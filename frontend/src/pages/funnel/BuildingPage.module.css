@@ -1,0 +1,86 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.ollie {
+  max-width: 40vw;
+  height: auto;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.lines {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  text-align: left;
+}
+
+.line {
+  display: flex;
+  gap: var(--space-1);
+  animation: reveal 200ms ease-out both;
+}
+
+.line::before {
+  content: "\2713";
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* Stagger of 150 ms per line; lines beyond the eighth appear with the eighth. */
+.line:nth-child(2) { animation-delay: 150ms; }
+.line:nth-child(3) { animation-delay: 300ms; }
+.line:nth-child(4) { animation-delay: 450ms; }
+.line:nth-child(5) { animation-delay: 600ms; }
+.line:nth-child(6) { animation-delay: 750ms; }
+.line:nth-child(7) { animation-delay: 900ms; }
+.line:nth-child(n + 8) { animation-delay: 1050ms; }
+
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line,
+  .line:nth-child(n) {
+    animation: none;
+    animation-delay: 0s;
+  }
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: 0 var(--space-3);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent, #fff);
+}
