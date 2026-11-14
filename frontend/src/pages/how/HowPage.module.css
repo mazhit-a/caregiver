@@ -1,0 +1,318 @@
+.hero img {
+  width: 200px;
+  margin-inline: auto;
+  filter: drop-shadow(0 8px 12px rgba(42, 37, 71, 0.18));
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.wide {
+  max-width: 720px;
+}
+
+.eyebrow {
+  margin: 0;
+  font: var(--text-caption);
+  font-weight: 800;
+  color: var(--accent-pressed);
+}
+
+.h2 {
+  margin: 0;
+  font: var(--text-h1);
+}
+
+.lead {
+  margin: 0;
+  font: var(--text-body);
+  color: var(--text-secondary);
+}
+
+.note {
+  margin: 0;
+  font: var(--text-small);
+  color: var(--text-secondary);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  font: var(--text-caption);
+  font-size: 15px;
+  background: var(--surface);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-chip);
+  padding: var(--space-2) 14px;
+}
+
+.phoneFrame {
+  display: flex;
+  justify-content: center;
+  border-radius: var(--radius-sheet);
+  padding: var(--space-5);
+  min-width: 0;
+}
+
+.butterFrame {
+  background: var(--butter-100);
+}
+
+.irisFrame {
+  background: var(--info-soft);
+}
+
+.phone {
+  width: 100%;
+  max-width: 280px;
+  border-radius: var(--radius-card);
+}
+
+.exampleCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+  background: var(--surface);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-sheet);
+  padding: var(--space-5);
+}
+
+.exampleLabel {
+  margin: 0;
+  align-self: flex-start;
+  font: var(--text-caption);
+  color: var(--text-secondary);
+  background: var(--surface-muted);
+  border-radius: var(--radius-chip);
+  padding: var(--space-1) var(--space-3);
+}
+
+.heard {
+  background: var(--info-soft);
+  border-radius: var(--radius-card);
+  padding: var(--space-5);
+}
+
+.cardTitle {
+  margin: 0 0 var(--space-2);
+  font: var(--text-small);
+  font-weight: 700;
+  color: var(--info-text);
+}
+
+.course .cardTitle {
+  color: var(--text);
+}
+
+.heardText {
+  margin: 0;
+  font: var(--text-body);
+}
+
+.courseList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: course;
+}
+
+.courseItem {
+  display: flex;
+  gap: var(--space-3);
+  align-items: baseline;
+  counter-increment: course;
+}
+
+.courseItem::before {
+  content: counter(course);
+  flex: 0 0 24px;
+  font-weight: 800;
+  color: var(--accent-pressed);
+}
+
+.courseText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.courseTitle {
+  font: var(--text-body-strong);
+}
+
+.courseWhy {
+  font: var(--text-small);
+  color: var(--text-secondary);
+}
+
+/* Table: stacked cards below 768px (--bp-tablet), a real table from there. */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font: var(--text-small);
+}
+
+.caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.table thead {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.table tbody,
+.table tr,
+.table th,
+.table td {
+  display: block;
+}
+
+.table tr {
+  background: var(--surface);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.table tbody th {
+  text-align: left;
+  font: var(--text-body-strong);
+  padding-bottom: var(--space-2);
+}
+
+.table td {
+  color: var(--text-secondary);
+  padding: var(--space-2) 0;
+}
+
+.table td::before {
+  content: attr(data-label);
+  display: block;
+  font: var(--text-caption);
+  color: var(--text);
+}
+
+/* 768px is --bp-tablet */
+@media (min-width: 768px) {
+  .row {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  .row > .text,
+  .row > .exampleCard {
+    flex: 1 1 460px;
+  }
+
+  .row > .phoneFrame {
+    flex: 0 1 340px;
+  }
+
+  .reverse {
+    flex-direction: row-reverse;
+  }
+
+  .exampleCard {
+    padding: var(--space-6);
+  }
+
+  .h2 {
+    font: var(--text-h1-lg);
+  }
+
+  .lead {
+    font: var(--text-body-lg);
+  }
+
+  .note {
+    font: var(--text-body);
+    color: var(--text-secondary);
+  }
+
+  .table {
+    display: table;
+    font: var(--text-body);
+  }
+
+  .table thead {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+    display: table-header-group;
+  }
+
+  .table tbody {
+    display: table-row-group;
+  }
+
+  .table tr {
+    display: table-row;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+  }
+
+  .table th,
+  .table td {
+    display: table-cell;
+    padding: var(--space-4);
+    border-bottom: var(--border-width) solid var(--border);
+    text-align: left;
+  }
+
+  .table thead th {
+    border-bottom: var(--border-width-strong) solid var(--text);
+    font-weight: 700;
+  }
+
+  .table tbody th {
+    font-weight: 700;
+  }
+
+  .table td::before {
+    content: none;
+  }
+}
