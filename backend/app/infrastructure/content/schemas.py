@@ -305,9 +305,16 @@ class SafetyMatching(ContentModel):
     excluded_phrases: list[str] = []
 
 
+class CoachTipsModel(ContentModel):
+    medical: str
+    off_topic: str
+    too_short: str
+
+
 class SafetyTermsFile(Notes):
     version: int
     matching: SafetyMatching
+    coach_tips: CoachTipsModel
     crisis: list[str] = Field(min_length=1)
     emergency: list[str] = Field(min_length=1)
     medical: list[str] = Field(min_length=1)

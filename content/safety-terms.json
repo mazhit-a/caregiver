@@ -12,6 +12,11 @@
       "missing the bus"
     ]
   },
+  "coachTips": {
+    "medical": "For medical questions, ask {label}'s doctor or pharmacist. Let's keep practicing the conversation.",
+    "offTopic": "This is a practice space for talking with {label}. Try answering what {label} just said.",
+    "tooShort": "Try a full sentence, the way you'd really say it."
+  },
   "crisis": [
     "kill myself",
     "end my life",
