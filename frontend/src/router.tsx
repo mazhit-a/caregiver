@@ -1,6 +1,8 @@
 import type { ComponentType } from "react";
 import { createBrowserRouter, type RouteObject } from "react-router";
+import { AppLayout } from "./layout/app/AppLayout";
 import { FunnelLayout } from "./layout/funnel/FunnelLayout";
+import { CardLayout } from "./pages/card/CardLayout";
 import { RootLayout } from "./layout/RootLayout";
 import { ROUTES } from "./routes";
 
@@ -55,7 +57,70 @@ export const routes: RouteObject[] = [
         path: ROUTES.checkoutReturn,
         ...page(() => import("./pages/funnel/CheckoutReturnPage")),
       },
+    ],
+  },
+  {
+    element: <AppLayout />,
+    HydrateFallback: () => null,
+    children: [
       { path: ROUTES.today, ...page(() => import("./pages/app/TodayPage")) },
+      {
+        path: ROUTES.todayPractice,
+        ...page(() => import("./pages/app/today/PracticeRoundPage")),
+      },
+      {
+        path: ROUTES.lesson,
+        ...page(() => import("./pages/app/lesson/LessonPage")),
+      },
+      {
+        path: ROUTES.appPlan,
+        ...page(() => import("./pages/app/plan/PlanTabPage")),
+      },
+      {
+        path: ROUTES.profile,
+        ...page(() => import("./pages/app/profile/ProfilePage")),
+      },
+      {
+        path: ROUTES.careCard,
+        ...page(() => import("./pages/app/care-card/CareCardPage")),
+      },
+      {
+        path: ROUTES.visitSheet,
+        ...page(() => import("./pages/app/visit-sheet/VisitSheetPage")),
+      },
+      {
+        path: ROUTES.skills,
+        ...page(() => import("./pages/app/skills/SkillsPage")),
+      },
+      {
+        path: ROUTES.settings,
+        ...page(() => import("./pages/app/settings/SettingsPage")),
+      },
+      {
+        path: ROUTES.settingsCancel,
+        ...page(() => import("./pages/app/settings/CancelPage")),
+      },
+      {
+        path: ROUTES.settingsGentleExit,
+        ...page(() => import("./pages/app/settings/GentleExitPage")),
+      },
+    ],
+  },
+  {
+    // The session is gone after the gentle exit, so /goodbye lives outside AppLayout.
+    HydrateFallback: () => null,
+    children: [
+      {
+        path: ROUTES.goodbye,
+        ...page(() => import("./pages/app/settings/GoodbyePage")),
+      },
+    ],
+  },
+  {
+    element: <CardLayout />,
+    HydrateFallback: () => null,
+    children: [
+      { path: ROUTES.card, ...page(() => import("./pages/card/CardPage")) },
     ],
   },
 ];

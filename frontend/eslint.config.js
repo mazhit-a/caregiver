@@ -19,7 +19,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ["src/components/funnel/**/*.{ts,tsx}"],
+    files: ["src/components/**/*.{ts,tsx}"],
     rules: {
       "no-restricted-imports": [
         "error",
@@ -27,7 +27,7 @@ export default tseslint.config(
           patterns: [
             {
               group: ["**/api", "**/api/*"],
-              message: "Funnel inputs are presentational and must not import the API layer.",
+              message: "Components are presentational: data and callbacks come through props, never from the API layer.",
             },
           ],
         },
@@ -35,7 +35,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ["src/components/funnel/**/*.{ts,tsx}"],
+    files: ["src/components/**/*.{ts,tsx}"],
     rules: {
       "no-restricted-imports": [
         "error",
@@ -43,7 +43,7 @@ export default tseslint.config(
           patterns: [
             {
               group: ["**/api", "**/api/*"],
-              message: "Funnel inputs are presentational and must not import the API layer.",
+              message: "Components are presentational: data and callbacks come through props, never from the API layer.",
             },
           ],
         },

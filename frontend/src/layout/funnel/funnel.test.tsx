@@ -147,6 +147,19 @@ describe("funnel routes", () => {
   });
 
   it("marks stubs and the Today placeholder noindex", async () => {
+    // /today now lives in the app shell, which reads the nav labels from GET /app-copy.
+    fetchMock.mockImplementation((input) =>
+      Promise.resolve(
+        String(input).includes("/api/app-copy")
+          ? new Response(
+              JSON.stringify({
+                nav: { today: "Today", plan: "Plan", profilePage: "Mom’s page", skills: "Skills", settings: "Settings" },
+              }),
+              { status: 200, headers: { "Content-Type": "application/json" } },
+            )
+          : crisisResponse(),
+      ),
+    );
     await renderAt("/today");
     expect(
       document.head.querySelector('meta[name="robots"][content="noindex"]'),
