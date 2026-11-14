@@ -2,7 +2,9 @@
 
 from collections.abc import Mapping
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Literal
+from uuid import UUID
 
 ModuleOrder = Literal["first", "noticing_second", "scored", "later"]
 ModuleStatus = Literal["current", "next", "later"]
@@ -166,3 +168,32 @@ class BuiltPlan:
     pace: Pace
     readiness: Readiness
     gift_phrase_ids: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class StoredPlan:
+    """The plan snapshot of a session: content edits never change it after it is built."""
+
+    session_id: UUID
+    plan: BuiltPlan
+    rules_version: int
+    content_version: str
+    lessons_per_week: int
+    gift_phrase_ids: tuple[str, ...]
+    built_at: datetime
+
+
+@dataclass(frozen=True)
+class PhraseText:
+    """A phrase of the phrase bank (text may hold {placeholders})."""
+
+    id: str
+    text: str
+    when: str
+
+
+@dataclass(frozen=True)
+class PhraseSheetText:
+    title: str
+    intro: str
+    footer: str

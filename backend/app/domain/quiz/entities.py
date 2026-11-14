@@ -7,7 +7,7 @@ from uuid import UUID
 
 from app.domain.quiz.answers import normalize_answer
 from app.domain.quiz.definition import QuizDefinition
-from app.domain.quiz.errors import QuizLocked
+from app.domain.quiz.errors import QuizIncomplete, QuizLocked
 from app.domain.quiz.tags import derive
 
 
@@ -35,3 +35,16 @@ class QuizState:
     def _furthest_answered(self, definition: QuizDefinition) -> str | None:
         answered = [q.id for q in definition.questions if q.id in self.answers]
         return answered[-1] if answered else None
+
+    def missing_required(self, definition: QuizDefinition) -> list[str]:
+        """Ids of the non-skippable questions without an answer, in quiz order."""
+        return [q for q in definition.required_question_ids() if self.answers.get(q) is None]
+
+    def complete(self, definition: QuizDefinition, at: datetime) -> None:
+        """Mark the quiz completed; requires every non-skippable question and an unlocked quiz."""
+        if self.locked:
+            raise QuizLocked("The quiz can no longer be changed.")
+        missing = self.missing_required(definition)
+        if missing:
+            raise QuizIncomplete("Some questions still need an answer.", {"questionIds": missing})
+        self.completed_at = at

@@ -11,6 +11,8 @@ QuestionKind = Literal["single", "multi", "grid", "scale", "interstitial"]
 
 RECIPIENT_QUESTION_ID = "q1_recipient"
 BRANCH_QUESTION_ID = "q3_situation"
+CHANGES_QUESTION_ID = "q5_changes"  # Q5: only used to pick the gift phrases
+CONFIDENCE_QUESTION_ID = "q11_confidence"  # Q11: stored as confidence.day0
 
 
 @dataclass(frozen=True)
@@ -19,6 +21,8 @@ class OptionSpec:
     tags: tuple[str, ...] = ()
     branch: str | None = None
     exclusive: bool = False
+    heard_slot: str | None = None  # "What we heard" fragment of this option
+    heard_text: str | None = None
 
 
 @dataclass(frozen=True)
@@ -55,6 +59,10 @@ class QuizDefinition:
             if question.id == question_id and question.answerable:
                 return question
         raise UnknownQuestion("There is no such quiz question.", {"questionId": question_id})
+
+    def required_question_ids(self) -> tuple[str, ...]:
+        """Answerable questions that are not skippable (`complete` needs all of them)."""
+        return tuple(q.id for q in self.questions if q.answerable and not q.skippable)
 
     def health_question_ids(self) -> tuple[str, ...]:
         """Questions flagged `healthData` (no trackers; raw answers purged on subscription)."""

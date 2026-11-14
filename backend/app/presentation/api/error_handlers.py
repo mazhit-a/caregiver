@@ -30,6 +30,8 @@ DOMAIN_ERROR_STATUS: dict[str, int] = {
     "quiz_locked": 409,
     "invalid_answer": 422,
     "unknown_question": 404,
+    "quiz_incomplete": 422,
+    "payment_required": 402,  # NoPlan now; the access gate (increment 9) reuses it
 }
 
 

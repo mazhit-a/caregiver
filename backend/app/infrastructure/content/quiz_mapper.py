@@ -36,7 +36,17 @@ def _display(question: QuizQuestion) -> dict[str, Any]:
 
 
 def _options(options: list[QuizOption]) -> tuple[OptionSpec, ...]:
-    return tuple(OptionSpec(o.id, tuple(o.tags), o.branch, bool(o.exclusive)) for o in options)
+    return tuple(
+        OptionSpec(
+            o.id,
+            tuple(o.tags),
+            o.branch,
+            bool(o.exclusive),
+            o.heard.slot if o.heard else None,
+            o.heard.text if o.heard else None,
+        )
+        for o in options
+    )
 
 
 def _rules(derived: list[DerivedTag]) -> tuple[Any, ...]:

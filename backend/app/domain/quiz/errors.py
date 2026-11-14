@@ -25,3 +25,9 @@ class QuizRuleError(DomainError):
     """A derived-tag condition in quiz.json that the quiz domain cannot read."""
 
     code = "quiz_rule_error"
+
+
+class QuizIncomplete(DomainError):
+    """Required questions are still unanswered; `details["questionIds"]` lists them."""
+
+    code = "quiz_incomplete"

@@ -72,3 +72,26 @@ class QuizStateRow(Base):
     health_answers_purged_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
     )
+
+
+class PlanRow(Base):
+    __tablename__ = "plans"
+
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("sessions.id", ondelete="CASCADE"), primary_key=True
+    )
+    snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+    rules_version: Mapped[int] = mapped_column(Integer, nullable=False)
+    content_version: Mapped[str] = mapped_column(String(64), nullable=False)
+    lessons_per_week: Mapped[int] = mapped_column(Integer, nullable=False)
+    gift_phrase_ids: Mapped[list[str]] = mapped_column(ARRAY(Text), nullable=False)
+    built_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class ConfidenceRow(Base):
+    __tablename__ = "confidence"
+
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("sessions.id", ondelete="CASCADE"), primary_key=True
+    )
+    day0: Mapped[int] = mapped_column(Integer, nullable=False)

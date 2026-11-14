@@ -4,11 +4,13 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
+from app.domain.plan.entities import PhraseSheetText, PhraseText, PlanRules
 from app.domain.quiz.definition import QuizDefinition
 from app.domain.safety.resources import CrisisResource
 from app.domain.shared.errors import DomainError
 from app.domain.shared.labels import RecipientLabels, lesson_labels, render_text
 from app.infrastructure.content.loader import ContentBundle, load_content
+from app.infrastructure.content.plan_rules_mapper import to_plan_rules
 from app.infrastructure.content.quiz_mapper import to_quiz_definition
 from app.infrastructure.content.schemas import LessonFile
 
@@ -27,6 +29,7 @@ class JsonContentProvider:
     def __init__(self, bundle: ContentBundle) -> None:
         self._bundle = bundle
         self._quiz_definition = to_quiz_definition(bundle.quiz)
+        self._plan_rules = to_plan_rules(bundle.plan_rules, bundle.phrases)
         self._labels = {
             key: RecipientLabels.from_mapping(model.model_dump(by_alias=True))
             for key, model in bundle.quiz.recipient_labels.items()
@@ -63,6 +66,16 @@ class JsonContentProvider:
 
     def quiz_definition(self) -> QuizDefinition:
         return self._quiz_definition
+
+    def plan_rules(self) -> PlanRules:
+        return self._plan_rules
+
+    def phrase_sheet(self) -> PhraseSheetText:
+        sheet = self._bundle.phrases.sheet
+        return PhraseSheetText(sheet.title, sheet.intro, sheet.footer)
+
+    def phrases(self) -> list[PhraseText]:
+        return [PhraseText(p.id, p.text, p.when) for p in self._bundle.phrases.phrases]
 
     def lesson_ids(self) -> list[str]:
         return sorted(self._bundle.lessons)

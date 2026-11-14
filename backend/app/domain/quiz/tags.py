@@ -21,14 +21,14 @@ def derive(definition: QuizDefinition, answers: Mapping[str, Any]) -> DerivedQui
         answer = answers.get(spec.id)
         if not spec.answerable or answer is None:
             continue
-        for option in _chosen_options(spec, answer):
+        for option in chosen_options(spec, answer):
             tags.extend(option.tags)
             branch = option.branch or branch
         tags.extend(rule.add for rule in spec.derived_rules if rule.matches(answer))
     return DerivedQuiz(tuple(dict.fromkeys(tags)), branch)
 
 
-def _chosen_options(spec: QuestionSpec, answer: Any) -> list[OptionSpec]:
+def chosen_options(spec: QuestionSpec, answer: Any) -> list[OptionSpec]:
     if spec.kind == "single" and isinstance(answer, str):
         found = spec.option(answer)
         return [found] if found else []

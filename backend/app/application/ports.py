@@ -6,6 +6,7 @@ from types import TracebackType
 from typing import Any, Protocol, Self
 from uuid import UUID
 
+from app.domain.plan.entities import PhraseSheetText, PhraseText, PlanRules, StoredPlan
 from app.domain.quiz.definition import QuizDefinition
 from app.domain.quiz.entities import QuizState
 from app.domain.safety.resources import CrisisResource
@@ -54,6 +55,22 @@ class QuizStateRepository(Protocol):
         ...
 
 
+class PlanRepository(Protocol):
+    async def get(self, session_id: UUID) -> StoredPlan | None: ...
+
+    async def save(self, plan: StoredPlan) -> None:
+        """Insert or replace the plan snapshot of the session."""
+        ...
+
+
+class ConfidenceRepository(Protocol):
+    async def get_day0(self, session_id: UUID) -> int | None: ...
+
+    async def save_day0(self, session_id: UUID, value: int) -> None:
+        """Insert or update `day0` (the Q11 answer) without touching later columns."""
+        ...
+
+
 class UnitOfWork(Protocol):
     """Transaction boundary: `async with uow:` ... `await uow.commit()`.
 
@@ -64,6 +81,8 @@ class UnitOfWork(Protocol):
     active_days: ActiveDayRepository
     quiz: QuizStateRepository
     lesson_schedule: LessonScheduleRepository
+    plans: PlanRepository
+    confidence: ConfidenceRepository
 
     async def __aenter__(self) -> Self: ...
 
@@ -109,6 +128,18 @@ class ContentProvider(Protocol):
 
     def quiz_definition(self) -> QuizDefinition:
         """The quiz questions as the quiz domain reads them (placeholders still unfilled)."""
+        ...
+
+    def plan_rules(self) -> PlanRules:
+        """The plan rules (plan-rules.json plus the phrase tags) as the plan builder reads them."""
+        ...
+
+    def phrase_sheet(self) -> PhraseSheetText:
+        """Title, intro and footer of the gift phrase sheet (placeholders unfilled)."""
+        ...
+
+    def phrases(self) -> list[PhraseText]:
+        """The phrase bank in list order (placeholders unfilled)."""
         ...
 
     def lesson_ids(self) -> list[str]: ...

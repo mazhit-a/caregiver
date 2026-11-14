@@ -2,6 +2,7 @@ from types import TracebackType
 from typing import Self
 
 from tests.fakes.lesson_schedule import InMemoryLessonScheduleRepository
+from tests.fakes.plans import InMemoryConfidenceRepository, InMemoryPlanRepository
 from tests.fakes.quiz import InMemoryQuizStateRepository
 from tests.fakes.sessions import InMemoryActiveDayRepository, InMemorySessionRepository
 
@@ -14,6 +15,8 @@ class FakeUnitOfWork:
         self.active_days = InMemoryActiveDayRepository()
         self.quiz = InMemoryQuizStateRepository()
         self.lesson_schedule = InMemoryLessonScheduleRepository()
+        self.plans = InMemoryPlanRepository()
+        self.confidence = InMemoryConfidenceRepository()
         self.committed = False
         self.rolled_back = False
 

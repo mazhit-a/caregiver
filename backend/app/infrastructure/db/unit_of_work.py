@@ -5,7 +5,9 @@ from typing import Self
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+from app.infrastructure.db.repositories.confidence import SqlConfidenceRepository
 from app.infrastructure.db.repositories.lesson_schedule import SqlLessonScheduleRepository
+from app.infrastructure.db.repositories.plans import SqlPlanRepository
 from app.infrastructure.db.repositories.quiz_states import SqlQuizStateRepository
 from app.infrastructure.db.repositories.sessions import SqlActiveDayRepository, SqlSessionRepository
 
@@ -15,6 +17,8 @@ class SqlAlchemyUnitOfWork:
     active_days: SqlActiveDayRepository
     quiz: SqlQuizStateRepository
     lesson_schedule: SqlLessonScheduleRepository
+    plans: SqlPlanRepository
+    confidence: SqlConfidenceRepository
 
     def __init__(self, session_factory: async_sessionmaker[AsyncSession]) -> None:
         self._factory = session_factory
@@ -26,6 +30,8 @@ class SqlAlchemyUnitOfWork:
         self.active_days = SqlActiveDayRepository(self._db)
         self.quiz = SqlQuizStateRepository(self._db)
         self.lesson_schedule = SqlLessonScheduleRepository(self._db)
+        self.plans = SqlPlanRepository(self._db)
+        self.confidence = SqlConfidenceRepository(self._db)
         return self
 
     async def __aexit__(
