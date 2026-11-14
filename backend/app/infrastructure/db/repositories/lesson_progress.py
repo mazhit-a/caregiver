@@ -34,6 +34,23 @@ class SqlLessonProgressRepository:
             done_at=row.done_at,
         )
 
+    async def list_for_session(self, session_id: UUID) -> list[LessonProgress]:
+        result = await self._db.execute(
+            select(LessonProgressRow).where(LessonProgressRow.session_id == session_id)
+        )
+        return [
+            LessonProgress(
+                session_id=row.session_id,
+                lesson_id=row.lesson_id,
+                started_at=row.started_at,
+                variant=row.variant,
+                step=row.step,
+                screen_answers=dict(row.screen_answers),
+                done_at=row.done_at,
+            )
+            for row in result.scalars()
+        ]
+
     async def save(self, progress: LessonProgress) -> None:
         values = {
             "variant": progress.variant,

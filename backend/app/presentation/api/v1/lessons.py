@@ -17,6 +17,7 @@ from app.presentation.api.schemas.lessons import (
     LessonResponse,
     NextLessonOut,
     PatternOut,
+    RecapOut,
 )
 
 router = APIRouter(tags=["lessons"])
@@ -76,6 +77,9 @@ async def get_lesson(
                 started_at=view.progress.started_at,
                 done_at=view.progress.done_at,
             ),
+            "recap": None
+            if view.recap is None
+            else RecapOut(from_lesson_id=view.recap.from_lesson_id, text=view.recap.text),
         }
     )
 

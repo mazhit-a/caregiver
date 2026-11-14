@@ -58,20 +58,7 @@ class LessonAccess:
         return progress
 
     def _plan_lessons(self, stored: StoredPlan) -> list[PlanLessonRef]:
-        """The plan's lessons; built means flagged built in the current rules and a file exists."""
-        files = set(self._content.lesson_ids())
-        flags = {
-            lesson.id: lesson.built
-            for module in self._content.plan_rules().modules
-            for lesson in module.lessons
-        }
-        return [
-            PlanLessonRef(
-                lesson.id, flags.get(lesson.id, lesson.built) is True and lesson.id in files
-            )
-            for module in stored.plan.modules
-            for lesson in module.lessons
-        ]
+        return plan_lesson_refs(self._content, stored)
 
     def _check_available(self, lesson_id: str, refs: list[PlanLessonRef]) -> None:
         by_id = {ref.lesson_id: ref for ref in refs}
@@ -80,6 +67,21 @@ class LessonAccess:
         ref = by_id.get(lesson_id)
         if ref is None or not ref.built:
             raise LessonNotAvailable(lesson_id)
+
+
+def plan_lesson_refs(content: ContentProvider, stored: StoredPlan) -> list[PlanLessonRef]:
+    """The plan's lessons; built means flagged built in the current rules and a file exists."""
+    files = set(content.lesson_ids())
+    flags = {
+        lesson.id: lesson.built
+        for module in content.plan_rules().modules
+        for lesson in module.lessons
+    }
+    return [
+        PlanLessonRef(lesson.id, flags.get(lesson.id, lesson.built) is True and lesson.id in files)
+        for module in stored.plan.modules
+        for lesson in module.lessons
+    ]
 
 
 def valid_variant(content: ContentProvider, lesson_id: str, variant: str | None) -> str | None:

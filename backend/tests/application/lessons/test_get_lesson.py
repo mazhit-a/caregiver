@@ -7,6 +7,7 @@ from uuid import uuid4
 import pytest
 
 from app.application.lessons.use_cases import GetLesson
+from app.application.phrases.use_cases import SavePhrase
 from app.application.plan.use_cases import CompleteQuiz
 from app.application.quiz.use_cases import AnswerQuizQuestion
 from app.domain.lessons.errors import LessonLocked, LessonNotAvailable, UnknownLesson
@@ -16,6 +17,7 @@ from app.domain.session.entities import Session
 from app.infrastructure.content.provider import JsonContentProvider
 from tests.application.plan.test_plan_use_cases import PERSONA_A
 from tests.fakes.clock import FixedClock
+from tests.fakes.sessions import FakeIdGenerator
 from tests.fakes.unit_of_work import FakeUnitOfWork
 from tests.lesson_content import make_content_dir
 
@@ -158,3 +160,43 @@ async def test_continue_where_you_left_off_returns_saved_step(
     )
     view = await get_lesson(uow, clock, content).execute(session, "m1_l1")
     assert view.progress.step == 3 and view.lesson.variant == "phone"
+
+
+async def test_lesson_2_recap_shows_previous_lesson_recap_with_saved_phrase(
+    uow: FakeUnitOfWork, clock: FixedClock, content: JsonContentProvider
+) -> None:
+    session = await with_plan(uow, clock, content)
+    await SavePhrase(uow, FakeIdGenerator(), clock).execute(
+        session, "I'm right here, Dad.", "roleplay", "m1_l1"
+    )
+    await get_lesson(uow, clock, content).execute(session, "m1_l1")  # schedules from day 0
+    clock.advance(timedelta(days=10))
+    view = await get_lesson(uow, clock, content).execute(session, "m1_l2")
+    assert view.recap is not None and view.recap.from_lesson_id == "m1_l1"
+    assert view.recap.text.startswith("Last time you practiced the three steps")
+    assert 'Your phrase was: "I\'m right here, Dad."' in view.recap.text
+    assert "{" not in view.recap.text
+
+
+async def test_recap_without_saved_phrase_uses_content_fallback(
+    uow: FakeUnitOfWork, clock: FixedClock, content: JsonContentProvider
+) -> None:
+    session = await with_plan(uow, clock, content)
+    # a phrase saved for another lesson (or from the gift sheet) is not this lesson's phrase
+    await SavePhrase(uow, FakeIdGenerator(), clock).execute(session, "Gift one", "gift", None)
+    await get_lesson(uow, clock, content).execute(session, "m1_l1")  # schedules from day 0
+    clock.advance(timedelta(days=10))
+    view = await get_lesson(uow, clock, content).execute(session, "m1_l2")
+    assert view.recap is not None
+    assert view.recap.text == (
+        "Last time you practiced the three steps: notice the feeling, reassure, "
+        "offer something to do."
+    )
+
+
+async def test_lesson_1_has_no_recap(
+    uow: FakeUnitOfWork, clock: FixedClock, content: JsonContentProvider
+) -> None:
+    session = await with_plan(uow, clock, content)
+    view = await get_lesson(uow, clock, content).execute(session, "m1_l1")
+    assert view.recap is None

@@ -15,10 +15,19 @@ class ProgressView:
 
 
 @dataclass(frozen=True)
+class RecapView:
+    """The opening recap of a lesson: the previous lesson's recap text with the user's phrase."""
+
+    from_lesson_id: str
+    text: str
+
+
+@dataclass(frozen=True)
 class LessonView:
     lesson: RenderedLesson
     unlock_on: date
     progress: ProgressView
+    recap: RecapView | None = None
 
 
 @dataclass(frozen=True)

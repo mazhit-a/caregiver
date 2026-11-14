@@ -12,6 +12,9 @@ class InMemoryLessonProgressRepository:
         row = self.rows.get((session_id, lesson_id))
         return None if row is None else replace(row, screen_answers=dict(row.screen_answers))
 
+    async def list_for_session(self, session_id: UUID) -> list[LessonProgress]:
+        return [replace(r) for (sid, _), r in self.rows.items() if sid == session_id]
+
     async def save(self, progress: LessonProgress) -> None:
         self.rows[(progress.session_id, progress.lesson_id)] = replace(
             progress, screen_answers=dict(progress.screen_answers)

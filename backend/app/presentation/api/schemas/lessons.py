@@ -168,6 +168,11 @@ class LessonProgressOut(CamelModel):
     done_at: datetime | None
 
 
+class RecapOut(CamelModel):
+    from_lesson_id: str
+    text: str
+
+
 class LessonResponse(CamelModel):
     id: str
     module_id: str
@@ -180,6 +185,7 @@ class LessonResponse(CamelModel):
     pattern: PatternOut
     screens: list[ScreenOut]
     progress: LessonProgressOut
+    recap: RecapOut | None = None
 
 
 class AnswerRequest(CamelModel):

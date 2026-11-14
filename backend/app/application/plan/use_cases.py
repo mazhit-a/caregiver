@@ -1,13 +1,24 @@
 """Plan use cases: complete the quiz (build and store the plan), preview, gift sheet."""
 
-from app.application.plan.dto import CompleteResult, GiftPhrase, GiftSheet, PlanPreviewView
+from app.application.lessons.access import plan_lesson_refs
+from app.application.plan.dto import (
+    CompleteResult,
+    GiftPhrase,
+    GiftSheet,
+    PlanLessonView,
+    PlanModuleView,
+    PlanPreviewView,
+    PlanView,
+)
 from app.application.ports import Clock, ContentProvider, UnitOfWork
+from app.application.schedule.use_cases import EnsureSchedule
 from app.domain.plan.builder import PlanBuilder
 from app.domain.plan.entities import StoredPlan
 from app.domain.plan.errors import NoPlan
 from app.domain.quiz.definition import CONFIDENCE_QUESTION_ID, RECIPIENT_QUESTION_ID
 from app.domain.quiz.entities import QuizState
 from app.domain.quiz.plan_inputs import plan_inputs
+from app.domain.schedule.entities import LessonSchedule, UnlockRule
 from app.domain.session.entities import Session
 from app.domain.shared.labels import render_text
 
@@ -95,4 +106,68 @@ class GetGiftSheet:
                 for p in (bank[i] for i in stored.gift_phrase_ids if i in bank)
             ],
             footer=render_text(sheet.footer, labels),
+        )
+
+
+class GetPlan:
+    """`GET /api/plan`: the stored plan with each lesson's status and unlock date.
+
+    The schedule is extended first, so a lesson built after the subscription started appears
+    as locked or available instead of coming later. Started lessons without `done_at` are in
+    progress; `hero_lesson_id` is the first unlocked lesson that is not done.
+    """
+
+    def __init__(self, uow: UnitOfWork, content: ContentProvider, clock: Clock) -> None:
+        self._uow = uow
+        self._content = content
+        self._clock = clock
+        self._ensure_schedule = EnsureSchedule(uow)
+
+    async def execute(self, session: Session) -> PlanView:
+        async with self._uow:
+            stored = await self._uow.plans.get(session.id)
+            progress = await self._uow.lesson_progress.list_for_session(session.id)
+        if stored is None:
+            raise NoPlan()
+        refs = plan_lesson_refs(self._content, stored)
+        today = session.app_today(self._clock.now())
+        schedule = await self._ensure_schedule.execute(
+            session.id,
+            today,
+            stored.lessons_per_week,
+            refs,
+            UnlockRule.from_pace(self._content.plan_rules().pace),
+        )
+        states = {
+            s.lesson_id: s
+            for s in LessonSchedule.statuses(
+                refs,
+                schedule,
+                today,
+                done_ids={p.lesson_id for p in progress if p.done_at is not None},
+                in_progress_ids={p.lesson_id for p in progress if p.done_at is None},
+            )
+        }
+        hero = LessonSchedule.hero_lesson_id(list(states.values()))
+        return PlanView(
+            modules=[
+                PlanModuleView(
+                    module.id,
+                    module.title,
+                    module.reason,
+                    [
+                        PlanLessonView(
+                            lesson.id,
+                            lesson.title,
+                            lesson.minutes,
+                            states[lesson.id].status,
+                            states[lesson.id].unlock_on,
+                        )
+                        for lesson in module.lessons
+                    ],
+                )
+                for module in stored.plan.modules
+            ],
+            hero_lesson_id=hero,
+            lessons_per_week=stored.lessons_per_week,
         )

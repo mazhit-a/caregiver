@@ -1,6 +1,7 @@
 """Plan funnel response schemas (finished text only)."""
 
-from datetime import datetime
+from datetime import date, datetime
+from typing import Literal
 
 from app.presentation.api.schemas.base import CamelModel
 
@@ -77,3 +78,26 @@ class GiftResponse(CamelModel):
     intro: str
     phrases: list[GiftPhraseOut]
     footer: str
+
+
+class PlanLessonStatusOut(CamelModel):
+    id: str
+    title: str
+    minutes: int
+    status: Literal["locked", "available", "in_progress", "done", "coming_later"]
+    unlock_on: date | None
+
+
+class PlanModuleStatusOut(CamelModel):
+    id: str
+    title: str
+    reason: str
+    lessons: list[PlanLessonStatusOut]
+
+
+class PlanResponse(CamelModel):
+    """`GET /api/plan`. `unlock_on` is set for every scheduled lesson, null for coming_later."""
+
+    modules: list[PlanModuleStatusOut]
+    hero_lesson_id: str | None
+    lessons_per_week: int
