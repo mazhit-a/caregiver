@@ -150,4 +150,8 @@ def test_cli_help_and_validate_only_work_offline(capsys: pytest.CaptureFixture[s
     assert exit_info.value.code == 0
     assert main(["--set", "test", "--validate-only"]) == 0
     assert "test cases" in capsys.readouterr().out
-    assert main(["--set", "dev"]) == 2  # real runs are not enabled in this increment
+    # Without a key (and never with the developer's real one) a real run is refused.
+    assert (
+        main(["--set", "dev", "--no-cache"], settings=_settings(), client_factory=lambda _s: None)
+        == 2
+    )

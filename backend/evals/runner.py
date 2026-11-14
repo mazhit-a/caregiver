@@ -5,16 +5,29 @@ It takes a `Coach`, so it works with the real adapter, the adapter over a fake `
 scripted fake coach. It never calls a model on its own.
 """
 
+import asyncio
+import time
+from collections.abc import Iterator
+from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass
 from pathlib import Path
 
 from app.application.ports import Coach, CoachUnavailable
 from app.domain.roleplay.errors import InvalidCoachOutput
-from app.domain.roleplay.verdict import CoachOutcome, CoachTips, apply_rules, validate_verdict
+from app.domain.roleplay.verdict import (
+    CoachOutcome,
+    CoachTips,
+    CoachVerdict,
+    apply_rules,
+    validate_verdict,
+)
 from app.domain.safety.check import SafetyCheck, SafetyKind, SafetyTerms
 from app.domain.shared.labels import RecipientLabels
 from app.infrastructure.content.loader import load_content
 from app.infrastructure.content.provider import JsonContentProvider
+from app.infrastructure.llm.anthropic_coach import CallMetrics
+from evals.cache import CacheEntry, ResultCache
 from evals.case import EvalCase
 from evals.graders.code import GraderData, GradeResult, grade_case, load_shaming_words
 
@@ -66,20 +79,24 @@ class CaseResult:
         return all(g.passed for g in self.grades)
 
 
-async def run_case(
-    coach: Coach, case: EvalCase, ctx: EvalContext, run_index: int = 0
+def grade_attempt(
+    case: EvalCase,
+    ctx: EvalContext,
+    run_index: int,
+    verdict: CoachVerdict | None,
+    error: str | None,
 ) -> CaseResult:
-    coach_input = case.to_coach_input()
+    """Domain rules and graders over one model verdict (or one failure). Pure and offline, so a
+    cached verdict goes through exactly the same code as a live one."""
     local = SafetyCheck.classify(case.caregiver_reply, ctx.safety_terms)
     outcome: CoachOutcome | None = None
-    error: str | None = None
-    # A local crisis match never reaches the model in production. Here the model is still asked
-    # (second layer, per the package notes) so its `crisis` flag can be checked as well.
-    try:
-        verdict = validate_verdict(await coach.turn(coach_input))
-        outcome = apply_rules(verdict, ctx.tips, ctx.labels_for(case.label), case.label)
-    except (CoachUnavailable, InvalidCoachOutput) as exc:
-        error = type(exc).__name__
+    if verdict is not None:
+        try:
+            outcome = apply_rules(
+                validate_verdict(verdict), ctx.tips, ctx.labels_for(case.label), case.label
+            )
+        except InvalidCoachOutput as exc:
+            error = type(exc).__name__
     return CaseResult(
         case_id=case.id,
         run_index=run_index,
@@ -88,6 +105,110 @@ async def run_case(
         error=error,
         grades=grade_case(case, outcome, local, ctx.grader_data),
     )
+
+
+async def _ask(coach: Coach, case: EvalCase) -> tuple[CoachVerdict | None, str | None]:
+    # A local crisis match never reaches the model in production. Here the model is still asked
+    # (second layer, per the package notes) so its `crisis` flag can be checked as well.
+    try:
+        return await coach.turn(case.to_coach_input()), None
+    except CoachUnavailable as exc:
+        return None, type(exc).__name__
+
+
+async def run_case(
+    coach: Coach, case: EvalCase, ctx: EvalContext, run_index: int = 0
+) -> CaseResult:
+    verdict, error = await _ask(coach, case)
+    return grade_attempt(case, ctx, run_index, verdict, error)
+
+
+@dataclass(frozen=True)
+class Measured:
+    """One graded case run plus what the metrics need: the case, wall-clock time, the adapter's
+    `CallMetrics` (usage; None for a fake coach or a cache entry without one)."""
+
+    case: EvalCase
+    result: CaseResult
+    wall_ms: float
+    call: CallMetrics | None
+    cached: bool = False
+
+
+class CallRecorder:
+    """Pass `recorder.sink` as `metrics_sink` to `build_eval_coach`. Each measured run captures
+    its own call metrics through a context variable, so it is correct at any concurrency."""
+
+    def __init__(self) -> None:
+        self._slot: ContextVar[list[CallMetrics] | None] = ContextVar("eval_calls", default=None)
+
+    def sink(self, metrics: CallMetrics) -> None:
+        slot = self._slot.get()
+        if slot is not None:
+            slot.append(metrics)
+
+    @contextmanager
+    def capture(self) -> Iterator[list[CallMetrics]]:
+        calls: list[CallMetrics] = []
+        token = self._slot.set(calls)
+        try:
+            yield calls
+        finally:
+            self._slot.reset(token)
+
+
+async def _measure_one(
+    coach: Coach,
+    case: EvalCase,
+    ctx: EvalContext,
+    run_index: int,
+    recorder: CallRecorder | None,
+    cache: ResultCache | None,
+    fingerprint: str | None,
+) -> Measured:
+    if cache is not None and fingerprint is not None:
+        hit = cache.get(case, run_index, fingerprint)
+        if hit is not None:
+            result = grade_attempt(case, ctx, run_index, hit.verdict, None)
+            return Measured(case, result, hit.wall_ms, hit.call, cached=True)
+    recorder = recorder or CallRecorder()
+    with recorder.capture() as calls:
+        started = time.perf_counter()
+        verdict, error = await _ask(coach, case)
+        wall_ms = round((time.perf_counter() - started) * 1000, 1)
+    call = calls[-1] if calls else None
+    if verdict is not None and cache is not None and fingerprint is not None:
+        cache.put(case, run_index, fingerprint, CacheEntry(verdict, wall_ms, call))
+    return Measured(case, grade_attempt(case, ctx, run_index, verdict, error), wall_ms, call)
+
+
+async def run_measured(
+    coach: Coach,
+    cases: list[EvalCase],
+    ctx: EvalContext,
+    *,
+    runs: int = 1,
+    concurrency: int = 1,
+    recorder: CallRecorder | None = None,
+    cache: ResultCache | None = None,
+    fingerprint: str | None = None,
+) -> list[Measured]:
+    """Run every case `runs` times and keep latency and usage. `concurrency=1` is the live
+    sequential run; 4 is the production concurrency. Results are always in (run, case) order.
+    A latency run must pass `cache=None` (cached wall times are history, not a live measurement).
+    """
+    if concurrency < 1:
+        raise ValueError("concurrency must be at least 1")
+    jobs = [(i, case) for i in range(runs) for case in cases]
+    if concurrency == 1:
+        return [await _measure_one(coach, c, ctx, i, recorder, cache, fingerprint) for i, c in jobs]
+    gate = asyncio.Semaphore(concurrency)
+
+    async def limited(i: int, c: EvalCase) -> Measured:
+        async with gate:
+            return await _measure_one(coach, c, ctx, i, recorder, cache, fingerprint)
+
+    return list(await asyncio.gather(*(limited(i, c) for i, c in jobs)))
 
 
 async def run_cases(

@@ -1,0 +1,10 @@
+{
+  "retrievedOn": "2026-11-14",
+  "note": "RE-CHECK BEFORE EVERY REAL RUN. Defaults were supplied from the claude-api model table on the retrieval date, not fetched by code. Cache-write prices and the haiku cache-read price are DERIVED (write = 1.25 x input, haiku read = 5% of input, the same ratio as opus and sonnet), not published figures. Prices apply to prompts up to 100K tokens.",
+  "unit": "USD per million tokens",
+  "models": {
+    "claude-opus-5-5": {"inputPerMTok": 4.0, "outputPerMTok": 20.0, "cacheReadPerMTok": 0.20, "cacheWritePerMTok": 5.0},
+    "claude-sonnet-5-5": {"inputPerMTok": 2.0, "outputPerMTok": 10.0, "cacheReadPerMTok": 0.10, "cacheWritePerMTok": 2.5},
+    "claude-haiku-5-5": {"inputPerMTok": 0.10, "outputPerMTok": 0.50, "cacheReadPerMTok": 0.005, "cacheWritePerMTok": 0.125}
+  }
+}
