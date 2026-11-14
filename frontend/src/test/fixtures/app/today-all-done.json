@@ -1,0 +1,55 @@
+{
+  "title": "Today with Margaret",
+  "order": [
+    "nextStep",
+    "weeklyRhythm",
+    "readiness",
+    "subscriptionNotice",
+    "demo"
+  ],
+  "checkIn": null,
+  "practiceRound": null,
+  "careCardNudge": null,
+  "nextStep": {
+    "kind": "all_done",
+    "message": "You've finished every lesson built so far. New lessons are coming.",
+    "lesson": null,
+    "unlockText": null
+  },
+  "weeklyRhythm": {
+    "done": 3,
+    "target": 4,
+    "text": "This week: 3 of 4 practice sessions."
+  },
+  "readiness": {
+    "done": 5,
+    "total": 12,
+    "text": "Margaret's plan: 5 of 12 lessons done"
+  },
+  "subscriptionNotice": {
+    "kind": "renews_on",
+    "on": "2026-02-02",
+    "text": "Your plan renews on February 2."
+  },
+  "welcomeBack": null,
+  "visitSheetLink": {
+    "label": "Prepare for a doctor visit",
+    "path": "/api/visit-sheet"
+  },
+  "demo": {
+    "label": "Demo controls: simulated time, not real time.",
+    "appNow": "2026-01-12T09:00:00Z",
+    "appToday": "2026-01-12",
+    "clockOffsetSeconds": 604800,
+    "controls": [
+      {
+        "id": "nextDay",
+        "label": "Simulate next day (demo)"
+      },
+      {
+        "id": "jumpToRenewal",
+        "label": "Jump to renewal (demo)"
+      }
+    ]
+  }
+}

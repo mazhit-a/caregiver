@@ -1,0 +1,7 @@
+{
+  "screenId": "s1_setup",
+  "type": "setup_question",
+  "result": {
+    "variant": "in_person"
+  }
+}

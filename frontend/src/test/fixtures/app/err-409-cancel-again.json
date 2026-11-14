@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "no_active_subscription",
+    "message": "There is no subscription to cancel.",
+    "details": {
+      "status": "canceling"
+    }
+  }
+}

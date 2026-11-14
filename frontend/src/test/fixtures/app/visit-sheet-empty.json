@@ -1,0 +1,43 @@
+{
+  "doctor": null,
+  "visitDate": null,
+  "familyNotes": "",
+  "questions": [],
+  "bank": [
+    {
+      "id": "q_changes",
+      "text": "What changes should we watch for over the next few months?"
+    },
+    {
+      "id": "q_tests",
+      "text": "Are there any tests or check-ups you would suggest, and what would they tell us?"
+    },
+    {
+      "id": "q_meds_review",
+      "text": "Could you review all of my parent's current medicines and supplements with us?"
+    },
+    {
+      "id": "q_safety",
+      "text": "Is there anything at home we should look at to keep my parent safe?"
+    },
+    {
+      "id": "q_when_call",
+      "text": "What changes should make us call your office before the next visit?"
+    },
+    {
+      "id": "q_next_visit",
+      "text": "When should we plan the next visit?"
+    },
+    {
+      "id": "q_support",
+      "text": "Are there local services or support groups you would point our family to?"
+    },
+    {
+      "id": "q_caregiver",
+      "text": "How can I look after my own health while I help?"
+    }
+  ],
+  "suggestedNotes": [],
+  "footer": "Family observations, not a medical assessment.",
+  "updatedAt": null
+}

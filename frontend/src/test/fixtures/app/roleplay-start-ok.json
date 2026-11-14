@@ -1,0 +1,37 @@
+{
+  "runId": "fb9d6f94-4973-4dce-abb2-abeac888bccb",
+  "lessonId": "m1_l1",
+  "context": "lesson",
+  "variant": "in_person",
+  "roundsTotal": 3,
+  "rounds": [
+    {
+      "stage": "It's 6 pm. The appointment is tomorrow.",
+      "line": "When are we going to the doctor?",
+      "mood": "worried"
+    },
+    {
+      "stage": "Ten minutes later.",
+      "line": "Something's wrong, isn't it? Why are we going to the doctor?",
+      "mood": "anxious"
+    },
+    {
+      "stage": "Later that evening.",
+      "line": "Why won't you just tell me? You're hiding something.",
+      "mood": "suspicious"
+    }
+  ],
+  "title": "Practice: Mom asks again",
+  "goals": [
+    "notice",
+    "reassure",
+    "offer"
+  ],
+  "intro": "Now try it out loud. Mom is an AI practice partner. Type what you'd say. The coach will show what worked.",
+  "labels": {
+    "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+    "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
+    "thinking": "Mom is thinking…",
+    "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
+  }
+}

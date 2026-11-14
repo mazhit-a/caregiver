@@ -1,0 +1,251 @@
+{
+  "id": "m1_l2",
+  "moduleId": "m1_talking",
+  "title": "Talking so it lands",
+  "minutes": 7,
+  "skill": "communication",
+  "skillLabel": "Talking so it lands",
+  "variant": null,
+  "unlockOn": "2026-01-07",
+  "pattern": {
+    "name": "The three steps",
+    "steps": [
+      {
+        "id": "notice",
+        "label": "Notice the feeling",
+        "example": "That was a lot at once."
+      },
+      {
+        "id": "reassure",
+        "label": "Reassure",
+        "example": "There's no rush. Dinner is ready."
+      },
+      {
+        "id": "offer",
+        "label": "Offer something to do",
+        "example": "Want to take my arm and walk in together?"
+      }
+    ]
+  },
+  "screens": [
+    {
+      "id": "s1_scenario",
+      "type": "scenario",
+      "intro": null,
+      "setup": "Dinner is ready. Margaret is in the living room with the TV on. You call from the kitchen: \"Wash your hands, come sit down, and bring the napkins, it's getting cold!\" Margaret looks up and says:",
+      "line": "What? What do you want me to do?",
+      "question": "What would you say next?",
+      "answers": [
+        {
+          "id": "a1",
+          "text": "I said wash your hands, sit down and bring the napkins. Please listen."
+        },
+        {
+          "id": "a2",
+          "text": "Come to the table, please. Dinner's ready."
+        },
+        {
+          "id": "a3",
+          "text": "Sorry, that was too many things! Just wash your hands, then sit down."
+        },
+        {
+          "id": "a4",
+          "text": "That was a lot at once. There's no rush, dinner's ready. Want to take my arm and walk in together?"
+        }
+      ],
+      "verdictLabels": {
+        "best": "Best",
+        "okay": "Okay",
+        "try_again": "Try again"
+      },
+      "afterChoice": "You can try another answer to compare.",
+      "saveButton": "Save this phrase"
+    },
+    {
+      "id": "s2_one_thing",
+      "type": "learn",
+      "title": "One thing at a time. Short sentences.",
+      "body": "A long sentence with many parts is hard to hold on to. One short sentence with one idea is easier to follow, and easier on you too. Say the first thing. Wait. Then say the next.",
+      "bullets": null,
+      "extra": null,
+      "patternTip": null,
+      "pattern": null,
+      "miniTask": {
+        "question": "Which one is easier to follow?",
+        "options": [
+          {
+            "id": "long",
+            "label": "Wash your hands, then sit down, and get the napkins, because the food is getting cold."
+          },
+          {
+            "id": "short",
+            "label": "Dinner's ready. Come sit with me."
+          }
+        ]
+      }
+    },
+    {
+      "id": "s3_close_slow",
+      "type": "learn",
+      "title": "Come close, slow down, then speak.",
+      "body": "Walk over before you talk. Get face to face, at eye level if you can. Smile, say hello, then wait a moment. A calm voice and a friendly face are understood before any words are.",
+      "bullets": null,
+      "extra": null,
+      "patternTip": null,
+      "pattern": null,
+      "miniTask": null
+    },
+    {
+      "id": "s4_choice",
+      "type": "learn",
+      "title": "Offer a choice of two, not an open question.",
+      "body": "\"What do you want to drink?\" is hard to answer. \"Tea or juice?\" is easy. Two choices give Margaret a say, without a lot to think about. Use the three steps, in short words.",
+      "bullets": null,
+      "extra": null,
+      "patternTip": null,
+      "pattern": {
+        "name": "The three steps",
+        "steps": [
+          {
+            "id": "notice",
+            "label": "Notice the feeling",
+            "example": "That was a lot at once."
+          },
+          {
+            "id": "reassure",
+            "label": "Reassure",
+            "example": "There's no rush. Dinner is ready."
+          },
+          {
+            "id": "offer",
+            "label": "Offer something to do",
+            "example": "Want to take my arm and walk in together?"
+          }
+        ]
+      },
+      "miniTask": {
+        "question": "Which reply is easiest to say yes to?",
+        "options": [
+          {
+            "id": "open",
+            "label": "What would you like to do now? Anything you want."
+          },
+          {
+            "id": "two",
+            "label": "You look tired. I'm right here. Tea or a short walk?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "s5_reset",
+      "type": "learn",
+      "title": "Take one second before you speak.",
+      "body": "When you're busy or tired, words come out fast. A tiny pause before you speak helps the calm land first. Pick the pause that feels easiest.",
+      "bullets": null,
+      "extra": null,
+      "patternTip": null,
+      "pattern": null,
+      "miniTask": {
+        "question": "Pick your pause for next time:",
+        "options": [
+          {
+            "id": "walk_over",
+            "label": "Walk over so we're face to face"
+          },
+          {
+            "id": "breath",
+            "label": "One slow breath before I speak"
+          },
+          {
+            "id": "wait",
+            "label": "Say it, then wait a few seconds for an answer"
+          }
+        ]
+      }
+    },
+    {
+      "id": "s6_practice",
+      "type": "roleplay",
+      "title": "Practice: say it so it lands",
+      "intro": "Now try it out loud. Margaret is an AI practice partner. Type what you'd say. The coach will show what worked.",
+      "goals": [
+        "notice",
+        "reassure",
+        "offer"
+      ],
+      "rounds": [
+        {
+          "stage": "Dinner is ready. You call from the kitchen.",
+          "line": "What? What do you want me to do?",
+          "mood": "confused"
+        },
+        {
+          "stage": "A few minutes later. You ask for two things at once.",
+          "line": "I can't keep up with all this talking.",
+          "mood": "overwhelmed"
+        },
+        {
+          "stage": "After dinner, you ask what Margaret would like to drink.",
+          "line": "I don't know. You decide.",
+          "mood": "tired"
+        }
+      ],
+      "labels": {
+        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
+        "thinking": "Margaret is thinking…",
+        "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
+      },
+      "summary": {
+        "title": "Your practice",
+        "bestPhraseLabel": "Your best phrase",
+        "saveButton": "Save",
+        "againButton": "Practice again"
+      }
+    },
+    {
+      "id": "s7_plan",
+      "type": "plan",
+      "title": "Your plan for next time",
+      "ifThen": {
+        "cue": "When I need Margaret to do something,",
+        "responseLabel": "then I'll say:",
+        "responseEditable": true,
+        "resetLabel": "And first, I'll:",
+        "resetFrom": "s5_reset"
+      },
+      "doNow": {
+        "title": "One thing to do now",
+        "text": "Save your phrase where you'll see it, like a note on your phone. Pick one moment today, such as a meal, to try it.",
+        "action": "copy_phrase",
+        "button": "Copy my phrase"
+      },
+      "remindButton": "Remind me tomorrow",
+      "doneButton": "Done",
+      "noteTemplate": {
+        "title": "Margaret's note",
+        "example": "Dinner at [time]. I'll walk in with you. — [your name]"
+      }
+    },
+    {
+      "id": "s8_wrap",
+      "type": "wrap",
+      "skillLine": "New skill: talking so it lands.",
+      "phraseLine": "Your phrase is saved to Margaret's page and care card.",
+      "patternLine": "Same three steps as before: notice the feeling, reassure, offer something to do. Now you also know how to say them: close, slow, short.",
+      "confidenceCheck": null,
+      "tomorrowLine": "Tomorrow: a quick check-in and a 2-minute practice round.",
+      "nextLine": "Next in this module: \"You stole my purse\", what to say when something goes missing."
+    }
+  ],
+  "progress": {
+    "step": 0,
+    "startedAt": "2026-01-07T09:00:00Z",
+    "doneAt": null
+  },
+  "recap": {
+    "fromLessonId": "m1_l1",
+    "text": "Last time you practiced the three steps: notice the feeling, reassure, offer something to do. Your phrase was: \"You sound worried. I'm here. Want some tea?\". You said it helped. Today we'll make every conversation a little easier."
+  }
+}

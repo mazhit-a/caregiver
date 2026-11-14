@@ -1,0 +1,56 @@
+{
+  "mode": "fallback",
+  "runMode": "fallback",
+  "round": 1,
+  "roundsTotal": 3,
+  "coach": null,
+  "kind": null,
+  "resources": [],
+  "emergencyText": null,
+  "fallbackScenarios": [
+    {
+      "id": "fb1",
+      "setup": "Ten minutes later, Mom asks again, a little more worried:",
+      "line": "Something's wrong, isn't it?",
+      "answers": [
+        {
+          "text": "No, nothing's wrong. I already said it's just a checkup.",
+          "verdict": "okay",
+          "feedback": "True, but \"already said\" points at the forgetting."
+        },
+        {
+          "text": "You sound worried. I'm right here, and everything's taken care of. Come sit with me?",
+          "verdict": "best",
+          "feedback": "Feeling, reassurance, something to do."
+        },
+        {
+          "text": "Why do you keep asking?",
+          "verdict": "try_again",
+          "feedback": "It can feel like blame, and Mom may not know why either."
+        }
+      ]
+    },
+    {
+      "id": "fb2",
+      "setup": "Later that evening:",
+      "line": "Why won't you just tell me? You're hiding something.",
+      "answers": [
+        {
+          "text": "I'm not hiding anything. I've told you five times.",
+          "verdict": "try_again",
+          "feedback": "Defending yourself is natural, but it turns into an argument."
+        },
+        {
+          "text": "It sounds like you feel left out. I'll tell you everything as it happens. Want to look at the calendar together?",
+          "verdict": "best",
+          "feedback": "You named the feeling and gave a calm, shared next step."
+        },
+        {
+          "text": "Okay, okay. It's at 2 tomorrow.",
+          "verdict": "okay",
+          "feedback": "It answers the question, but not the feeling of being left out."
+        }
+      ]
+    }
+  ]
+}

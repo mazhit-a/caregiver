@@ -1,0 +1,25 @@
+{
+  "mode": "ai",
+  "runMode": "ai",
+  "round": 2,
+  "roundsTotal": 3,
+  "coach": {
+    "aiGenerated": true,
+    "score": 1,
+    "goals": {
+      "notice": true,
+      "reassure": false,
+      "offer": false
+    },
+    "argued": true,
+    "flags": [],
+    "tip": "Try adding one calming sentence.",
+    "betterPhrase": "You sound worried. I'm here. Want some tea?",
+    "parentReaction": "But I need to know now.",
+    "parentMood": "more_upset"
+  },
+  "kind": null,
+  "resources": [],
+  "emergencyText": null,
+  "fallbackScenarios": []
+}

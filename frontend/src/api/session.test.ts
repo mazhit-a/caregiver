@@ -152,7 +152,7 @@ describe("gateRoute", () => {
   it("is the one reason-to-route table", () => {
     expect(gateRoute("no_plan")).toEqual({ path: "/quiz", notice: null });
     expect(gateRoute("no_subscription")).toEqual({ path: "/paywall", notice: null });
-    expect(gateRoute("past_due")).toEqual({ path: "/paywall", notice: "past_due" });
+    expect(gateRoute("past_due")).toEqual({ path: "/today", notice: "past_due" });
     expect(gateRoute("ended")).toEqual({ path: "/", notice: null });
   });
 });

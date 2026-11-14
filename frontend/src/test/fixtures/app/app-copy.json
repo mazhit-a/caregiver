@@ -1,0 +1,51 @@
+{
+  "nav": {
+    "today": "Today",
+    "plan": "Plan",
+    "profilePage": "Mom's page",
+    "skills": "Skills",
+    "settings": "Settings"
+  },
+  "plan": {
+    "title": "Mom's course",
+    "subtitle": "Built from your answers. One topic at a time.",
+    "quickGuidesTitle": "Quick guides for urgent moments",
+    "quickGuidesCaption": "These guides are still being written. If you are at your limit right now, open Need help now."
+  },
+  "profile": {
+    "title": "Mom's page",
+    "privacyNote": "Saved privately to this session. No account, no name needed.",
+    "worksTitle": "What works with Mom",
+    "aboutTitle": "About Mom",
+    "enjoysTitle": "Enjoys",
+    "calmsTitle": "Calms",
+    "avoidTitle": "Try to avoid",
+    "rhythmTitle": "Daily rhythm",
+    "contactsTitle": "Contacts",
+    "emptyPhrases": "Phrases you save in a lesson will appear here, on Mom's page.",
+    "editNote": "Please don't add diagnoses or medicines here. Part of this page is shared through the care card."
+  },
+  "careCard": {
+    "title": "Mom's care card",
+    "purpose": "One page for a sitter, a neighbor or a family member: what works with Mom, who to call, and the phrases you chose.",
+    "sharingSentence": "Anyone who has the link can open it until you stop sharing. It never shows a diagnosis or medicines."
+  },
+  "visitSheet": {
+    "title": "Prepare for Mom's next doctor visit",
+    "subtitle": "Write down what you have noticed and the questions you want to ask, so you have them in the room."
+  },
+  "skills": {
+    "title": "Your skills",
+    "subtitle": "What you have practiced so far, from your lessons and practice rounds."
+  },
+  "settings": {
+    "title": "Settings",
+    "gentleExitEntry": "Mom has passed away or moved to a care facility",
+    "gentleExitHint": "If your situation has changed, there is a quiet way to close things here."
+  },
+  "welcome": {
+    "title": "Welcome",
+    "body": "If you like, add a first name and we will use it in your lessons and on Mom's page. No last names, no diagnosis. You can skip this.",
+    "nameLabel": "First name (optional)"
+  }
+}

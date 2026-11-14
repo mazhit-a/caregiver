@@ -1,0 +1,114 @@
+{
+  "status": "published",
+  "link": "http://localhost:3000/card/REDACTED_CARD_ID",
+  "published": {
+    "displayName": "Margaret",
+    "enjoys": [
+      "gardening",
+      "old songs"
+    ],
+    "calms": [
+      "tea"
+    ],
+    "avoid": [
+      "loud TV"
+    ],
+    "rhythm": "Up at 7. Tea at 10. Quiet after 6.",
+    "contacts": [
+      {
+        "name": "Sam",
+        "phone": "555-0100",
+        "role": "Neighbor"
+      }
+    ],
+    "helplines": [
+      {
+        "name": "Emergency services",
+        "phone": "911",
+        "description": "If this is happening now, call 911."
+      },
+      {
+        "name": "988 Suicide & Crisis Lifeline",
+        "phone": "988",
+        "description": "Call or text 988, any time, for you or someone you care about."
+      },
+      {
+        "name": "Alzheimer's Association 24/7 Helpline",
+        "phone": "1-800-272-3900",
+        "description": "Free support and advice from trained staff, day or night."
+      },
+      {
+        "name": "Adult Protective Services",
+        "phone": "1-800-677-1116",
+        "description": "If you worry that an older adult is being harmed or neglected. This is the Eldercare Locator, which connects you to your local agency."
+      }
+    ],
+    "phrases": [
+      "You sound worried. I'm here. Want some tea?"
+    ],
+    "updatedOn": "2026-01-06",
+    "caregiverFirstName": "Alex"
+  },
+  "preview": {
+    "displayName": "Margaret",
+    "enjoys": [
+      "gardening",
+      "old songs"
+    ],
+    "calms": [
+      "tea"
+    ],
+    "avoid": [
+      "loud TV"
+    ],
+    "rhythm": "Up at 7. Tea at 10. Quiet after 6.",
+    "contacts": [
+      {
+        "name": "Sam",
+        "phone": "555-0100",
+        "role": "Neighbor"
+      }
+    ],
+    "helplines": [
+      {
+        "name": "Emergency services",
+        "phone": "911",
+        "description": "If this is happening now, call 911."
+      },
+      {
+        "name": "988 Suicide & Crisis Lifeline",
+        "phone": "988",
+        "description": "Call or text 988, any time, for you or someone you care about."
+      },
+      {
+        "name": "Alzheimer's Association 24/7 Helpline",
+        "phone": "1-800-272-3900",
+        "description": "Free support and advice from trained staff, day or night."
+      },
+      {
+        "name": "Adult Protective Services",
+        "phone": "1-800-677-1116",
+        "description": "If you worry that an older adult is being harmed or neglected. This is the Eldercare Locator, which connects you to your local agency."
+      }
+    ],
+    "phrases": [
+      "You sound worried. I'm here. Want some tea?"
+    ],
+    "updatedOn": "2026-01-06",
+    "caregiverFirstName": "Alex"
+  },
+  "chosenPhraseIds": [
+    "5fec744a-aad6-40e3-9340-ffe98674cc50"
+  ],
+  "availablePhrases": [
+    {
+      "id": "5fec744a-aad6-40e3-9340-ffe98674cc50",
+      "text": "You sound worried. I'm here. Want some tea?"
+    }
+  ],
+  "newPhraseCount": 0,
+  "publishedAt": "2026-01-06T09:00:00Z",
+  "updatedAt": "2026-01-06T09:00:00Z",
+  "lastOpenedAt": null,
+  "revokedAt": null
+}

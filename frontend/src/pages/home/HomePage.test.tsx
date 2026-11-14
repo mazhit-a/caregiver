@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -170,11 +170,10 @@ describe("HomePage", () => {
     expect(await axe(container)).toHaveNoViolations();
   });
 
-  it("matches the design's visible text except for the allowed copy changes", async () => {
-    const html = readFileSync(
-      resolve(import.meta.dirname, "../../../../context/design/kelper-landing/home/index.html"),
-      "utf8",
-    );
+  // context/ is git-ignored, so the design export only exists on a developer machine, not in CI.
+  const designPath = resolve(import.meta.dirname, "../../../../context/design/kelper-landing/home/index.html");
+  it.skipIf(!existsSync(designPath))("matches the design's visible text except for the allowed copy changes", async () => {
+    const html = readFileSync(designPath, "utf8");
     const body = html.slice(html.indexOf("<main>"), html.indexOf("</main>"));
     const designText = new Set(
       body

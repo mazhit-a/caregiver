@@ -1,0 +1,23 @@
+{
+  "displayName": "Margaret",
+  "enjoys": [
+    "gardening",
+    "old songs"
+  ],
+  "calms": [
+    "tea"
+  ],
+  "avoid": [
+    "loud TV"
+  ],
+  "rhythm": "Up at 7. Tea at 10. Quiet after 6.",
+  "contacts": [
+    {
+      "name": "Sam",
+      "phone": "555-0100",
+      "role": "Neighbor"
+    }
+  ],
+  "caregiverFirstName": "Alex",
+  "updatedAt": "2026-01-06T09:00:00Z"
+}

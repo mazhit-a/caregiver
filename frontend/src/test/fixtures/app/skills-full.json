@@ -1,0 +1,36 @@
+{
+  "skills": [
+    {
+      "id": "communication",
+      "label": "Communication",
+      "roleplay": {
+        "runs": 6,
+        "firstScore": 3,
+        "latestScore": 3,
+        "maxScore": 3
+      },
+      "scenarios": {
+        "practised": 4,
+        "best": 4
+      }
+    }
+  ],
+  "confidence": {
+    "day0": 2,
+    "first": {
+      "repeat": 3,
+      "visits": 5,
+      "refusal": 1,
+      "evenings": 4,
+      "accusations": 2
+    },
+    "latest": null
+  },
+  "counts": {
+    "scenariosPractised": 4,
+    "phrasesSaved": 2,
+    "tasksTried": 5,
+    "tasksHelped": 1
+  },
+  "next": null
+}

@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "invalid_session_token",
+    "message": "A valid session token is required.",
+    "details": {}
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "doctor": "Dr. Lee",
+  "visitDate": "2026-01-15",
+  "familyNotes": "Slept badly",
+  "questions": [
+    {
+      "id": null,
+      "text": "Is the new routine OK?",
+      "custom": true
+    }
+  ],
+  "bank": [
+    {
+      "id": "q_changes",
+      "text": "What changes should we watch for over the next few months?"
+    },
+    {
+      "id": "q_tests",
+      "text": "Are there any tests or check-ups you would suggest, and what would they tell us?"
+    },
+    {
+      "id": "q_meds_review",
+      "text": "Could you review all of my parent's current medicines and supplements with us?"
+    },
+    {
+      "id": "q_safety",
+      "text": "Is there anything at home we should look at to keep my parent safe?"
+    },
+    {
+      "id": "q_when_call",
+      "text": "What changes should make us call your office before the next visit?"
+    },
+    {
+      "id": "q_next_visit",
+      "text": "When should we plan the next visit?"
+    },
+    {
+      "id": "q_support",
+      "text": "Are there local services or support groups you would point our family to?"
+    },
+    {
+      "id": "q_caregiver",
+      "text": "How can I look after my own health while I help?"
+    }
+  ],
+  "suggestedNotes": [
+    {
+      "id": "beab6d8d-073f-44ee-aa1d-89d7c341dcb4",
+      "text": "At dinner",
+      "createdAt": "2026-01-06T09:00:00Z"
+    }
+  ],
+  "footer": "Family observations, not a medical assessment.",
+  "updatedAt": "2026-01-06T09:00:00Z"
+}

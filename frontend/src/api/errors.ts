@@ -66,7 +66,8 @@ export function gateRoute(reason: AccessReason): GateTarget {
     case "no_subscription":
       return { path: ROUTES.paywall, notice: null };
     case "past_due":
-      return { path: ROUTES.paywall, notice: "past_due" };
+      // The paywall would invite a second subscription: the shell shows a notice instead.
+      return { path: ROUTES.today, notice: "past_due" };
     case "ended":
       return { path: ROUTES.home, notice: null };
   }
@@ -77,4 +78,38 @@ export function missingQuestionIds(failure: ApiFailure): string[] {
   if (failure.kind !== "validation" || failure.code !== "quiz_incomplete") return [];
   const ids = isRecord(failure.details) ? failure.details["questionIds"] : undefined;
   return Array.isArray(ids) ? ids.filter((id): id is string => typeof id === "string") : [];
+}
+
+/** Failures only the app screens tell apart (the funnel never sees these kinds). */
+export type AppFailure =
+  | ApiFailure
+  | { kind: "not_found" }
+  | { kind: "gone" }
+  | { kind: "lesson_locked"; unlockOn: string | null }
+  | { kind: "conflict"; code: string }
+  | { kind: "billing_failed" };
+
+/** `classifyError` plus 404, 409 (other than the funnel ones), 410, 423 and `billing_cancel_failed`. */
+export function classifyAppError(error: unknown): AppFailure {
+  if (error instanceof ApiError) {
+    const { status, code, details } = error;
+    if (status === 404) return { kind: "not_found" };
+    if (status === 410) return { kind: "gone" };
+    if (status === 423) {
+      const unlockOn = isRecord(details) ? details["unlockOn"] : undefined;
+      return { kind: "lesson_locked", unlockOn: typeof unlockOn === "string" ? unlockOn : null };
+    }
+    if (status === 409 && code !== "quiz_locked" && code !== "already_subscribed") {
+      return { kind: "conflict", code };
+    }
+    if (status === 503 && code === "billing_cancel_failed") return { kind: "billing_failed" };
+  }
+  return classifyError(error);
+}
+
+/** Kinds the app shell handles itself (redirect or the past-due notice). */
+export function isShellFailure(
+  failure: AppFailure,
+): failure is Extract<ApiFailure, { kind: "session_lost" | "gate" }> {
+  return failure.kind === "session_lost" || failure.kind === "gate";
 }

@@ -1,0 +1,10 @@
+{
+  "error": {
+    "code": "lesson_locked",
+    "message": "This lesson is not unlocked yet.",
+    "details": {
+      "lesson": "m1_l2",
+      "unlockOn": "2026-01-07"
+    }
+  }
+}

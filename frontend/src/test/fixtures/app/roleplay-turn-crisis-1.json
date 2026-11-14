@@ -1,0 +1,36 @@
+{
+  "mode": "safety",
+  "runMode": "ai",
+  "round": 1,
+  "roundsTotal": 3,
+  "coach": null,
+  "kind": "crisis",
+  "resources": [
+    {
+      "id": "emergency_911",
+      "name": "Emergency services",
+      "phone": "911",
+      "description": "If this is happening now, call 911."
+    },
+    {
+      "id": "lifeline_988",
+      "name": "988 Suicide & Crisis Lifeline",
+      "phone": "988",
+      "description": "Call or text 988, any time, for you or someone you care about."
+    },
+    {
+      "id": "alz_helpline",
+      "name": "Alzheimer's Association 24/7 Helpline",
+      "phone": "1-800-272-3900",
+      "description": "Free support and advice from trained staff, day or night."
+    },
+    {
+      "id": "adult_protective_services",
+      "name": "Adult Protective Services",
+      "phone": "1-800-677-1116",
+      "description": "If you worry that an older adult is being harmed or neglected. This is the Eldercare Locator, which connects you to your local agency."
+    }
+  ],
+  "emergencyText": null,
+  "fallbackScenarios": []
+}

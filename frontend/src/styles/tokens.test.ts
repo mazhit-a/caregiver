@@ -1,8 +1,10 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const tokensCss = readFileSync(resolve(__dirname, "tokens.css"), "utf8");
 const designHtml = resolve(__dirname, "../../../context/design/kelper-landing/home/index.html");
+// context/ is git-ignored, so the design export only exists on a developer machine, not in CI.
+const hasDesign = existsSync(designHtml);
 
 function names(css: string): string[] {
   return [...css.matchAll(/(--[a-z0-9-]+)\s*:/g)].map((m) => m[1] as string);
@@ -13,7 +15,7 @@ describe("tokens.css", () => {
     expect(tokensCss).toMatch(/--tap-min:\s*48px;/);
   });
 
-  it("defines every token of the design block", () => {
+  it.skipIf(!hasDesign)("defines every token of the design block", () => {
     const html = readFileSync(designHtml, "utf8");
     const start = html.indexOf("data-dc-design-system-vars");
     const block = html.slice(start, html.indexOf("</style>", start));

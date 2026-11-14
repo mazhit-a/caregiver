@@ -1,0 +1,16 @@
+{
+  "runId": "88bb3f2d-3fde-4bd3-9669-8c1c323a5b49",
+  "mode": "fallback",
+  "finishedAt": "2026-01-05T09:00:00Z",
+  "summary": {
+    "firstScore": null,
+    "lastScore": null,
+    "improved": false,
+    "noticeTurns": 0,
+    "reassureTurns": 0,
+    "offerTurns": 0
+  },
+  "scores": [],
+  "firstVsLast": null,
+  "bestPhrase": null
+}

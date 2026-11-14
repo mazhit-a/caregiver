@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "not_a_stripe_subscription",
+    "message": "This control needs a card subscription made through Stripe checkout.",
+    "details": {}
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "unknown_lesson",
+    "message": "We could not find this lesson.",
+    "details": {
+      "lesson": "nope"
+    }
+  }
+}

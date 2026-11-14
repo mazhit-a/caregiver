@@ -1,0 +1,37 @@
+{
+  "runId": "1da5f137-9fab-4f8a-affd-c3dbd557bc47",
+  "lessonId": "m1_l1",
+  "context": "lesson",
+  "variant": "phone",
+  "roundsTotal": 3,
+  "rounds": [
+    {
+      "stage": "You're at work. Mom calls.",
+      "line": "When are you coming on Saturday?",
+      "mood": "worried"
+    },
+    {
+      "stage": "Twenty minutes later, Mom calls again.",
+      "line": "Are you still coming? Nobody tells me anything.",
+      "mood": "anxious"
+    },
+    {
+      "stage": "Another call, later that afternoon.",
+      "line": "You forgot about me, didn't you?",
+      "mood": "hurt"
+    }
+  ],
+  "title": "Practice: Mom asks again",
+  "goals": [
+    "notice",
+    "reassure",
+    "offer"
+  ],
+  "intro": "Now try it out loud. Mom is an AI practice partner. Type what you'd say. The coach will show what worked.",
+  "labels": {
+    "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+    "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
+    "thinking": "Mom is thinking…",
+    "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
+  }
+}

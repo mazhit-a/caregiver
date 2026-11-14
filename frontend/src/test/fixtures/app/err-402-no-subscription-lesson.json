@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "payment_required",
+    "message": "Start your subscription to continue.",
+    "details": {
+      "reason": "no_subscription"
+    }
+  }
+}

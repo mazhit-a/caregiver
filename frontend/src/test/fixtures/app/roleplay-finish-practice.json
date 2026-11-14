@@ -1,0 +1,19 @@
+{
+  "runId": "a4cab2c2-e557-4030-80f2-d4386e356d67",
+  "mode": "ai",
+  "finishedAt": "2026-01-06T09:00:00Z",
+  "summary": {
+    "firstScore": 3,
+    "lastScore": 3,
+    "improved": false,
+    "noticeTurns": 2,
+    "reassureTurns": 2,
+    "offerTurns": 2
+  },
+  "scores": [
+    3,
+    3
+  ],
+  "firstVsLast": null,
+  "bestPhrase": "You sound worried. I'm right here. Want to sit with me for a minute?"
+}

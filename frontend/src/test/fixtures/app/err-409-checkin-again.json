@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "checkin_already_answered",
+    "message": "You already answered this check-in.",
+    "details": {
+      "planId": "m1_l1"
+    }
+  }
+}

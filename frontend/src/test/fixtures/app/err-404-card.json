@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "card_not_found",
+    "message": "This card does not exist.",
+    "details": {}
+  }
+}

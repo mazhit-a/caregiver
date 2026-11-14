@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "card_revoked",
+    "message": "This card is no longer shared.",
+    "details": {}
+  }
+}

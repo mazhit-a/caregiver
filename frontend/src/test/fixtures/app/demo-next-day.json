@@ -1,0 +1,11 @@
+{
+  "demoControls": true,
+  "label": "Demo controls: simulated time, not real time.",
+  "appNow": "2026-01-13T09:00:00Z",
+  "appToday": "2026-01-13",
+  "clockOffsetSeconds": 691200,
+  "subscriptionStatus": "demo",
+  "currentPeriodEnd": "2026-02-02T09:00:00Z",
+  "renewalCount": 0,
+  "billingSync": "none"
+}
