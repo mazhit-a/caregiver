@@ -66,6 +66,9 @@ class AdvanceDemoDay:
         async with self._uow:
             await self._uow.sessions.save(session)
             subscription = await self._uow.subscriptions.get(session.id) or Subscription(session.id)
+            await self._uow.events.record(
+                session.id, "demo_next_day", {}, session.app_now(self._clock.now())
+            )
             await self._uow.commit()
         return _state(session, subscription, self._clock)
 
@@ -95,6 +98,9 @@ class JumpToRenewal:
             session.clock_offset = period_end + _AFTER_RENEWAL - self._clock.now()
             await self._uow.sessions.save(session)
             subscription = await self._uow.subscriptions.get(session.id) or Subscription(session.id)
+            await self._uow.events.record(
+                session.id, "demo_jump_to_renewal", {}, session.app_now(self._clock.now())
+            )
             await self._uow.commit()
         return _state(session, subscription, self._clock)
 

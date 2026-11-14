@@ -36,6 +36,9 @@ class CompleteLesson:
             if progress.done_at is None:
                 progress.done_at = done_at
                 await self._uow.lesson_progress.save(progress)
+                await self._uow.events.record(
+                    session.id, "lesson_complete", {"lessonId": lesson_id}, done_at
+                )
                 await self._uow.commit()
             schedule = await self._uow.lesson_schedule.list_for_session(session.id)
             stored = await self._uow.plans.get(session.id)

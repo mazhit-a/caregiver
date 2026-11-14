@@ -92,9 +92,17 @@ class HandleStripeEvent:
             subscription = await self._uow.subscriptions.get(session.id)
             if subscription is None or subscription.source != SOURCE:
                 return
+            renewals_before = subscription.renewal_count
             if not apply(subscription, session):
                 return
             await self._uow.subscriptions.save(subscription)
+            if subscription.renewal_count > renewals_before:
+                await self._uow.events.record(
+                    session.id,
+                    "renewed",
+                    {"source": SOURCE, "renewalCount": subscription.renewal_count},
+                    session.app_now(self._clock.now()),
+                )
             for entry in subscription.pull_history():
                 await self._uow.subscription_history.add(entry)
             await self._uow.commit()

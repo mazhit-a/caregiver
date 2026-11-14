@@ -121,6 +121,10 @@ class SubmitCheckin:
             final_outcome: Outcome | None = chosen
             task_done = final_outcome == "helped"
             await self._uow.checkins.add(Checkin(session.id, plan_id, came_up, final_outcome, now))
+            props: dict[str, object] = {"planId": plan_id, "cameUp": came_up}
+            if final_outcome is not None:
+                props["outcome"] = final_outcome
+            await self._uow.events.record(session.id, "checkin_answer", props, now)
             if task_done:
                 await self._uow.tasks.mark_done(session.id, plan_id, now)
             observation = self._observation(session, plan_id, came_up, doctor_note, day2, now)

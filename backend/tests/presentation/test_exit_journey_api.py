@@ -21,6 +21,7 @@ EXPECTED_TABLES = {
     "care_cards",
     "checkins",
     "confidence",
+    "events",
     "if_then_plans",
     "lesson_progress",
     "lesson_schedule",
@@ -76,6 +77,8 @@ async def _journey(
         await client.put("/api/visit-sheet", json={"familyNotes": "Slept badly"})
     ).status_code == 200
     assert (await client.post("/api/care-card", json={})).status_code in (200, 201)
+    r = await client.post("/api/events", json={"events": [{"name": "quiz_start"}]})
+    assert r.status_code == 200, r.text
     async with factory() as db:
         sid = (await db.execute(text("SELECT id FROM sessions"))).scalar_one()
         await db.execute(
@@ -148,3 +151,20 @@ async def test_every_session_foreign_key_cascades_on_delete(
     tables = {name for name, _ in rows}
     assert tables == await _session_tables(session_factory)
     assert all(kind == "c" for _, kind in rows), rows
+
+
+@pytest.mark.parametrize(
+    ("method", "url"), [("post", "/api/exit/gentle"), ("delete", "/api/session")]
+)
+async def test_gentle_exit_deletes_events_rows(
+    method: str,
+    url: str,
+    pclient: httpx.AsyncClient,  # noqa: F811
+    db_app: FastAPI,
+    session_factory: async_sessionmaker[AsyncSession],
+) -> None:
+    sid = await _journey(pclient, db_app, session_factory)
+    before = await _row_counts(session_factory, {"events"}, sid)
+    assert before["events"] >= 3  # client event + lesson_complete + checkin_answer ...
+    assert (await getattr(pclient, method)(url)).status_code == 200
+    assert (await _row_counts(session_factory, {"events"}, sid))["events"] == 0

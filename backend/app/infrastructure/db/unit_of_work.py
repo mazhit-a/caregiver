@@ -11,6 +11,7 @@ from app.infrastructure.db.repositories.checkins import (
     SqlObservationRepository,
 )
 from app.infrastructure.db.repositories.confidence import SqlConfidenceRepository
+from app.infrastructure.db.repositories.events import SqlEventLog
 from app.infrastructure.db.repositories.lesson_plans import (
     SqlIfThenPlanRepository,
     SqlTaskRepository,
@@ -53,6 +54,7 @@ class SqlAlchemyUnitOfWork:
     profiles: SqlProfileRepository
     visit_sheets: SqlVisitSheetRepository
     care_cards: SqlCareCardRepository
+    events: SqlEventLog
 
     def __init__(self, session_factory: async_sessionmaker[AsyncSession]) -> None:
         self._factory = session_factory
@@ -80,6 +82,7 @@ class SqlAlchemyUnitOfWork:
         self.profiles = SqlProfileRepository(self._db)
         self.visit_sheets = SqlVisitSheetRepository(self._db)
         self.care_cards = SqlCareCardRepository(self._db)
+        self.events = SqlEventLog(self._db)
         return self
 
     async def __aexit__(

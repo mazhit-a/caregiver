@@ -8,6 +8,7 @@ from tests.fakes.billing import (
 )
 from tests.fakes.care_cards import InMemoryCareCardRepository
 from tests.fakes.checkins import InMemoryCheckinRepository, InMemoryObservationRepository
+from tests.fakes.events import InMemoryEventLog
 from tests.fakes.lesson_plans import InMemoryIfThenPlanRepository, InMemoryTaskRepository
 from tests.fakes.lesson_progress import InMemoryLessonProgressRepository
 from tests.fakes.lesson_schedule import InMemoryLessonScheduleRepository
@@ -45,6 +46,7 @@ class FakeUnitOfWork:
         self.profiles = InMemoryProfileRepository()
         self.visit_sheets = InMemoryVisitSheetRepository()
         self.care_cards = InMemoryCareCardRepository()
+        self.events = InMemoryEventLog()
         self.committed = False
         self.rolled_back = False
 

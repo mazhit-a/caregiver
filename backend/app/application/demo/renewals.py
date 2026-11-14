@@ -40,6 +40,12 @@ class RollDemoRenewals:
             subscription.renew(
                 boundary, boundary + timedelta(days=renew_days), DEMO_RENEWED_EVENT, "demo"
             )
+            await self._uow.events.record(
+                session.id,
+                "renewed",
+                {"source": "demo", "renewalCount": subscription.renewal_count},
+                boundary,
+            )
             changed = True
         if not changed:
             return

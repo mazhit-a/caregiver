@@ -265,6 +265,17 @@ class RoleplayRunRepository(Protocol):
         ...
 
 
+class EventLog(Protocol):
+    """Product events of a session. Implementations clean every event through
+    `domain.events.catalog.clean_event` (unknown name raises `UnknownEvent`, props not on the
+    whitelist are dropped), so no answer value or free text is ever stored. It is an attribute of
+    the unit of work: an event commits or rolls back with the action that emitted it."""
+
+    async def record(
+        self, session_id: UUID, name: str, props: Mapping[str, object], app_at: datetime
+    ) -> None: ...
+
+
 class UnitOfWork(Protocol):
     """Transaction boundary: `async with uow:` ... `await uow.commit()`.
 
@@ -291,6 +302,7 @@ class UnitOfWork(Protocol):
     profiles: ProfileRepository
     visit_sheets: VisitSheetRepository
     care_cards: CareCardRepository
+    events: EventLog
 
     async def __aenter__(self) -> Self: ...
 

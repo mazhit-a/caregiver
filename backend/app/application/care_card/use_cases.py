@@ -152,6 +152,9 @@ class PublishCareCard:
                 session.app_now(self._clock.now()),
             )
             await self._uow.care_cards.save(card)
+            await self._uow.events.record(
+                session.id, "card_published", {"phrases": len(chosen)}, card.published_at
+            )
             await self._uow.commit()
         return card
 

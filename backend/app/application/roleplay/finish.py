@@ -2,12 +2,13 @@
 
 import logging
 from collections.abc import Sequence
+from datetime import datetime
 from uuid import UUID
 
 from app.application.ports import Clock, ContentProvider, UnitOfWork
 from app.application.roleplay.dto import FinishView, TurnPhrase
 from app.application.roleplay.lesson_source import render, roleplay_screen
-from app.application.roleplay.runs import load_run, save_run
+from app.application.roleplay.runs import load_run
 from app.domain.roleplay.errors import TurnsMismatch
 from app.domain.roleplay.run import RunContext, RunRecord, TurnPhrases, best_phrase, validate_reply
 from app.domain.session.entities import Session
@@ -38,7 +39,7 @@ class FinishRoleplay:
         ]
         if record.finished_at is None:
             record.finished_at = session.app_now(self._clock.now())
-            await save_run(self._uow, record)
+            await self._save_finished(session, record, record.finished_at)
         summary = record.run.summary()
         logger.info("roleplay finish run=%s turns=%s", record.id, len(scores))
         return FinishView(
@@ -50,6 +51,25 @@ class FinishRoleplay:
             first_vs_last=self._first_vs_last(session, record),
             best_phrase=best_phrase(turns),
         )
+
+    async def _save_finished(
+        self, session: Session, record: RunRecord, finished_at: datetime
+    ) -> None:
+        """Store the finished run and its `roleplay_finish` event (scores only, no text)."""
+        summary = record.run.summary()
+        props: dict[str, object] = {
+            "lessonId": record.lesson_id,
+            "context": record.context.value,
+            "mode": str(record.run.mode),
+            "turns": len(record.run.turn_scores),
+        }
+        if summary.first_score is not None:
+            props["firstScore"] = summary.first_score
+            props["lastScore"] = summary.last_score
+        async with self._uow:
+            await self._uow.roleplay_runs.save(record)
+            await self._uow.events.record(session.id, "roleplay_finish", props, finished_at)
+            await self._uow.commit()
 
     def _first_vs_last(self, session: Session, record: RunRecord) -> str | None:
         """The lesson's `summary.firstVsLast`, filled here (lesson context, at least one score)."""

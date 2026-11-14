@@ -323,3 +323,17 @@ class CareCardRow(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     last_opened_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class EventRow(Base):
+    """A whitelisted product event. `props` holds only catalog-approved short values."""
+
+    __tablename__ = "events"
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("sessions.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    name: Mapped[str] = mapped_column(String(40), nullable=False, index=True)
+    props: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, server_default="{}")
+    app_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
