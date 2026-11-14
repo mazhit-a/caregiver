@@ -1,5 +1,7 @@
 # Funnel QA checklist
 
+> **Superseded by TASK.md section 6.2 (server-side session).** This file still describes the old `pcn_state_v1` localStorage design and "nothing sent to our server". The persona tables and rules stay valid as logic reference; the storage description does not.
+
 Run this before every submission, in an incognito window, on a phone and on a laptop, against the production URL.
 
 ## 1. Three test personas (one per branch)

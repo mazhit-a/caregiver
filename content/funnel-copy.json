@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "notes": [
     "All funnel texts in one place. Placeholders as in quiz.json; paywall placeholders come from pricing.json and the current date.",
     "Keep the same phrase from ad to button: \"Mom's plan\" uses {possessive} plan.",
@@ -7,7 +7,7 @@
   ],
   "common": {
     "notMedicalAdvice": "We teach and organize. We don't give medical advice.",
-    "privacyShort": "Your answers stay in this browser.",
+    "privacyShort": "Saved privately to this session. No account, no name needed.",
     "needHelpNow": "Need help now?",
     "back": "Back",
     "continue": "Continue",
@@ -44,7 +44,7 @@
     "trust": [
       "Inspired by research on caregiver training programs",
       "Not medical advice",
-      "Your answers stay in your browser"
+      "Saved privately to this session. No account, no name needed."
     ],
     "faq": [
       {
@@ -61,15 +61,18 @@
       },
       {
         "q": "What happens to my answers?",
-        "a": "They stay in this browser. We don't sell or share them, and there's no ad tracking in the quiz or the app."
+        "a": "Saved privately to this session. No account, no name needed. We don't sell or share them, and there's no ad tracking in the quiz or the app."
       }
     ],
     "footer": "We teach and organize. We don't give medical advice. In an emergency, call 911."
   },
   "quizIntro": {
-    "title": "Let's build {possessive} plan",
-    "body": "11 quick questions, about 3 minutes. No sign-up needed. Your answers stay in this browser.",
+    "title": "Let's build your plan",
+    "body": "11 quick questions, about 3 minutes. Saved privately to this session. No account, no name needed.",
     "cta": "Start"
+  },
+  "quiz": {
+    "healthNote": "This page has no ad tracking. Saved privately to this session."
   },
   "loader": {
     "title": "Building {possessive} plan…",
@@ -98,7 +101,8 @@
       "reasonPrefix": "Why now: ",
       "paceLine": "About 8 minutes a lesson, {perWeek} lessons a week",
       "quickGuidesTitle": "Quick guides for urgent moments",
-      "quickGuidesNote": "Always there when you need them, outside the course."
+      "quickGuidesNote": "Always there when you need them, outside the course.",
+      "highlightLabel": "For now"
     },
     "proof": {
       "title": "Why this works",
@@ -136,6 +140,8 @@
       "twelve_week": "12 weeks"
     },
     "selectedBadgeNote": "Only show a badge like 'Most chosen' if real data supports it.",
+    "moneyFormat": "${amount}",
+    "planDetail": "for the first {introPeriod}, then {renewPrice} every {renewPeriod}",
     "disclosure": "**Today: {todayPrice}** for the first {introPeriod}. Then **{renewPrice} every {renewPeriod}**, starting {renewDate}, until you cancel. Cancel anytime in Settings → Subscription.",
     "consentCheckbox": "I understand my plan renews automatically at {renewPrice} every {renewPeriod} until I cancel.",
     "consentRequiredError": "Please confirm the renewal terms to continue.",
@@ -150,14 +156,6 @@
       "success": "You're all set. Let's start {possessive} plan.",
       "returnedCanceled": "No payment was made. Your plan is still here when you're ready."
     }
-  },
-  "savePlan": {
-    "title": "Save your plan to come back on another device",
-    "body": "Optional. Without it, your plan stays in this browser.",
-    "emailLabel": "Email",
-    "cta": "Save my plan",
-    "skip": "Skip for now",
-    "note": "We'll only email you about your plan. No marketing without your OK."
   },
   "today": {
     "title": "Today with {recipient}",
@@ -215,7 +213,7 @@
     "clearDataConfirmation": "Your data has been deleted. Your care card link no longer works."
   },
   "errors": {
-    "generic": "Something went wrong. Your answers are safe in this browser. Please try again.",
+    "generic": "Something went wrong. Your answers are saved privately to this session. Please try again.",
     "restoreFailed": "We couldn't restore your plan, so we started a new one."
   }
 }

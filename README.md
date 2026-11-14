@@ -391,7 +391,7 @@ For the user and the content owner. None of this is done by the code.
       `backend/evals/data/shaming-words.json` (21 terms).
 - [ ] Replace placeholder prices in `content/pricing.json` (demo prices, "TBD by test") and run
       `scripts.stripe_setup` again.
-- [ ] Change the privacy copy to "Saved privately to this session. No account, no name needed."
+- [x] Change the privacy copy to "Saved privately to this session. No account, no name needed."
 - [ ] Frontend route assumptions: `/checkout/return?checkout_id=...` and
       `/paywall?checkout=canceled` (Stripe return URLs), `/card/{id}` (public care card) and
       `/lessons/{id}` (reminder link). These were guesses; fix `PUBLIC_APP_URL` usage if the

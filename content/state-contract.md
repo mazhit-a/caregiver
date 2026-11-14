@@ -1,5 +1,7 @@
 # State contract (funnel ↔ app)
 
+> **Superseded by TASK.md section 6.2 (server-side session).** This file still describes the old `pcn_state_v1` localStorage design and "nothing sent to our server". The persona tables and rules stay valid as logic reference; the storage description does not.
+
 Everything the user enters lives in the browser, in one localStorage key. The funnel writes the first part; the app reads it and adds the rest. This file is the agreement between the two.
 
 ## Storage

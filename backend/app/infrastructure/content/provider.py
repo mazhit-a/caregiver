@@ -7,6 +7,7 @@ from typing import Any
 
 from app.domain.billing.exit_copy import GentleExitCopy, GentleExitResourceCopy
 from app.domain.billing.pricing import Pricing, PricingPlan
+from app.domain.funnel.copy import FunnelCopy
 from app.domain.plan.entities import PhraseSheetText, PhraseText, PlanRules
 from app.domain.quiz.definition import QuizDefinition
 from app.domain.roleplay.verdict import CoachTips
@@ -107,6 +108,27 @@ class JsonContentProvider:
             demo_controls=tuple(DemoControlCopy(c.id, c.label) for c in t.demo.controls),
             welcome_back_after_days=t.welcome_back_after_days,
             renewed_notice_days=t.renewed_notice_days,
+        )
+
+    def funnel_copy(self) -> FunnelCopy:
+        c = self._bundle.funnel_copy
+        p = c.paywall
+        return FunnelCopy(
+            loader_title=c.loader.title,
+            plan_preview_title=c.plan_preview.title,
+            plan_preview_cta=c.plan_preview.cta,
+            highlight_label=c.plan_preview.plan.highlight_label,
+            health_note=c.quiz.health_note,
+            paywall_headline=p.headline,
+            paywall_includes=tuple(p.includes),
+            money_format=p.money_format,
+            plan_detail=p.plan_detail,
+            disclosure=p.disclosure,
+            consent_checkbox=p.consent_checkbox,
+            consent_required_error=p.consent_required_error,
+            pay_button=p.pay_button,
+            success=p.states.success,
+            returned_canceled=p.states.returned_canceled,
         )
 
     def gentle_exit_copy(self) -> GentleExitCopy:

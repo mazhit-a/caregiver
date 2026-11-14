@@ -9,6 +9,7 @@ from app.presentation.api.v1.checkins import router as checkins_router
 from app.presentation.api.v1.demo import router as demo_router
 from app.presentation.api.v1.events import router as events_router
 from app.presentation.api.v1.exit import router as exit_router
+from app.presentation.api.v1.funnel_copy import router as funnel_copy_router
 from app.presentation.api.v1.lessons import router as lessons_router
 from app.presentation.api.v1.phrases import router as phrases_router
 from app.presentation.api.v1.plan import router as plan_router
@@ -26,6 +27,7 @@ router = APIRouter()
 router.include_router(resources_router)
 router.include_router(quiz_router)
 router.include_router(plan_router)
+router.include_router(funnel_copy_router)
 router.include_router(billing_router)
 router.include_router(lessons_router)
 router.include_router(phrases_router)

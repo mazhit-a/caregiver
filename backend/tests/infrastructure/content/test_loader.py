@@ -148,3 +148,24 @@ def test_content_version_changes_when_a_lesson_file_changes(content_copy: Path) 
 
     _edit(content_copy / "lessons" / "m1_l1.json", retitle)
     assert load_content(content_copy).content_version != before
+
+
+def test_funnel_copy_v2_privacy_wording_and_new_keys() -> None:
+    copy = load_content(REAL_CONTENT).funnel_copy
+    saved = "Saved privately to this session. No account, no name needed."
+    assert copy.version == 2
+    assert copy.common["privacyShort"] == saved
+    assert copy.landing.trust[2] == saved
+    assert copy.landing.faq[3].a.startswith(saved)
+    assert copy.quiz_intro.title == "Let's build your plan"
+    assert saved in copy.quiz_intro.body
+    assert copy.quiz.health_note.startswith("This page has no ad tracking.")
+    assert copy.plan_preview.plan.highlight_label == "For now"
+
+
+def test_funnel_copy_no_longer_claims_answers_stay_in_the_browser() -> None:
+    raw = json.loads((REAL_CONTENT / "funnel-copy.json").read_text())
+    raw.pop("notes", None)
+    for text in _strings(raw):
+        assert "in this browser" not in text
+        assert "your browser" not in text

@@ -18,6 +18,7 @@ from app.domain.billing.entities import Subscription, SubscriptionHistoryEntry
 from app.domain.billing.exit_copy import GentleExitCopy
 from app.domain.billing.pricing import Pricing
 from app.domain.care_card.entities import CareCard
+from app.domain.funnel.copy import FunnelCopy
 from app.domain.lessons.plans import ConfidenceRatings, IfThenPlan, Task
 from app.domain.lessons.progress import LessonProgress, ScenarioAnswer
 from app.domain.phrases.entities import SavedPhrase
@@ -451,6 +452,10 @@ class ContentProvider(Protocol):
 
     def today_copy(self) -> TodayCopy:
         """The Today screen wording and its two day counts (placeholders unfilled)."""
+        ...
+
+    def funnel_copy(self) -> FunnelCopy:
+        """The pre-subscription funnel wording (placeholders unfilled)."""
         ...
 
     def gentle_exit_copy(self) -> GentleExitCopy:

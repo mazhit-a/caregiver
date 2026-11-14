@@ -392,6 +392,10 @@ class QuizIntro(ContentModel):
     cta: str
 
 
+class QuizCopy(ContentModel):
+    health_note: str
+
+
 class Loader(ContentModel):
     title: str
     line_source_note: str
@@ -421,6 +425,7 @@ class PreviewPlan(ContentModel):
     pace_line: str
     quick_guides_title: str
     quick_guides_note: str
+    highlight_label: str
 
 
 class ProofItem(ContentModel):
@@ -464,6 +469,8 @@ class Paywall(ContentModel):
     includes: list[str]
     plan_labels: dict[str, str]
     selected_badge_note: str
+    money_format: str
+    plan_detail: str
     disclosure: str
     consent_checkbox: str
     consent_required_error: str
@@ -473,15 +480,6 @@ class Paywall(ContentModel):
     demo_note: str
     footer: str
     states: PaywallStates
-
-
-class SavePlan(ContentModel):
-    title: str
-    body: str
-    email_label: str
-    cta: str
-    skip: str
-    note: str
 
 
 class TodaySubscriptionCopy(ContentModel):
@@ -543,10 +541,10 @@ class FunnelCopyFile(Notes):
     common: dict[str, str]
     landing: Landing
     quiz_intro: QuizIntro
+    quiz: QuizCopy
     loader: Loader
     plan_preview: PlanPreview
     paywall: Paywall
-    save_plan: SavePlan
     today: TodayCopyFile
     gentle_exit: GentleExitCopyFile
     errors: dict[str, str]
