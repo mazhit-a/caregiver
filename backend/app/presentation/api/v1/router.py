@@ -9,10 +9,13 @@ from app.presentation.api.v1.demo import router as demo_router
 from app.presentation.api.v1.lessons import router as lessons_router
 from app.presentation.api.v1.phrases import router as phrases_router
 from app.presentation.api.v1.plan import router as plan_router
+from app.presentation.api.v1.profile import router as profile_router
 from app.presentation.api.v1.quiz import router as quiz_router
 from app.presentation.api.v1.resources import router as resources_router
 from app.presentation.api.v1.roleplay import router as roleplay_router
 from app.presentation.api.v1.session import router as session_router
+from app.presentation.api.v1.skills import router as skills_router
+from app.presentation.api.v1.visit_sheet import router as visit_sheet_router
 from app.presentation.api.v1.webhooks import router as webhooks_router
 
 router = APIRouter()
@@ -23,9 +26,12 @@ router.include_router(billing_router)
 router.include_router(lessons_router)
 router.include_router(phrases_router)
 router.include_router(checkins_router)
+router.include_router(profile_router)
 router.include_router(roleplay_router)
+router.include_router(visit_sheet_router)
 router.include_router(demo_router)
 router.include_router(session_router)
+router.include_router(skills_router)
 router.include_router(webhooks_router)
 
 

@@ -53,12 +53,15 @@ DOMAIN_ERROR_STATUS: dict[str, int] = {
     "checkin_not_due": 409,
     "invalid_checkin_answer": 422,
     "invalid_reply": 422,
+    "invalid_profile": 422,
     "rate_limited": 429,
     "run_not_found": 404,
     "run_finished": 409,
     "round_mismatch": 422,
     "too_many_previous_turns": 422,
     "turns_mismatch": 422,
+    "invalid_visit_sheet": 422,
+    "unknown_visit_question": 422,
 }
 
 

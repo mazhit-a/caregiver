@@ -12,7 +12,13 @@ from app.domain.roleplay.verdict import CoachTips
 from app.domain.safety.check import SafetyTerms
 from app.domain.safety.resources import CrisisResource
 from app.domain.shared.errors import DomainError
-from app.domain.shared.labels import RecipientLabels, lesson_labels, render_text
+from app.domain.shared.labels import (
+    RecipientLabels,
+    lesson_labels,
+    render_text,
+    with_display_name,
+)
+from app.domain.visit_sheet.entities import BankQuestion, VisitQuestionBank
 from app.infrastructure.content.loader import ContentBundle, load_content
 from app.infrastructure.content.plan_rules_mapper import to_plan_rules
 from app.infrastructure.content.quiz_mapper import to_quiz_definition
@@ -56,15 +62,21 @@ class JsonContentProvider:
             raise UnknownContentReference(f"Unknown recipient key '{key}'", {"key": key})
         return self._labels[key]
 
-    def lesson_recipient_labels(self, key: str) -> RecipientLabels:
+    def lesson_recipient_labels(self, key: str, display_name: str | None = None) -> RecipientLabels:
         self.recipient_labels(key)  # validates the key
-        return lesson_labels(key, self._labels)
+        return with_display_name(lesson_labels(key, self._labels), display_name)
 
     def crisis_resources(self) -> list[CrisisResource]:
         return [
             CrisisResource(id=r.id, name=r.name, phone=r.phone, description=r.description)
             for r in self._bundle.crisis_resources.resources
         ]
+
+    def visit_questions(self) -> VisitQuestionBank:
+        file = self._bundle.visit_questions
+        return VisitQuestionBank(
+            file.footer, tuple(BankQuestion(q.id, q.text) for q in file.questions)
+        )
 
     def safety_terms(self) -> SafetyTerms:
         return to_safety_terms(self._bundle.safety_terms)
@@ -123,6 +135,7 @@ class JsonContentProvider:
         recipient_key: str,
         variant: str | None = None,
         runtime_values: Mapping[str, str] | None = None,
+        display_name: str | None = None,
     ) -> dict[str, Any]:
         """Lesson as camelCase JSON data with every placeholder filled (authoring notes dropped).
 
@@ -136,7 +149,7 @@ class JsonContentProvider:
                 f"Lesson '{lesson_id}' has no variant '{variant}'",
                 {"lesson": lesson_id, "variant": variant},
             )
-        labels = self.lesson_recipient_labels(recipient_key)
+        labels = self.lesson_recipient_labels(recipient_key, display_name)
         data = lesson.model_dump(by_alias=True, mode="json", exclude_none=True)
         return {
             key: _render_tree(value, labels, runtime_values)

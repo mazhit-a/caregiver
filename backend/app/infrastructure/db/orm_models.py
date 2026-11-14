@@ -266,3 +266,39 @@ class ObservationRow(Base):
     text: Mapped[str] = mapped_column(String(300), nullable=False)
     add_to_visit_sheet: Mapped[bool] = mapped_column(Boolean, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class VisitSheetRow(Base):
+    """The doctor-visit sheet of a session (one row). Free text: never logged, never shared."""
+
+    __tablename__ = "visit_sheets"
+
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("sessions.id", ondelete="CASCADE"), primary_key=True
+    )
+    doctor: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    visit_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+    family_notes: Mapped[str] = mapped_column(String(2000), nullable=False, server_default="")
+    questions: Mapped[list[dict[str, str]]] = mapped_column(
+        JSONB, nullable=False, server_default="[]"
+    )
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class ProfileRow(Base):
+    """The non-medical profile; the display name stays in `sessions.display_name`."""
+
+    __tablename__ = "profiles"
+
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("sessions.id", ondelete="CASCADE"), primary_key=True
+    )
+    enjoys: Mapped[list[str]] = mapped_column(JSONB, nullable=False, server_default="[]")
+    calms: Mapped[list[str]] = mapped_column(JSONB, nullable=False, server_default="[]")
+    avoid: Mapped[list[str]] = mapped_column(JSONB, nullable=False, server_default="[]")
+    rhythm: Mapped[str] = mapped_column(String(500), nullable=False, server_default="")
+    contacts: Mapped[list[dict[str, Any]]] = mapped_column(
+        JSONB, nullable=False, server_default="[]"
+    )
+    caregiver_first_name: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)

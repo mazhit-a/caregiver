@@ -20,6 +20,7 @@ from app.domain.lessons.plans import ConfidenceRatings, IfThenPlan, Task
 from app.domain.lessons.progress import LessonProgress, ScenarioAnswer
 from app.domain.phrases.entities import SavedPhrase
 from app.domain.plan.entities import PhraseSheetText, PhraseText, PlanRules, StoredPlan
+from app.domain.profile.entities import Profile
 from app.domain.quiz.definition import QuizDefinition
 from app.domain.quiz.entities import QuizState
 from app.domain.roleplay.run import RunRecord
@@ -31,6 +32,7 @@ from app.domain.session.entities import Session
 from app.domain.shared.errors import DomainError
 from app.domain.shared.labels import RecipientLabels
 from app.domain.today.checkins import Checkin, Observation
+from app.domain.visit_sheet.entities import VisitQuestionBank, VisitSheet
 
 
 class Clock(Protocol):
@@ -104,6 +106,10 @@ class ScenarioAnswerRepository(Protocol):
         """The picks of the lesson, oldest first."""
         ...
 
+    async def list_for_session(self, session_id: UUID) -> list[ScenarioAnswer]:
+        """Every pick of the session, oldest first."""
+        ...
+
 
 class ConfidenceRepository(Protocol):
     async def get_day0(self, session_id: UUID) -> int | None: ...
@@ -165,6 +171,14 @@ class ObservationRepository(Protocol):
         ...
 
 
+class VisitSheetRepository(Protocol):
+    async def get(self, session_id: UUID) -> VisitSheet | None: ...
+
+    async def save(self, sheet: VisitSheet) -> None:
+        """Insert or replace the one sheet of the session."""
+        ...
+
+
 class SubscriptionRepository(Protocol):
     async def get(self, session_id: UUID) -> Subscription | None: ...
 
@@ -208,11 +222,23 @@ class SavedPhraseRepository(Protocol):
         ...
 
 
+class ProfileRepository(Protocol):
+    async def get(self, session_id: UUID) -> Profile | None: ...
+
+    async def save(self, profile: Profile) -> None:
+        """Insert or replace the session's profile."""
+        ...
+
+
 class RoleplayRunRepository(Protocol):
     async def get(self, run_id: UUID) -> RunRecord | None: ...
 
     async def save(self, record: RunRecord) -> None:
         """Insert or update the run (scores, goals, mode, finished_at; never any text)."""
+        ...
+
+    async def list_finished(self, session_id: UUID) -> list[RunRecord]:
+        """The session's finished runs, oldest `finished_at` first."""
         ...
 
 
@@ -239,6 +265,8 @@ class UnitOfWork(Protocol):
     saved_phrases: SavedPhraseRepository
     checkins: CheckinRepository
     observations: ObservationRepository
+    profiles: ProfileRepository
+    visit_sheets: VisitSheetRepository
 
     async def __aenter__(self) -> Self: ...
 
@@ -333,8 +361,9 @@ class ContentProvider(Protocol):
         """Quiz labels for a Q1 key (`both` is plural: "your parents")."""
         ...
 
-    def lesson_recipient_labels(self, key: str) -> RecipientLabels:
-        """Labels for lesson text (`both` becomes the singular "your parent")."""
+    def lesson_recipient_labels(self, key: str, display_name: str | None = None) -> RecipientLabels:
+        """Labels for lesson text (`both` becomes the singular "your parent"); a display name
+        replaces `{recipient}` / `{possessive}`."""
         ...
 
     def quiz_definition(self) -> QuizDefinition:
@@ -363,6 +392,7 @@ class ContentProvider(Protocol):
         recipient_key: str,
         variant: str | None = None,
         runtime_values: Mapping[str, str] | None = None,
+        display_name: str | None = None,
     ) -> dict[str, Any]: ...
 
     def pricing(self) -> Pricing:
@@ -370,6 +400,10 @@ class ContentProvider(Protocol):
         ...
 
     def crisis_resources(self) -> list[CrisisResource]: ...
+
+    def visit_questions(self) -> VisitQuestionBank:
+        """The doctor-visit question bank and the footer that is always shown."""
+        ...
 
     def safety_terms(self) -> SafetyTerms:
         """Crisis and emergency terms and excluded phrases for the local safety check."""

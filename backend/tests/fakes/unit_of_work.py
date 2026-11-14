@@ -11,11 +11,13 @@ from tests.fakes.lesson_plans import InMemoryIfThenPlanRepository, InMemoryTaskR
 from tests.fakes.lesson_progress import InMemoryLessonProgressRepository
 from tests.fakes.lesson_schedule import InMemoryLessonScheduleRepository
 from tests.fakes.plans import InMemoryConfidenceRepository, InMemoryPlanRepository
+from tests.fakes.profiles import InMemoryProfileRepository
 from tests.fakes.quiz import InMemoryQuizStateRepository
 from tests.fakes.roleplay import InMemoryRoleplayRunRepository
 from tests.fakes.saved_phrases import InMemorySavedPhraseRepository
 from tests.fakes.scenario_answers import InMemoryScenarioAnswerRepository
 from tests.fakes.sessions import InMemoryActiveDayRepository, InMemorySessionRepository
+from tests.fakes.visit_sheets import InMemoryVisitSheetRepository
 
 
 class FakeUnitOfWork:
@@ -39,6 +41,8 @@ class FakeUnitOfWork:
         self.saved_phrases = InMemorySavedPhraseRepository()
         self.checkins = InMemoryCheckinRepository()
         self.observations = InMemoryObservationRepository()
+        self.profiles = InMemoryProfileRepository()
+        self.visit_sheets = InMemoryVisitSheetRepository()
         self.committed = False
         self.rolled_back = False
 

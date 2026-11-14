@@ -17,6 +17,7 @@ from app.infrastructure.db.repositories.lesson_plans import (
 from app.infrastructure.db.repositories.lesson_progress import SqlLessonProgressRepository
 from app.infrastructure.db.repositories.lesson_schedule import SqlLessonScheduleRepository
 from app.infrastructure.db.repositories.plans import SqlPlanRepository
+from app.infrastructure.db.repositories.profiles import SqlProfileRepository
 from app.infrastructure.db.repositories.quiz_states import SqlQuizStateRepository
 from app.infrastructure.db.repositories.roleplay_runs import SqlRoleplayRunRepository
 from app.infrastructure.db.repositories.saved_phrases import SqlSavedPhraseRepository
@@ -27,6 +28,7 @@ from app.infrastructure.db.repositories.subscriptions import (
     SqlSubscriptionHistoryRepository,
     SqlSubscriptionRepository,
 )
+from app.infrastructure.db.repositories.visit_sheets import SqlVisitSheetRepository
 
 
 class SqlAlchemyUnitOfWork:
@@ -47,6 +49,8 @@ class SqlAlchemyUnitOfWork:
     saved_phrases: SqlSavedPhraseRepository
     checkins: SqlCheckinRepository
     observations: SqlObservationRepository
+    profiles: SqlProfileRepository
+    visit_sheets: SqlVisitSheetRepository
 
     def __init__(self, session_factory: async_sessionmaker[AsyncSession]) -> None:
         self._factory = session_factory
@@ -71,6 +75,8 @@ class SqlAlchemyUnitOfWork:
         self.saved_phrases = SqlSavedPhraseRepository(self._db)
         self.checkins = SqlCheckinRepository(self._db)
         self.observations = SqlObservationRepository(self._db)
+        self.profiles = SqlProfileRepository(self._db)
+        self.visit_sheets = SqlVisitSheetRepository(self._db)
         return self
 
     async def __aexit__(
