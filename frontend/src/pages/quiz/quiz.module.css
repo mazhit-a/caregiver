@@ -1,0 +1,11 @@
+.page { display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-3); }
+.image { width: 150px; height: auto; }
+.title { margin: 0; font: 800 26px/32px var(--font-sans); color: var(--text); }
+.title:focus { outline: none; }
+.body { margin: 0; font: var(--text-body); color: var(--text-secondary); }
+.notice { margin: 0; padding: var(--space-3); border-radius: var(--radius-button); background: var(--info-soft); font: var(--text-body); color: var(--text); }
+.error { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-3); margin-top: var(--space-4); }
+.errorText { margin: 0; font: var(--text-body); color: var(--text); }
+.retry { min-height: var(--tap-min); padding: 0 var(--space-5); border-radius: var(--radius-button); border: var(--border-width-strong) solid var(--accent); background: transparent; color: var(--accent-pressed); font: var(--text-button); cursor: pointer; }
+.retry:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+@media (min-width: 768px) { .image { width: 200px; } }
