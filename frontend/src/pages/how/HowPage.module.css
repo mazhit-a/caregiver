@@ -247,10 +247,6 @@
     flex: 0 1 340px;
   }
 
-  .reverse {
-    flex-direction: row-reverse;
-  }
-
   .exampleCard {
     padding: var(--space-6);
   }

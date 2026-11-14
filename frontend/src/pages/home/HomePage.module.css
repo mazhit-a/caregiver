@@ -106,13 +106,11 @@
 
 .gapStat {
   margin: 0;
-  flex: 1 1 560px;
   font: var(--text-display);
 }
 
 .gapText {
   margin: 0;
-  flex: 0 1 360px;
   font: 400 16px/24px var(--font-sans);
   color: #e7e3fa;
 }
@@ -486,8 +484,13 @@
   }
 
   .gapStat {
+    flex: 1 1 560px;
     font-size: 34px;
     line-height: 42px;
+  }
+
+  .gapText {
+    flex: 0 1 360px;
   }
 
   .ollie {

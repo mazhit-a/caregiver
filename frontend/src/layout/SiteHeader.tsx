@@ -18,7 +18,7 @@ export function SiteHeader({ onNeedHelp }: Props) {
     <header className={styles.header}>
       <div className={styles.inner}>
         <Link to={ROUTES.home} aria-label="Kelper home" className={styles.logo}>
-          <img src={logo} alt="Kelper" height={36} />
+          <img src={logo} alt="Kelper" width={95} height={36} />
         </Link>
         <div id="site-menu" className={styles.panel} data-open={menuOpen}>
           <nav aria-label="Main" className={styles.nav}>

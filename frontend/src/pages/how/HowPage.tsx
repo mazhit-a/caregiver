@@ -69,7 +69,10 @@ export default function HowPage() {
       </Section>
 
       <Section labelledBy="how-step2">
-        <div className={`${styles.row} ${styles.reverse}`}>
+        <div className={styles.row}>
+          <div className={styles.text}>
+            <StepHeading id="how-step2" eyebrow={HOW_STEP2.eyebrow} title={HOW_STEP2.title} lead={HOW_STEP2.lead} />
+          </div>
           <div className={styles.exampleCard}>
             <p className={styles.exampleLabel}>{HOW_STEP2.exampleLabel}</p>
             <div className={styles.heard}>
@@ -89,9 +92,6 @@ export default function HowPage() {
                 ))}
               </ol>
             </div>
-          </div>
-          <div className={styles.text}>
-            <StepHeading id="how-step2" eyebrow={HOW_STEP2.eyebrow} title={HOW_STEP2.title} lead={HOW_STEP2.lead} />
           </div>
         </div>
       </Section>

@@ -55,7 +55,7 @@
   }
 
   .image {
-    flex: 0 1 440px;
-    max-width: 440px;
+    flex: 0 0 200px; /* design: 200px hero art on every page */
+    max-width: 200px;
   }
 }
