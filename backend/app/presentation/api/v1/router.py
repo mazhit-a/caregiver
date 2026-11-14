@@ -4,6 +4,7 @@ from fastapi import APIRouter
 
 from app.presentation.api.schemas.base import CamelModel
 from app.presentation.api.v1.billing import router as billing_router
+from app.presentation.api.v1.care_card import router as care_card_router
 from app.presentation.api.v1.checkins import router as checkins_router
 from app.presentation.api.v1.demo import router as demo_router
 from app.presentation.api.v1.lessons import router as lessons_router
@@ -27,6 +28,7 @@ router.include_router(lessons_router)
 router.include_router(phrases_router)
 router.include_router(checkins_router)
 router.include_router(profile_router)
+router.include_router(care_card_router)
 router.include_router(roleplay_router)
 router.include_router(visit_sheet_router)
 router.include_router(demo_router)

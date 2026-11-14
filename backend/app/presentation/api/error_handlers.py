@@ -62,6 +62,11 @@ DOMAIN_ERROR_STATUS: dict[str, int] = {
     "turns_mismatch": 422,
     "invalid_visit_sheet": 422,
     "unknown_visit_question": 422,
+    "card_not_found": 404,
+    "card_revoked": 410,
+    "card_already_published": 409,
+    "card_not_published": 409,
+    "invalid_card_phrases": 422,
 }
 
 

@@ -16,6 +16,7 @@ from app.application.billing.payments import (
 from app.application.roleplay.dto import CoachInput
 from app.domain.billing.entities import Subscription, SubscriptionHistoryEntry
 from app.domain.billing.pricing import Pricing
+from app.domain.care_card.entities import CareCard
 from app.domain.lessons.plans import ConfidenceRatings, IfThenPlan, Task
 from app.domain.lessons.progress import LessonProgress, ScenarioAnswer
 from app.domain.phrases.entities import SavedPhrase
@@ -230,6 +231,20 @@ class ProfileRepository(Protocol):
         ...
 
 
+class CareCardRepository(Protocol):
+    async def get(self, card_id: str) -> CareCard | None:
+        """Any card row by public id, live or tombstone."""
+        ...
+
+    async def get_current(self, session_id: UUID) -> CareCard | None:
+        """The session's live card, else its most recently revoked tombstone, else None."""
+        ...
+
+    async def save(self, card: CareCard) -> None:
+        """Insert or replace the row with this id."""
+        ...
+
+
 class RoleplayRunRepository(Protocol):
     async def get(self, run_id: UUID) -> RunRecord | None: ...
 
@@ -267,6 +282,7 @@ class UnitOfWork(Protocol):
     observations: ObservationRepository
     profiles: ProfileRepository
     visit_sheets: VisitSheetRepository
+    care_cards: CareCardRepository
 
     async def __aenter__(self) -> Self: ...
 

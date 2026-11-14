@@ -302,3 +302,21 @@ class ProfileRow(Base):
     )
     caregiver_first_name: Mapped[str | None] = mapped_column(String(40), nullable=True)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class CareCardRow(Base):
+    """A published care card or its tombstone (`snapshot` NULL, `revoked_at` set). Several rows
+    per session are possible (a revoked id stays a tombstone after a republish)."""
+
+    __tablename__ = "care_cards"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("sessions.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    snapshot: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True)
+    phrase_ids: Mapped[list[str]] = mapped_column(JSONB, nullable=False, server_default="[]")
+    published_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_opened_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

@@ -5,6 +5,7 @@ from typing import Self
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+from app.infrastructure.db.repositories.care_cards import SqlCareCardRepository
 from app.infrastructure.db.repositories.checkins import (
     SqlCheckinRepository,
     SqlObservationRepository,
@@ -51,6 +52,7 @@ class SqlAlchemyUnitOfWork:
     observations: SqlObservationRepository
     profiles: SqlProfileRepository
     visit_sheets: SqlVisitSheetRepository
+    care_cards: SqlCareCardRepository
 
     def __init__(self, session_factory: async_sessionmaker[AsyncSession]) -> None:
         self._factory = session_factory
@@ -77,6 +79,7 @@ class SqlAlchemyUnitOfWork:
         self.observations = SqlObservationRepository(self._db)
         self.profiles = SqlProfileRepository(self._db)
         self.visit_sheets = SqlVisitSheetRepository(self._db)
+        self.care_cards = SqlCareCardRepository(self._db)
         return self
 
     async def __aexit__(

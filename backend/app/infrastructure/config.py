@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     content_dir: Path = Path(__file__).resolve().parents[3] / "content"
     demo_controls: bool = True
     roleplay_turns_per_hour: int = 40
+    public_card_requests_per_minute: int = 30
 
     @model_validator(mode="after")
     def _validate(self) -> Self:

@@ -2,6 +2,7 @@
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from datetime import timedelta
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -61,6 +62,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.token_generator = SecretsTokenGenerator()
     app.state.coach = build_coach(settings)
     app.state.rate_limiter = InMemoryRateLimiter(settings.roleplay_turns_per_hour)
+    app.state.card_rate_limiter = InMemoryRateLimiter(
+        settings.public_card_requests_per_minute, timedelta(minutes=1)
+    )
     app.state.llm_limiter = LlmConcurrencyLimiter(4)  # one per process
     app.state.id_generator = UuidGenerator()
     if settings.cors_origin_list:
