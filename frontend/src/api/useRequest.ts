@@ -1,0 +1,47 @@
+import { useCallback, useEffect, useRef, useState } from "react";
+import { type ApiFailure, classifyError } from "./errors";
+
+export type RequestState<T> =
+  | { status: "loading"; data: undefined; error: undefined }
+  | { status: "error"; data: undefined; error: ApiFailure }
+  | { status: "ready"; data: T; error: undefined };
+
+export type Request<T> = RequestState<T> & { retry: () => void };
+
+/**
+ * Runs `fn` on mount and whenever `deps` change; `retry()` runs it again.
+ * Per-component state: nothing is cached across sessions. Aborts on unmount.
+ */
+export function useRequest<T>(
+  fn: (signal: AbortSignal) => Promise<T>,
+  deps: readonly unknown[],
+): Request<T> {
+  const [state, setState] = useState<RequestState<T>>({
+    status: "loading",
+    data: undefined,
+    error: undefined,
+  });
+  const [attempt, setAttempt] = useState(0);
+  const fnRef = useRef(fn);
+  fnRef.current = fn;
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setState({ status: "loading", data: undefined, error: undefined });
+    fnRef
+      .current(controller.signal)
+      .then((data) => {
+        if (!controller.signal.aborted) setState({ status: "ready", data, error: undefined });
+      })
+      .catch((err: unknown) => {
+        if (!controller.signal.aborted) {
+          setState({ status: "error", data: undefined, error: classifyError(err) });
+        }
+      });
+    return () => controller.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [...deps, attempt]);
+
+  const retry = useCallback(() => setAttempt((n) => n + 1), []);
+  return { ...state, retry } as Request<T>;
+}

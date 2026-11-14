@@ -1,0 +1,78 @@
+{
+  "401": {
+    "error": {
+      "code": "invalid_session_token",
+      "message": "A valid session token is required.",
+      "details": {}
+    }
+  },
+  "noPlan402": {
+    "error": {
+      "code": "payment_required",
+      "message": "Finish the quiz to see your plan.",
+      "details": {
+        "reason": "no_plan"
+      }
+    }
+  },
+  "noSubscription402": {
+    "error": {
+      "code": "payment_required",
+      "message": "Start your subscription to continue.",
+      "details": {
+        "reason": "no_subscription"
+      }
+    }
+  },
+  "alreadySubscribed409": {
+    "error": {
+      "code": "already_subscribed",
+      "message": "You already have a subscription.",
+      "details": {}
+    }
+  },
+  "quizLocked409": {
+    "error": {
+      "code": "quiz_locked",
+      "message": "The quiz can no longer be changed.",
+      "details": {}
+    }
+  },
+  "consentRequired422": {
+    "error": {
+      "code": "consent_required",
+      "message": "Please confirm the auto-renewal terms to continue.",
+      "details": {}
+    }
+  },
+  "quizIncomplete422": {
+    "error": {
+      "code": "quiz_incomplete",
+      "message": "Some questions still need an answer.",
+      "details": {
+        "questionIds": [
+          "q1_recipient",
+          "q2_age",
+          "q3_situation",
+          "q6_living",
+          "q7_helpers",
+          "q8_work",
+          "q9_worries",
+          "q10_documents",
+          "q11_confidence",
+          "q12_time"
+        ]
+      }
+    }
+  },
+  "gateway502": {
+    "error": {
+      "code": "payment_gateway_error",
+      "message": "Card payments are not configured on this server.",
+      "details": {
+        "hint": "demo_mode",
+        "demoEndpoint": "/api/billing/demo"
+      }
+    }
+  }
+}

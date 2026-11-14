@@ -1,0 +1,32 @@
+{
+  "title": "Phrases that calm Mom",
+  "intro": "Short, warm phrases for the moments that come up most. Keep your voice low and slow, and use Mom's name.",
+  "phrases": [
+    {
+      "id": "p08",
+      "text": "That's okay. Let's try again a little later.",
+      "when": "When the answer is no to a shower, a meal or getting ready"
+    },
+    {
+      "id": "p09",
+      "text": "You choose: before lunch or after lunch?",
+      "when": "When a small choice helps more than a yes-or-no question"
+    },
+    {
+      "id": "p10",
+      "text": "Tell me about home. What do you miss most?",
+      "when": "When the wish to \"go home\" comes up while at home"
+    },
+    {
+      "id": "p11",
+      "text": "Let's have a snack first, and then we'll see.",
+      "when": "When gently pausing the urge to leave"
+    },
+    {
+      "id": "p03",
+      "text": "I'm right here. Let's have some tea while we wait.",
+      "when": "When the question comes from worry, not from missing facts"
+    }
+  ],
+  "footer": "We teach and organize. We don't give medical advice."
+}

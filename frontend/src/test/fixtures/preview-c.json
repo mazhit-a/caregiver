@@ -1,0 +1,300 @@
+{
+  "planIntro": "You have a good start. Here's how to build on it.",
+  "whatWeHeard": [
+    "Mom just came home from the hospital.",
+    "Mom lives with you.",
+    "A paid caregiver helps.",
+    "What worries you most: safety at home and your own exhaustion."
+  ],
+  "beforeAfter": {
+    "before": "Today: things are changing, and every day brings a new hard moment.",
+    "after": "In 30 days: you have calm ways to handle the hard moments, a steadier routine, and a care card anyone who helps can use."
+  },
+  "modules": [
+    {
+      "id": "m1_talking",
+      "title": "Talking with Mom",
+      "reason": "Everyone starts here. As things change, the way you talk with Mom makes every day easier.",
+      "status": "current",
+      "inFirst30Days": true,
+      "lessons": [
+        {
+          "id": "m1_l1",
+          "title": "When Mom asks again",
+          "minutes": 8,
+          "built": true
+        },
+        {
+          "id": "m1_l2",
+          "title": "Talking so it lands",
+          "minutes": 7,
+          "built": true
+        },
+        {
+          "id": "m1_l3",
+          "title": "\"You stole my purse\"",
+          "minutes": 8,
+          "built": true
+        },
+        {
+          "id": "m1_l4",
+          "title": "When Mom says no",
+          "minutes": 8,
+          "built": true
+        },
+        {
+          "id": "m1_l5",
+          "title": "Your phrase book: review and practice",
+          "minutes": 6,
+          "built": true
+        }
+      ]
+    },
+    {
+      "id": "m4_safe_home",
+      "title": "Safe home, calmer days",
+      "reason": "Because Mom just came home from the hospital, and safety at home comes first.",
+      "status": "next",
+      "inFirst30Days": true,
+      "lessons": [
+        {
+          "id": "m4_l1",
+          "title": "Home safety walk-through",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m4_l2",
+          "title": "A calming daily routine",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m4_l3",
+          "title": "Activities that bring joy",
+          "minutes": 6,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m2_hard_moments",
+      "title": "Hard moments",
+      "reason": "Because you said some moments are getting harder.",
+      "status": "next",
+      "inFirst30Days": true,
+      "lessons": [
+        {
+          "id": "m2_l1",
+          "title": "Finding the trigger",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m2_l2",
+          "title": "Evening confusion",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m2_l3",
+          "title": "\"I want to go home\"",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m2_l4",
+          "title": "Anger and agitation",
+          "minutes": 8,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m3_decide",
+      "title": "While she can still decide",
+      "reason": "Because some of Mom's key papers are missing.",
+      "status": "next",
+      "inFirst30Days": false,
+      "lessons": [
+        {
+          "id": "m3_l1",
+          "title": "Key papers to talk about",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m3_l2",
+          "title": "Managing Mom's bills together",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m3_l3",
+          "title": "The driving conversation",
+          "minutes": 8,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m6_you",
+      "title": "Caring for yourself",
+      "reason": "Because you said you're exhausted. Your health matters too.",
+      "status": "next",
+      "inFirst30Days": false,
+      "lessons": [
+        {
+          "id": "m6_l1",
+          "title": "The fifth time is the hardest",
+          "minutes": 6,
+          "built": false
+        },
+        {
+          "id": "m6_l2",
+          "title": "Spotting burnout early",
+          "minutes": 6,
+          "built": false
+        },
+        {
+          "id": "m6_l3",
+          "title": "A plan for your own breaks",
+          "minutes": 5,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m5_care_team",
+      "title": "Doctors and your care team",
+      "reason": "Because a sitter helps, and a care card shows them what works with Mom.",
+      "status": "next",
+      "inFirst30Days": false,
+      "lessons": [
+        {
+          "id": "m5_l1",
+          "title": "Getting the most from 15 minutes with the doctor",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m5_l2",
+          "title": "Guiding your sitter",
+          "minutes": 6,
+          "built": false
+        },
+        {
+          "id": "m5_l3",
+          "title": "Asking your siblings for specific help",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m5_l4",
+          "title": "Caring from a distance",
+          "minutes": 7,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m7_more_help",
+      "title": "Getting more help",
+      "reason": "For when Mom needs more help than you can give alone.",
+      "status": "later",
+      "inFirst30Days": false,
+      "lessons": [
+        {
+          "id": "m7_l1",
+          "title": "When it's time for more help",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m7_l2",
+          "title": "Medicare and paying for care",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m7_l3",
+          "title": "Choosing in-home help or a care community",
+          "minutes": 8,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m8_later",
+      "title": "Later stages",
+      "reason": "Comfort, connection and the conversations families need, when the time comes.",
+      "status": "later",
+      "inFirst30Days": false,
+      "lessons": [
+        {
+          "id": "m8_l1",
+          "title": "Comfort and connection",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m8_l2",
+          "title": "Hospice and palliative care: what they are",
+          "minutes": 8,
+          "built": false
+        }
+      ]
+    }
+  ],
+  "first30Days": [
+    "m1_talking",
+    "m4_safe_home",
+    "m2_hard_moments"
+  ],
+  "firstLessonId": "m1_l1",
+  "quickGuides": [
+    {
+      "id": "qg_hospital",
+      "title": "After a hospital stay",
+      "highlight": true
+    },
+    {
+      "id": "qg_missing",
+      "title": "If Mom goes missing",
+      "highlight": true
+    },
+    {
+      "id": "qg_fall",
+      "title": "After a fall",
+      "highlight": true
+    },
+    {
+      "id": "qg_limit",
+      "title": "You're at your limit",
+      "highlight": true
+    },
+    {
+      "id": "qg_sudden_change",
+      "title": "A sudden change in confusion",
+      "highlight": false
+    }
+  ],
+  "loaderLines": [
+    "Starting with how to talk with Mom\u2026",
+    "Moving papers up, while Mom can take part\u2026",
+    "Adding the hard moments you mentioned\u2026",
+    "Setting the pace to fit your day\u2026"
+  ],
+  "pace": {
+    "lessonsPerWeek": 5,
+    "minutesPerLesson": 15,
+    "label": "About 15 minutes a lesson, 5 lessons a week"
+  },
+  "readiness": {
+    "modulesTotal": 3,
+    "lessonsTotal": 12
+  },
+  "rulesVersion": 5,
+  "contentVersion": "2b2a2927eba1d4bf",
+  "builtAt": "2026-01-05T09:00:00Z"
+}

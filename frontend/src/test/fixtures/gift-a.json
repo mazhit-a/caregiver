@@ -1,0 +1,32 @@
+{
+  "title": "Phrases that calm Dad",
+  "intro": "Short, warm phrases for the moments that come up most. Keep your voice low and slow, and use Dad's name.",
+  "phrases": [
+    {
+      "id": "p03",
+      "text": "I'm right here. Let's have some tea while we wait.",
+      "when": "When the question comes from worry, not from missing facts"
+    },
+    {
+      "id": "p13",
+      "text": "I'm sorry this is hard. I'm with you.",
+      "when": "Any time feelings run high"
+    },
+    {
+      "id": "p14",
+      "text": "Thank you for telling me.",
+      "when": "When a worry is shared, even if it doesn't make sense to you"
+    },
+    {
+      "id": "p15",
+      "text": "Let's do it together, one step at a time.",
+      "when": "When a task feels too big"
+    },
+    {
+      "id": "p01",
+      "text": "We have plenty of time. I'll let you know when it's time.",
+      "when": "When the same question about plans or time comes up again"
+    }
+  ],
+  "footer": "We teach and organize. We don't give medical advice."
+}

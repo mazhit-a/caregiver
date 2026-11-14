@@ -1,0 +1,339 @@
+{
+  "questions": [
+    {
+      "id": "q1_recipient",
+      "type": "single",
+      "title": "Who are you caring for?",
+      "options": [
+        {
+          "id": "mom",
+          "label": "My mom"
+        },
+        {
+          "id": "dad",
+          "label": "My dad"
+        },
+        {
+          "id": "both",
+          "label": "Both of my parents"
+        },
+        {
+          "id": "in_law",
+          "label": "A parent-in-law"
+        },
+        {
+          "id": "other",
+          "label": "Another relative"
+        }
+      ],
+      "healthData": false
+    },
+    {
+      "id": "q2_age",
+      "type": "single",
+      "title": "How old is Dad?",
+      "subtitle": "If you're caring for both parents, pick the older one.",
+      "options": [
+        {
+          "id": "under65",
+          "label": "Under 65"
+        },
+        {
+          "id": "65_74",
+          "label": "65\u201374"
+        },
+        {
+          "id": "75_84",
+          "label": "75\u201384"
+        },
+        {
+          "id": "85plus",
+          "label": "85 or older"
+        }
+      ],
+      "healthData": false
+    },
+    {
+      "id": "q3_situation",
+      "type": "single",
+      "title": "What's happening right now?",
+      "healthData": true,
+      "options": [
+        {
+          "id": "noticing",
+          "label": "I'm noticing changes, but there's no diagnosis yet"
+        },
+        {
+          "id": "recent",
+          "label": "Dad was diagnosed in the last 6 months"
+        },
+        {
+          "id": "changing",
+          "label": "The diagnosis was a while ago, and things are changing"
+        },
+        {
+          "id": "hospital",
+          "label": "Dad just came home from the hospital"
+        }
+      ]
+    },
+    {
+      "id": "q5_changes",
+      "type": "multi",
+      "title": "Which of these have you noticed lately?",
+      "subtitle": "Pick up to 3. It's okay if you're not sure yet.",
+      "healthData": true,
+      "skippable": true,
+      "max": 3,
+      "options": [
+        {
+          "id": "repeats",
+          "label": "Asks the same questions again and again"
+        },
+        {
+          "id": "accuses",
+          "label": "Loses things and thinks someone took them"
+        },
+        {
+          "id": "evenings",
+          "label": "Gets confused or upset in the late afternoon or evening"
+        },
+        {
+          "id": "refuses",
+          "label": "Says no to help, like a shower or a doctor visit"
+        },
+        {
+          "id": "lost",
+          "label": "Gets lost, or wants to \"go home\" while at home"
+        },
+        {
+          "id": "driving",
+          "label": "Still drives, and I'm worried"
+        },
+        {
+          "id": "none",
+          "label": "None of these yet",
+          "exclusive": true
+        }
+      ]
+    },
+    {
+      "id": "reassure_1",
+      "type": "interstitial",
+      "speaker": "rosa",
+      "title": "You're not alone.",
+      "body": "About 1 in 4 adults in the US cares for a family member, and most never got any training. Knowing what to say and do is a skill. You can learn it, one step at a time.",
+      "cta": "Continue",
+      "healthData": false
+    },
+    {
+      "id": "q6_living",
+      "type": "single",
+      "title": "Where does Dad live?",
+      "options": [
+        {
+          "id": "with_me",
+          "label": "With me"
+        },
+        {
+          "id": "nearby",
+          "label": "Nearby, under an hour away"
+        },
+        {
+          "id": "far",
+          "label": "Far away"
+        },
+        {
+          "id": "facility",
+          "label": "In assisted living or a care home"
+        }
+      ],
+      "healthData": false
+    },
+    {
+      "id": "q7_helpers",
+      "type": "single",
+      "title": "Who else helps?",
+      "options": [
+        {
+          "id": "just_me",
+          "label": "Just me"
+        },
+        {
+          "id": "siblings",
+          "label": "My brother or sister"
+        },
+        {
+          "id": "partner",
+          "label": "My partner"
+        },
+        {
+          "id": "paid",
+          "label": "A paid caregiver or sitter"
+        },
+        {
+          "id": "several",
+          "label": "Several people"
+        }
+      ],
+      "healthData": false
+    },
+    {
+      "id": "q8_work",
+      "type": "single",
+      "title": "Do you work?",
+      "options": [
+        {
+          "id": "full_time",
+          "label": "Yes, full-time"
+        },
+        {
+          "id": "part_time",
+          "label": "Yes, part-time"
+        },
+        {
+          "id": "not_now",
+          "label": "Not right now"
+        }
+      ],
+      "healthData": false
+    },
+    {
+      "id": "q9_worries",
+      "type": "multi",
+      "title": "What worries you most right now?",
+      "subtitle": "Pick up to 3.",
+      "max": 3,
+      "options": [
+        {
+          "id": "what_to_say",
+          "label": "Knowing what to say"
+        },
+        {
+          "id": "safety",
+          "label": "Safety at home"
+        },
+        {
+          "id": "legal_money",
+          "label": "Legal papers and money"
+        },
+        {
+          "id": "doctor",
+          "label": "Getting more from doctor visits"
+        },
+        {
+          "id": "family",
+          "label": "Family not helping enough"
+        },
+        {
+          "id": "me",
+          "label": "My own exhaustion"
+        },
+        {
+          "id": "future",
+          "label": "Not knowing what comes next"
+        }
+      ],
+      "healthData": false
+    },
+    {
+      "id": "reassure_2",
+      "type": "interstitial",
+      "speaker": "rosa",
+      "title": "Thank you. This helps a lot.",
+      "body": "We'll start with what matters most to you and build the rest step by step. You don't have to figure it all out today.",
+      "cta": "Continue",
+      "healthData": false
+    },
+    {
+      "id": "q10_documents",
+      "type": "grid",
+      "title": "Which of these does Dad have?",
+      "subtitle": "It's fine if you're not sure. We'll help you find out.",
+      "states": [
+        {
+          "id": "have",
+          "label": "Have"
+        },
+        {
+          "id": "missing",
+          "label": "Missing"
+        },
+        {
+          "id": "not_sure",
+          "label": "Not sure"
+        }
+      ],
+      "rows": [
+        {
+          "id": "healthcare_proxy",
+          "label": "Healthcare proxy",
+          "hint": "The person who can make medical decisions if Dad can't"
+        },
+        {
+          "id": "financial_poa",
+          "label": "Financial power of attorney",
+          "hint": "The person who can handle money and bills"
+        },
+        {
+          "id": "hipaa_release",
+          "label": "HIPAA release",
+          "hint": "Lets doctors share information with you"
+        }
+      ],
+      "healthData": false
+    },
+    {
+      "id": "q11_confidence",
+      "type": "scale",
+      "title": "How prepared do you feel for what's ahead?",
+      "min": 1,
+      "max": 5,
+      "minLabel": "Not at all",
+      "maxLabel": "Very prepared",
+      "healthData": false
+    },
+    {
+      "id": "q12_time",
+      "type": "single",
+      "title": "How much time can you give this on most days?",
+      "options": [
+        {
+          "id": "5",
+          "label": "About 5 minutes"
+        },
+        {
+          "id": "10",
+          "label": "About 10 minutes"
+        },
+        {
+          "id": "15",
+          "label": "15 minutes or more"
+        }
+      ],
+      "healthData": false
+    }
+  ],
+  "answers": {
+    "q2_age": "65_74",
+    "q8_work": "part_time",
+    "q12_time": "5",
+    "q6_living": "nearby",
+    "q7_helpers": "siblings",
+    "q9_worries": [
+      "future"
+    ],
+    "q1_recipient": "dad",
+    "q3_situation": "noticing",
+    "q10_documents": {
+      "financial_poa": "have",
+      "hipaa_release": "have",
+      "healthcare_proxy": "have"
+    },
+    "q11_confidence": 3
+  },
+  "branch": "noticing",
+  "lastQuestionId": "q12_time",
+  "completed": false,
+  "locked": false
+}

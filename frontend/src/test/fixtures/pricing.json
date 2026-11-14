@@ -1,0 +1,28 @@
+{
+  "currency": "USD",
+  "defaultPlanId": "four_week",
+  "plans": [
+    {
+      "id": "four_week",
+      "label": "4 weeks",
+      "priceToday": 14.99,
+      "renewalPrice": 29.99,
+      "introPeriodText": "4 weeks",
+      "renewPeriodText": "4 weeks",
+      "introDays": 28,
+      "renewDays": 28,
+      "firstRenewalDate": "2026-02-02"
+    },
+    {
+      "id": "twelve_week",
+      "label": "12 weeks",
+      "priceToday": 49.99,
+      "renewalPrice": 69.99,
+      "introPeriodText": "12 weeks",
+      "renewPeriodText": "12 weeks",
+      "introDays": 84,
+      "renewDays": 84,
+      "firstRenewalDate": "2026-03-30"
+    }
+  ]
+}

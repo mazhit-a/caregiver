@@ -1,0 +1,326 @@
+{
+  "planIntro": "You're already doing more than you think. Here's what to focus on first.",
+  "whatWeHeard": [
+    "You've noticed changes in Dad, but there's no diagnosis yet.",
+    "Dad lives nearby.",
+    "You share it with a brother or sister, and you work part-time.",
+    "What worries you most: not knowing what comes next."
+  ],
+  "beforeAfter": {
+    "before": "Today: you've noticed changes in Dad and aren't sure what they mean or how to bring them up.",
+    "after": "In 30 days: you know what's worth raising with a doctor, you've had a calm talk with Dad, and you have phrases that work when the same questions come up."
+  },
+  "modules": [
+    {
+      "id": "m1_talking",
+      "title": "Talking with Dad",
+      "reason": "Everyone starts here. Calm conversations help now, before and after any diagnosis.",
+      "status": "current",
+      "inFirst30Days": true,
+      "lessons": [
+        {
+          "id": "m1_l1",
+          "title": "When Dad asks again",
+          "minutes": 8,
+          "built": true
+        },
+        {
+          "id": "m1_l2",
+          "title": "Talking so it lands",
+          "minutes": 7,
+          "built": true
+        },
+        {
+          "id": "m1_l3",
+          "title": "\"You stole my purse\"",
+          "minutes": 8,
+          "built": true
+        },
+        {
+          "id": "m1_l4",
+          "title": "When Dad says no",
+          "minutes": 8,
+          "built": true
+        },
+        {
+          "id": "m1_l5",
+          "title": "Your phrase book: review and practice",
+          "minutes": 6,
+          "built": true
+        }
+      ]
+    },
+    {
+      "id": "m0_before",
+      "title": "Before the diagnosis",
+      "reason": "Because there's no diagnosis yet. These steps help you understand what's happening and talk to a doctor.",
+      "status": "next",
+      "inFirst30Days": true,
+      "lessons": [
+        {
+          "id": "m0_l1",
+          "title": "Normal aging or something more?",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m0_l2",
+          "title": "Talking to Dad about seeing a doctor",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m0_l3",
+          "title": "Preparing for the memory evaluation",
+          "minutes": 7,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m2_hard_moments",
+      "title": "Hard moments",
+      "reason": "The same pattern, used when emotions run higher.",
+      "status": "next",
+      "inFirst30Days": true,
+      "lessons": [
+        {
+          "id": "m2_l1",
+          "title": "Finding the trigger",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m2_l2",
+          "title": "Evening confusion",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m2_l3",
+          "title": "\"I want to go home\"",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m2_l4",
+          "title": "Anger and agitation",
+          "minutes": 8,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m3_decide",
+      "title": "While he can still decide",
+      "reason": "Papers, money and driving are easier to sort out while Dad can take part.",
+      "status": "next",
+      "inFirst30Days": false,
+      "lessons": [
+        {
+          "id": "m3_l1",
+          "title": "Key papers to talk about",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m3_l2",
+          "title": "Managing Dad's bills together",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m3_l3",
+          "title": "The driving conversation",
+          "minutes": 8,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m4_safe_home",
+      "title": "Safe home, calmer days",
+      "reason": "Small changes at home make days safer and calmer.",
+      "status": "next",
+      "inFirst30Days": false,
+      "lessons": [
+        {
+          "id": "m4_l1",
+          "title": "Home safety walk-through",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m4_l2",
+          "title": "A calming daily routine",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m4_l3",
+          "title": "Activities that bring joy",
+          "minutes": 6,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m5_care_team",
+      "title": "Doctors and your care team",
+      "reason": "Get more from doctor visits and share the load with others.",
+      "status": "next",
+      "inFirst30Days": false,
+      "lessons": [
+        {
+          "id": "m5_l1",
+          "title": "Getting the most from 15 minutes with the doctor",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m5_l2",
+          "title": "Guiding your sitter",
+          "minutes": 6,
+          "built": false
+        },
+        {
+          "id": "m5_l3",
+          "title": "Asking your siblings for specific help",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m5_l4",
+          "title": "Caring from a distance",
+          "minutes": 7,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m6_you",
+      "title": "Caring for yourself",
+      "reason": "Caring for Dad works better when you rest too.",
+      "status": "next",
+      "inFirst30Days": false,
+      "lessons": [
+        {
+          "id": "m6_l1",
+          "title": "The fifth time is the hardest",
+          "minutes": 6,
+          "built": false
+        },
+        {
+          "id": "m6_l2",
+          "title": "Spotting burnout early",
+          "minutes": 6,
+          "built": false
+        },
+        {
+          "id": "m6_l3",
+          "title": "A plan for your own breaks",
+          "minutes": 5,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m7_more_help",
+      "title": "Getting more help",
+      "reason": "For when Dad needs more help than you can give alone.",
+      "status": "later",
+      "inFirst30Days": false,
+      "lessons": [
+        {
+          "id": "m7_l1",
+          "title": "When it's time for more help",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m7_l2",
+          "title": "Medicare and paying for care",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m7_l3",
+          "title": "Choosing in-home help or a care community",
+          "minutes": 8,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m8_later",
+      "title": "Later stages",
+      "reason": "Comfort, connection and the conversations families need, when the time comes.",
+      "status": "later",
+      "inFirst30Days": false,
+      "lessons": [
+        {
+          "id": "m8_l1",
+          "title": "Comfort and connection",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m8_l2",
+          "title": "Hospice and palliative care: what they are",
+          "minutes": 8,
+          "built": false
+        }
+      ]
+    }
+  ],
+  "first30Days": [
+    "m1_talking",
+    "m0_before",
+    "m2_hard_moments"
+  ],
+  "firstLessonId": "m1_l1",
+  "quickGuides": [
+    {
+      "id": "qg_hospital",
+      "title": "After a hospital stay",
+      "highlight": false
+    },
+    {
+      "id": "qg_missing",
+      "title": "If Dad goes missing",
+      "highlight": false
+    },
+    {
+      "id": "qg_fall",
+      "title": "After a fall",
+      "highlight": false
+    },
+    {
+      "id": "qg_sudden_change",
+      "title": "A sudden change in confusion",
+      "highlight": false
+    },
+    {
+      "id": "qg_limit",
+      "title": "You're at your limit",
+      "highlight": false
+    }
+  ],
+  "loaderLines": [
+    "Starting with how to talk with Dad\u2026",
+    "Planning how others can help\u2026",
+    "Setting the pace to fit your day\u2026"
+  ],
+  "pace": {
+    "lessonsPerWeek": 3,
+    "minutesPerLesson": 5,
+    "label": "About 5 minutes a lesson, 3 lessons a week"
+  },
+  "readiness": {
+    "modulesTotal": 3,
+    "lessonsTotal": 12
+  },
+  "rulesVersion": 5,
+  "contentVersion": "2b2a2927eba1d4bf",
+  "builtAt": "2026-01-05T09:00:00Z"
+}

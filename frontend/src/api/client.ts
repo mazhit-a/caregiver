@@ -1,3 +1,5 @@
+import { clearToken, getToken } from "./session";
+
 export const REQUEST_TIMEOUT_MS = 10_000;
 
 export class ApiError extends Error {
@@ -32,8 +34,17 @@ async function toApiError(response: Response): Promise<ApiError> {
   return new ApiError(response.status, "http_error", "The request failed.");
 }
 
-/** Public GET on same-origin /api. No session token, no body or response logging. */
-export async function apiGet<T>(path: string, signal?: AbortSignal): Promise<T> {
+interface SendOptions {
+  method: "GET" | "POST" | "PUT" | "DELETE";
+  path: string;
+  body?: unknown;
+  signal?: AbortSignal;
+  /** Adds the X-Session-Token header when a token exists. */
+  auth: boolean;
+}
+
+/** One place for the timeout, the abort wiring and the error mapping. Never logs. */
+async function send<T>({ method, path, body, signal, auth }: SendOptions): Promise<T> {
   const controller = new AbortController();
   let timedOut = false;
   const timer = setTimeout(() => {
@@ -42,16 +53,24 @@ export async function apiGet<T>(path: string, signal?: AbortSignal): Promise<T> 
   }, REQUEST_TIMEOUT_MS);
   const onAbort = (): void => controller.abort();
   signal?.addEventListener("abort", onAbort);
+  const headers: Record<string, string> = { Accept: "application/json" };
+  const token = auth ? getToken() : null;
+  if (token) headers["X-Session-Token"] = token;
+  if (body !== undefined) headers["Content-Type"] = "application/json";
   try {
     const response = await fetch(`/api${path}`, {
-      method: "GET",
-      headers: { Accept: "application/json" },
+      method,
+      headers,
+      body: body === undefined ? undefined : JSON.stringify(body),
       signal: controller.signal,
     });
     if (!response.ok) throw await toApiError(response);
     return (await response.json()) as T;
   } catch (err) {
-    if (err instanceof ApiError) throw err;
+    if (err instanceof ApiError) {
+      if (auth && err.status === 401) clearToken();
+      throw err;
+    }
     if (timedOut) throw new ApiError(0, "timeout", "The request took too long.");
     if (signal?.aborted) throw err;
     throw new ApiError(0, "network_error", "Could not reach the server.");
@@ -59,4 +78,23 @@ export async function apiGet<T>(path: string, signal?: AbortSignal): Promise<T> 
     clearTimeout(timer);
     signal?.removeEventListener("abort", onAbort);
   }
+}
+
+/** Public GET on same-origin /api. No session token, no body or response logging. */
+export function apiGet<T>(path: string, signal?: AbortSignal): Promise<T> {
+  return send<T>({ method: "GET", path, signal, auth: false });
+}
+
+export interface ApiRequestOptions {
+  method: "GET" | "POST" | "PUT" | "DELETE";
+  path: string;
+  body?: unknown;
+  signal?: AbortSignal;
+  /** True: send X-Session-Token. A 401 clears the stored token. */
+  auth: boolean;
+}
+
+/** Session-aware request (JSON body, same timeout and ApiError as apiGet). Never logs. */
+export function apiRequest<T>(options: ApiRequestOptions): Promise<T> {
+  return send<T>(options);
 }

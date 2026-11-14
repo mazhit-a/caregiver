@@ -1,0 +1,32 @@
+{
+  "title": "Phrases that calm Mom",
+  "intro": "Short, warm phrases for the moments that come up most. Keep your voice low and slow, and use Mom's name.",
+  "phrases": [
+    {
+      "id": "p01",
+      "text": "We have plenty of time. I'll let you know when it's time.",
+      "when": "When the same question about plans or time comes up again"
+    },
+    {
+      "id": "p02",
+      "text": "Good question. Let's look at the calendar together.",
+      "when": "When a written answer can help more than a spoken one"
+    },
+    {
+      "id": "p06",
+      "text": "You're safe. I'm here with you.",
+      "when": "Late afternoon or evening, when confusion or worry grows"
+    },
+    {
+      "id": "p07",
+      "text": "It's been a long day. Let's sit down together for a bit.",
+      "when": "When restlessness starts as the day ends"
+    },
+    {
+      "id": "p03",
+      "text": "I'm right here. Let's have some tea while we wait.",
+      "when": "When the question comes from worry, not from missing facts"
+    }
+  ],
+  "footer": "We teach and organize. We don't give medical advice."
+}

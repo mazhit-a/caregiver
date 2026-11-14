@@ -1,0 +1,59 @@
+{
+  "loader": { "title": "Building Mom's plan…" },
+  "planPreview": {
+    "title": "Your first 30 days with Mom",
+    "cta": "Continue to your plan"
+  },
+  "paywall": {
+    "headline": "Mom's 30-day plan is ready",
+    "subhead": "Mom was diagnosed in the last few months.",
+    "includes": [
+      "Short lessons that start with real moments",
+      "Practice with an AI partner, with tips after every reply",
+      "Mom's page and a care card to share with anyone who helps",
+      "A one-page sheet for every doctor visit"
+    ],
+    "consentRequiredError": "Please confirm the renewal terms to continue.",
+    "states": {
+      "success": "You're all set. Let's start Mom's plan.",
+      "returnedCanceled": "No payment was made. Your plan is still here when you're ready."
+    },
+    "defaultPlanId": "four_week",
+    "plans": [
+      {
+        "id": "four_week",
+        "label": "4 weeks",
+        "priceToday": "$14.99",
+        "detail": "for the first 4 weeks, then $29.99 every 4 weeks",
+        "disclosure": [
+          { "text": "Today: $14.99", "strong": true },
+          { "text": " for the first 4 weeks. Then ", "strong": false },
+          { "text": "$29.99 every 4 weeks", "strong": true },
+          {
+            "text": ", starting Feb 2, until you cancel. Cancel anytime in Settings → Subscription.",
+            "strong": false
+          }
+        ],
+        "consentLabel": "I understand my plan renews automatically at $29.99 every 4 weeks until I cancel.",
+        "payButtonLabel": "Pay $14.99 and start"
+      },
+      {
+        "id": "twelve_week",
+        "label": "12 weeks",
+        "priceToday": "$49.99",
+        "detail": "for the first 12 weeks, then $69.99 every 12 weeks",
+        "disclosure": [
+          { "text": "Today: $49.99", "strong": true },
+          { "text": " for the first 12 weeks. Then ", "strong": false },
+          { "text": "$69.99 every 12 weeks", "strong": true },
+          {
+            "text": ", starting Mar 30, until you cancel. Cancel anytime in Settings → Subscription.",
+            "strong": false
+          }
+        ],
+        "consentLabel": "I understand my plan renews automatically at $69.99 every 12 weeks until I cancel.",
+        "payButtonLabel": "Pay $49.99 and start"
+      }
+    ]
+  }
+}
