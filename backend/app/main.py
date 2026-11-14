@@ -6,14 +6,17 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.application.roleplay.limiter import LlmConcurrencyLimiter
 from app.infrastructure.clock import SystemClock
 from app.infrastructure.config import Settings
 from app.infrastructure.content.provider import JsonContentProvider
 from app.infrastructure.db.session import create_engine, create_session_factory
 from app.infrastructure.db.unit_of_work import SqlAlchemyUnitOfWork
+from app.infrastructure.llm.factory import build_coach
 from app.infrastructure.payments.pricing_check import ensure_stripe_ids_resolved
 from app.infrastructure.payments.stripe_gateway import StripePaymentGateway
 from app.infrastructure.payments.webhook_parser import StripeWebhookParser
+from app.infrastructure.rate_limit import InMemoryRateLimiter
 from app.infrastructure.tokens import SecretsTokenGenerator, UuidGenerator
 from app.presentation.api.deps import AppInfo
 from app.presentation.api.error_handlers import register_error_handlers
@@ -56,6 +59,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     app.state.webhook_parser = StripeWebhookParser(settings.stripe_webhook_secret)
     app.state.token_generator = SecretsTokenGenerator()
+    app.state.coach = build_coach(settings)
+    app.state.rate_limiter = InMemoryRateLimiter(settings.roleplay_turns_per_hour)
+    app.state.llm_limiter = LlmConcurrencyLimiter(4)  # one per process
     app.state.id_generator = UuidGenerator()
     if settings.cors_origin_list:
         app.add_middleware(

@@ -6,6 +6,7 @@ from tests.fakes.billing import (
     InMemorySubscriptionHistoryRepository,
     InMemorySubscriptionRepository,
 )
+from tests.fakes.checkins import InMemoryCheckinRepository, InMemoryObservationRepository
 from tests.fakes.lesson_plans import InMemoryIfThenPlanRepository, InMemoryTaskRepository
 from tests.fakes.lesson_progress import InMemoryLessonProgressRepository
 from tests.fakes.lesson_schedule import InMemoryLessonScheduleRepository
@@ -36,6 +37,8 @@ class FakeUnitOfWork:
         self.stripe_events = InMemoryStripeEventRepository()
         self.roleplay_runs = InMemoryRoleplayRunRepository()
         self.saved_phrases = InMemorySavedPhraseRepository()
+        self.checkins = InMemoryCheckinRepository()
+        self.observations = InMemoryObservationRepository()
         self.committed = False
         self.rolled_back = False
 

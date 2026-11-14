@@ -236,3 +236,33 @@ class RoleplayRunRow(Base):
     )
     started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class CheckinRow(Base):
+    """One answer per if-then plan (the plan's lesson id identifies it)."""
+
+    __tablename__ = "checkins"
+
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("sessions.id", ondelete="CASCADE"), primary_key=True
+    )
+    lesson_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    came_up: Mapped[str] = mapped_column(String(32), nullable=False)
+    outcome: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    answered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class ObservationRow(Base):
+    """A family note from a check-in; feeds the visit sheet when `add_to_visit_sheet`."""
+
+    __tablename__ = "observations"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True)
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("sessions.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    lesson_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    source: Mapped[str] = mapped_column(String(16), nullable=False)
+    text: Mapped[str] = mapped_column(String(300), nullable=False)
+    add_to_visit_sheet: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)

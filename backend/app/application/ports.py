@@ -30,6 +30,7 @@ from app.domain.schedule.entities import ScheduledLesson
 from app.domain.session.entities import Session
 from app.domain.shared.errors import DomainError
 from app.domain.shared.labels import RecipientLabels
+from app.domain.today.checkins import Checkin, Observation
 
 
 class Clock(Protocol):
@@ -127,12 +128,40 @@ class IfThenPlanRepository(Protocol):
         """Insert or replace the if-then plan of the lesson."""
         ...
 
+    async def latest(self, session_id: UUID) -> IfThenPlan | None:
+        """The most recently created plan of the session."""
+        ...
+
 
 class TaskRepository(Protocol):
     async def get(self, session_id: UUID, lesson_id: str) -> Task | None: ...
 
     async def save(self, task: Task) -> None:
         """Insert or replace the do-now task of the lesson (`done_at` is kept)."""
+        ...
+
+    async def mark_done(self, session_id: UUID, lesson_id: str, done_at: datetime) -> None:
+        """Set `done_at` of the task (a check-in said it helped); no-op when there is no task."""
+        ...
+
+    async def list_for_session(self, session_id: UUID) -> list[Task]: ...
+
+
+class CheckinRepository(Protocol):
+    async def get(self, session_id: UUID, lesson_id: str) -> Checkin | None: ...
+
+    async def add(self, checkin: Checkin) -> None: ...
+
+    async def list_for_session(self, session_id: UUID) -> list[Checkin]:
+        """Oldest first."""
+        ...
+
+
+class ObservationRepository(Protocol):
+    async def add(self, observation: Observation) -> None: ...
+
+    async def list_for_session(self, session_id: UUID) -> list[Observation]:
+        """Oldest first."""
         ...
 
 
@@ -208,6 +237,8 @@ class UnitOfWork(Protocol):
     stripe_events: StripeEventRepository
     roleplay_runs: RoleplayRunRepository
     saved_phrases: SavedPhraseRepository
+    checkins: CheckinRepository
+    observations: ObservationRepository
 
     async def __aenter__(self) -> Self: ...
 

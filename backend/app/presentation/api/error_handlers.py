@@ -48,6 +48,17 @@ DOMAIN_ERROR_STATUS: dict[str, int] = {
     "invalid_phrase": 422,
     "phrase_limit_reached": 422,
     "phrase_not_found": 404,
+    "checkin_plan_not_found": 404,
+    "checkin_already_answered": 409,
+    "checkin_not_due": 409,
+    "invalid_checkin_answer": 422,
+    "invalid_reply": 422,
+    "rate_limited": 429,
+    "run_not_found": 404,
+    "run_finished": 409,
+    "round_mismatch": 422,
+    "too_many_previous_turns": 422,
+    "turns_mismatch": 422,
 }
 
 

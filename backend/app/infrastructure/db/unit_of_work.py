@@ -5,6 +5,10 @@ from typing import Self
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+from app.infrastructure.db.repositories.checkins import (
+    SqlCheckinRepository,
+    SqlObservationRepository,
+)
 from app.infrastructure.db.repositories.confidence import SqlConfidenceRepository
 from app.infrastructure.db.repositories.lesson_plans import (
     SqlIfThenPlanRepository,
@@ -41,6 +45,8 @@ class SqlAlchemyUnitOfWork:
     stripe_events: SqlStripeEventRepository
     roleplay_runs: SqlRoleplayRunRepository
     saved_phrases: SqlSavedPhraseRepository
+    checkins: SqlCheckinRepository
+    observations: SqlObservationRepository
 
     def __init__(self, session_factory: async_sessionmaker[AsyncSession]) -> None:
         self._factory = session_factory
@@ -63,6 +69,8 @@ class SqlAlchemyUnitOfWork:
         self.stripe_events = SqlStripeEventRepository(self._db)
         self.roleplay_runs = SqlRoleplayRunRepository(self._db)
         self.saved_phrases = SqlSavedPhraseRepository(self._db)
+        self.checkins = SqlCheckinRepository(self._db)
+        self.observations = SqlObservationRepository(self._db)
         return self
 
     async def __aexit__(
