@@ -1,0 +1,181 @@
+{
+  "persona": "C_changing_mom",
+  "input": {
+    "recipientKey": "mom",
+    "branch": "changing",
+    "tags": [
+      "recipient:mom",
+      "age:85plus",
+      "age:65plus",
+      "age:75plus",
+      "branch:changing",
+      "stage:middle",
+      "after_hospital",
+      "need:refusal",
+      "need:wandering",
+      "need:safety",
+      "living:with_me",
+      "help:paid",
+      "need:sitter",
+      "work:none",
+      "worry:safety",
+      "worry:burnout",
+      "need:documents",
+      "confidence:high",
+      "pace:15"
+    ],
+    "q5Order": [
+      "need:refusal",
+      "need:wandering",
+      "need:safety"
+    ],
+    "heard": [
+      {
+        "slot": "situation",
+        "text": "{Recipient} just came home from the hospital."
+      },
+      {
+        "slot": "living",
+        "text": "{Recipient} {lives} with you."
+      },
+      {
+        "slot": "helpers",
+        "text": "A paid caregiver helps"
+      },
+      {
+        "slot": "worries",
+        "text": "safety at home"
+      },
+      {
+        "slot": "worries",
+        "text": "your own exhaustion"
+      }
+    ]
+  },
+  "expected": {
+    "planIntro": "You have a good start. Here's how to build on it.",
+    "whatWeHeard": [
+      "Mom just came home from the hospital.",
+      "Mom lives with you.",
+      "A paid caregiver helps.",
+      "What worries you most: safety at home and your own exhaustion."
+    ],
+    "beforeAfter": {
+      "before": "Today: things are changing, and every day brings a new hard moment.",
+      "after": "In 30 days: you have calm ways to handle the hard moments, a steadier routine, and a care card anyone who helps can use."
+    },
+    "modules": [
+      {
+        "id": "m1_talking",
+        "title": "Talking with Mom",
+        "reason": "Everyone starts here. As things change, the way you talk with Mom makes every day easier.",
+        "status": "current",
+        "inFirst30Days": true
+      },
+      {
+        "id": "m4_safe_home",
+        "title": "Safe home, calmer days",
+        "reason": "Because Mom just came home from the hospital, and safety at home comes first.",
+        "status": "next",
+        "inFirst30Days": true
+      },
+      {
+        "id": "m2_hard_moments",
+        "title": "Hard moments",
+        "reason": "Because you said some moments are getting harder.",
+        "status": "next",
+        "inFirst30Days": true
+      },
+      {
+        "id": "m3_decide",
+        "title": "While she can still decide",
+        "reason": "Because some of Mom's key papers are missing.",
+        "status": "next",
+        "inFirst30Days": false
+      },
+      {
+        "id": "m6_you",
+        "title": "Caring for yourself",
+        "reason": "Because you said you're exhausted. Your health matters too.",
+        "status": "next",
+        "inFirst30Days": false
+      },
+      {
+        "id": "m5_care_team",
+        "title": "Doctors and your care team",
+        "reason": "Because a sitter helps, and a care card shows them what works with Mom.",
+        "status": "next",
+        "inFirst30Days": false
+      },
+      {
+        "id": "m7_more_help",
+        "title": "Getting more help",
+        "reason": "For when Mom needs more help than you can give alone.",
+        "status": "later",
+        "inFirst30Days": false
+      },
+      {
+        "id": "m8_later",
+        "title": "Later stages",
+        "reason": "Comfort, connection and the conversations families need, when the time comes.",
+        "status": "later",
+        "inFirst30Days": false
+      }
+    ],
+    "first30Days": [
+      "m1_talking",
+      "m4_safe_home",
+      "m2_hard_moments"
+    ],
+    "firstLessonId": "m1_l1",
+    "quickGuides": [
+      {
+        "id": "qg_hospital",
+        "title": "After a hospital stay",
+        "highlight": true
+      },
+      {
+        "id": "qg_missing",
+        "title": "If Mom goes missing",
+        "highlight": true
+      },
+      {
+        "id": "qg_fall",
+        "title": "After a fall",
+        "highlight": true
+      },
+      {
+        "id": "qg_limit",
+        "title": "You're at your limit",
+        "highlight": true
+      },
+      {
+        "id": "qg_sudden_change",
+        "title": "A sudden change in confusion",
+        "highlight": false
+      }
+    ],
+    "loaderLines": [
+      "Starting with how to talk with Mom…",
+      "Moving papers up, while Mom can take part…",
+      "Adding the hard moments you mentioned…",
+      "Setting the pace to fit your day…"
+    ],
+    "pace": {
+      "lessonsPerWeek": 5,
+      "minutesPerLesson": 15,
+      "label": "About 15 minutes a lesson, 5 lessons a week"
+    },
+    "readiness": {
+      "modulesTotal": 3,
+      "lessonsTotal": 12
+    },
+    "giftPhraseIds": [
+      "p08",
+      "p09",
+      "p10",
+      "p11",
+      "p03"
+    ]
+  }
+}

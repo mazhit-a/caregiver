@@ -1,0 +1,184 @@
+{
+  "persona": "B_recent_mom",
+  "input": {
+    "recipientKey": "mom",
+    "branch": "recent",
+    "tags": [
+      "recipient:mom",
+      "age:75_84",
+      "age:65plus",
+      "age:75plus",
+      "branch:recent",
+      "stage:early",
+      "new_diagnosis",
+      "need:repeated_questions",
+      "need:evening_confusion",
+      "living:far",
+      "need:distance",
+      "help:alone",
+      "need:support_team",
+      "work:full_time",
+      "worry:communication",
+      "worry:legal",
+      "need:documents",
+      "confidence:low",
+      "pace:10"
+    ],
+    "q5Order": [
+      "need:repeated_questions",
+      "need:evening_confusion"
+    ],
+    "heard": [
+      {
+        "slot": "situation",
+        "text": "{Recipient} {was} diagnosed in the last few months."
+      },
+      {
+        "slot": "living",
+        "text": "{Recipient} {lives} far away."
+      },
+      {
+        "slot": "helpers",
+        "text": "You're handling most of it alone"
+      },
+      {
+        "slot": "work",
+        "text": "and you work full-time"
+      },
+      {
+        "slot": "worries",
+        "text": "knowing what to say"
+      },
+      {
+        "slot": "worries",
+        "text": "legal papers and money"
+      }
+    ]
+  },
+  "expected": {
+    "planIntro": "This feels like a lot right now. We'll start small: one short step at a time.",
+    "whatWeHeard": [
+      "Mom was diagnosed in the last few months.",
+      "Mom lives far away.",
+      "You're handling most of it alone, and you work full-time.",
+      "What worries you most: knowing what to say and legal papers and money."
+    ],
+    "beforeAfter": {
+      "before": "Today: the diagnosis came with a brochure, and you don't know what to say when Mom asks the same question again and again.",
+      "after": "In 30 days: you have phrases that work, practiced out loud, key papers on track, and a plan your family can see."
+    },
+    "modules": [
+      {
+        "id": "m1_talking",
+        "title": "Talking with Mom",
+        "reason": "Everyone starts here. Talking with Mom comes up every day, from the first weeks on.",
+        "status": "current",
+        "inFirst30Days": true
+      },
+      {
+        "id": "m3_decide",
+        "title": "While she can still decide",
+        "reason": "Because some of Mom's key papers are missing, and it's easier to sort them out while she can take part.",
+        "status": "next",
+        "inFirst30Days": true
+      },
+      {
+        "id": "m2_hard_moments",
+        "title": "Hard moments",
+        "reason": "Because you said evenings are hard. This module starts with the trigger behind them.",
+        "status": "next",
+        "inFirst30Days": true
+      },
+      {
+        "id": "m5_care_team",
+        "title": "Doctors and your care team",
+        "reason": "Because Mom lives far away.",
+        "status": "next",
+        "inFirst30Days": false
+      },
+      {
+        "id": "m6_you",
+        "title": "Caring for yourself",
+        "reason": "Because this feels like a lot right now. Small breaks help you keep going.",
+        "status": "next",
+        "inFirst30Days": false
+      },
+      {
+        "id": "m4_safe_home",
+        "title": "Safe home, calmer days",
+        "reason": "Because a quick room-by-room check helps at Mom's age.",
+        "status": "next",
+        "inFirst30Days": false
+      },
+      {
+        "id": "m7_more_help",
+        "title": "Getting more help",
+        "reason": "For when Mom needs more help than you can give alone.",
+        "status": "later",
+        "inFirst30Days": false
+      },
+      {
+        "id": "m8_later",
+        "title": "Later stages",
+        "reason": "Comfort, connection and the conversations families need, when the time comes.",
+        "status": "later",
+        "inFirst30Days": false
+      }
+    ],
+    "first30Days": [
+      "m1_talking",
+      "m3_decide",
+      "m2_hard_moments"
+    ],
+    "firstLessonId": "m1_l1",
+    "quickGuides": [
+      {
+        "id": "qg_hospital",
+        "title": "After a hospital stay",
+        "highlight": false
+      },
+      {
+        "id": "qg_missing",
+        "title": "If Mom goes missing",
+        "highlight": false
+      },
+      {
+        "id": "qg_fall",
+        "title": "After a fall",
+        "highlight": false
+      },
+      {
+        "id": "qg_sudden_change",
+        "title": "A sudden change in confusion",
+        "highlight": false
+      },
+      {
+        "id": "qg_limit",
+        "title": "You're at your limit",
+        "highlight": false
+      }
+    ],
+    "loaderLines": [
+      "Starting with how to talk with Mom…",
+      "Moving papers up, while Mom can take part…",
+      "Adding the hard moments you mentioned…",
+      "Setting the pace to fit your day…"
+    ],
+    "pace": {
+      "lessonsPerWeek": 4,
+      "minutesPerLesson": 10,
+      "label": "About 10 minutes a lesson, 4 lessons a week"
+    },
+    "readiness": {
+      "modulesTotal": 3,
+      "lessonsTotal": 12
+    },
+    "giftPhraseIds": [
+      "p01",
+      "p02",
+      "p06",
+      "p07",
+      "p03"
+    ]
+  }
+}

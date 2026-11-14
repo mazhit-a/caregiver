@@ -1,0 +1,177 @@
+{
+  "persona": "A_noticing_dad",
+  "input": {
+    "recipientKey": "dad",
+    "branch": "noticing",
+    "tags": [
+      "recipient:dad",
+      "age:65_74",
+      "age:65plus",
+      "branch:noticing",
+      "stage:pre",
+      "living:nearby",
+      "help:siblings",
+      "need:family",
+      "work:part_time",
+      "worry:future",
+      "docs:ready",
+      "confidence:mid",
+      "pace:5"
+    ],
+    "q5Order": [],
+    "heard": [
+      {
+        "slot": "situation",
+        "text": "You've noticed changes in {recipient}, but there's no diagnosis yet."
+      },
+      {
+        "slot": "living",
+        "text": "{Recipient} {lives} nearby."
+      },
+      {
+        "slot": "helpers",
+        "text": "You share it with a brother or sister"
+      },
+      {
+        "slot": "work",
+        "text": "and you work part-time"
+      },
+      {
+        "slot": "worries",
+        "text": "not knowing what comes next"
+      }
+    ]
+  },
+  "expected": {
+    "planIntro": "You're already doing more than you think. Here's what to focus on first.",
+    "whatWeHeard": [
+      "You've noticed changes in Dad, but there's no diagnosis yet.",
+      "Dad lives nearby.",
+      "You share it with a brother or sister, and you work part-time.",
+      "What worries you most: not knowing what comes next."
+    ],
+    "beforeAfter": {
+      "before": "Today: you've noticed changes in Dad and aren't sure what they mean or how to bring them up.",
+      "after": "In 30 days: you know what's worth raising with a doctor, you've had a calm talk with Dad, and you have phrases that work when the same questions come up."
+    },
+    "modules": [
+      {
+        "id": "m1_talking",
+        "title": "Talking with Dad",
+        "reason": "Everyone starts here. Calm conversations help now, before and after any diagnosis.",
+        "status": "current",
+        "inFirst30Days": true
+      },
+      {
+        "id": "m0_before",
+        "title": "Before the diagnosis",
+        "reason": "Because there's no diagnosis yet. These steps help you understand what's happening and talk to a doctor.",
+        "status": "next",
+        "inFirst30Days": true
+      },
+      {
+        "id": "m2_hard_moments",
+        "title": "Hard moments",
+        "reason": "The same pattern, used when emotions run higher.",
+        "status": "next",
+        "inFirst30Days": true
+      },
+      {
+        "id": "m3_decide",
+        "title": "While he can still decide",
+        "reason": "Papers, money and driving are easier to sort out while Dad can take part.",
+        "status": "next",
+        "inFirst30Days": false
+      },
+      {
+        "id": "m4_safe_home",
+        "title": "Safe home, calmer days",
+        "reason": "Small changes at home make days safer and calmer.",
+        "status": "next",
+        "inFirst30Days": false
+      },
+      {
+        "id": "m5_care_team",
+        "title": "Doctors and your care team",
+        "reason": "Get more from doctor visits and share the load with others.",
+        "status": "next",
+        "inFirst30Days": false
+      },
+      {
+        "id": "m6_you",
+        "title": "Caring for yourself",
+        "reason": "Caring for Dad works better when you rest too.",
+        "status": "next",
+        "inFirst30Days": false
+      },
+      {
+        "id": "m7_more_help",
+        "title": "Getting more help",
+        "reason": "For when Dad needs more help than you can give alone.",
+        "status": "later",
+        "inFirst30Days": false
+      },
+      {
+        "id": "m8_later",
+        "title": "Later stages",
+        "reason": "Comfort, connection and the conversations families need, when the time comes.",
+        "status": "later",
+        "inFirst30Days": false
+      }
+    ],
+    "first30Days": [
+      "m1_talking",
+      "m0_before",
+      "m2_hard_moments"
+    ],
+    "firstLessonId": "m1_l1",
+    "quickGuides": [
+      {
+        "id": "qg_hospital",
+        "title": "After a hospital stay",
+        "highlight": false
+      },
+      {
+        "id": "qg_missing",
+        "title": "If Dad goes missing",
+        "highlight": false
+      },
+      {
+        "id": "qg_fall",
+        "title": "After a fall",
+        "highlight": false
+      },
+      {
+        "id": "qg_sudden_change",
+        "title": "A sudden change in confusion",
+        "highlight": false
+      },
+      {
+        "id": "qg_limit",
+        "title": "You're at your limit",
+        "highlight": false
+      }
+    ],
+    "loaderLines": [
+      "Starting with how to talk with Dad…",
+      "Planning how others can help…",
+      "Setting the pace to fit your day…"
+    ],
+    "pace": {
+      "lessonsPerWeek": 3,
+      "minutesPerLesson": 5,
+      "label": "About 5 minutes a lesson, 3 lessons a week"
+    },
+    "readiness": {
+      "modulesTotal": 3,
+      "lessonsTotal": 12
+    },
+    "giftPhraseIds": [
+      "p03",
+      "p13",
+      "p14",
+      "p15",
+      "p01"
+    ]
+  }
+}
