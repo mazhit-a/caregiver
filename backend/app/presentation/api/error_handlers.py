@@ -10,6 +10,7 @@ from app.presentation.api.schemas.base import ErrorBody, ErrorResponse
 
 # The single status-code table: HTTP status -> default error code.
 STATUS_CODE_TABLE: dict[int, str] = {
+    401: "unauthorized",
     402: "payment_required",
     404: "not_found",
     409: "conflict",
@@ -23,7 +24,10 @@ STATUS_CODE_TABLE: dict[int, str] = {
 }
 
 # Domain error code -> HTTP status. Later increments add rows here only.
-DOMAIN_ERROR_STATUS: dict[str, int] = {}
+DOMAIN_ERROR_STATUS: dict[str, int] = {
+    "invalid_session_token": 401,
+    "invalid_timezone": 422,
+}
 
 
 def error_response(

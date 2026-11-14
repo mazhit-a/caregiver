@@ -1,11 +1,15 @@
 from types import TracebackType
 from typing import Self
 
+from tests.fakes.sessions import InMemoryActiveDayRepository, InMemorySessionRepository
+
 
 class FakeUnitOfWork:
     """In-memory UnitOfWork scaffold: records commit/rollback; rolls back on error."""
 
     def __init__(self) -> None:
+        self.sessions = InMemorySessionRepository()
+        self.active_days = InMemoryActiveDayRepository()
         self.committed = False
         self.rolled_back = False
 
