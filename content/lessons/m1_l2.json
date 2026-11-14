@@ -1,0 +1,413 @@
+{
+  "id": "m1_l2",
+  "version": 1,
+  "moduleId": "m1_talking",
+  "title": "Talking so it lands",
+  "minutes": 7,
+  "skill": "communication",
+  "skillLabel": "Talking so it lands",
+  "notes": [
+    "DRAFT for content-owner review. Same for everyone: no setup question and no variants. Every by-variant block has one 'default' entry and every *VariantMap is empty.",
+    "Placeholders as in quiz.json: {recipient}, {Recipient}, {possessive}, {Possessive}, {object}. Lessons talk about one person, so the subject is always {recipient}, never {pronoun}.",
+    "The three steps from lesson 1 stay the same (notice, reassure, offer). This lesson adds HOW to say them: close, slow, short, one thing at a time, a choice of two.",
+    "Every screen shows the line from common.notMedicalAdvice in the footer."
+  ],
+  "pattern": {
+    "name": "The three steps",
+    "steps": [
+      {
+        "id": "notice",
+        "label": "Notice the feeling",
+        "example": "That was a lot at once."
+      },
+      {
+        "id": "reassure",
+        "label": "Reassure",
+        "example": "There's no rush. Dinner is ready."
+      },
+      {
+        "id": "offer",
+        "label": "Offer something to do",
+        "example": "Want to take my arm and walk in together?"
+      }
+    ]
+  },
+  "screens": [
+    {
+      "id": "s1_scenario",
+      "type": "scenario",
+      "byVariant": {
+        "default": {
+          "setup": "Dinner is ready. {Recipient} is in the living room with the TV on. You call from the kitchen: \"Wash your hands, come sit down, and bring the napkins, it's getting cold!\" {Recipient} looks up and says:",
+          "line": "What? What do you want me to do?"
+        }
+      },
+      "question": "What would you say next?",
+      "answers": {
+        "default": [
+          {
+            "id": "a1",
+            "text": "I said wash your hands, sit down and bring the napkins. Please listen.",
+            "verdict": "try_again",
+            "feedback": "Almost everyone does this when dinner is hot and the day was long. But saying it again, longer, adds more to follow, and \"please listen\" can sound like blame."
+          },
+          {
+            "id": "a2",
+            "text": "Come to the table, please. Dinner's ready.",
+            "verdict": "okay",
+            "feedback": "Short and clear, which helps. But it doesn't notice that {recipient} felt confused, and a call from the next room is easy to miss."
+          },
+          {
+            "id": "a3",
+            "text": "Sorry, that was too many things! Just wash your hands, then sit down.",
+            "verdict": "okay",
+            "feedback": "Kind, and a good start. It's still two steps, and it doesn't say what you'll do to help."
+          },
+          {
+            "id": "a4",
+            "text": "That was a lot at once. There's no rush, dinner's ready. Want to take my arm and walk in together?",
+            "verdict": "best",
+            "feedback": "This names the feeling, takes the pressure off, and gives {object} one easy thing to do. That's the pattern, now with the delivery to match.",
+            "savePhrase": true
+          }
+        ]
+      },
+      "answersVariantMap": {},
+      "verdictLabels": {
+        "best": "Best",
+        "okay": "Okay",
+        "try_again": "Try again"
+      },
+      "afterChoice": "You can try another answer to compare.",
+      "saveButton": "Save this phrase"
+    },
+    {
+      "id": "s2_one_thing",
+      "type": "learn",
+      "title": "One thing at a time. Short sentences.",
+      "body": "A long sentence with many parts is hard to hold on to. One short sentence with one idea is easier to follow, and easier on you too. Say the first thing. Wait. Then say the next.",
+      "miniTask": {
+        "question": "Which one is easier to follow?",
+        "options": [
+          {
+            "id": "long",
+            "label": "Wash your hands, then sit down, and get the napkins, because the food is getting cold.",
+            "correct": false,
+            "response": "Good instinct to get everything done. But that's four ideas in one go. Here's a gentler way: one at a time."
+          },
+          {
+            "id": "short",
+            "label": "Dinner's ready. Come sit with me.",
+            "correct": true,
+            "response": "Yes. One idea, and an invitation."
+          }
+        ]
+      }
+    },
+    {
+      "id": "s3_close_slow",
+      "type": "learn",
+      "title": "Come close, slow down, then speak.",
+      "body": "Walk over before you talk. Get face to face, at eye level if you can. Smile, say hello, then wait a moment. A calm voice and a friendly face are understood before any words are."
+    },
+    {
+      "id": "s4_choice",
+      "type": "learn",
+      "title": "Offer a choice of two, not an open question.",
+      "body": "\"What do you want to drink?\" is hard to answer. \"Tea or juice?\" is easy. Two choices give {recipient} a say, without a lot to think about. Use the three steps, in short words.",
+      "showPattern": true,
+      "miniTask": {
+        "question": "Which reply is easiest to say yes to?",
+        "options": [
+          {
+            "id": "open",
+            "label": "What would you like to do now? Anything you want.",
+            "correct": false,
+            "response": "Generous, but a wide-open question can be hard to answer."
+          },
+          {
+            "id": "two",
+            "label": "You look tired. I'm right here. Tea or a short walk?",
+            "correct": true,
+            "response": "Yes: the feeling, a reassurance, and a choice of two."
+          }
+        ]
+      }
+    },
+    {
+      "id": "s5_reset",
+      "type": "learn",
+      "title": "Take one second before you speak.",
+      "body": "When you're busy or tired, words come out fast. A tiny pause before you speak helps the calm land first. Pick the pause that feels easiest.",
+      "miniTask": {
+        "question": "Pick your pause for next time:",
+        "storeAs": "reset",
+        "options": [
+          {
+            "id": "walk_over",
+            "label": "Walk over so we're face to face"
+          },
+          {
+            "id": "breath",
+            "label": "One slow breath before I speak"
+          },
+          {
+            "id": "wait",
+            "label": "Say it, then wait a few seconds for an answer"
+          }
+        ]
+      }
+    },
+    {
+      "id": "s6_practice",
+      "type": "roleplay",
+      "promptFile": "prompts/roleplay-turn.md",
+      "title": "Practice: say it so it lands",
+      "intro": "Now try it out loud. {Recipient} is an AI practice partner. Type what you'd say. The coach will show what worked.",
+      "goals": [
+        "notice",
+        "reassure",
+        "offer"
+      ],
+      "roundsByVariant": {
+        "default": [
+          {
+            "stage": "Dinner is ready. You call from the kitchen.",
+            "line": "What? What do you want me to do?",
+            "mood": "confused"
+          },
+          {
+            "stage": "A few minutes later. You ask for two things at once.",
+            "line": "I can't keep up with all this talking.",
+            "mood": "overwhelmed"
+          },
+          {
+            "stage": "After dinner, you ask what {recipient} would like to drink.",
+            "line": "I don't know. You decide.",
+            "mood": "tired"
+          }
+        ]
+      },
+      "roundsVariantMap": {},
+      "summary": {
+        "title": "Your practice",
+        "firstVsLast": "First try: {firstScore} of 3 · Last try: {lastScore} of 3",
+        "bestPhraseLabel": "Your best phrase",
+        "saveButton": "Save",
+        "againButton": "Practice again"
+      },
+      "labels": {
+        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
+        "thinking": "{Recipient} is thinking…",
+        "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
+      },
+      "fallbackScenarios": [
+        "fb1",
+        "fb2",
+        "fb3"
+      ]
+    },
+    {
+      "id": "s7_plan",
+      "type": "plan",
+      "title": "Your plan for next time",
+      "ifThen": {
+        "cueByVariant": {
+          "default": "When I need {recipient} to do something,"
+        },
+        "cueVariantMap": {},
+        "responseLabel": "then I'll say:",
+        "responseDefault": "the best phrase from practice, else the saved scenario phrase",
+        "responseEditable": true,
+        "resetLabel": "And first, I'll:",
+        "resetFrom": "s5_reset"
+      },
+      "doNow": {
+        "title": "One thing to do now",
+        "byVariant": {
+          "default": {
+            "text": "Save your phrase where you'll see it, like a note on your phone. Pick one moment today, such as a meal, to try it.",
+            "action": "copy_phrase",
+            "button": "Copy my phrase"
+          }
+        }
+      },
+      "remindButton": "Remind me tomorrow",
+      "doneButton": "Done",
+      "noteTemplate": {
+        "title": "{Possessive} note",
+        "example": "Dinner at [time]. I'll walk in with you. — [your name]"
+      }
+    },
+    {
+      "id": "s8_wrap",
+      "type": "wrap",
+      "skillLine": "New skill: talking so it lands.",
+      "phraseLine": "Your phrase is saved to {possessive} page and care card.",
+      "patternLine": "Same three steps as before: notice the feeling, reassure, offer something to do. Now you also know how to say them: close, slow, short.",
+      "tomorrowLine": "Tomorrow: a quick check-in and a 2-minute practice round.",
+      "nextLine": "Next in this module: \"You stole my purse\", what to say when something goes missing.",
+      "allDoneLine": "That's every lesson ready for you so far. More are on the way. Come back to Today to practice again."
+    }
+  ],
+  "fallbackScenarios": [
+    {
+      "id": "fb1",
+      "setup": "Dinner is ready. You call from the kitchen, and {recipient} says:",
+      "line": "What? What do you want me to do?",
+      "answers": [
+        {
+          "text": "I just said it. Wash your hands, sit down, bring the napkins.",
+          "verdict": "try_again",
+          "feedback": "It's natural when you're tired. But saying it again, longer, is more to follow."
+        },
+        {
+          "text": "That was a lot. No rush, dinner's ready. Want to take my arm and walk in together?",
+          "verdict": "best",
+          "feedback": "Feeling, reassurance, and one easy thing to do."
+        },
+        {
+          "text": "Come to the table, please.",
+          "verdict": "okay",
+          "feedback": "Short and clear. It doesn't yet notice how {recipient} feels."
+        }
+      ]
+    },
+    {
+      "id": "fb2",
+      "setup": "A few minutes later, you ask for two things at once. {Recipient} says:",
+      "line": "I can't keep up with all this talking.",
+      "answers": [
+        {
+          "text": "I'm only asking you two little things.",
+          "verdict": "try_again",
+          "feedback": "It's understandable, but it can sound like the problem is {object}."
+        },
+        {
+          "text": "I'm sorry, I went too fast. That's on me. Let's do one thing: want to sit by the window with me?",
+          "verdict": "best",
+          "feedback": "You noticed, took the pressure off, and offered one thing. A short \"that's on me\" lets {recipient} feel at ease."
+        },
+        {
+          "text": "Okay, okay. Take your time.",
+          "verdict": "okay",
+          "feedback": "Kind. A small next step would make it even easier."
+        }
+      ]
+    },
+    {
+      "id": "fb3",
+      "setup": "After dinner, you ask what {recipient} would like to drink. {Recipient} says:",
+      "line": "I don't know. You decide.",
+      "answers": [
+        {
+          "text": "You always say that. Just pick something.",
+          "verdict": "try_again",
+          "feedback": "It's tiring to decide for two. But it puts the pressure back on {object}."
+        },
+        {
+          "text": "Tea or juice?",
+          "verdict": "okay",
+          "feedback": "A choice of two is just right. Adding a kind word would make it warmer."
+        },
+        {
+          "text": "Lots of choices can be tiring. Let's keep it easy: tea or juice? I'll make whichever you like.",
+          "verdict": "best",
+          "feedback": "You noticed the feeling, reassured, and gave a choice of two."
+        }
+      ]
+    }
+  ],
+  "day2": {
+    "checkIn": {
+      "byVariant": {
+        "default": {
+          "question": "Did you try one short sentence, said close and slowly, with {recipient} since yesterday?",
+          "options": [
+            {
+              "id": "yes",
+              "label": "Yes"
+            },
+            {
+              "id": "not_yet",
+              "label": "Not yet",
+              "response": "Your plan is ready for when the moment comes."
+            }
+          ],
+          "followUp": {
+            "ifAnswer": "yes",
+            "question": "How did it go?",
+            "showPlan": true,
+            "options": [
+              {
+                "id": "helped",
+                "label": "It helped",
+                "response": "That's real progress. Short and slow gets easier every time."
+              },
+              {
+                "id": "partly",
+                "label": "Partly",
+                "response": "That's normal at first. Keep the same short words for a few days. Familiar words help."
+              },
+              {
+                "id": "didnt_help",
+                "label": "It didn't help",
+                "response": "That happens. Here are a few more ways to try.",
+                "next": "followUpsDidntHelp"
+              }
+            ]
+          }
+        }
+      },
+      "checkInVariantMap": {}
+    },
+    "followUpsDidntHelp": [
+      {
+        "title": "Try a quieter room",
+        "text": "A TV or a busy kitchen can drown out even a clear sentence. Turn it down, or talk in a calmer spot."
+      },
+      {
+        "title": "Show it as well as say it",
+        "text": "Hold up the cup, point to the chair, or offer your hand. Seeing what you mean makes it easier."
+      },
+      {
+        "title": "Pick a calmer time",
+        "text": "Some times of day are easier than others. Try the same request at a different time and see."
+      }
+    ],
+    "doctorNote": {
+      "text": "If {recipient} suddenly follows conversations much less than before, mention it at the next doctor visit.",
+      "button": "Add to the doctor-visit sheet"
+    },
+    "practiceRound": {
+      "title": "2-minute practice: a new version",
+      "promptFile": "prompts/roleplay-turn.md",
+      "goals": [
+        "notice",
+        "reassure",
+        "offer"
+      ],
+      "roundsByVariant": {
+        "default": [
+          {
+            "stage": "Morning. You're getting ready to go out.",
+            "line": "Which coat? I don't know which one.",
+            "mood": "unsure"
+          },
+          {
+            "stage": "A minute later.",
+            "line": "You're going too fast for me.",
+            "mood": "flustered"
+          }
+        ]
+      },
+      "roundsVariantMap": {}
+    },
+    "nextLessonPrompt": "Ready for the next step? \"You stole my purse\" builds on what you just practiced."
+  },
+  "recapForNextLesson": {
+    "text": "Last time you practiced talking so it lands: come close, speak slowly, keep it short. Your phrase was: \"{savedPhrase}\".",
+    "ifCheckInHelped": "You said it helped. Today we'll use the same calm voice when something goes missing."
+  }
+}

@@ -1,0 +1,420 @@
+{
+  "id": "m1_l3",
+  "version": 1,
+  "moduleId": "m1_talking",
+  "title": "\"You stole my purse\"",
+  "minutes": 8,
+  "skill": "communication",
+  "skillLabel": "When something goes missing",
+  "notes": [
+    "DRAFT for content-owner review. Same for everyone: no setup question and no variants. Every by-variant block has one 'default' entry and every *VariantMap is empty.",
+    "Placeholders as in quiz.json: {recipient}, {Recipient}, {possessive}, {Possessive}, {object}. The subject is always {recipient}, never {pronoun}.",
+    "Default example is a lost purse: a neutral everyday moment. Heavier accusations are not covered here.",
+    "Same three steps as lessons 1 and 2: notice the feeling, reassure, offer to help look.",
+    "Every screen shows the line from common.notMedicalAdvice in the footer."
+  ],
+  "pattern": {
+    "name": "The three steps",
+    "steps": [
+      {
+        "id": "notice",
+        "label": "Notice the feeling",
+        "example": "It's upsetting when something goes missing."
+      },
+      {
+        "id": "reassure",
+        "label": "Reassure",
+        "example": "I'm here, and we'll find it."
+      },
+      {
+        "id": "offer",
+        "label": "Offer to help look",
+        "example": "Shall we look together, starting in the bedroom?"
+      }
+    ]
+  },
+  "screens": [
+    {
+      "id": "s1_scenario",
+      "type": "scenario",
+      "byVariant": {
+        "default": {
+          "setup": "You're getting ready to go out. {Recipient} can't find {possessive} purse, looks around, and turns to you:",
+          "line": "Someone took my purse. Was it you? You stole it."
+        }
+      },
+      "question": "What would you say?",
+      "answers": {
+        "default": [
+          {
+            "id": "a1",
+            "text": "I didn't take it! Why would I steal your purse?",
+            "verdict": "try_again",
+            "feedback": "Almost everyone says this. It hurts to be accused, and defending yourself is natural. But it turns into an argument, and the purse is still missing."
+          },
+          {
+            "id": "a2",
+            "text": "Nobody took it. You just put it somewhere and forgot.",
+            "verdict": "try_again",
+            "feedback": "It's true, and you're trying to calm things. But \"you forgot\" can feel like blame, and the worry stays."
+          },
+          {
+            "id": "a3",
+            "text": "Let's look for it. It's probably in the bedroom.",
+            "verdict": "okay",
+            "feedback": "Practical and kind. Looking together is a good move. It skips the feeling, and \"probably\" is a guess that may not work out."
+          },
+          {
+            "id": "a4",
+            "text": "It's upsetting when your purse is missing. I'm here, and we'll find it. Shall we look together, starting in the bedroom?",
+            "verdict": "best",
+            "feedback": "This names the feeling, reassures {object}, and offers to help look. You don't argue, and you don't accept the blame.",
+            "savePhrase": true
+          }
+        ]
+      },
+      "answersVariantMap": {},
+      "verdictLabels": {
+        "best": "Best",
+        "okay": "Okay",
+        "try_again": "Try again"
+      },
+      "afterChoice": "You can try another answer to compare.",
+      "saveButton": "Save this phrase"
+    },
+    {
+      "id": "s2_worry_is_real",
+      "type": "learn",
+      "title": "The worry is real, even if the story isn't.",
+      "body": "When something is missing, the mind looks for a reason, and \"someone took it\" is an easy one. {Recipient} isn't trying to hurt you. The feeling of losing something important is real, and that's what you can answer.",
+      "miniTask": {
+        "question": "What is {recipient} most likely feeling?",
+        "options": [
+          {
+            "id": "worry",
+            "label": "Worry or fear",
+            "correct": true,
+            "response": "Often, yes. Losing something we need feels unsettling."
+          },
+          {
+            "id": "anger",
+            "label": "Anger at me",
+            "correct": false,
+            "response": "It can sound that way. Good instinct to take it seriously. Often it's the worry speaking, not a feeling about you."
+          },
+          {
+            "id": "fight",
+            "label": "Wanting a fight",
+            "correct": false,
+            "response": "It can feel like that in the moment. Usually it's a worried person looking for answers."
+          }
+        ]
+      }
+    },
+    {
+      "id": "s3_join_the_search",
+      "type": "learn",
+      "title": "Don't argue it. Join the search.",
+      "body": "Proving that nobody took it rarely helps, and it adds a second upset. Use the three steps instead: notice the feeling, reassure {object} that you're on {possessive} side, and offer to look together.",
+      "showPattern": true,
+      "miniTask": {
+        "question": "Which reply follows all three steps?",
+        "options": [
+          {
+            "id": "x1",
+            "label": "I haven't touched your purse. Nobody has.",
+            "correct": false,
+            "response": "Understandable. But it defends you and skips the feeling."
+          },
+          {
+            "id": "x2",
+            "label": "That sounds upsetting. I'm here, and we'll find it. Shall we check the kitchen together?",
+            "correct": true,
+            "response": "Yes: feeling, reassurance, something to do together."
+          }
+        ]
+      }
+    },
+    {
+      "id": "s4_search_calmly",
+      "type": "learn",
+      "title": "Keep the search short and calm.",
+      "body": "Start with the usual spots: coat pockets, bags, drawers. Walk with {object} and keep your voice easy. Later, pick a \"home\" for important things, like a bowl by the door, and show {object} where it is. A spare key helps too."
+    },
+    {
+      "id": "s5_reset",
+      "type": "learn",
+      "title": "Being accused hurts. Take a moment first.",
+      "body": "It's normal to feel stung, even when you know it's the worry talking. A small pause before you answer helps you stay kind.",
+      "miniTask": {
+        "question": "Pick your pause for next time:",
+        "storeAs": "reset",
+        "options": [
+          {
+            "id": "breath",
+            "label": "One slow breath before I answer"
+          },
+          {
+            "id": "worry_talking",
+            "label": "Tell myself: this is the worry talking"
+          },
+          {
+            "id": "step_away",
+            "label": "Step away for a minute, if it's safe"
+          }
+        ]
+      }
+    },
+    {
+      "id": "s6_practice",
+      "type": "roleplay",
+      "promptFile": "prompts/roleplay-turn.md",
+      "title": "Practice: a missing purse",
+      "intro": "Now try it out loud. {Recipient} is an AI practice partner. Type what you'd say. The coach will show what worked.",
+      "goals": [
+        "notice",
+        "reassure",
+        "offer"
+      ],
+      "roundsByVariant": {
+        "default": [
+          {
+            "stage": "You're getting ready to go out.",
+            "line": "I can't find my purse. Did you move it?",
+            "mood": "worried"
+          },
+          {
+            "stage": "After a few minutes of looking.",
+            "line": "Somebody took it. I know somebody took it.",
+            "mood": "upset"
+          },
+          {
+            "stage": "Later, back in the kitchen.",
+            "line": "You took it, didn't you? I want it back.",
+            "mood": "suspicious"
+          }
+        ]
+      },
+      "roundsVariantMap": {},
+      "summary": {
+        "title": "Your practice",
+        "firstVsLast": "First try: {firstScore} of 3 · Last try: {lastScore} of 3",
+        "bestPhraseLabel": "Your best phrase",
+        "saveButton": "Save",
+        "againButton": "Practice again"
+      },
+      "labels": {
+        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
+        "thinking": "{Recipient} is thinking…",
+        "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
+      },
+      "fallbackScenarios": [
+        "fb1",
+        "fb2",
+        "fb3"
+      ]
+    },
+    {
+      "id": "s7_plan",
+      "type": "plan",
+      "title": "Your plan for next time",
+      "ifThen": {
+        "cueByVariant": {
+          "default": "If {recipient} says something is missing or taken,"
+        },
+        "cueVariantMap": {},
+        "responseLabel": "then I'll say:",
+        "responseDefault": "the best phrase from practice, else the saved scenario phrase",
+        "responseEditable": true,
+        "resetLabel": "And first, I'll:",
+        "resetFrom": "s5_reset"
+      },
+      "doNow": {
+        "title": "One thing to do now",
+        "byVariant": {
+          "default": {
+            "text": "Save your phrase where you'll see it, like a note on your phone. Then pick a \"home\" for the thing {recipient} looks for most.",
+            "action": "copy_phrase",
+            "button": "Copy my phrase"
+          }
+        }
+      },
+      "remindButton": "Remind me tomorrow",
+      "doneButton": "Done",
+      "noteTemplate": {
+        "title": "{Possessive} note",
+        "example": "My purse lives here: [place]. — [your name]"
+      }
+    },
+    {
+      "id": "s8_wrap",
+      "type": "wrap",
+      "skillLine": "New skill: answering \"someone took it\".",
+      "phraseLine": "Your phrase is saved to {possessive} page and care card.",
+      "patternLine": "Same three steps again: notice the feeling, reassure, offer to help look. You don't have to argue, and you don't have to take the blame.",
+      "tomorrowLine": "Tomorrow: a quick check-in and a 2-minute practice round.",
+      "nextLine": "Next in this module: \"When {recipient} says no\", what helps when {recipient} turns down help.",
+      "allDoneLine": "That's every lesson ready for you so far. More are on the way. Come back to Today to practice again."
+    }
+  ],
+  "fallbackScenarios": [
+    {
+      "id": "fb1",
+      "setup": "You're getting ready to go out. {Recipient} says:",
+      "line": "I can't find my purse. Did you move it?",
+      "answers": [
+        {
+          "text": "No, I didn't touch it. You must have put it somewhere.",
+          "verdict": "try_again",
+          "feedback": "It's true, but it can sound like blame."
+        },
+        {
+          "text": "Losing your purse is stressful. I'm here. Shall we look together, starting by the door?",
+          "verdict": "best",
+          "feedback": "Feeling, reassurance, and a search together."
+        },
+        {
+          "text": "I'll help you look for it.",
+          "verdict": "okay",
+          "feedback": "A good offer. Naming the feeling too would make it warmer."
+        }
+      ]
+    },
+    {
+      "id": "fb2",
+      "setup": "After a few minutes of looking, {recipient} says:",
+      "line": "Somebody took it. I know somebody took it.",
+      "answers": [
+        {
+          "text": "Nobody took it, I promise.",
+          "verdict": "okay",
+          "feedback": "Kind and honest, but it doesn't touch the worry."
+        },
+        {
+          "text": "Nobody took it! It's here somewhere!",
+          "verdict": "try_again",
+          "feedback": "Almost everyone feels this. But raising your voice adds to the upset."
+        },
+        {
+          "text": "You're really worried about it. I'm with you, and we'll keep looking. Want to check your coat pockets?",
+          "verdict": "best",
+          "feedback": "You named the worry, stayed on {possessive} side, and gave one small step."
+        }
+      ]
+    },
+    {
+      "id": "fb3",
+      "setup": "Later, back in the kitchen, {recipient} says:",
+      "line": "You took it, didn't you? I want it back.",
+      "answers": [
+        {
+          "text": "I'm not a thief. How can you say that?",
+          "verdict": "try_again",
+          "feedback": "It hurts to hear. Stepping back from the blame, even silently, helps you stay calm."
+        },
+        {
+          "text": "I can hear how much you want it back. I'm here, and we'll find it. Shall we have a look in the bedroom?",
+          "verdict": "best",
+          "feedback": "You didn't argue or accept blame. You gave the feeling a place to go."
+        },
+        {
+          "text": "I don't have it. Let's keep looking.",
+          "verdict": "okay",
+          "feedback": "Calm and honest. A word about the feeling would make it warmer."
+        }
+      ]
+    }
+  ],
+  "day2": {
+    "checkIn": {
+      "byVariant": {
+        "default": {
+          "question": "Did {recipient} look for something that felt lost or taken since yesterday?",
+          "options": [
+            {
+              "id": "yes",
+              "label": "Yes"
+            },
+            {
+              "id": "not_yet",
+              "label": "Not yet",
+              "response": "Your plan is ready for when it does."
+            }
+          ],
+          "followUp": {
+            "ifAnswer": "yes",
+            "question": "How did your plan go?",
+            "showPlan": true,
+            "options": [
+              {
+                "id": "helped",
+                "label": "It helped",
+                "response": "That's real progress. Looking together is a strong way to calm things."
+              },
+              {
+                "id": "partly",
+                "label": "Partly",
+                "response": "That's normal at first. Keep the same calm words for a few days. Familiar words help."
+              },
+              {
+                "id": "didnt_help",
+                "label": "It didn't help",
+                "response": "That happens. Here are a few more ways to try.",
+                "next": "followUpsDidntHelp"
+              }
+            ]
+          }
+        }
+      },
+      "checkInVariantMap": {}
+    },
+    "followUpsDidntHelp": [
+      {
+        "title": "Look first, talk second",
+        "text": "Start walking toward the usual spots, and say one calm sentence along the way. Moving together can settle a worry faster than words."
+      },
+      {
+        "title": "Give things a home",
+        "text": "A bowl by the door for keys and a hook for the purse make the search shorter, and the worry smaller."
+      },
+      {
+        "title": "Keep a spare",
+        "text": "A second set of keys, or a copy of a favorite card, lowers the stakes of losing the first."
+      }
+    ],
+    "doctorNote": {
+      "text": "If the worry about things being taken is new or growing, mention it at the next doctor visit.",
+      "button": "Add to the doctor-visit sheet"
+    },
+    "practiceRound": {
+      "title": "2-minute practice: a new version",
+      "promptFile": "prompts/roleplay-turn.md",
+      "goals": [
+        "notice",
+        "reassure",
+        "offer"
+      ],
+      "roundsByVariant": {
+        "default": [
+          {
+            "stage": "Morning. You're about to leave the house.",
+            "line": "Where are my keys? Somebody moved them.",
+            "mood": "worried"
+          },
+          {
+            "stage": "A minute later.",
+            "line": "Nobody ever puts things back where they were.",
+            "mood": "frustrated"
+          }
+        ]
+      },
+      "roundsVariantMap": {}
+    },
+    "nextLessonPrompt": "Ready for the next step? \"When {recipient} says no\" builds on what you just practiced."
+  },
+  "recapForNextLesson": {
+    "text": "Last time you practiced the three steps when something went missing: notice the feeling, reassure, offer to help look. Your phrase was: \"{savedPhrase}\".",
+    "ifCheckInHelped": "You said it helped. Today we'll use the same calm words when {recipient} says no."
+  }
+}

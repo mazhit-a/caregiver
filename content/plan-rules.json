@@ -1,10 +1,10 @@
 {
-  "version": 3,
+  "version": 4,
   "notes": [
     "v2: the plan is built from MODULES. Lessons inside a module are fixed and the same for everyone. The quiz decides the ORDER of modules (after Module 1, which is always first) and the reason shown for each.",
     "Personalize the surface, keep the path the same: lesson variants (in person / phone / not noticed yet) change examples and tasks, never which lesson comes next.",
     "Input: tags from quiz.json (incl. derivedTags) and the branch. Output of planBuilder: whatWeHeard, beforeAfter, planIntro, modules[] in order (each with reason and lessons), firstLessonId, quickGuides (highlighted ones first), loaderLines, giftPhraseIds, readiness.",
-    "Placeholders as in quiz.json. Only lesson 'm1_l1' is fully built in the MVP; 'm1_l2' is next if time allows."
+    "Placeholders as in quiz.json. Lessons 'm1_l1' to 'm1_l3' are built (m1_l2 and m1_l3 are drafts awaiting content-owner review); 'm1_l4' is next."
   ],
   "algorithm": [
     "1. Module 'm1_talking' is always first, with reason firstModule.reasonByBranch[branch].",
@@ -44,20 +44,20 @@
           "id": "m1_l2",
           "title": "Talking so it lands",
           "minutes": 7,
-          "built": false,
-          "buildNext": true
+          "built": true
         },
         {
           "id": "m1_l3",
           "title": "\"You stole my purse\"",
           "minutes": 8,
-          "built": false
+          "built": true
         },
         {
           "id": "m1_l4",
           "title": "When {recipient} says no",
           "minutes": 8,
-          "built": false
+          "built": false,
+          "buildNext": true
         },
         {
           "id": "m1_l5",

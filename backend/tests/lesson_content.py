@@ -1,4 +1,5 @@
-"""A temp copy of `content/` with a second built lesson, `m1_l2`, that has no variants."""
+"""A temp copy of `content/` with exactly two built lessons: `m1_l1` and a fixture `m1_l2` (no
+variants). The real `m1_l2`/`m1_l3` are replaced/removed so these tests do not depend on them."""
 
 import copy
 import json
@@ -48,7 +49,10 @@ def make_content_dir(target: Path) -> Path:
         for lesson in module["lessons"]:
             if lesson["id"] == "m1_l2":
                 lesson["built"] = True
+            elif lesson["id"] == "m1_l3":
+                lesson["built"] = False  # the real m1_l3 is built; fixtures keep only l1 and l2
     rules_path.write_text(json.dumps(rules))
+    (target / "lessons" / "m1_l3.json").unlink(missing_ok=True)
     source = json.loads((target / "lessons" / "m1_l1.json").read_text())
     fixture = _drop_variants(copy.deepcopy(source))
     (target / "lessons" / "m1_l2.json").write_text(json.dumps(fixture))
