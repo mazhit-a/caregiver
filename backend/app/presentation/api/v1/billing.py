@@ -16,6 +16,7 @@ from app.application.ports import Clock, ContentProvider, PaymentGateway, UnitOf
 from app.domain.billing.entities import Subscription
 from app.presentation.api.deps import (
     CurrentSession,
+    OptionalSession,
     get_clock,
     get_optional_payment_gateway,
     get_payment_gateway,
@@ -104,7 +105,7 @@ def _to_response(subscription: Subscription) -> SubscriptionResponse:
 
 @router.get("/pricing", response_model=PricingResponse)
 async def pricing(
-    session: CurrentSession, use_case: Annotated[GetPricing, Depends(_get_pricing)]
+    session: OptionalSession, use_case: Annotated[GetPricing, Depends(_get_pricing)]
 ) -> PricingResponse:
     view = use_case.execute(session)
     return PricingResponse(

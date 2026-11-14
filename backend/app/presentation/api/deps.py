@@ -103,6 +103,23 @@ async def get_current_session(
 CurrentSession = Annotated[Session, Depends(get_current_session)]
 
 
+async def get_optional_session(
+    resolve: Annotated[ResolveSession, Depends(get_resolve_session)],
+    x_session_token: Annotated[str | None, Header()] = None,
+) -> Session | None:
+    """For public routes that personalise when a session is present.
+
+    No header means anonymous (None, nothing written). A header that is present but unknown or
+    empty is still a 401, exactly like `CurrentSession`.
+    """
+    if x_session_token is None:
+        return None
+    return await resolve.execute(x_session_token)
+
+
+OptionalSession = Annotated[Session | None, Depends(get_optional_session)]
+
+
 # --- access gate ---
 
 

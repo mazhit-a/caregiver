@@ -15,8 +15,9 @@ class GetPricing:
         self._content = content
         self._clock = clock
 
-    def execute(self, session: Session) -> PricingView:
-        today = session.app_today(self._clock.now())
+    def execute(self, session: Session | None) -> PricingView:
+        """Without a session there is no app clock, so `first_renewal_date` is None."""
+        today = session.app_today(self._clock.now()) if session is not None else None
         pricing = self._content.pricing()
         return PricingView(
             currency=pricing.currency,
@@ -31,7 +32,7 @@ class GetPricing:
                     renew_period_text=p.renew_period_text,
                     intro_days=p.intro_days,
                     renew_days=p.renew_days,
-                    first_renewal_date=p.first_renewal_date(today),
+                    first_renewal_date=p.first_renewal_date(today) if today is not None else None,
                 )
                 for p in pricing.plans
             ],

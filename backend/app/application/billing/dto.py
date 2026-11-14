@@ -17,7 +17,7 @@ class PricingPlanView:
     renew_period_text: str
     intro_days: int
     renew_days: int
-    first_renewal_date: date  # app_today + introDays
+    first_renewal_date: date | None  # app_today + introDays; None without a session
 
 
 @dataclass(frozen=True)

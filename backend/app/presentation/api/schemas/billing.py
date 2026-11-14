@@ -14,7 +14,7 @@ class PricingPlanOut(CamelModel):
     renew_period_text: str
     intro_days: int
     renew_days: int
-    first_renewal_date: date
+    first_renewal_date: date | None
 
 
 class PricingResponse(CamelModel):

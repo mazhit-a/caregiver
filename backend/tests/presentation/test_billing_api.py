@@ -263,5 +263,28 @@ async def test_pricing_contains_no_per_day_field(pclient: httpx.AsyncClient) -> 
     assert "/day" not in raw and "a day" not in raw
 
 
-async def test_pricing_requires_a_session(db_client: httpx.AsyncClient, content: Any) -> None:
-    assert (await db_client.get("/api/pricing")).status_code == 401
+async def test_pricing_without_session_returns_plans_and_null_renewal_date_and_writes_no_row(
+    db_client: httpx.AsyncClient,
+    content: Any,
+    session_factory: async_sessionmaker[AsyncSession],
+) -> None:
+    r = await db_client.get("/api/pricing")
+    assert r.status_code == 200
+    body = r.json()
+    plans = {p["id"]: p for p in body["plans"]}
+    assert plans["four_week"]["priceToday"] == 14.99
+    assert plans["four_week"]["renewalPrice"] == 29.99
+    assert set(plans) == {p.id for p in content.pricing().plans}
+    assert all(p["firstRenewalDate"] is None for p in body["plans"])
+    raw = r.text.lower()
+    assert "perday" not in raw and "per_day" not in raw and "/day" not in raw
+    async with session_factory() as db:
+        assert await db.scalar(text("SELECT count(*) FROM sessions")) == 0
+
+
+async def test_pricing_with_unknown_session_token_is_401(
+    db_client: httpx.AsyncClient, content: Any
+) -> None:
+    r = await db_client.get("/api/pricing", headers={"X-Session-Token": "nope"})
+    assert r.status_code == 401
+    assert r.json()["error"]["code"] == "invalid_session_token"
