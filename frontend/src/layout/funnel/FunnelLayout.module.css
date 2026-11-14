@@ -1,0 +1,18 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--bg);
+}
+
+.footer {
+  padding: var(--space-4) 20px var(--space-5);
+  text-align: center;
+  color: var(--text-secondary);
+  font: var(--text-small);
+}
+
+.footer p {
+  max-width: var(--content-max);
+  margin: 0 auto;
+}

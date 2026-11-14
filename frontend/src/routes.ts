@@ -1,4 +1,4 @@
-/** Single list of public routes. */
+/** Single list of routes (marketing site and funnel). */
 export const ROUTES = {
   home: "/",
   how: "/how-it-works",
@@ -7,4 +7,14 @@ export const ROUTES = {
   tools: "/care-tools",
   pricing: "/pricing",
   quiz: "/quiz",
+  quizBuilding: "/quiz/building",
+  plan: "/your-plan",
+  gift: "/your-plan/gift",
+  paywall: "/paywall",
+  checkoutReturn: "/checkout/return",
+  today: "/today",
 } as const;
+
+/** One quiz step (a question id or a reassure_* screen id). An id is never an answer. */
+export const quizQuestionRoute = (id: string): string =>
+  `${ROUTES.quiz}/${encodeURIComponent(id)}`;

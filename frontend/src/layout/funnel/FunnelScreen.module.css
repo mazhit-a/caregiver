@@ -1,0 +1,109 @@
+/* Values from the quiz-funnel mockup (390px artboard): side padding 20px, bar padding 12/20/20.
+   Fidelity values win over tokens where they differ, so they are local custom properties. */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--bg);
+  border-bottom: var(--border-width) solid var(--border);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--space-2) 20px;
+}
+
+.side {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+}
+
+.end {
+  justify-content: flex-end;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+}
+
+.logo img {
+  height: 36px;
+  width: auto;
+}
+
+.back,
+.help {
+  min-height: var(--tap-min);
+  min-width: var(--tap-min);
+  padding: 0 var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-button);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.back {
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.help {
+  border: var(--border-width) solid var(--safety);
+  background: var(--safety-soft);
+  color: var(--safety-text);
+}
+
+.progress {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 20px var(--space-3);
+}
+
+.main {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--space-5) 20px var(--space-6);
+}
+
+.main:focus {
+  outline: none;
+}
+
+.bar {
+  background: var(--bg);
+  border-top: var(--border-width) solid var(--border);
+  padding: 12px 20px 20px;
+}
+
+.barInner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Sticky only when the viewport is tall and wide enough, so at 200% zoom or on small
+   screens it flows in the page and never covers a focused control (WCAG 2.4.11). */
+@media (min-height: 600px) and (min-width: 320px) {
+  .bar {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+  }
+}
