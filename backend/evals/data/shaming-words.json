@@ -1,0 +1,29 @@
+{
+  "notes": [
+    "Words and phrases the coach tip must not contain (grader: tip has no shaming words). Matched whole-word, case-insensitive.",
+    "Drafted for the offline graders; needs content-owner review like the medical list in content/safety-terms.json."
+  ],
+  "shaming": [
+    "wrong",
+    "bad",
+    "terrible",
+    "awful",
+    "horrible",
+    "stupid",
+    "lazy",
+    "selfish",
+    "failed",
+    "failure",
+    "fail",
+    "blame",
+    "fault",
+    "ashamed",
+    "shame",
+    "guilty",
+    "unacceptable",
+    "should have",
+    "shouldn't have",
+    "you always",
+    "you never"
+  ]
+}
