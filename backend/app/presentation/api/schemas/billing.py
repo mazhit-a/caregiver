@@ -36,6 +36,7 @@ class SubscriptionResponse(CamelModel):
     current_period_end: datetime | None
     renewal_count: int
     auto_renew_consent_at: datetime | None
+    billing_sync: str  # none | pending | done (Stripe Test Clock sync; none for demo sessions)
 
 
 class CheckoutRequestBody(CamelModel):
@@ -52,3 +53,18 @@ class CheckoutStatusResponse(CamelModel):
     paid: bool
     message: str | None
     subscription: SubscriptionResponse
+
+
+class CancelPreviewResponse(CamelModel):
+    """What the user would lose by canceling. Facts only: no discount or offer fields."""
+
+    plan_name: str
+    saved_phrase_count: int
+    care_card_published: bool
+    end_date: datetime | None
+    status: str
+
+
+class CancelResponse(CamelModel):
+    status: str
+    end_date: datetime | None

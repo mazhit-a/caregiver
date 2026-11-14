@@ -31,3 +31,4 @@ class BillingEvent:
     first_payment: bool = False  # invoice.paid: the invoice that started the subscription
     period_end: datetime | None = None  # invoice.paid: end of the period that was just paid
     cancel_at_period_end: bool = False  # customer.subscription.updated
+    test_clock_id: str | None = None  # test_helpers.test_clock.ready: the clock's own id

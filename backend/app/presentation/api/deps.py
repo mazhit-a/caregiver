@@ -55,6 +55,12 @@ def get_payment_gateway(request: Request) -> PaymentGateway:
     return gateway
 
 
+def get_optional_payment_gateway(request: Request) -> PaymentGateway | None:
+    """The payment gateway, or None (demo sessions never need it)."""
+    gateway: PaymentGateway | None = request.app.state.payment_gateway
+    return gateway
+
+
 def get_token_generator(request: Request) -> TokenGenerator:
     tokens: TokenGenerator = request.app.state.token_generator
     return tokens

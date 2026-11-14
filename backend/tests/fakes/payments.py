@@ -141,6 +141,8 @@ class RecordingStripeHttpClient(HTTPClient):
                 "object": "checkout.session",
                 **self.checkout_session,
             }
+        if path == "/v1/subscriptions" and method == "GET":
+            return {"object": "list", "data": [{"id": "sub_9", "object": "subscription"}]}
         if path.startswith("/v1/test_helpers/test_clocks/"):
             return {"id": "clock_1", "object": "test_helpers.test_clock"}
         if path == "/v1/payment_methods/pm_card_chargeCustomerFail/attach":

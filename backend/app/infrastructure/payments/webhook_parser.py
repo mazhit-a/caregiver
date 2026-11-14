@@ -13,6 +13,7 @@ from app.application.billing.events import (
     INVOICE_PAYMENT_FAILED,
     SUBSCRIPTION_DELETED,
     SUBSCRIPTION_UPDATED,
+    TEST_CLOCK_READY,
     BillingEvent,
 )
 from app.domain.billing.errors import InvalidWebhookSignature
@@ -142,4 +143,6 @@ class StripeWebhookParser:
                 plan_id=_plan_id(obj),
                 cancel_at_period_end=obj.get("cancel_at_period_end") is True,
             )
+        if event_type == TEST_CLOCK_READY:
+            return BillingEvent(event_id, event_type, test_clock_id=_id_of(obj))
         return BillingEvent(event_id, event_type)

@@ -18,6 +18,7 @@ from app.domain.shared.labels import (
     render_text,
     with_display_name,
 )
+from app.domain.today.copy import DemoControlCopy, TodayCopy
 from app.domain.visit_sheet.entities import BankQuestion, VisitQuestionBank
 from app.infrastructure.content.loader import ContentBundle, load_content
 from app.infrastructure.content.plan_rules_mapper import to_plan_rules
@@ -83,6 +84,29 @@ class JsonContentProvider:
 
     def coach_tips(self) -> CoachTips:
         return to_coach_tips(self._bundle.safety_terms)
+
+    def today_copy(self) -> TodayCopy:
+        t = self._bundle.funnel_copy.today
+        return TodayCopy(
+            title=t.title,
+            rest_message=t.rest_message,
+            all_built_done=t.all_built_done,
+            next_unlock=t.next_unlock,
+            care_card_nudge_one=t.care_card_nudge_one,
+            care_card_nudge_many=t.care_card_nudge_many,
+            weekly_rhythm=t.weekly_rhythm,
+            readiness=t.readiness,
+            renews_on=t.subscription.renews_on,
+            renewed=t.subscription.renewed,
+            ends_on=t.subscription.ends_on,
+            welcome_back_title=t.welcome_back.title,
+            welcome_back_body=t.welcome_back.body,
+            visit_sheet_link=t.visit_sheet_link,
+            demo_label=t.demo.label,
+            demo_controls=tuple(DemoControlCopy(c.id, c.label) for c in t.demo.controls),
+            welcome_back_after_days=t.welcome_back_after_days,
+            renewed_notice_days=t.renewed_notice_days,
+        )
 
     def crisis_resources_need_verification(self) -> bool:
         return self._bundle.crisis_resources.verify_before_launch

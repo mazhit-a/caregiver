@@ -33,6 +33,7 @@ from app.domain.session.entities import Session
 from app.domain.shared.errors import DomainError
 from app.domain.shared.labels import RecipientLabels
 from app.domain.today.checkins import Checkin, Observation
+from app.domain.today.copy import TodayCopy
 from app.domain.visit_sheet.entities import VisitQuestionBank, VisitSheet
 
 
@@ -184,6 +185,8 @@ class SubscriptionRepository(Protocol):
     async def get(self, session_id: UUID) -> Subscription | None: ...
 
     async def get_by_stripe_customer_id(self, customer_id: str) -> Subscription | None: ...
+
+    async def get_by_stripe_test_clock_id(self, test_clock_id: str) -> Subscription | None: ...
 
     async def save(self, subscription: Subscription) -> None:
         """Insert or update the subscription row of the session (history is separate)."""
@@ -427,6 +430,10 @@ class ContentProvider(Protocol):
 
     def coach_tips(self) -> CoachTips:
         """The fixed coach tips (medical, off topic, too short); `{label}` still unfilled."""
+        ...
+
+    def today_copy(self) -> TodayCopy:
+        """The Today screen wording and its two day counts (placeholders unfilled)."""
         ...
 
     def crisis_resources_need_verification(self) -> bool:

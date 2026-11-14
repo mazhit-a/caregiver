@@ -4,6 +4,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Request
 
+from app.application.billing.cancel import CancelSubscription, GetCancelPreview
 from app.application.billing.checkout import CreateCheckout, ReconcileCheckout
 from app.application.billing.use_cases import (
     GetPricing,
@@ -13,8 +14,16 @@ from app.application.billing.use_cases import (
 )
 from app.application.ports import Clock, ContentProvider, PaymentGateway, UnitOfWork
 from app.domain.billing.entities import Subscription
-from app.presentation.api.deps import CurrentSession, get_clock, get_payment_gateway, get_uow
+from app.presentation.api.deps import (
+    CurrentSession,
+    get_clock,
+    get_optional_payment_gateway,
+    get_payment_gateway,
+    get_uow,
+)
 from app.presentation.api.schemas.billing import (
+    CancelPreviewResponse,
+    CancelResponse,
     CheckoutRequestBody,
     CheckoutResponse,
     CheckoutStatusResponse,
@@ -65,6 +74,21 @@ def _reconcile_checkout(
     return ReconcileCheckout(uow, content, clock, gateway, StartSubscription(uow, content, clock))
 
 
+def _cancel_preview(
+    request: Request, uow: Annotated[UnitOfWork, Depends(get_uow)]
+) -> GetCancelPreview:
+    content: ContentProvider = request.app.state.content
+    return GetCancelPreview(uow, content)
+
+
+def _cancel(
+    uow: Annotated[UnitOfWork, Depends(get_uow)],
+    clock: Annotated[Clock, Depends(get_clock)],
+    gateway: Annotated[PaymentGateway | None, Depends(get_optional_payment_gateway)],
+) -> CancelSubscription:
+    return CancelSubscription(uow, clock, gateway)
+
+
 def _to_response(subscription: Subscription) -> SubscriptionResponse:
     return SubscriptionResponse(
         status=subscription.status,
@@ -74,6 +98,7 @@ def _to_response(subscription: Subscription) -> SubscriptionResponse:
         current_period_end=subscription.current_period_end,
         renewal_count=subscription.renewal_count,
         auto_renew_consent_at=subscription.auto_renew_consent_at,
+        billing_sync=subscription.billing_sync if subscription.source == "stripe" else "none",
     )
 
 
@@ -140,3 +165,25 @@ async def reconcile_checkout(
         message=None if result.paid else "No payment has been received for this checkout.",
         subscription=_to_response(result.subscription),
     )
+
+
+@router.get("/billing/cancel-preview", response_model=CancelPreviewResponse)
+async def cancel_preview(
+    session: CurrentSession, use_case: Annotated[GetCancelPreview, Depends(_cancel_preview)]
+) -> CancelPreviewResponse:
+    view = await use_case.execute(session)
+    return CancelPreviewResponse(
+        plan_name=view.plan_name,
+        saved_phrase_count=view.saved_phrase_count,
+        care_card_published=view.care_card_published,
+        end_date=view.end_date,
+        status=view.status,
+    )
+
+
+@router.post("/billing/cancel", response_model=CancelResponse)
+async def cancel(
+    session: CurrentSession, use_case: Annotated[CancelSubscription, Depends(_cancel)]
+) -> CancelResponse:
+    result = await use_case.execute(session)
+    return CancelResponse(status=result.status, end_date=result.end_date)

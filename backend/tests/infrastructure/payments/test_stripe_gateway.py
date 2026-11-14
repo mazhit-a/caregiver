@@ -109,6 +109,8 @@ async def test_remaining_operations_send_the_expected_requests() -> None:
     assert http.fields("/v1/customers/cus_1") == {
         "invoice_settings[default_payment_method]": "pm_1"
     }
+    # a subscription-level default payment method would override the customer's: set it too
+    assert http.fields("/v1/subscriptions/sub_9") == {"default_payment_method": "pm_1"}
 
 
 @pytest.mark.parametrize(

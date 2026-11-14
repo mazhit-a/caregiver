@@ -163,5 +163,15 @@ class HandleStripeEvent:
         await self._change(event, apply)
 
     async def _test_clock_ready(self, event: BillingEvent) -> None:
-        """Acknowledged and recorded only; `billing_sync` is added by increment 36."""
-        return None
+        """The event carries only the clock id: find the subscription through the stored id and
+        set `billing_sync` to done. Unknown clocks, and clocks with nothing pending, are ignored."""
+        if event.test_clock_id is None:
+            return
+        async with self._uow:
+            subscription = await self._uow.subscriptions.get_by_stripe_test_clock_id(
+                event.test_clock_id
+            )
+            if subscription is None or not subscription.clock_ready():
+                return
+            await self._uow.subscriptions.save(subscription)
+            await self._uow.commit()

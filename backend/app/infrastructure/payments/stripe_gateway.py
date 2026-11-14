@@ -150,6 +150,9 @@ class StripePaymentGateway:
         )
 
     async def attach_failing_payment_method(self, customer_id: str) -> None:
+        """Attach the declined test card and make it the default everywhere it could be
+        overridden: the customer's invoice settings, and the default payment method of each of the
+        customer's subscriptions (a Checkout-created subscription may carry its own)."""
         method = await self._call(
             lambda: self._v1.payment_methods.attach(
                 FAILING_TEST_PAYMENT_METHOD, params={"customer": customer_id}
@@ -160,3 +163,12 @@ class StripePaymentGateway:
                 customer_id, params={"invoice_settings": {"default_payment_method": method.id}}
             )
         )
+        subscriptions = await self._call(
+            lambda: self._v1.subscriptions.list(params={"customer": customer_id})
+        )
+        for subscription in subscriptions.data:
+            await self._call(
+                lambda sid=subscription.id: self._v1.subscriptions.update(  # type: ignore[misc]
+                    sid, params={"default_payment_method": method.id}
+                )
+            )

@@ -9,6 +9,9 @@ from app.domain.billing.errors import AccessDenied, ConsentRequired, InvalidTran
 
 SubscriptionStatus = Literal["none", "active", "demo", "past_due", "canceling", "canceled", "ended"]
 SubscriptionSource = Literal["demo", "stripe"]
+# Stripe Test Clock sync after a demo control moved the clock: none (nothing sent), pending
+# (clock advanced, waiting for `test_clock.ready`), done.
+BillingSync = Literal["none", "pending", "done"]
 
 ALL_STATUSES: tuple[SubscriptionStatus, ...] = (
     "none",
@@ -62,6 +65,9 @@ class Subscription:
     auto_renew_consent_at: datetime | None = None
     stripe_customer_id: str | None = None
     stripe_subscription_id: str | None = None
+    stripe_test_clock_id: str | None = None
+    stripe_clock_at: datetime | None = None  # the time the Test Clock was last set to (app time)
+    billing_sync: BillingSync = "none"
     _pending: list[SubscriptionHistoryEntry] = field(default_factory=list, repr=False)
 
     # --- consent -------------------------------------------------------------------------------
@@ -170,6 +176,31 @@ class Subscription:
     def end_now(self, at: datetime, source: str | None = None) -> None:
         """Gentle exit: from any status to `ended`."""
         self.transition("ended", at, "ended", source)
+
+    # --- Stripe Test Clock sync (not a status change) --------------------------------------------
+
+    def clock_needs_advance(self, target: datetime) -> bool:
+        """True for a Stripe subscription with a Test Clock that is strictly behind `target`.
+
+        The clock only moves forward: a target at or before the last time it was set is skipped.
+        """
+        return (
+            self.source == "stripe"
+            and self.stripe_test_clock_id is not None
+            and self.stripe_clock_at is not None
+            and target > self.stripe_clock_at
+        )
+
+    def clock_advanced(self, target: datetime) -> None:
+        self.stripe_clock_at = target
+        self.billing_sync = "pending"
+
+    def clock_ready(self) -> bool:
+        """The Test Clock finished advancing: pending -> done. False when nothing was pending."""
+        if self.billing_sync != "pending":
+            return False
+        self.billing_sync = "done"
+        return True
 
     def pull_history(self) -> list[SubscriptionHistoryEntry]:
         """The history entries recorded since the last pull (the repository persists them)."""

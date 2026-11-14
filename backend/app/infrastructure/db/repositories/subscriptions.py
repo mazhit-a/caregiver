@@ -8,6 +8,7 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.domain.billing.entities import (
+    BillingSync,
     Subscription,
     SubscriptionHistoryEntry,
     SubscriptionSource,
@@ -32,6 +33,12 @@ class SqlSubscriptionRepository:
         )
         return self._to_domain(result.scalars().first())
 
+    async def get_by_stripe_test_clock_id(self, test_clock_id: str) -> Subscription | None:
+        result = await self._db.execute(
+            select(SubscriptionRow).where(SubscriptionRow.stripe_test_clock_id == test_clock_id)
+        )
+        return self._to_domain(result.scalars().first())
+
     @staticmethod
     def _to_domain(row: SubscriptionRow | None) -> Subscription | None:
         if row is None:
@@ -47,6 +54,9 @@ class SqlSubscriptionRepository:
             auto_renew_consent_at=row.auto_renew_consent_at,
             stripe_customer_id=row.stripe_customer_id,
             stripe_subscription_id=row.stripe_subscription_id,
+            stripe_test_clock_id=row.stripe_test_clock_id,
+            stripe_clock_at=row.stripe_clock_at,
+            billing_sync=cast(BillingSync, row.billing_sync),
         )
 
     async def save(self, subscription: Subscription) -> None:
@@ -60,6 +70,9 @@ class SqlSubscriptionRepository:
             "auto_renew_consent_at": subscription.auto_renew_consent_at,
             "stripe_customer_id": subscription.stripe_customer_id,
             "stripe_subscription_id": subscription.stripe_subscription_id,
+            "stripe_test_clock_id": subscription.stripe_test_clock_id,
+            "stripe_clock_at": subscription.stripe_clock_at,
+            "billing_sync": subscription.billing_sync,
         }
         stmt = insert(SubscriptionRow).values(session_id=subscription.session_id, **values)
         await self._db.execute(

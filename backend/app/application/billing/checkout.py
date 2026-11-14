@@ -61,6 +61,8 @@ class CreateCheckout:
             customer_id = customer.customer_id
             async with self._uow:
                 subscription.stripe_customer_id = customer_id
+                subscription.stripe_test_clock_id = customer.test_clock_id
+                subscription.stripe_clock_at = now  # the clock was created frozen at app time
                 await self._uow.subscriptions.save(subscription)
                 await self._uow.commit()
         return await self._gateway.create_checkout_session(

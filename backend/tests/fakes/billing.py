@@ -26,6 +26,12 @@ class InMemorySubscriptionRepository:
                 return _snapshot(stored)
         return None
 
+    async def get_by_stripe_test_clock_id(self, test_clock_id: str) -> Subscription | None:
+        for stored in self.rows.values():
+            if stored.stripe_test_clock_id == test_clock_id:
+                return _snapshot(stored)
+        return None
+
     async def save(self, subscription: Subscription) -> None:
         self.rows[subscription.session_id] = _snapshot(subscription)
         self.saves.append(_snapshot(subscription))

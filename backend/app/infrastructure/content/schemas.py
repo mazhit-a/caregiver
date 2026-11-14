@@ -484,6 +484,44 @@ class SavePlan(ContentModel):
     note: str
 
 
+class TodaySubscriptionCopy(ContentModel):
+    renews_on: str
+    renewed: str
+    ends_on: str
+
+
+class TodayWelcomeBackCopy(ContentModel):
+    title: str
+    body: str
+
+
+class TodayDemoControl(ContentModel):
+    id: str
+    label: str
+
+
+class TodayDemoCopy(ContentModel):
+    label: str
+    controls: list[TodayDemoControl]
+
+
+class TodayCopyFile(ContentModel):
+    title: str
+    rest_message: str
+    all_built_done: str
+    next_unlock: str
+    care_card_nudge_one: str
+    care_card_nudge_many: str
+    weekly_rhythm: str
+    readiness: str
+    subscription: TodaySubscriptionCopy
+    welcome_back: TodayWelcomeBackCopy
+    visit_sheet_link: str
+    demo: TodayDemoCopy
+    welcome_back_after_days: int = Field(ge=1)
+    renewed_notice_days: int = Field(ge=1)
+
+
 class FunnelCopyFile(Notes):
     version: int
     common: dict[str, str]
@@ -493,6 +531,7 @@ class FunnelCopyFile(Notes):
     plan_preview: PlanPreview
     paywall: Paywall
     save_plan: SavePlan
+    today: TodayCopyFile
     errors: dict[str, str]
 
 
@@ -577,6 +616,16 @@ class LearnScreen(ContentModel):
     pattern_tip: str | None = None
     show_pattern: bool | None = None
     mini_task: MiniTask | None = None
+
+
+class PhrasesReviewScreen(ContentModel):
+    """Review screen: the server fills it with the phrases the learner saved."""
+
+    id: str
+    type: Literal["phrases_review"]
+    title: str
+    intro: str
+    empty_text: str
 
 
 class Round(ContentModel):
@@ -672,7 +721,13 @@ class WrapScreen(ContentModel):
 
 
 LessonScreen = Annotated[
-    SetupQuestionScreen | ScenarioScreen | LearnScreen | RoleplayScreen | PlanScreen | WrapScreen,
+    SetupQuestionScreen
+    | ScenarioScreen
+    | LearnScreen
+    | PhrasesReviewScreen
+    | RoleplayScreen
+    | PlanScreen
+    | WrapScreen,
     Field(discriminator="type"),
 ]
 

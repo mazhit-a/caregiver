@@ -42,6 +42,8 @@ DOMAIN_ERROR_STATUS: dict[str, int] = {
     "unknown_screen": 422,
     "invalid_screen_answer": 422,
     "no_subscription_period": 409,
+    "no_active_subscription": 409,
+    "not_a_stripe_subscription": 409,
     "payment_gateway_error": 502,
     "checkout_not_found": 404,
     "invalid_webhook_signature": 400,

@@ -16,3 +16,4 @@ class DemoResponse(CamelModel):
     subscription_status: str
     current_period_end: datetime | None
     renewal_count: int
+    billing_sync: str  # none | pending | done

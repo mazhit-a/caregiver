@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 
-from app.domain.billing.entities import SubscriptionStatus
+from app.domain.billing.entities import BillingSync, SubscriptionStatus
 
 
 @dataclass(frozen=True)
@@ -16,3 +16,4 @@ class DemoState:
     subscription_status: SubscriptionStatus
     current_period_end: datetime | None
     renewal_count: int
+    billing_sync: BillingSync

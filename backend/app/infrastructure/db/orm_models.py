@@ -148,6 +148,9 @@ class SubscriptionRow(Base):
     )
     stripe_customer_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
     stripe_subscription_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    stripe_test_clock_id: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
+    stripe_clock_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    billing_sync: Mapped[str] = mapped_column(String(8), nullable=False, server_default="none")
 
 
 class SubscriptionHistoryRow(Base):

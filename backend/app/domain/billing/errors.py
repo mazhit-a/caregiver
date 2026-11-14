@@ -67,6 +67,24 @@ class NoSubscriptionPeriod(DomainError):
         super().__init__("There is no subscription period to jump to. Start a subscription first.")
 
 
+class NoActiveSubscription(DomainError):
+    """There is no subscription that can be canceled or previewed for cancellation (HTTP 409)."""
+
+    code = "no_active_subscription"
+
+    def __init__(self, status: str) -> None:
+        super().__init__("There is no subscription to cancel.", {"status": status})
+
+
+class NotAStripeSubscription(DomainError):
+    """The control needs a paid (Stripe) subscription, and this session has none (HTTP 409)."""
+
+    code = "not_a_stripe_subscription"
+
+    def __init__(self) -> None:
+        super().__init__("This control needs a card subscription made through Stripe checkout.")
+
+
 class PaymentGatewayError(DomainError):
     """The payment provider failed or is not configured (HTTP 502).
 

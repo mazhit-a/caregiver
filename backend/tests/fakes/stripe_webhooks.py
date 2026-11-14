@@ -126,8 +126,8 @@ class FakeStripe:
         }
         return self.event(event_type, obj)
 
-    def test_clock_ready(self) -> tuple[bytes, str]:
+    def test_clock_ready(self, clock_id: str = "clock_fake_1") -> tuple[bytes, str]:
         return self.event(
             "test_helpers.test_clock.ready",
-            {"id": "clock_fake_1", "object": "test_helpers.test_clock", "status": "ready"},
+            {"id": clock_id, "object": "test_helpers.test_clock", "status": "ready"},
         )
