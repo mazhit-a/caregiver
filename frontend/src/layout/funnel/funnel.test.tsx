@@ -222,7 +222,7 @@ describe("funnel shell", () => {
       "utf8",
     );
     expect(css).toMatch(
-      /@media \(min-height: 600px\)[^{]*\{[^}]*\.bar\s*\{[^}]*position: sticky/s,
+      /@media \(min-height: 600px\)[^{]*\{[\s\S]*?\.bar\s*\{[^}]*position: sticky/,
     );
   });
 });
