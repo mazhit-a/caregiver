@@ -1,9 +1,13 @@
 """Composition root: the only module that knows every layer."""
 
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.infrastructure.config import Settings
+from app.infrastructure.content.provider import JsonContentProvider
 from app.presentation.api.deps import AppInfo
 from app.presentation.api.error_handlers import register_error_handlers
 from app.presentation.api.v1.router import router as v1_router
@@ -11,7 +15,15 @@ from app.presentation.api.v1.router import router as v1_router
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings or Settings()
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+        # Invalid or missing content raises ContentLoadError here, so the app refuses to start.
+        app.state.content = JsonContentProvider.from_directory(settings.content_dir)
+        yield
+
     app = FastAPI(
+        lifespan=lifespan,
         title="Parent Care Navigator",
         docs_url="/api/docs",
         openapi_url="/api/openapi.json",

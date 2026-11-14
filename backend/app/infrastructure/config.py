@@ -1,6 +1,7 @@
 """Application settings, the only place that reads the environment."""
 
 import logging
+from pathlib import Path
 from typing import Self
 
 from pydantic import model_validator
@@ -29,6 +30,7 @@ class Settings(BaseSettings):
     stripe_webhook_secret: str = ""
     public_app_url: str = "http://localhost:3000"
     cors_origins: str = ""
+    content_dir: Path = Path(__file__).resolve().parents[3] / "content"
     demo_controls: bool = True
     roleplay_turns_per_hour: int = 40
 
