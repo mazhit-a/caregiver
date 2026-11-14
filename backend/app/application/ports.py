@@ -6,7 +6,10 @@ from types import TracebackType
 from typing import Any, Protocol, Self
 from uuid import UUID
 
+from app.domain.quiz.definition import QuizDefinition
+from app.domain.quiz.entities import QuizState
 from app.domain.safety.resources import CrisisResource
+from app.domain.schedule.entities import ScheduledLesson
 from app.domain.session.entities import Session
 from app.domain.shared.labels import RecipientLabels
 
@@ -35,6 +38,22 @@ class ActiveDayRepository(Protocol):
     async def list_days(self, session_id: UUID) -> list[date]: ...
 
 
+class LessonScheduleRepository(Protocol):
+    async def list_for_session(self, session_id: UUID) -> list[ScheduledLesson]:
+        """All scheduled lessons of the session, ordered by seq."""
+        ...
+
+    async def add_many(self, session_id: UUID, lessons: list[ScheduledLesson]) -> None: ...
+
+
+class QuizStateRepository(Protocol):
+    async def get(self, session_id: UUID) -> QuizState | None: ...
+
+    async def save(self, state: QuizState) -> None:
+        """Insert or update the quiz state of the session."""
+        ...
+
+
 class UnitOfWork(Protocol):
     """Transaction boundary: `async with uow:` ... `await uow.commit()`.
 
@@ -43,6 +62,8 @@ class UnitOfWork(Protocol):
 
     sessions: SessionRepository
     active_days: ActiveDayRepository
+    quiz: QuizStateRepository
+    lesson_schedule: LessonScheduleRepository
 
     async def __aenter__(self) -> Self: ...
 
@@ -84,6 +105,10 @@ class ContentProvider(Protocol):
 
     def lesson_recipient_labels(self, key: str) -> RecipientLabels:
         """Labels for lesson text (`both` becomes the singular "your parent")."""
+        ...
+
+    def quiz_definition(self) -> QuizDefinition:
+        """The quiz questions as the quiz domain reads them (placeholders still unfilled)."""
         ...
 
     def lesson_ids(self) -> list[str]: ...

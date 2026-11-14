@@ -14,6 +14,7 @@ from app.infrastructure.db.unit_of_work import SqlAlchemyUnitOfWork
 from app.infrastructure.tokens import SecretsTokenGenerator, UuidGenerator
 from app.presentation.api.deps import AppInfo
 from app.presentation.api.error_handlers import register_error_handlers
+from app.presentation.api.request_logging import RequestLogMiddleware
 from app.presentation.api.v1.router import router as v1_router
 
 
@@ -50,6 +51,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             allow_methods=["*"],
             allow_headers=["*"],
         )
+    app.add_middleware(RequestLogMiddleware)
     register_error_handlers(app)
     app.include_router(v1_router, prefix="/api")
     return app

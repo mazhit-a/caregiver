@@ -4,10 +4,12 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
+from app.domain.quiz.definition import QuizDefinition
 from app.domain.safety.resources import CrisisResource
 from app.domain.shared.errors import DomainError
 from app.domain.shared.labels import RecipientLabels, lesson_labels, render_text
 from app.infrastructure.content.loader import ContentBundle, load_content
+from app.infrastructure.content.quiz_mapper import to_quiz_definition
 from app.infrastructure.content.schemas import LessonFile
 
 _AUTHORING_KEYS = frozenset({"notes"})
@@ -24,6 +26,7 @@ class JsonContentProvider:
 
     def __init__(self, bundle: ContentBundle) -> None:
         self._bundle = bundle
+        self._quiz_definition = to_quiz_definition(bundle.quiz)
         self._labels = {
             key: RecipientLabels.from_mapping(model.model_dump(by_alias=True))
             for key, model in bundle.quiz.recipient_labels.items()
@@ -57,6 +60,9 @@ class JsonContentProvider:
 
     def crisis_resources_need_verification(self) -> bool:
         return self._bundle.crisis_resources.verify_before_launch
+
+    def quiz_definition(self) -> QuizDefinition:
+        return self._quiz_definition
 
     def lesson_ids(self) -> list[str]:
         return sorted(self._bundle.lessons)

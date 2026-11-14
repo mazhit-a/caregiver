@@ -27,6 +27,9 @@ STATUS_CODE_TABLE: dict[int, str] = {
 DOMAIN_ERROR_STATUS: dict[str, int] = {
     "invalid_session_token": 401,
     "invalid_timezone": 422,
+    "quiz_locked": 409,
+    "invalid_answer": 422,
+    "unknown_question": 404,
 }
 
 

@@ -46,7 +46,12 @@ def to_plan_rules(rules: PlanRulesFile, phrases: PhrasesFile) -> PlanRules:
         quick_guides=tuple(
             QuickGuideRule(g.id, g.title, tuple(g.highlight_if)) for g in rules.quick_guides
         ),
-        pace=PaceRules(dict(rules.pace.lessons_per_week), rules.pace.label),
+        pace=PaceRules(
+            dict(rules.pace.lessons_per_week),
+            rules.pace.label,
+            rules.pace.unlock_rule.days_per_week,
+            rules.pace.unlock_rule.first_lesson_offset_days,
+        ),
         plan_intro=dict(rules.plan_intro),
         heard_sentences=tuple(
             HeardSentenceRule(

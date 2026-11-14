@@ -97,3 +97,14 @@ def render_text(text: str, labels: RecipientLabels, extra: Mapping[str, str] | N
         return values[name]
 
     return _PLACEHOLDER.sub(replace, text)
+
+
+def render_tree(node: object, labels: RecipientLabels) -> object:
+    """Fill placeholders in every string of a JSON-like tree (dicts, lists, strings)."""
+    if isinstance(node, str):
+        return render_text(node, labels)
+    if isinstance(node, list):
+        return [render_tree(item, labels) for item in node]
+    if isinstance(node, dict):
+        return {key: render_tree(value, labels) for key, value in node.items()}
+    return node

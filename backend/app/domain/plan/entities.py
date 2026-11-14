@@ -50,6 +50,8 @@ class QuickGuideRule:
 class PaceRules:
     lessons_per_week: Mapping[str, int]  # "pace:5" -> 3, plus the key "default"
     label: str  # "About {minutes} minutes a lesson, {perWeek} lessons a week"
+    unlock_days_per_week: int = 7  # pace.unlockRule.daysPerWeek
+    unlock_first_lesson_offset_days: int = 0  # pace.unlockRule.firstLessonOffsetDays
 
 
 @dataclass(frozen=True)

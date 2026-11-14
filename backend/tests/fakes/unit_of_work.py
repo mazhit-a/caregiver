@@ -1,6 +1,8 @@
 from types import TracebackType
 from typing import Self
 
+from tests.fakes.lesson_schedule import InMemoryLessonScheduleRepository
+from tests.fakes.quiz import InMemoryQuizStateRepository
 from tests.fakes.sessions import InMemoryActiveDayRepository, InMemorySessionRepository
 
 
@@ -10,6 +12,8 @@ class FakeUnitOfWork:
     def __init__(self) -> None:
         self.sessions = InMemorySessionRepository()
         self.active_days = InMemoryActiveDayRepository()
+        self.quiz = InMemoryQuizStateRepository()
+        self.lesson_schedule = InMemoryLessonScheduleRepository()
         self.committed = False
         self.rolled_back = False
 
