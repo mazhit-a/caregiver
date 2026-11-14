@@ -37,12 +37,17 @@ class Settings(BaseSettings):
     demo_controls: bool = True
     roleplay_turns_per_hour: int = 40
     public_card_requests_per_minute: int = 30
+    session_creations_per_minute: int = 20  # POST /api/session, per client address
+    events_requests_per_minute: int = 120  # POST /api/events, per session
+    docs_enabled: bool = True  # /api/docs and /api/openapi.json (TASK.md section 8)
 
     @model_validator(mode="after")
     def _validate(self) -> Self:
         key = self.stripe_secret_key
         if key and not key.startswith(_TEST_KEY_PREFIXES):
             raise ValueError("STRIPE_SECRET_KEY must be a test key (sk_test_ or rk_test_)")
+        if "*" in self.cors_origin_list:
+            raise ValueError("CORS_ORIGINS must list explicit origins, never '*'")
         if not self.anthropic_api_key:
             logger.warning("ANTHROPIC_API_KEY is empty: role-play will use the fallback only")
         return self

@@ -11,6 +11,7 @@ from app.application.ports import (
     ContentProvider,
     IdGenerator,
     PaymentGateway,
+    RateLimiter,
     TokenGenerator,
     UnitOfWork,
 )
@@ -134,3 +135,32 @@ def require_demo_controls(info: AppInfoDep) -> None:
     """404 in the shared error shape unless `DEMO_CONTROLS=true` (the routes look absent)."""
     if not info.demo_controls:
         raise HTTPException(status_code=404, detail="Not Found")
+
+
+# --- client identity and request rate limits ---
+
+
+def client_key(request: Request) -> str:
+    """The caller's address: the LAST X-Forwarded-For hop (appended by our own Caddy; earlier
+    hops are client-supplied and spoofable), else the socket peer."""
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[-1].strip()
+    return request.client.host if request.client else "unknown"
+
+
+async def _enforce(request: Request, attribute: str, key: str) -> None:
+    limiter: RateLimiter = getattr(request.app.state, attribute)
+    clock: Clock = request.app.state.clock
+    if not await limiter.allow(key, clock.now()):
+        raise HTTPException(status_code=429, detail="Too many requests. Please slow down.")
+
+
+async def limit_session_creation(request: Request) -> None:
+    """429 `rate_limited` when one client address creates too many sessions per minute."""
+    await _enforce(request, "session_rate_limiter", client_key(request))
+
+
+async def limit_events(request: Request, session: CurrentSession) -> None:
+    """429 `rate_limited` when one session posts too many event batches per minute."""
+    await _enforce(request, "events_rate_limiter", str(session.id))

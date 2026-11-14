@@ -16,6 +16,7 @@ from app.application.care_card.use_cases import (
 from app.application.ports import Clock, ContentProvider, RateLimiter, TokenGenerator, UnitOfWork
 from app.presentation.api.deps import (
     SubscribedSession,
+    client_key,
     get_clock,
     get_token_generator,
     get_uow,
@@ -65,14 +66,6 @@ def _public(request: Request, uow: Uow, clock: Clk) -> GetPublicCard:
 def _public_url(request: Request) -> str:
     url: str = request.app.state.settings.public_app_url
     return url
-
-
-def _client_key(request: Request) -> str:
-    """The caller: the last X-Forwarded-For hop (appended by our own proxy), else the peer."""
-    forwarded = request.headers.get("x-forwarded-for")
-    if forwarded:
-        return forwarded.split(",")[-1].strip()
-    return request.client.host if request.client else "unknown"
 
 
 @router.get("/care-card", response_model=CareCardResponse)
@@ -125,4 +118,4 @@ async def get_public_card(
     use_case: Annotated[GetPublicCard, Depends(_public)],
 ) -> CardSnapshotOut:
     response.headers["Cache-Control"] = "no-store"
-    return snapshot_out(await use_case.execute(card_id, _client_key(request)))
+    return snapshot_out(await use_case.execute(card_id, client_key(request)))

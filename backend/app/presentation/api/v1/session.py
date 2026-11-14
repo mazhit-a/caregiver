@@ -5,7 +5,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from app.application.session.use_cases import CreateSession
-from app.presentation.api.deps import get_create_session
+from app.presentation.api.deps import get_create_session, limit_session_creation
 from app.presentation.api.schemas.base import CamelModel
 
 router = APIRouter()
@@ -20,7 +20,12 @@ class CreateSessionResponse(CamelModel):
     timezone: str
 
 
-@router.post("/session", response_model=CreateSessionResponse, status_code=201)
+@router.post(
+    "/session",
+    response_model=CreateSessionResponse,
+    status_code=201,
+    dependencies=[Depends(limit_session_creation)],
+)
 async def create_session(
     use_case: Annotated[CreateSession, Depends(get_create_session)],
     body: CreateSessionRequest | None = None,

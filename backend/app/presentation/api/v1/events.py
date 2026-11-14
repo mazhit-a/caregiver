@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends
 
 from app.application.events.use_cases import EventInput, RecordEvents
 from app.application.ports import Clock, UnitOfWork
-from app.presentation.api.deps import CurrentSession, get_clock, get_uow
+from app.presentation.api.deps import CurrentSession, get_clock, get_uow, limit_events
 from app.presentation.api.schemas.events import EventsRequest, EventsResponse
 
 router = APIRouter(tags=["events"])
@@ -19,7 +19,7 @@ def _record(
     return RecordEvents(uow, clock)
 
 
-@router.post("/events", response_model=EventsResponse)
+@router.post("/events", response_model=EventsResponse, dependencies=[Depends(limit_events)])
 async def post_events(
     body: EventsRequest,
     session: CurrentSession,

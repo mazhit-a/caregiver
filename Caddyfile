@@ -1,5 +1,21 @@
 {$SITE_ADDRESS::80} {
+	# Security headers. HSTS is only honoured by browsers over HTTPS (set SITE_ADDRESS to the
+	# domain so Caddy serves TLS); it is harmless on plain HTTP in local development.
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "no-referrer"
+		X-Frame-Options "DENY"
+		-Server
+	}
+
 	handle /api/* {
+		# Same limit as BodySizeLimitMiddleware in the app (413 at the edge).
+		request_body {
+			max_size 64KB
+		}
+		# Caddy sets X-Forwarded-For to the real peer for untrusted clients, so the app's
+		# rate limiters key on the last hop.
 		reverse_proxy api:8000
 	}
 }
