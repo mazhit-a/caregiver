@@ -1,0 +1,9 @@
+.group { border: 0; margin: 0; padding: 0; min-width: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+.legend { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.buttons { display: flex; gap: var(--space-2); }
+.button { position: relative; flex: 1 1 0; min-width: 48px; height: 56px; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; border: var(--border-width-strong) solid var(--border-control); background: var(--surface); color: var(--text); font: 800 20px/1 var(--font-sans); cursor: pointer; }
+.button.selected { background: var(--info-soft); border-color: var(--accent); }
+.button:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+.input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.ends { margin: 0; display: flex; justify-content: space-between; gap: var(--space-3); font: var(--text-small); color: var(--text-secondary); }
+.error { margin: 0; font: var(--text-small); color: var(--safety-text); }

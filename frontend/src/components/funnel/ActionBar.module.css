@@ -1,0 +1,6 @@
+.primary, .secondary { min-height: var(--tap-min); padding: 0 var(--space-5); border-radius: var(--radius-button); font: var(--text-button); cursor: pointer; width: 100%; }
+.primary { border: var(--border-width-strong) solid var(--accent); background: var(--accent); color: var(--on-accent); }
+.primary:hover { background: var(--accent-hover); }
+.primary[aria-disabled="true"] { background: var(--border); border-color: var(--border); color: var(--text-secondary); cursor: not-allowed; }
+.secondary { border: var(--border-width-strong) solid transparent; background: transparent; color: var(--accent-pressed); }
+.primary:focus-visible, .secondary:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }

@@ -19,6 +19,38 @@ export default tseslint.config(
     },
   },
   {
+    files: ["src/components/funnel/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/api", "**/api/*"],
+              message: "Funnel inputs are presentational and must not import the API layer.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/components/funnel/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/api", "**/api/*"],
+              message: "Funnel inputs are presentational and must not import the API layer.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ["src/components/practice/**/*.{ts,tsx}", "src/content/practiceScript.ts"],
     rules: {
       "no-restricted-imports": [
