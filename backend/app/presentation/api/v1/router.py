@@ -10,6 +10,7 @@ from app.presentation.api.v1.plan import router as plan_router
 from app.presentation.api.v1.quiz import router as quiz_router
 from app.presentation.api.v1.resources import router as resources_router
 from app.presentation.api.v1.session import router as session_router
+from app.presentation.api.v1.webhooks import router as webhooks_router
 
 router = APIRouter()
 router.include_router(resources_router)
@@ -19,6 +20,7 @@ router.include_router(billing_router)
 router.include_router(lessons_router)
 router.include_router(demo_router)
 router.include_router(session_router)
+router.include_router(webhooks_router)
 
 
 class HealthResponse(CamelModel):

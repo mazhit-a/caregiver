@@ -24,7 +24,16 @@ class SqlSubscriptionRepository:
         result = await self._db.execute(
             select(SubscriptionRow).where(SubscriptionRow.session_id == session_id)
         )
-        row = result.scalar_one_or_none()
+        return self._to_domain(result.scalar_one_or_none())
+
+    async def get_by_stripe_customer_id(self, customer_id: str) -> Subscription | None:
+        result = await self._db.execute(
+            select(SubscriptionRow).where(SubscriptionRow.stripe_customer_id == customer_id)
+        )
+        return self._to_domain(result.scalars().first())
+
+    @staticmethod
+    def _to_domain(row: SubscriptionRow | None) -> Subscription | None:
         if row is None:
             return None
         return Subscription(

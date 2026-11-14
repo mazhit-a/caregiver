@@ -6,12 +6,17 @@ from typing import Self
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.infrastructure.db.repositories.confidence import SqlConfidenceRepository
+from app.infrastructure.db.repositories.lesson_plans import (
+    SqlIfThenPlanRepository,
+    SqlTaskRepository,
+)
 from app.infrastructure.db.repositories.lesson_progress import SqlLessonProgressRepository
 from app.infrastructure.db.repositories.lesson_schedule import SqlLessonScheduleRepository
 from app.infrastructure.db.repositories.plans import SqlPlanRepository
 from app.infrastructure.db.repositories.quiz_states import SqlQuizStateRepository
 from app.infrastructure.db.repositories.scenario_answers import SqlScenarioAnswerRepository
 from app.infrastructure.db.repositories.sessions import SqlActiveDayRepository, SqlSessionRepository
+from app.infrastructure.db.repositories.stripe_events import SqlStripeEventRepository
 from app.infrastructure.db.repositories.subscriptions import (
     SqlSubscriptionHistoryRepository,
     SqlSubscriptionRepository,
@@ -27,8 +32,11 @@ class SqlAlchemyUnitOfWork:
     scenario_answers: SqlScenarioAnswerRepository
     plans: SqlPlanRepository
     confidence: SqlConfidenceRepository
+    if_then_plans: SqlIfThenPlanRepository
+    tasks: SqlTaskRepository
     subscriptions: SqlSubscriptionRepository
     subscription_history: SqlSubscriptionHistoryRepository
+    stripe_events: SqlStripeEventRepository
 
     def __init__(self, session_factory: async_sessionmaker[AsyncSession]) -> None:
         self._factory = session_factory
@@ -44,8 +52,11 @@ class SqlAlchemyUnitOfWork:
         self.scenario_answers = SqlScenarioAnswerRepository(self._db)
         self.plans = SqlPlanRepository(self._db)
         self.confidence = SqlConfidenceRepository(self._db)
+        self.if_then_plans = SqlIfThenPlanRepository(self._db)
+        self.tasks = SqlTaskRepository(self._db)
         self.subscriptions = SqlSubscriptionRepository(self._db)
         self.subscription_history = SqlSubscriptionHistoryRepository(self._db)
+        self.stripe_events = SqlStripeEventRepository(self._db)
         return self
 
     async def __aexit__(

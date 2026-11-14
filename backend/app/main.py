@@ -13,6 +13,7 @@ from app.infrastructure.db.session import create_engine, create_session_factory
 from app.infrastructure.db.unit_of_work import SqlAlchemyUnitOfWork
 from app.infrastructure.payments.pricing_check import ensure_stripe_ids_resolved
 from app.infrastructure.payments.stripe_gateway import StripePaymentGateway
+from app.infrastructure.payments.webhook_parser import StripeWebhookParser
 from app.infrastructure.tokens import SecretsTokenGenerator, UuidGenerator
 from app.presentation.api.deps import AppInfo
 from app.presentation.api.error_handlers import register_error_handlers
@@ -53,6 +54,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if settings.stripe_enabled
         else None
     )
+    app.state.webhook_parser = StripeWebhookParser(settings.stripe_webhook_secret)
     app.state.token_generator = SecretsTokenGenerator()
     app.state.id_generator = UuidGenerator()
     if settings.cors_origin_list:

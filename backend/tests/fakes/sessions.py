@@ -22,6 +22,10 @@ class InMemorySessionRepository:
                 return replace(stored)
         return None
 
+    async def get(self, session_id: UUID) -> Session | None:
+        stored = self.rows.get(session_id)
+        return replace(stored) if stored else None
+
     async def save(self, session: Session) -> None:
         self.rows[session.id] = replace(session)
 

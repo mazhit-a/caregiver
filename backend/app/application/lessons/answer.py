@@ -23,7 +23,9 @@ class AnswerLesson:
         content: ContentProvider,
         clock: Clock,
         handlers: Mapping[str, ScreenHandler] | None = None,
+        public_app_url: str = "",
     ) -> None:
+        self._public_app_url = public_app_url
         self._uow = uow
         self._content = content
         self._clock = clock
@@ -33,7 +35,7 @@ class AnswerLesson:
     async def execute(
         self, session: Session, lesson_id: str, screen_id: str, value: object
     ) -> AnswerView:
-        await self._access.open(session, lesson_id)
+        row = await self._access.open(session, lesson_id)
         progress = await self._access.get_or_start(session, lesson_id)
         variant = valid_variant(self._content, lesson_id, progress.variant)
         data = self._content.render_lesson(
@@ -49,7 +51,19 @@ class AnswerLesson:
         if handler is None:
             raise InvalidScreenAnswer(screen_id, "screen_takes_no_answer")
         answered_at = session.app_now(self._clock.now())
-        outcome = handler(AnswerContext(session.id, lesson_id, screen, variant, answered_at), value)
+        context = AnswerContext(
+            session.id,
+            lesson_id,
+            screen,
+            variant,
+            answered_at,
+            lesson=data,
+            screen_answers=dict(progress.screen_answers),
+            timezone=session.timezone,
+            is_first_lesson=row.seq == 0,
+            app_url=self._public_app_url,
+        )
+        outcome = handler(context, value)
         progress.screen_answers.update(outcome.stored)
         if outcome.variant is not None:
             progress.variant = outcome.variant
@@ -57,5 +71,13 @@ class AnswerLesson:
             await self._uow.lesson_progress.save(progress)
             if outcome.scenario_answer is not None:
                 await self._uow.scenario_answers.add(outcome.scenario_answer)
+            if outcome.if_then_plan is not None:
+                await self._uow.if_then_plans.save(outcome.if_then_plan)
+            if outcome.task is not None:
+                await self._uow.tasks.save(outcome.task)
+            if outcome.confidence is not None:
+                await self._uow.confidence.save_ratings(
+                    session.id, outcome.confidence.slot, outcome.confidence.ratings
+                )
             await self._uow.commit()
         return AnswerView(screen_id, screen["type"], outcome.result)

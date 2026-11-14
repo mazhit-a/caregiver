@@ -26,3 +26,24 @@ class AnswerView:
     screen_id: str
     screen_type: str
     result: dict[str, Any]
+
+
+@dataclass(frozen=True)
+class NextLessonView:
+    lesson_id: str
+    title: str
+    module_id: str
+    reason: str
+    unlock_on: date
+
+
+@dataclass(frozen=True)
+class CompleteView:
+    """`wrap` is the lesson's rendered wrap screen (None when it has none). `next_lesson` is None
+    when no later lesson is built; `all_done_line` is then the lesson's own closing text."""
+
+    lesson_id: str
+    done_at: datetime
+    wrap: dict[str, Any] | None
+    next_lesson: NextLessonView | None
+    all_done_line: str | None

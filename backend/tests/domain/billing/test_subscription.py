@@ -22,6 +22,7 @@ LEGAL_PAIRS: set[tuple[str, str]] = {
     ("active", "past_due"),
     ("past_due", "active"),
     ("past_due", "canceled"),
+    ("active", "canceled"),  # provider deleted the subscription (cancel_now)
     ("active", "canceling"),
     ("demo", "canceling"),
     ("canceling", "canceled"),
@@ -76,6 +77,21 @@ def test_named_methods_follow_the_table() -> None:
     assert s.status == "ended"
     with pytest.raises(InvalidTransition):
         s.mark_past_due(T0)
+
+
+@pytest.mark.parametrize("status", ["active", "past_due", "canceling"])
+def test_cancel_now_moves_to_canceled_with_history(status: SubscriptionStatus) -> None:
+    s = sub(status)
+    s.cancel_now(T0, "stripe")
+    [entry] = s.pull_history()
+    assert (entry.from_status, entry.to_status) == (status, "canceled")
+    assert (entry.event, entry.source) == ("subscription_deleted", "stripe")
+
+
+@pytest.mark.parametrize("status", ["none", "demo", "canceled", "ended"])
+def test_cancel_now_rejected_elsewhere(status: SubscriptionStatus) -> None:
+    with pytest.raises(InvalidTransition):
+        sub(status).cancel_now(T0)
 
 
 def test_start_requires_consent_first() -> None:

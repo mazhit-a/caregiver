@@ -1,7 +1,7 @@
 """Stripe checkout: create the Checkout Session, and reconcile it on the return page."""
 
 from dataclasses import dataclass
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from app.application.billing.dto import StartRequest
 from app.application.billing.payments import CheckoutRequest, CheckoutSessionRef
@@ -77,6 +77,27 @@ class CreateCheckout:
         )
 
 
+def stripe_start_request(
+    content: ContentProvider,
+    now: datetime,
+    plan_id: str | None,
+    period_end: datetime | None,
+    customer_id: str | None,
+    subscription_id: str | None,
+) -> StartRequest:
+    """The one `StartRequest` of a paid Stripe checkout: used by the return-page reconcile and by
+    the `checkout.session.completed` webhook, so both starts are identical (and idempotent)."""
+    plan = content.pricing().plan(plan_id)
+    return StartRequest(
+        "stripe",
+        auto_renew_consent=False,  # stored by CreateCheckout
+        plan_id=plan.id,
+        period_end=period_end or now + timedelta(days=plan.intro_days),
+        stripe_customer_id=customer_id,
+        stripe_subscription_id=subscription_id,
+    )
+
+
 @dataclass(frozen=True)
 class ReconcileResult:
     paid: bool
@@ -112,19 +133,13 @@ class ReconcileCheckout:
             async with self._uow:
                 current = await self._uow.subscriptions.get(session.id)
             return ReconcileResult(False, current or Subscription(session.id))
-        plan = self._content.pricing().plan(info.plan_id)
-        period_end = info.period_end or (
-            session.app_now(self._clock.now()) + timedelta(days=plan.intro_days)
+        request = stripe_start_request(
+            self._content,
+            session.app_now(self._clock.now()),
+            info.plan_id,
+            info.period_end,
+            info.customer_id,
+            info.subscription_id,
         )
-        subscription = await self._start.execute(
-            session,
-            StartRequest(
-                "stripe",
-                auto_renew_consent=False,  # stored by CreateCheckout
-                plan_id=plan.id,
-                period_end=period_end,
-                stripe_customer_id=info.customer_id,
-                stripe_subscription_id=info.subscription_id,
-            ),
-        )
+        subscription = await self._start.execute(session, request)
         return ReconcileResult(True, subscription)

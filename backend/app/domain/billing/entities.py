@@ -22,9 +22,11 @@ ALL_STATUSES: tuple[SubscriptionStatus, ...] = (
 
 # TASK.md 6.6: none -> active|demo; active -> past_due -> active|canceled;
 # active|demo -> canceling -> canceled (at period end); any -> ended (gentle exit).
+# Deliberate addition: a Stripe `customer.subscription.deleted` event ends a Stripe subscription
+# at once, so active|past_due|canceling -> canceled is legal too (`cancel_now`).
 TRANSITIONS: dict[SubscriptionStatus, frozenset[SubscriptionStatus]] = {
     "none": frozenset({"active", "demo", "ended"}),
-    "active": frozenset({"past_due", "canceling", "ended"}),
+    "active": frozenset({"past_due", "canceling", "canceled", "ended"}),
     "demo": frozenset({"canceling", "ended"}),
     "past_due": frozenset({"active", "canceled", "ended"}),
     "canceling": frozenset({"canceled", "ended"}),
@@ -160,6 +162,10 @@ class Subscription:
     def end_period(self, at: datetime, source: str | None = None) -> None:
         """The period ended for a `canceling` subscription (or a past-due one gave up)."""
         self.transition("canceled", at, "period_ended", source)
+
+    def cancel_now(self, at: datetime, source: str | None = None) -> None:
+        """The provider deleted the subscription: active|past_due|canceling -> canceled."""
+        self.transition("canceled", at, "subscription_deleted", source)
 
     def end_now(self, at: datetime, source: str | None = None) -> None:
         """Gentle exit: from any status to `ended`."""

@@ -95,7 +95,36 @@ class ConfidenceRow(Base):
     session_id: Mapped[uuid.UUID] = mapped_column(
         Uuid, ForeignKey("sessions.id", ondelete="CASCADE"), primary_key=True
     )
-    day0: Mapped[int] = mapped_column(Integer, nullable=False)
+    day0: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    first: Mapped[dict[str, int] | None] = mapped_column(JSONB, nullable=True)
+    latest: Mapped[dict[str, int] | None] = mapped_column(JSONB, nullable=True)
+
+
+class IfThenPlanRow(Base):
+    __tablename__ = "if_then_plans"
+
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("sessions.id", ondelete="CASCADE"), primary_key=True
+    )
+    lesson_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    cue: Mapped[str] = mapped_column(Text, nullable=False)
+    response: Mapped[str] = mapped_column(Text, nullable=False)
+    reset: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class TaskRow(Base):
+    __tablename__ = "tasks"
+
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("sessions.id", ondelete="CASCADE"), primary_key=True
+    )
+    lesson_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    text: Mapped[str] = mapped_column(Text, nullable=False)
+    action: Mapped[str] = mapped_column(String(32), nullable=False)
+    reminder_downloaded: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    done_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
 class SubscriptionRow(Base):
@@ -163,3 +192,12 @@ class ScenarioAnswerRow(Base):
     answer_id: Mapped[str] = mapped_column(String(64), nullable=False)
     verdict: Mapped[str] = mapped_column(String(16), nullable=False)
     answered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class StripeEventRow(Base):
+    __tablename__ = "stripe_events"
+
+    event_id: Mapped[str] = mapped_column(String(255), primary_key=True)
+    type: Mapped[str] = mapped_column(String(100), nullable=False)
+    received_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    processed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

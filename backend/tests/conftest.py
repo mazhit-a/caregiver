@@ -86,7 +86,7 @@ async def session_factory(
     """Session factory on the migrated test database with all session data removed."""
     engine = create_async_engine(test_database_url)
     async with engine.begin() as conn:
-        await conn.execute(text("TRUNCATE sessions CASCADE"))
+        await conn.execute(text("TRUNCATE sessions, stripe_events CASCADE"))
     yield async_sessionmaker(engine, expire_on_commit=False)
     await engine.dispose()
 

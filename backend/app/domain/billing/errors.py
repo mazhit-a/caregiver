@@ -90,3 +90,12 @@ class CheckoutNotFound(DomainError):
 
     def __init__(self) -> None:
         super().__init__("This checkout could not be found.")
+
+
+class InvalidWebhookSignature(DomainError):
+    """The webhook payload is not signed correctly (or not signed at all): HTTP 400."""
+
+    code = "invalid_webhook_signature"
+
+    def __init__(self) -> None:
+        super().__init__("The webhook signature is missing or not valid.")

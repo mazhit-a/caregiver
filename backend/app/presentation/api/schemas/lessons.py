@@ -191,9 +191,31 @@ class AnswerRequest(CamelModel):
     value: JsonValue
 
 
+class NextLessonOut(CamelModel):
+    id: str
+    title: str
+    module_id: str
+    reason: str
+    unlock_on: date
+
+
+class CompleteResponse(CamelModel):
+    """`wrap` holds the lesson's wrap lines (the confidence check is not repeated). `nextLesson`
+    is null when no later lesson is built; `allDoneLine` is then the closing text."""
+
+    lesson_id: str
+    done_at: datetime
+    wrap: WrapScreenOut | None
+    next_lesson: NextLessonOut | None
+    all_done_line: str | None
+
+
 class AnswerResponse(CamelModel):
     """`result` depends on the screen type: setup `{variant}`; scenario `{answerId, verdict,
-    feedback, savePhrase}`; mini-task `{optionId, response, correct?}`."""
+    feedback, savePhrase}`; mini-task `{optionId, response, correct?}`; plan `{ifThen, task,
+    reminder}` (reminder: title, description, startsAt, timezone, url for the browser's .ics);
+    wrap `{saved, ratings}`. A plan answer value is `{response, reminderDownloaded?}`; a wrap
+    answer value is `{itemId: 1..5}` for every confidence item."""
 
     screen_id: str
     type: str

@@ -667,6 +667,8 @@ class WrapScreen(ContentModel):
     confidence_check: ConfidenceCheck | None = None
     tomorrow_line: str
     next_line: str
+    # Shown instead of a next lesson when this is the last lesson built so far.
+    all_done_line: str | None = None
 
 
 LessonScreen = Annotated[

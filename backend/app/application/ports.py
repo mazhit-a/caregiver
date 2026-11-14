@@ -3,9 +3,10 @@
 from collections.abc import Mapping
 from datetime import date, datetime
 from types import TracebackType
-from typing import Any, Protocol, Self
+from typing import Any, Literal, Protocol, Self
 from uuid import UUID
 
+from app.application.billing.events import BillingEvent
 from app.application.billing.payments import (
     CheckoutRequest,
     CheckoutSessionInfo,
@@ -14,6 +15,7 @@ from app.application.billing.payments import (
 )
 from app.domain.billing.entities import Subscription, SubscriptionHistoryEntry
 from app.domain.billing.pricing import Pricing
+from app.domain.lessons.plans import ConfidenceRatings, IfThenPlan, Task
 from app.domain.lessons.progress import LessonProgress, ScenarioAnswer
 from app.domain.plan.entities import PhraseSheetText, PhraseText, PlanRules, StoredPlan
 from app.domain.quiz.definition import QuizDefinition
@@ -34,6 +36,8 @@ class SessionRepository(Protocol):
     async def add(self, session: Session) -> None: ...
 
     async def get_by_token_hash(self, token_hash: str) -> Session | None: ...
+
+    async def get(self, session_id: UUID) -> Session | None: ...
 
     async def save(self, session: Session) -> None:
         """Persist the mutable fields (offset, last_seen_at, recipient_key, display_name)."""
@@ -97,9 +101,35 @@ class ConfidenceRepository(Protocol):
         """Insert or update `day0` (the Q11 answer) without touching later columns."""
         ...
 
+    async def get_ratings(self, session_id: UUID) -> ConfidenceRatings: ...
+
+    async def save_ratings(
+        self, session_id: UUID, slot: Literal["first", "latest"], ratings: dict[str, int]
+    ) -> None:
+        """Insert or update the `first` or `latest` slider ratings, keeping the other columns."""
+        ...
+
+
+class IfThenPlanRepository(Protocol):
+    async def get(self, session_id: UUID, lesson_id: str) -> IfThenPlan | None: ...
+
+    async def save(self, plan: IfThenPlan) -> None:
+        """Insert or replace the if-then plan of the lesson."""
+        ...
+
+
+class TaskRepository(Protocol):
+    async def get(self, session_id: UUID, lesson_id: str) -> Task | None: ...
+
+    async def save(self, task: Task) -> None:
+        """Insert or replace the do-now task of the lesson (`done_at` is kept)."""
+        ...
+
 
 class SubscriptionRepository(Protocol):
     async def get(self, session_id: UUID) -> Subscription | None: ...
+
+    async def get_by_stripe_customer_id(self, customer_id: str) -> Subscription | None: ...
 
     async def save(self, subscription: Subscription) -> None:
         """Insert or update the subscription row of the session (history is separate)."""
@@ -112,6 +142,17 @@ class SubscriptionHistoryRepository(Protocol):
     async def list_for_session(self, session_id: UUID) -> list[SubscriptionHistoryEntry]:
         """All entries of the session, oldest first."""
         ...
+
+
+class StripeEventRepository(Protocol):
+    """Processed webhook events, keyed by the provider's event id (idempotency)."""
+
+    async def begin(self, event_id: str, event_type: str, received_at: datetime) -> bool:
+        """Record the event before it is handled. True when it must be processed: a new event,
+        or one recorded earlier whose processing never finished. False for a processed duplicate."""
+        ...
+
+    async def mark_processed(self, event_id: str, processed_at: datetime) -> None: ...
 
 
 class UnitOfWork(Protocol):
@@ -128,8 +169,11 @@ class UnitOfWork(Protocol):
     scenario_answers: ScenarioAnswerRepository
     plans: PlanRepository
     confidence: ConfidenceRepository
+    if_then_plans: IfThenPlanRepository
+    tasks: TaskRepository
     subscriptions: SubscriptionRepository
     subscription_history: SubscriptionHistoryRepository
+    stripe_events: StripeEventRepository
 
     async def __aenter__(self) -> Self: ...
 
@@ -169,6 +213,15 @@ class PaymentGateway(Protocol):
     async def attach_failing_payment_method(self, customer_id: str) -> None:
         """Make the customer's next charge fail (test card that is declined)."""
         ...
+
+
+class WebhookParser(Protocol):
+    """Verifies a provider webhook and turns it into a `BillingEvent`.
+
+    Raises `InvalidWebhookSignature` for a missing or wrong signature.
+    """
+
+    def parse(self, payload: bytes, signature: str | None) -> BillingEvent: ...
 
 
 class TokenGenerator(Protocol):

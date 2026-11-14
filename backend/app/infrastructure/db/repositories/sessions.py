@@ -27,6 +27,10 @@ class SqlSessionRepository:
         row = result.scalar_one_or_none()
         return session_to_domain(row) if row else None
 
+    async def get(self, session_id: UUID) -> Session | None:
+        row = await self._db.get(SessionRow, session_id)
+        return session_to_domain(row) if row else None
+
     async def save(self, session: Session) -> None:
         await self._db.execute(
             update(SessionRow)
