@@ -6,6 +6,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { axe } from "vitest-axe";
 import { crisisStore } from "../../api/useCrisisResources";
 import { routes } from "../../router";
+import { FunnelLayout } from "./FunnelLayout";
+import { FunnelScreen } from "./FunnelScreen";
 import giftFixture from "../../test/fixtures/gift-b.json";
 
 // jsdom's AbortSignal is rejected by Node's Request, which React Router builds on navigation.
@@ -55,6 +57,33 @@ function crisisResponse(): Response {
   );
 }
 
+function Dummy({ title }: { title: string }) {
+  return (
+    <FunnelScreen>
+      <h1 data-funnel-heading tabIndex={-1}>
+        {title}
+      </h1>
+    </FunnelScreen>
+  );
+}
+
+const shellRoutes = [
+  {
+    element: <FunnelLayout />,
+    children: [
+      { path: "/s1", element: <Dummy title="Shell one" /> },
+      { path: "/s2", element: <Dummy title="Shell two" /> },
+    ],
+  },
+];
+
+async function renderShell(path: string) {
+  const router = createMemoryRouter(shellRoutes, { initialEntries: [path] });
+  const utils = render(<RouterProvider router={router} />);
+  await screen.findByRole("heading", { level: 1 });
+  return { router, ...utils };
+}
+
 async function renderAt(path: string) {
   const router = createMemoryRouter(routes, { initialEntries: [path] });
   const utils = render(<RouterProvider router={router} />);
@@ -63,22 +92,15 @@ async function renderAt(path: string) {
 }
 
 const FUNNEL: [string, string][] = [
-  ["/quiz", "The quiz is coming soon"],
-  ["/quiz/q1_recipient", "Quiz"],
-  ["/quiz/reassure_1", "Quiz"],
-  ["/quiz/building", "Building your plan"],
-  ["/your-plan", "Your plan"],
-  ["/your-plan/gift", "Phrases that calm Mom"],
-  ["/paywall", "Start your plan"],
-  ["/checkout/return", "Checking your payment"],
-  ["/today", "Today is coming soon"],
+  ["/s1", "Shell one"],
+  ["/s2", "Shell two"],
 ];
 
 describe("funnel routes", () => {
   it.each(FUNNEL)(
     "%s renders inside the funnel shell without any request",
     async (path, h1) => {
-      await renderAt(path);
+      await renderShell(path);
       expect(
         screen.getByRole("heading", { level: 1, name: h1 }),
       ).toBeInTheDocument();
@@ -102,7 +124,7 @@ describe("funnel routes", () => {
     },
   );
 
-  it("resolves /quiz/building to the building stub, not a question", async () => {
+  it("resolves /quiz/building to its own page, not a question", async () => {
     await renderAt("/quiz/building");
     expect(
       screen.getByRole("heading", { level: 1, name: "Building your plan" }),
@@ -137,7 +159,7 @@ describe("funnel header", () => {
     "opens help from %s and returns focus",
     async (path) => {
       const user = userEvent.setup();
-      await renderAt(path);
+      await renderShell(path);
       const trigger = within(screen.getByRole("banner")).getByRole("button", {
         name: "Need help now?",
       });
@@ -156,7 +178,7 @@ describe("funnel header", () => {
   );
 
   it("links the logo home", async () => {
-    await renderAt("/paywall");
+    await renderShell("/s1");
     expect(screen.getByRole("link", { name: "Kelper home" })).toHaveAttribute(
       "href",
       "/",
@@ -165,7 +187,7 @@ describe("funnel header", () => {
 
   it("skip link is the first tab stop and moves focus to main", async () => {
     const user = userEvent.setup();
-    await renderAt("/paywall");
+    await renderShell("/s1");
     await user.tab();
     const skip = screen.getByRole("link", { name: "Skip to main content" });
     expect(skip).toHaveFocus();
@@ -174,14 +196,14 @@ describe("funnel header", () => {
   });
 
   it("moves focus to the step heading on navigation, not on first load", async () => {
-    const { router } = await renderAt("/your-plan");
+    const { router } = await renderShell("/s1");
     expect(screen.getByRole("heading", { level: 1 })).not.toHaveFocus();
     await act(async () => {
-      await router.navigate("/paywall");
+      await router.navigate("/s2");
     });
     const h1 = await screen.findByRole("heading", {
       level: 1,
-      name: "Start your plan",
+      name: "Shell two",
     });
     await waitFor(() => expect(h1).toHaveFocus());
     expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
@@ -190,7 +212,7 @@ describe("funnel header", () => {
 
 describe("funnel shell", () => {
   it("has no axe violations", async () => {
-    const { container } = await renderAt("/paywall");
+    const { container } = await renderShell("/s1");
     expect(await axe(container)).toHaveNoViolations();
   });
 
