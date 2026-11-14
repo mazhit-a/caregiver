@@ -20,10 +20,10 @@ const AppCopyContext = createContext<AppCopyState | null>(null);
 export function AppDataProvider({ children }: { children: ReactNode }) {
   const token = getToken();
   const request = useRequest<AppCopy, AppFailure>((signal) => getAppCopy(signal), [token], classifyAppError);
-  const { status, data, error, retry } = request;
+  const { status, data, error, refresh } = request;
   const value = useMemo(
-    () => ({ status, data, error, refresh: retry }) as AppCopyState,
-    [status, data, error, retry],
+    () => ({ status, data, error, refresh }) as AppCopyState,
+    [status, data, error, refresh],
   );
   return <AppCopyContext.Provider value={value}>{children}</AppCopyContext.Provider>;
 }

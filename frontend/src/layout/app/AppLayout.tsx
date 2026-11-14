@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router";
-import { type ApiFailure, gateRoute } from "../../api/errors";
+import { AppDataProvider, useAppCopy } from "../../api/AppDataProvider";
+import {
+  type AppFailure,
+  type ApiFailure,
+  gateRoute,
+  isShellFailure,
+} from "../../api/errors";
 import { clearToken } from "../../api/session";
 import { StatusBlock } from "../../components/StatusBlock";
 import { HelpSheet } from "../HelpSheet";
@@ -12,7 +18,7 @@ import { AppSidebar } from "./AppSidebar";
 import { AppTabBar } from "./AppTabBar";
 import { AppTopBar } from "./AppTopBar";
 import { PastDueNotice } from "./PastDueNotice";
-import { useNavCopy } from "./navCopy";
+import { readNavCopy } from "./navCopy";
 import { isFullScreenRoute } from "./tabs";
 import { useIsDesktop } from "./useIsDesktop";
 import { useRouteFocus } from "./useRouteFocus";
@@ -23,7 +29,8 @@ type Outcome =
   | { kind: "redirect"; to: string; restore: boolean }
   | { kind: "past_due"; message?: string };
 
-function outcomeFor(failure: ApiFailure, message?: string): Outcome | null {
+function outcomeFor(failure: AppFailure, message?: string): Outcome | null {
+  if (!isShellFailure(failure)) return null;
   if (failure.kind === "session_lost") {
     clearToken();
     return { kind: "redirect", to: ROUTES.quiz, restore: true };
@@ -38,12 +45,21 @@ function outcomeFor(failure: ApiFailure, message?: string): Outcome | null {
 
 /** Shell for every signed-in app route: sidebar from 1024px, top bar and tab bar below. */
 export function AppLayout() {
+  return (
+    <AppDataProvider>
+      <AppShell />
+    </AppDataProvider>
+  );
+}
+
+function AppShell() {
   const { pathname } = useLocation();
   const desktop = useIsDesktop();
   const fullScreen = isFullScreenRoute(pathname);
   const [helpOpen, setHelpOpen] = useState(false);
   const [outcome, setOutcome] = useState<Outcome>({ kind: "none" });
-  const copy = useNavCopy();
+  const appCopy = useAppCopy();
+  const nav = appCopy.status === "ready" ? readNavCopy(appCopy.data.nav) : null;
   useRouteFocus();
 
   useEffect(() => {
@@ -64,7 +80,8 @@ export function AppLayout() {
     [],
   );
 
-  const loadOutcome = copy.status === "error" ? outcomeFor(copy.error) : null;
+  const loadOutcome =
+    appCopy.status === "error" ? outcomeFor(appCopy.error) : null;
   const active = loadOutcome ?? outcome;
   if (active.kind === "redirect") {
     return (
@@ -80,7 +97,7 @@ export function AppLayout() {
     openHelp: () => setHelpOpen(true),
     reportFailure,
   };
-  const labels = copy.status === "ready" ? copy.data : null;
+  const labels = nav;
   const showTabBar = !desktop && !fullScreen && labels !== null;
 
   return (
@@ -106,13 +123,13 @@ export function AppLayout() {
               settingsLabel={labels.settings}
             />
           )}
-          {copy.status === "ready" ? (
+          {labels ? (
             <Outlet context={context} />
           ) : (
             <StatusBlock
-              status={copy.status === "loading" ? "loading" : "error"}
+              status={appCopy.status === "loading" ? "loading" : "error"}
               what="your page"
-              onRetry={copy.retry}
+              onRetry={appCopy.refresh}
             />
           )}
           {!desktop && !fullScreen && (
