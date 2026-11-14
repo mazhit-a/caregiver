@@ -411,7 +411,8 @@
         ]
       },
       "tomorrowLine": "Tomorrow: a quick check-in and a 2-minute practice round.",
-      "nextLine": "Next in this module: \"Talking so it lands\", making every conversation easier, not just the answers."
+      "nextLine": "Next in this module: \"Talking so it lands\", making every conversation easier, not just the answers.",
+      "allDoneLine": "That's every lesson ready for you so far. More are on the way. Come back to Today to practice again."
     }
   ],
   "fallbackScenarios": [
