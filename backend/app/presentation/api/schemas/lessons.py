@@ -181,6 +181,10 @@ ScreenOut = Annotated[
 ]
 
 
+class StepRequest(CamelModel):
+    step: int = Field(ge=0, le=1000)
+
+
 class LessonProgressOut(CamelModel):
     step: int
     started_at: datetime

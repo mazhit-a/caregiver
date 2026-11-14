@@ -1,0 +1,55 @@
+from pathlib import Path
+
+import pytest
+
+from app.domain.app_copy.render import render_app_copy
+from app.domain.shared.labels import with_display_name
+from app.infrastructure.content.provider import JsonContentProvider
+
+REAL_CONTENT = Path(__file__).resolve().parents[4] / "content"
+KEYS = JsonContentProvider.from_directory(REAL_CONTENT).recipient_keys()
+
+
+def _all_texts(tree: dict[str, dict[str, str]]) -> list[str]:
+    return [text for section in tree.values() for text in section.values()]
+
+
+def test_the_app_copy_file_is_loaded_with_every_section() -> None:
+    copy = JsonContentProvider.from_directory(REAL_CONTENT).app_copy()
+    assert set(copy) == {
+        "nav",
+        "plan",
+        "profile",
+        "care_card",
+        "visit_sheet",
+        "skills",
+        "settings",
+        "welcome",
+    }
+
+
+@pytest.mark.parametrize("key", KEYS)
+def test_every_recipient_key_renders_without_placeholders_or_markdown(key: str) -> None:
+    content = JsonContentProvider.from_directory(REAL_CONTENT)
+    rendered = render_app_copy(content.app_copy(), content.recipient_labels(key))
+    texts = _all_texts(rendered)
+    assert texts
+    for text in texts:
+        assert text and "{" not in text and "}" not in text and "**" not in text
+
+
+@pytest.mark.parametrize("key", KEYS)
+def test_display_name_replaces_the_label_for_every_key(key: str) -> None:
+    content = JsonContentProvider.from_directory(REAL_CONTENT)
+    labels = with_display_name(content.recipient_labels(key), "Margaret")
+    rendered = render_app_copy(content.app_copy(), labels)
+    assert rendered["nav"]["profile_page"] == "Margaret's page"
+    assert rendered["profile"]["works_title"] == "What works with Margaret"
+
+
+def test_plural_label_agrees_in_the_gentle_exit_entry() -> None:
+    content = JsonContentProvider.from_directory(REAL_CONTENT)
+    both = render_app_copy(content.app_copy(), content.recipient_labels("both"))
+    assert both["settings"]["gentle_exit_entry"].startswith("Your parents have passed away")
+    mom = render_app_copy(content.app_copy(), content.recipient_labels("mom"))
+    assert mom["settings"]["gentle_exit_entry"].startswith("Mom has passed away")

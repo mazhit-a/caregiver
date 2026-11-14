@@ -3,6 +3,7 @@
 from fastapi import APIRouter
 
 from app.presentation.api.schemas.base import CamelModel
+from app.presentation.api.v1.app_copy import router as app_copy_router
 from app.presentation.api.v1.billing import router as billing_router
 from app.presentation.api.v1.care_card import router as care_card_router
 from app.presentation.api.v1.checkins import router as checkins_router
@@ -28,6 +29,7 @@ router.include_router(resources_router)
 router.include_router(quiz_router)
 router.include_router(plan_router)
 router.include_router(funnel_copy_router)
+router.include_router(app_copy_router)
 router.include_router(billing_router)
 router.include_router(lessons_router)
 router.include_router(phrases_router)

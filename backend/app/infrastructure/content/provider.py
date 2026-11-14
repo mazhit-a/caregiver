@@ -5,6 +5,7 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
+from app.domain.app_copy.render import AppCopy
 from app.domain.billing.exit_copy import GentleExitCopy, GentleExitResourceCopy
 from app.domain.billing.pricing import Pricing, PricingPlan
 from app.domain.funnel.copy import FunnelCopy
@@ -109,6 +110,10 @@ class JsonContentProvider:
             welcome_back_after_days=t.welcome_back_after_days,
             renewed_notice_days=t.renewed_notice_days,
         )
+
+    def app_copy(self) -> AppCopy:
+        tree = self._bundle.app_copy.model_dump(exclude={"notes", "version"})
+        return {section: dict(texts) for section, texts in tree.items()}
 
     def funnel_copy(self) -> FunnelCopy:
         c = self._bundle.funnel_copy
