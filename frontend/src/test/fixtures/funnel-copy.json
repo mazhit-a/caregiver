@@ -1,8 +1,14 @@
 {
-  "loader": { "title": "Building Mom's plan…" },
+  "quiz": {
+    "healthNote": "This page has no ad tracking. Saved privately to this session."
+  },
+  "loader": {
+    "title": "Building Mom's plan…"
+  },
   "planPreview": {
     "title": "Your first 30 days with Mom",
-    "cta": "Continue to your plan"
+    "cta": "Continue to your plan",
+    "highlightLabel": "For now"
   },
   "paywall": {
     "headline": "Mom's 30-day plan is ready",
@@ -26,16 +32,26 @@
         "priceToday": "$14.99",
         "detail": "for the first 4 weeks, then $29.99 every 4 weeks",
         "disclosure": [
-          { "text": "Today: $14.99", "strong": true },
-          { "text": " for the first 4 weeks. Then ", "strong": false },
-          { "text": "$29.99 every 4 weeks", "strong": true },
+          {
+            "text": "Today: $14.99",
+            "strong": true
+          },
+          {
+            "text": " for the first 4 weeks. Then ",
+            "strong": false
+          },
+          {
+            "text": "$29.99 every 4 weeks",
+            "strong": true
+          },
           {
             "text": ", starting Feb 2, until you cancel. Cancel anytime in Settings → Subscription.",
             "strong": false
           }
         ],
         "consentLabel": "I understand my plan renews automatically at $29.99 every 4 weeks until I cancel.",
-        "payButtonLabel": "Pay $14.99 and start"
+        "payButtonLabel": "Pay $14.99 and start",
+        "firstRenewalDate": "Feb 2"
       },
       {
         "id": "twelve_week",
@@ -43,16 +59,26 @@
         "priceToday": "$49.99",
         "detail": "for the first 12 weeks, then $69.99 every 12 weeks",
         "disclosure": [
-          { "text": "Today: $49.99", "strong": true },
-          { "text": " for the first 12 weeks. Then ", "strong": false },
-          { "text": "$69.99 every 12 weeks", "strong": true },
+          {
+            "text": "Today: $49.99",
+            "strong": true
+          },
+          {
+            "text": " for the first 12 weeks. Then ",
+            "strong": false
+          },
+          {
+            "text": "$69.99 every 12 weeks",
+            "strong": true
+          },
           {
             "text": ", starting Mar 30, until you cancel. Cancel anytime in Settings → Subscription.",
             "strong": false
           }
         ],
         "consentLabel": "I understand my plan renews automatically at $69.99 every 12 weeks until I cancel.",
-        "payButtonLabel": "Pay $49.99 and start"
+        "payButtonLabel": "Pay $49.99 and start",
+        "firstRenewalDate": "Mar 30"
       }
     ]
   }

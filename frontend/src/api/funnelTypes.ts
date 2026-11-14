@@ -169,8 +169,7 @@ export interface Gift {
 }
 
 // ---- Funnel copy (P2, GET /api/funnel-copy) -------------------------------
-// PROVISIONAL: P2 is not built yet and the plan leaves the exact shape to its implementer.
-// This follows the "required content" list of P2. Re-check against the real response when P2 lands.
+// Matches backend/app/presentation/api/schemas/funnel_copy.py (P2, real).
 
 export interface DisclosureSegment {
   text: string;
@@ -185,11 +184,14 @@ export interface PaywallPlanCopy {
   disclosure: DisclosureSegment[];
   consentLabel: string;
   payButtonLabel: string;
+  /** Short date such as "Dec 13". */
+  firstRenewalDate: string;
 }
 
 export interface FunnelCopy {
+  quiz: { healthNote: string };
   loader: { title: string };
-  planPreview: { title: string; cta: string };
+  planPreview: { title: string; cta: string; highlightLabel: string };
   paywall: {
     headline: string;
     subhead: string;
@@ -329,4 +331,4 @@ export const PLAN_ACCESS_KEYS = [
   "lessonsPerWeek",
 ] as const satisfies Keys<PlanAccess>;
 export const EVENTS_KEYS = ["stored"] as const satisfies Keys<EventsStored>;
-export const FUNNEL_COPY_KEYS = ["loader", "planPreview", "paywall"] as const satisfies Keys<FunnelCopy>;
+export const FUNNEL_COPY_KEYS = ["quiz", "loader", "planPreview", "paywall"] as const satisfies Keys<FunnelCopy>;

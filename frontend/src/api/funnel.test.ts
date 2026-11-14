@@ -74,7 +74,7 @@ describe("fixtures captured from the real backend match the hand-written types",
     expectKeys(eventsFixture, T.EVENTS_KEYS);
   });
 
-  it("the provisional funnel-copy fixture has the keys of the P2 types and no placeholders", () => {
+  it("the funnel-copy fixture has the keys of the real P2 types and no placeholders", () => {
     expectKeys(funnelCopyFixture, T.FUNNEL_COPY_KEYS);
     const strings: string[] = [];
     const walk = (v: unknown): void => {
