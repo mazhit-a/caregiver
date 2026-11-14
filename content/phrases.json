@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "notes": [
+    "Phrase bank for H0 'Phrases that calm {recipient}' and as starter phrases in lessons.",
+    "Selection rule is in plan-rules.json → giftPhrases: Q5 tags first (max 2 per tag), then 'general' until there are 5.",
+    "Communication only. No medical content. Placeholders as in quiz.json."
+  ],
+  "sheet": {
+    "title": "Phrases that calm {recipient}",
+    "intro": "Short, warm phrases for the moments that come up most. Keep your voice low and slow, and use {possessive} name.",
+    "footer": "We teach and organize. We don't give medical advice."
+  },
+  "phrases": [
+    { "id": "p01", "tags": ["need:repeated_questions"], "text": "We have plenty of time. I'll let you know when it's time.", "when": "When the same question about plans or time comes up again" },
+    { "id": "p02", "tags": ["need:repeated_questions"], "text": "Good question. Let's look at the calendar together.", "when": "When a written answer can help more than a spoken one" },
+    { "id": "p03", "tags": ["need:repeated_questions", "general"], "text": "I'm right here. Let's have some tea while we wait.", "when": "When the question comes from worry, not from missing facts" },
+    { "id": "p04", "tags": ["need:accusations"], "text": "That sounds upsetting. Let's look for it together.", "when": "When something is lost and someone is blamed" },
+    { "id": "p05", "tags": ["need:accusations"], "text": "I'd be worried too. I'll help you find it.", "when": "When arguing about who took it would make things worse" },
+    { "id": "p06", "tags": ["need:evening_confusion"], "text": "You're safe. I'm here with you.", "when": "Late afternoon or evening, when confusion or worry grows" },
+    { "id": "p07", "tags": ["need:evening_confusion"], "text": "It's been a long day. Let's sit down together for a bit.", "when": "When restlessness starts as the day ends" },
+    { "id": "p08", "tags": ["need:refusal"], "text": "That's okay. Let's try again a little later.", "when": "When the answer is no to a shower, a meal or getting ready" },
+    { "id": "p09", "tags": ["need:refusal"], "text": "You choose: before lunch or after lunch?", "when": "When a small choice helps more than a yes-or-no question" },
+    { "id": "p10", "tags": ["need:wandering"], "text": "Tell me about home. What do you miss most?", "when": "When the wish to \"go home\" comes up while at home" },
+    { "id": "p11", "tags": ["need:wandering"], "text": "Let's have a snack first, and then we'll see.", "when": "When gently pausing the urge to leave" },
+    { "id": "p12", "tags": ["need:driving"], "text": "I'd feel better if I drove today. Will you keep me company?", "when": "When you want to drive without starting an argument" },
+    { "id": "p13", "tags": ["general"], "text": "I'm sorry this is hard. I'm with you.", "when": "Any time feelings run high" },
+    { "id": "p14", "tags": ["general"], "text": "Thank you for telling me.", "when": "When a worry is shared, even if it doesn't make sense to you" },
+    { "id": "p15", "tags": ["general"], "text": "Let's do it together, one step at a time.", "when": "When a task feels too big" }
+  ]
+}

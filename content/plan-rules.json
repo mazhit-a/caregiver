@@ -1,0 +1,651 @@
+{
+  "version": 2,
+  "notes": [
+    "v2: the plan is built from MODULES. Lessons inside a module are fixed and the same for everyone. The quiz decides the ORDER of modules (after Module 1, which is always first) and the reason shown for each.",
+    "Personalize the surface, keep the path the same: lesson variants (in person / phone / not noticed yet) change examples and tasks, never which lesson comes next.",
+    "Input: tags from quiz.json (incl. derivedTags) and the branch. Output of planBuilder: whatWeHeard, beforeAfter, planIntro, modules[] in order (each with reason and lessons), firstLessonId, quickGuides (highlighted ones first), loaderLines, giftPhraseIds, readiness.",
+    "Placeholders as in quiz.json. Only lesson 'm1_l1' is fully built in the MVP; 'm1_l2' is next if time allows."
+  ],
+  "algorithm": [
+    "1. Module 'm1_talking' is always first, with reason firstModule.reasonByBranch[branch].",
+    "2. If the branch is 'noticing', module 'm0_before' is always second, with its fixed reason. Otherwise it is not in the plan.",
+    "3. Every other module in 'modules' with order 'scored' starts at its baseScore and its default reason.",
+    "4. Go through 'boosts' in order. A boost matches when ALL tags in 'all' are present, AT LEAST ONE in 'any' (if given), and NONE in 'none'. Add its points to that module. If this boost's points are the highest added so far to that module, its reason replaces the module's reason.",
+    "5. Sort scored modules by score, high to low; ties keep the order in 'modules'.",
+    "6. Modules with order 'later' always come last, in their listed order, with their default reason and status 'later'.",
+    "7. 'First 30 days' = Module 1 plus the next two modules in the list. The plan preview shows them in full and the rest as a short map.",
+    "8. Quick guides are always available. Guides whose 'highlightIf' tags match are shown first, marked 'For now'.",
+    "9. Every module shown must have a reason. Never show a module without one."
+  ],
+  "firstModule": {
+    "id": "m1_talking",
+    "reasonByBranch": {
+      "noticing": "Everyone starts here. Calm conversations help now, before and after any diagnosis.",
+      "recent": "Everyone starts here. Talking with {recipient} comes up every day, from the first weeks on.",
+      "changing": "Everyone starts here. As things change, the way you talk with {recipient} makes every day easier."
+    }
+  },
+  "firstLessonId": "m1_l1",
+  "modules": [
+    {
+      "id": "m1_talking",
+      "title": "Talking with {recipient}",
+      "order": "first",
+      "skill": "communication",
+      "summary": "One simple pattern for hard conversations: notice the feeling, reassure, offer something to do.",
+      "lessons": [
+        {
+          "id": "m1_l1",
+          "title": "When {recipient} asks again",
+          "minutes": 8,
+          "built": true
+        },
+        {
+          "id": "m1_l2",
+          "title": "Talking so it lands",
+          "minutes": 7,
+          "built": false,
+          "buildNext": true
+        },
+        {
+          "id": "m1_l3",
+          "title": "\"You stole my purse\"",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m1_l4",
+          "title": "When {recipient} says no",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m1_l5",
+          "title": "Your phrase book: review and practice",
+          "minutes": 6,
+          "built": false,
+          "review": true
+        }
+      ]
+    },
+    {
+      "id": "m0_before",
+      "title": "Before the diagnosis",
+      "order": "noticing_second",
+      "skill": "understanding",
+      "reason": "Because there's no diagnosis yet. These steps help you understand what's happening and talk to a doctor.",
+      "lessons": [
+        {
+          "id": "m0_l1",
+          "title": "Normal aging or something more?",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m0_l2",
+          "title": "Talking to {recipient} about seeing a doctor",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m0_l3",
+          "title": "Preparing for the memory evaluation",
+          "minutes": 7,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m2_hard_moments",
+      "title": "Hard moments",
+      "order": "scored",
+      "baseScore": 50,
+      "skill": "daily_care",
+      "reason": "The same pattern, used when emotions run higher.",
+      "lessons": [
+        {
+          "id": "m2_l1",
+          "title": "Finding the trigger",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m2_l2",
+          "title": "Evening confusion",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m2_l3",
+          "title": "\"I want to go home\"",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m2_l4",
+          "title": "Anger and agitation",
+          "minutes": 8,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m3_decide",
+      "title": "While {pronoun} can still decide",
+      "order": "scored",
+      "baseScore": 45,
+      "skill": "legal_money",
+      "reason": "Papers, money and driving are easier to sort out while {recipient} can take part.",
+      "lessons": [
+        {
+          "id": "m3_l1",
+          "title": "Key papers to talk about",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m3_l2",
+          "title": "Managing {possessive} bills together",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m3_l3",
+          "title": "The driving conversation",
+          "minutes": 8,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m4_safe_home",
+      "title": "Safe home, calmer days",
+      "order": "scored",
+      "baseScore": 40,
+      "skill": "safety",
+      "reason": "Small changes at home make days safer and calmer.",
+      "lessons": [
+        {
+          "id": "m4_l1",
+          "title": "Home safety walk-through",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m4_l2",
+          "title": "A calming daily routine",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m4_l3",
+          "title": "Activities that bring joy",
+          "minutes": 6,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m5_care_team",
+      "title": "Doctors and your care team",
+      "order": "scored",
+      "baseScore": 35,
+      "skill": "family",
+      "reason": "Get more from doctor visits and share the load with others.",
+      "lessons": [
+        {
+          "id": "m5_l1",
+          "title": "Getting the most from 15 minutes with the doctor",
+          "minutes": 7,
+          "built": false,
+          "handout": "visit_sheet"
+        },
+        {
+          "id": "m5_l2",
+          "title": "Guiding your sitter",
+          "minutes": 6,
+          "built": false,
+          "handout": "care_card"
+        },
+        {
+          "id": "m5_l3",
+          "title": "Asking your siblings for specific help",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m5_l4",
+          "title": "Caring from a distance",
+          "minutes": 7,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m6_you",
+      "title": "Caring for yourself",
+      "order": "scored",
+      "baseScore": 30,
+      "skill": "self_care",
+      "reason": "Caring for {recipient} works better when you rest too.",
+      "lessons": [
+        {
+          "id": "m6_l1",
+          "title": "The fifth time is the hardest",
+          "minutes": 6,
+          "built": false
+        },
+        {
+          "id": "m6_l2",
+          "title": "Spotting burnout early",
+          "minutes": 6,
+          "built": false
+        },
+        {
+          "id": "m6_l3",
+          "title": "A plan for your own breaks",
+          "minutes": 5,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m7_more_help",
+      "title": "Getting more help",
+      "order": "later",
+      "skill": "family",
+      "reason": "For when {recipient} needs more help than you can give alone.",
+      "lessons": [
+        {
+          "id": "m7_l1",
+          "title": "When it's time for more help",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m7_l2",
+          "title": "Medicare and paying for care",
+          "minutes": 8,
+          "built": false
+        },
+        {
+          "id": "m7_l3",
+          "title": "Choosing in-home help or a care community",
+          "minutes": 8,
+          "built": false
+        }
+      ]
+    },
+    {
+      "id": "m8_later",
+      "title": "Later stages",
+      "order": "later",
+      "skill": "understanding",
+      "reason": "Comfort, connection and the conversations families need, when the time comes.",
+      "lessons": [
+        {
+          "id": "m8_l1",
+          "title": "Comfort and connection",
+          "minutes": 7,
+          "built": false
+        },
+        {
+          "id": "m8_l2",
+          "title": "Hospice and palliative care: what they are",
+          "minutes": 8,
+          "built": false
+        }
+      ]
+    }
+  ],
+  "boosts": [
+    {
+      "all": [
+        "after_hospital"
+      ],
+      "module": "m4_safe_home",
+      "points": 60,
+      "reason": "Because {recipient} just came home from the hospital, and safety at home comes first."
+    },
+    {
+      "all": [
+        "need:documents"
+      ],
+      "none": [
+        "branch:changing"
+      ],
+      "module": "m3_decide",
+      "points": 45,
+      "reason": "Because some of {possessive} key papers are missing, and it's easier to sort them out while {pronoun} can take part."
+    },
+    {
+      "all": [
+        "need:documents",
+        "branch:changing"
+      ],
+      "module": "m3_decide",
+      "points": 30,
+      "reason": "Because some of {possessive} key papers are missing."
+    },
+    {
+      "all": [
+        "worry:legal"
+      ],
+      "module": "m3_decide",
+      "points": 35,
+      "reason": "Because you said legal papers and money worry you."
+    },
+    {
+      "all": [
+        "need:driving"
+      ],
+      "module": "m3_decide",
+      "points": 30,
+      "reason": "Because you're worried about {possessive} driving."
+    },
+    {
+      "any": [
+        "need:evening_confusion",
+        "need:accusations",
+        "need:refusal",
+        "need:wandering"
+      ],
+      "module": "m2_hard_moments",
+      "points": 40,
+      "reason": "Because you said some moments are getting harder.",
+      "none": [
+        "need:evening_confusion"
+      ]
+    },
+    {
+      "all": [
+        "need:evening_confusion"
+      ],
+      "module": "m2_hard_moments",
+      "points": 45,
+      "reason": "Because you said evenings are hard. This module starts with the trigger behind them."
+    },
+    {
+      "all": [
+        "worry:safety"
+      ],
+      "module": "m4_safe_home",
+      "points": 35,
+      "reason": "Because you said safety at home worries you."
+    },
+    {
+      "all": [
+        "need:wandering"
+      ],
+      "module": "m4_safe_home",
+      "points": 15,
+      "reason": "Because you said {recipient} sometimes gets lost."
+    },
+    {
+      "all": [
+        "age:75plus"
+      ],
+      "none": [
+        "living:facility"
+      ],
+      "module": "m4_safe_home",
+      "points": 10,
+      "reason": "Because a quick room-by-room check helps at {possessive} age."
+    },
+    {
+      "all": [
+        "living:facility"
+      ],
+      "module": "m4_safe_home",
+      "points": -25,
+      "reason": "Small changes in {possessive} room and routine still help."
+    },
+    {
+      "all": [
+        "worry:doctor"
+      ],
+      "module": "m5_care_team",
+      "points": 30,
+      "reason": "Because you want to get more from doctor visits."
+    },
+    {
+      "all": [
+        "need:distance"
+      ],
+      "module": "m5_care_team",
+      "points": 25,
+      "reason": "Because {recipient} {lives} far away."
+    },
+    {
+      "all": [
+        "worry:family"
+      ],
+      "module": "m5_care_team",
+      "points": 25,
+      "reason": "Because you said family isn't helping enough."
+    },
+    {
+      "all": [
+        "help:paid"
+      ],
+      "module": "m5_care_team",
+      "points": 20,
+      "reason": "Because a sitter helps, and a care card shows them what works with {recipient}."
+    },
+    {
+      "all": [
+        "help:alone"
+      ],
+      "module": "m5_care_team",
+      "points": 15,
+      "reason": "Because you're handling most of it alone."
+    },
+    {
+      "all": [
+        "worry:burnout"
+      ],
+      "module": "m6_you",
+      "points": 45,
+      "reason": "Because you said you're exhausted. Your health matters too."
+    },
+    {
+      "all": [
+        "confidence:low"
+      ],
+      "module": "m6_you",
+      "points": 20,
+      "reason": "Because this feels like a lot right now. Small breaks help you keep going."
+    },
+    {
+      "all": [
+        "work:full_time"
+      ],
+      "module": "m6_you",
+      "points": 10,
+      "reason": "Because you're fitting this around a full-time job."
+    },
+    {
+      "all": [
+        "worry:future"
+      ],
+      "none": [
+        "branch:noticing"
+      ],
+      "module": "m2_hard_moments",
+      "points": 10,
+      "reason": "Because knowing what to expect makes the next changes less frightening."
+    }
+  ],
+  "quickGuides": [
+    {
+      "id": "qg_hospital",
+      "title": "After a hospital stay",
+      "highlightIf": [
+        "after_hospital"
+      ]
+    },
+    {
+      "id": "qg_missing",
+      "title": "If {recipient} goes missing",
+      "highlightIf": [
+        "need:wandering"
+      ]
+    },
+    {
+      "id": "qg_fall",
+      "title": "After a fall",
+      "highlightIf": [
+        "age:85plus"
+      ]
+    },
+    {
+      "id": "qg_sudden_change",
+      "title": "A sudden change in confusion",
+      "highlightIf": []
+    },
+    {
+      "id": "qg_limit",
+      "title": "You're at your limit",
+      "highlightIf": [
+        "worry:burnout"
+      ]
+    }
+  ],
+  "quickGuidesNote": "Short how-to guides outside the modules, for urgent moments. Always reachable from the Plan tab and the 'Need help now?' sheet. In the MVP: titles only, except 'You're at your limit', which opens the crisis sheet (A11).",
+  "pace": {
+    "lessonsPerWeek": {
+      "pace:5": 3,
+      "pace:10": 4,
+      "pace:15": 5,
+      "default": 4
+    },
+    "label": "About {minutes} minutes a lesson, {perWeek} lessons a week"
+  },
+  "skills": {
+    "communication": "Communication",
+    "understanding": "Understanding the changes",
+    "daily_care": "Daily care",
+    "safety": "Safety",
+    "doctor_visits": "Doctor visits",
+    "legal_money": "Papers and money",
+    "family": "Family and help",
+    "self_care": "Caring for yourself"
+  },
+  "planIntro": {
+    "confidence:low": "This feels like a lot right now. We'll start small: one short step at a time.",
+    "confidence:mid": "You're already doing more than you think. Here's what to focus on first.",
+    "confidence:high": "You have a good start. Here's how to build on it.",
+    "default": "Here's what to focus on first."
+  },
+  "whatWeHeard": {
+    "title": "What we heard",
+    "sentences": [
+      {
+        "slots": [
+          "situation"
+        ]
+      },
+      {
+        "slots": [
+          "living"
+        ]
+      },
+      {
+        "slots": [
+          "helpers",
+          "work"
+        ],
+        "join": ", ",
+        "end": "."
+      },
+      {
+        "prefix": "What worries you most: ",
+        "slots": [
+          "worries"
+        ],
+        "listJoin": ", ",
+        "lastJoin": " and ",
+        "end": "."
+      }
+    ],
+    "rules": [
+      "Skip a sentence if none of its slots have an answer.",
+      "Never include health changes (Q5) in this summary.",
+      "If 'work' is empty, end the helpers sentence with a period."
+    ],
+    "example": "Mom was diagnosed in the last few months. Mom lives far away. You're handling most of it alone, and you work full-time. What worries you most: knowing what to say and legal papers and money."
+  },
+  "beforeAfter": {
+    "noticing": {
+      "before": "Today: you've noticed changes in {recipient} and aren't sure what they mean or how to bring them up.",
+      "after": "In 30 days: you know what's worth raising with a doctor, you've had a calm talk with {recipient}, and you have phrases that work when the same questions come up."
+    },
+    "recent": {
+      "before": "Today: the diagnosis came with a brochure, and you don't know what to say when {recipient} asks the same question again and again.",
+      "after": "In 30 days: you have phrases that work, practiced out loud, key papers on track, and a plan your family can see."
+    },
+    "changing": {
+      "before": "Today: things are changing, and every day brings a new hard moment.",
+      "after": "In 30 days: you have calm ways to handle the hard moments, a steadier routine, and a care card anyone who helps can use."
+    }
+  },
+  "loaderLines": [
+    {
+      "always": true,
+      "text": "Starting with how to talk with {recipient}…"
+    },
+    {
+      "any": [
+        "need:documents",
+        "worry:legal"
+      ],
+      "text": "Moving papers up, while {recipient} can take part…"
+    },
+    {
+      "any": [
+        "need:evening_confusion",
+        "need:accusations",
+        "need:refusal",
+        "need:wandering"
+      ],
+      "text": "Adding the hard moments you mentioned…"
+    },
+    {
+      "any": [
+        "after_hospital",
+        "worry:safety"
+      ],
+      "text": "Putting safety at home early…"
+    },
+    {
+      "any": [
+        "worry:doctor",
+        "help:alone",
+        "help:siblings",
+        "help:several",
+        "worry:family",
+        "need:distance"
+      ],
+      "text": "Planning how others can help…"
+    },
+    {
+      "any": [
+        "worry:burnout",
+        "confidence:low"
+      ],
+      "text": "Making room for your own breaks…"
+    },
+    {
+      "always": true,
+      "text": "Setting the pace to fit your day…"
+    }
+  ],
+  "loaderRules": "Show up to 4 lines: the first 'always' line, up to 2 matching lines in order, then the last 'always' line.",
+  "giftPhrases": {
+    "count": 5,
+    "rule": "Take phrases whose tags match the Q5 answers first (in Q5 order, max 2 per tag), then fill with phrases tagged 'general' until there are 5. Source: phrases.json."
+  },
+  "readiness": {
+    "description": "Readiness ring on Today: 'x of y lessons done' for the first 30 days (Module 1 + the next two modules)."
+  }
+}

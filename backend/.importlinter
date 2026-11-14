@@ -1,0 +1,25 @@
+[importlinter]
+root_package = app
+include_external_packages = True
+
+[importlinter:contract:layers]
+name = Clean Architecture layers
+type = layers
+layers =
+    app.main
+    app.presentation | app.infrastructure
+    app.application
+    app.domain
+
+[importlinter:contract:forbidden]
+name = Domain and application are framework-free
+type = forbidden
+source_modules =
+    app.domain
+    app.application
+forbidden_modules =
+    fastapi
+    sqlalchemy
+    stripe
+    anthropic
+    httpx

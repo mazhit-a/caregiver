@@ -1,0 +1,5 @@
+# Dev-only: publish the database on 55432 for local pytest/alembic (5432 is often taken).
+services:
+  db:
+    ports:
+      - "55432:5432"

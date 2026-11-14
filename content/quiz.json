@@ -1,0 +1,650 @@
+{
+  "version": 3,
+  "notes": [
+    "One question per screen. Every option has tags (used by plan-rules.json) and, where relevant, a 'heard' fragment for the 'What we heard' summary.",
+    "Placeholders, filled from recipientLabels by the choice in Q1: {recipient} (Mom), {Recipient} (same, capitalized at sentence start), {possessive} (Mom's), {Possessive}, {pronoun} (she), {Pronoun}, {object} (her), {was}, {is}, {has}, {lives}.",
+    "Q3 sets the branch: noticing, recent or changing. Copy can change by branch through 'subtitleByBranch'.",
+    "Questions marked healthData: no ad trackers on these screens; answers stay in the browser; never put answers in URLs.",
+    "Rule: every question must change something the user gets. The 'usedFor' field says what.",
+    "v3: the diagnosis question was removed. Q3 already tells us where the family is, and asking for a diagnosis added sensitive data without changing the plan."
+  ],
+  "recipientLabels": {
+    "mom": {
+      "recipient": "Mom",
+      "possessive": "Mom's",
+      "pronoun": "she",
+      "object": "her",
+      "was": "was",
+      "is": "is",
+      "has": "has",
+      "lives": "lives"
+    },
+    "dad": {
+      "recipient": "Dad",
+      "possessive": "Dad's",
+      "pronoun": "he",
+      "object": "him",
+      "was": "was",
+      "is": "is",
+      "has": "has",
+      "lives": "lives"
+    },
+    "both": {
+      "recipient": "your parents",
+      "possessive": "your parents'",
+      "pronoun": "they",
+      "object": "them",
+      "was": "were",
+      "is": "are",
+      "has": "have",
+      "lives": "live"
+    },
+    "in_law": {
+      "recipient": "your parent-in-law",
+      "possessive": "your parent-in-law's",
+      "pronoun": "they",
+      "object": "them",
+      "was": "was",
+      "is": "is",
+      "has": "has",
+      "lives": "lives"
+    },
+    "other": {
+      "recipient": "your loved one",
+      "possessive": "your loved one's",
+      "pronoun": "they",
+      "object": "them",
+      "was": "was",
+      "is": "is",
+      "has": "has",
+      "lives": "lives"
+    }
+  },
+  "branches": {
+    "noticing": {
+      "label": "Noticing changes, no diagnosis yet"
+    },
+    "recent": {
+      "label": "Diagnosed in the last 6 months"
+    },
+    "changing": {
+      "label": "Diagnosed a while ago, or just home from the hospital"
+    }
+  },
+  "questions": [
+    {
+      "id": "q1_recipient",
+      "type": "single",
+      "title": "Who are you caring for?",
+      "usedFor": "Name and pronouns in every text of the funnel and the app",
+      "options": [
+        {
+          "id": "mom",
+          "label": "My mom",
+          "tags": [
+            "recipient:mom"
+          ]
+        },
+        {
+          "id": "dad",
+          "label": "My dad",
+          "tags": [
+            "recipient:dad"
+          ]
+        },
+        {
+          "id": "both",
+          "label": "Both of my parents",
+          "tags": [
+            "recipient:both"
+          ]
+        },
+        {
+          "id": "in_law",
+          "label": "A parent-in-law",
+          "tags": [
+            "recipient:in_law"
+          ]
+        },
+        {
+          "id": "other",
+          "label": "Another relative",
+          "tags": [
+            "recipient:other"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "q2_age",
+      "type": "single",
+      "title": "How old is {recipient}?",
+      "subtitle": "If you're caring for both parents, pick the older one.",
+      "usedFor": "Moves 'Safe home, calmer days' earlier for 75+; quick guide 'After a fall' for 85+",
+      "options": [
+        {
+          "id": "under65",
+          "label": "Under 65",
+          "tags": [
+            "age:under65"
+          ]
+        },
+        {
+          "id": "65_74",
+          "label": "65–74",
+          "tags": [
+            "age:65_74",
+            "age:65plus"
+          ]
+        },
+        {
+          "id": "75_84",
+          "label": "75–84",
+          "tags": [
+            "age:75_84",
+            "age:65plus",
+            "age:75plus"
+          ]
+        },
+        {
+          "id": "85plus",
+          "label": "85 or older",
+          "tags": [
+            "age:85plus",
+            "age:65plus",
+            "age:75plus"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "q3_situation",
+      "type": "single",
+      "title": "What's happening right now?",
+      "healthData": true,
+      "usedFor": "Sets the branch: before / after text, the Module 1 reason, and adds 'Before the diagnosis' for the noticing branch",
+      "options": [
+        {
+          "id": "noticing",
+          "label": "I'm noticing changes, but there's no diagnosis yet",
+          "branch": "noticing",
+          "tags": [
+            "branch:noticing",
+            "stage:pre"
+          ],
+          "heard": {
+            "slot": "situation",
+            "text": "You've noticed changes in {recipient}, but there's no diagnosis yet."
+          }
+        },
+        {
+          "id": "recent",
+          "label": "{Recipient} {was} diagnosed in the last 6 months",
+          "branch": "recent",
+          "tags": [
+            "branch:recent",
+            "stage:early",
+            "new_diagnosis"
+          ],
+          "heard": {
+            "slot": "situation",
+            "text": "{Recipient} {was} diagnosed in the last few months."
+          }
+        },
+        {
+          "id": "changing",
+          "label": "The diagnosis was a while ago, and things are changing",
+          "branch": "changing",
+          "tags": [
+            "branch:changing",
+            "stage:middle"
+          ],
+          "heard": {
+            "slot": "situation",
+            "text": "The diagnosis was a while ago, and things are changing."
+          }
+        },
+        {
+          "id": "hospital",
+          "label": "{Recipient} just came home from the hospital",
+          "branch": "changing",
+          "tags": [
+            "branch:changing",
+            "stage:middle",
+            "after_hospital"
+          ],
+          "heard": {
+            "slot": "situation",
+            "text": "{Recipient} just came home from the hospital."
+          }
+        }
+      ]
+    },
+    {
+      "id": "q5_changes",
+      "type": "multi",
+      "max": 3,
+      "title": "Which of these have you noticed lately?",
+      "subtitle": "Pick up to 3. You can skip this one.",
+      "subtitleByBranch": {
+        "noticing": "Pick up to 3. It's okay if you're not sure yet."
+      },
+      "healthData": true,
+      "skippable": true,
+      "usedFor": "Moves 'Hard moments' earlier and picks the phrases on the free gift sheet",
+      "options": [
+        {
+          "id": "repeats",
+          "label": "Asks the same questions again and again",
+          "tags": [
+            "need:repeated_questions"
+          ]
+        },
+        {
+          "id": "accuses",
+          "label": "Loses things and thinks someone took them",
+          "tags": [
+            "need:accusations"
+          ]
+        },
+        {
+          "id": "evenings",
+          "label": "Gets confused or upset in the late afternoon or evening",
+          "tags": [
+            "need:evening_confusion"
+          ]
+        },
+        {
+          "id": "refuses",
+          "label": "Says no to help, like a shower or a doctor visit",
+          "tags": [
+            "need:refusal"
+          ]
+        },
+        {
+          "id": "lost",
+          "label": "Gets lost, or wants to \"go home\" while at home",
+          "tags": [
+            "need:wandering",
+            "need:safety"
+          ]
+        },
+        {
+          "id": "driving",
+          "label": "Still drives, and I'm worried",
+          "tags": [
+            "need:driving"
+          ]
+        },
+        {
+          "id": "none",
+          "label": "None of these yet",
+          "tags": [],
+          "exclusive": true
+        }
+      ]
+    },
+    {
+      "id": "reassure_1",
+      "type": "interstitial",
+      "speaker": "rosa",
+      "title": "You're not alone.",
+      "body": "About 1 in 4 adults in the US cares for a family member, and most never got any training. Knowing what to say and do is a skill. You can learn it, one step at a time.",
+      "cta": "Continue"
+    },
+    {
+      "id": "q6_living",
+      "type": "single",
+      "title": "Where does {recipient} live?",
+      "usedFor": "Moves 'Doctors and your care team' earlier if far away; summary line",
+      "options": [
+        {
+          "id": "with_me",
+          "label": "With me",
+          "tags": [
+            "living:with_me"
+          ],
+          "heard": {
+            "slot": "living",
+            "text": "{Recipient} {lives} with you."
+          }
+        },
+        {
+          "id": "nearby",
+          "label": "Nearby, under an hour away",
+          "tags": [
+            "living:nearby"
+          ],
+          "heard": {
+            "slot": "living",
+            "text": "{Recipient} {lives} nearby."
+          }
+        },
+        {
+          "id": "far",
+          "label": "Far away",
+          "tags": [
+            "living:far",
+            "need:distance"
+          ],
+          "heard": {
+            "slot": "living",
+            "text": "{Recipient} {lives} far away."
+          }
+        },
+        {
+          "id": "facility",
+          "label": "In assisted living or a care home",
+          "tags": [
+            "living:facility"
+          ],
+          "heard": {
+            "slot": "living",
+            "text": "{Recipient} {lives} in a care home."
+          }
+        }
+      ]
+    },
+    {
+      "id": "q7_helpers",
+      "type": "single",
+      "title": "Who else helps?",
+      "usedFor": "Moves 'Doctors and your care team' earlier; summary line",
+      "options": [
+        {
+          "id": "just_me",
+          "label": "Just me",
+          "tags": [
+            "help:alone",
+            "need:support_team"
+          ],
+          "heard": {
+            "slot": "helpers",
+            "text": "You're handling most of it alone"
+          }
+        },
+        {
+          "id": "siblings",
+          "label": "My brother or sister",
+          "tags": [
+            "help:siblings",
+            "need:family"
+          ],
+          "heard": {
+            "slot": "helpers",
+            "text": "You share it with a brother or sister"
+          }
+        },
+        {
+          "id": "partner",
+          "label": "My partner",
+          "tags": [
+            "help:partner"
+          ],
+          "heard": {
+            "slot": "helpers",
+            "text": "Your partner helps"
+          }
+        },
+        {
+          "id": "paid",
+          "label": "A paid caregiver or sitter",
+          "tags": [
+            "help:paid",
+            "need:sitter"
+          ],
+          "heard": {
+            "slot": "helpers",
+            "text": "A paid caregiver helps"
+          }
+        },
+        {
+          "id": "several",
+          "label": "Several people",
+          "tags": [
+            "help:several",
+            "need:family"
+          ],
+          "heard": {
+            "slot": "helpers",
+            "text": "Several people help"
+          }
+        }
+      ]
+    },
+    {
+      "id": "q8_work",
+      "type": "single",
+      "title": "Do you work?",
+      "usedFor": "Moves 'Caring for yourself' a little earlier for full-time work; summary line",
+      "options": [
+        {
+          "id": "full_time",
+          "label": "Yes, full-time",
+          "tags": [
+            "work:full_time"
+          ],
+          "heard": {
+            "slot": "work",
+            "text": "and you work full-time"
+          }
+        },
+        {
+          "id": "part_time",
+          "label": "Yes, part-time",
+          "tags": [
+            "work:part_time"
+          ],
+          "heard": {
+            "slot": "work",
+            "text": "and you work part-time"
+          }
+        },
+        {
+          "id": "not_now",
+          "label": "Not right now",
+          "tags": [
+            "work:none"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "q9_worries",
+      "type": "multi",
+      "max": 3,
+      "title": "What worries you most right now?",
+      "subtitle": "Pick up to 3.",
+      "usedFor": "Moves the matching modules earlier; summary line",
+      "options": [
+        {
+          "id": "what_to_say",
+          "label": "Knowing what to say",
+          "tags": [
+            "worry:communication"
+          ],
+          "heard": {
+            "slot": "worries",
+            "text": "knowing what to say"
+          }
+        },
+        {
+          "id": "safety",
+          "label": "Safety at home",
+          "tags": [
+            "worry:safety"
+          ],
+          "heard": {
+            "slot": "worries",
+            "text": "safety at home"
+          }
+        },
+        {
+          "id": "legal_money",
+          "label": "Legal papers and money",
+          "tags": [
+            "worry:legal"
+          ],
+          "heard": {
+            "slot": "worries",
+            "text": "legal papers and money"
+          }
+        },
+        {
+          "id": "doctor",
+          "label": "Getting more from doctor visits",
+          "tags": [
+            "worry:doctor"
+          ],
+          "heard": {
+            "slot": "worries",
+            "text": "getting more from doctor visits"
+          }
+        },
+        {
+          "id": "family",
+          "label": "Family not helping enough",
+          "tags": [
+            "worry:family"
+          ],
+          "heard": {
+            "slot": "worries",
+            "text": "family not helping enough"
+          }
+        },
+        {
+          "id": "me",
+          "label": "My own exhaustion",
+          "tags": [
+            "worry:burnout"
+          ],
+          "heard": {
+            "slot": "worries",
+            "text": "your own exhaustion"
+          }
+        },
+        {
+          "id": "future",
+          "label": "Not knowing what comes next",
+          "tags": [
+            "worry:future"
+          ],
+          "heard": {
+            "slot": "worries",
+            "text": "not knowing what comes next"
+          }
+        }
+      ]
+    },
+    {
+      "id": "reassure_2",
+      "type": "interstitial",
+      "speaker": "rosa",
+      "title": "Thank you. This helps a lot.",
+      "body": "We'll start with what matters most to you and build the rest step by step. You don't have to figure it all out today.",
+      "cta": "Continue"
+    },
+    {
+      "id": "q10_documents",
+      "type": "grid",
+      "title": "Which of these does {recipient} have?",
+      "subtitle": "It's fine if you're not sure. We'll help you find out.",
+      "usedFor": "Moves 'While they can still decide' earlier if papers are missing or unsure",
+      "states": [
+        {
+          "id": "have",
+          "label": "Have"
+        },
+        {
+          "id": "missing",
+          "label": "Missing"
+        },
+        {
+          "id": "not_sure",
+          "label": "Not sure"
+        }
+      ],
+      "rows": [
+        {
+          "id": "healthcare_proxy",
+          "label": "Healthcare proxy",
+          "hint": "The person who can make medical decisions if {recipient} can't"
+        },
+        {
+          "id": "financial_poa",
+          "label": "Financial power of attorney",
+          "hint": "The person who can handle money and bills"
+        },
+        {
+          "id": "hipaa_release",
+          "label": "HIPAA release",
+          "hint": "Lets doctors share information with you"
+        }
+      ],
+      "derivedTags": [
+        {
+          "if": "any row is 'missing' or 'not_sure'",
+          "add": "need:documents"
+        },
+        {
+          "if": "all rows are 'have'",
+          "add": "docs:ready"
+        }
+      ]
+    },
+    {
+      "id": "q11_confidence",
+      "type": "scale",
+      "min": 1,
+      "max": 5,
+      "title": "How prepared do you feel for what's ahead?",
+      "minLabel": "Not at all",
+      "maxLabel": "Very prepared",
+      "storeAs": "confidenceDay0",
+      "usedFor": "Plan intro line; moves 'Caring for yourself' earlier if low; start of the progress chart",
+      "derivedTags": [
+        {
+          "if": "value 1-2",
+          "add": "confidence:low"
+        },
+        {
+          "if": "value 3",
+          "add": "confidence:mid"
+        },
+        {
+          "if": "value 4-5",
+          "add": "confidence:high"
+        }
+      ]
+    },
+    {
+      "id": "q12_time",
+      "type": "single",
+      "title": "How much time can you give this on most days?",
+      "usedFor": "Pace: lessons per week",
+      "options": [
+        {
+          "id": "5",
+          "label": "About 5 minutes",
+          "tags": [
+            "pace:5"
+          ]
+        },
+        {
+          "id": "10",
+          "label": "About 10 minutes",
+          "tags": [
+            "pace:10"
+          ]
+        },
+        {
+          "id": "15",
+          "label": "15 minutes or more",
+          "tags": [
+            "pace:15"
+          ]
+        }
+      ]
+    }
+  ]
+}

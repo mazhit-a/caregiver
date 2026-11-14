@@ -1,0 +1,166 @@
+{
+  "version": 1,
+  "notes": [
+    "All funnel texts in one place. Placeholders as in quiz.json; paywall placeholders come from pricing.json and the current date.",
+    "Keep the same phrase from ad to button: \"Mom's plan\" uses {possessive} plan.",
+    "No invented reviews, no countdowns, no price per day."
+  ],
+  "common": {
+    "notMedicalAdvice": "We teach and organize. We don't give medical advice.",
+    "privacyShort": "Your answers stay in this browser.",
+    "needHelpNow": "Need help now?",
+    "back": "Back",
+    "continue": "Continue",
+    "skip": "Skip",
+    "testModeBanner": "Demo build: payments run in test mode. No real charges."
+  },
+  "landing": {
+    "hero": {
+      "title": "Mom's diagnosis came with a brochure. Here's the plan.",
+      "subtitle": "Learn what to say, practice before it happens, and get a plan built around your mom.",
+      "cta": "Get Mom's plan (3 min)",
+      "ctaNote": "No sign-up needed."
+    },
+    "blocks": [
+      {
+        "title": "Learn what to say",
+        "body": "Short lessons for the moments that come up most, like the same question asked again and again."
+      },
+      {
+        "title": "Practice before it happens",
+        "body": "Rehearse the hard conversation with an AI practice partner, and get tips on what to say instead."
+      },
+      {
+        "title": "A plan for your mom",
+        "body": "Your first 30 days, step by step, plus a care card for anyone who helps."
+      }
+    ],
+    "demo": {
+      "title": "See how practice works",
+      "momLine": "When are we going to the doctor?",
+      "yourLine": "I told you already, it's tomorrow.",
+      "coachTip": "Try: \"We have plenty of time. I'll let you know when it's time.\""
+    },
+    "trust": [
+      "Inspired by research on caregiver training programs",
+      "Not medical advice",
+      "Your answers stay in your browser"
+    ],
+    "faq": [
+      {
+        "q": "What is this?",
+        "a": "A short online course that teaches you how to care for a parent with dementia, with a plan built around your parent and practice for real conversations."
+      },
+      {
+        "q": "Is this medical advice?",
+        "a": "No. We teach communication and everyday care, and help you get ready for doctor visits. For medical questions, talk to your parent's doctor or pharmacist."
+      },
+      {
+        "q": "How much does it cost?",
+        "a": "You'll see the full price and renewal terms before you pay. You can cancel anytime in Settings."
+      },
+      {
+        "q": "What happens to my answers?",
+        "a": "They stay in this browser. We don't sell or share them, and there's no ad tracking in the quiz or the app."
+      }
+    ],
+    "footer": "We teach and organize. We don't give medical advice. In an emergency, call 911."
+  },
+  "quizIntro": {
+    "title": "Let's build {possessive} plan",
+    "body": "11 quick questions, about 3 minutes. No sign-up needed. Your answers stay in this browser.",
+    "cta": "Start"
+  },
+  "loader": {
+    "title": "Building {possessive} plan…",
+    "lineSourceNote": "Lines come from plan-rules.json → loaderLines.",
+    "durationMs": 4000
+  },
+  "planPreview": {
+    "title": "Your first 30 days with {recipient}",
+    "whatWeHeard": {
+      "title": "What we heard",
+      "editLink": "Change my answers"
+    },
+    "beforeAfter": {
+      "title": "Where you'll be in 30 days",
+      "beforeLabel": "Today",
+      "afterLabel": "In 30 days"
+    },
+    "plan": {
+      "title": "Your course, module by module",
+      "first30Title": "Your first 30 days",
+      "moduleLessonsLabel": "{count} short lessons",
+      "firstLessonBadge": "Start here",
+      "currentModuleBadge": "Everyone starts here",
+      "laterTitle": "Coming later",
+      "lockedHint": "Opens when you start your plan",
+      "reasonPrefix": "Why now: ",
+      "paceLine": "About 8 minutes a lesson, {perWeek} lessons a week",
+      "quickGuidesTitle": "Quick guides for urgent moments",
+      "quickGuidesNote": "Always there when you need them, outside the course."
+    },
+    "proof": {
+      "title": "Why this works",
+      "items": [
+        {
+          "text": "About 1 in 4 US adults cares for a family member, and most never got any training.",
+          "source": "AARP and the National Alliance for Caregiving, Caregiving in the US 2025"
+        },
+        {
+          "text": "Caregiver programs that include hands-on practice, not just reading, have been shown to lower caregiver stress.",
+          "source": "NIH-funded REACH caregiver research"
+        }
+      ]
+    },
+    "gift": {
+      "title": "A free gift for you",
+      "body": "\"Phrases that calm {recipient}\": 5 phrases picked for your situation, ready to print or keep on your phone.",
+      "cta": "Download free sheet",
+      "note": "Yours to keep, whether or not you continue."
+    },
+    "cta": "Get {possessive} plan"
+  },
+  "paywall": {
+    "headline": "{Possessive} 30-day plan is ready",
+    "subheadFromSummary": "Use the first sentence of 'What we heard'.",
+    "includesTitle": "What you get",
+    "includes": [
+      "Short lessons that start with real moments",
+      "Practice with an AI partner, with tips after every reply",
+      "{Possessive} page and a care card to share with anyone who helps",
+      "A one-page sheet for every doctor visit"
+    ],
+    "planLabels": {
+      "four_week": "4 weeks",
+      "twelve_week": "12 weeks"
+    },
+    "selectedBadgeNote": "Only show a badge like 'Most chosen' if real data supports it.",
+    "disclosure": "**Today: {todayPrice}** for the first {introPeriod}. Then **{renewPrice} every {renewPeriod}**, starting {renewDate}, until you cancel. Cancel anytime in Settings → Subscription.",
+    "consentCheckbox": "I understand my plan renews automatically at {renewPrice} every {renewPeriod} until I cancel.",
+    "consentRequiredError": "Please confirm the renewal terms to continue.",
+    "payButton": "Pay {todayPrice} and start",
+    "testModeHint": "Test mode: use card 4242 4242 4242 4242, any future date, any CVC. No real charge.",
+    "demoButton": "Continue in demo mode (no charge)",
+    "demoNote": "For reviewers: unlocks the full demo without payment.",
+    "footer": "Prices in USD. We teach and organize. We don't give medical advice.",
+    "states": {
+      "loading": "Opening secure checkout…",
+      "cardError": "The payment didn't go through. Please check the card details or try another card.",
+      "success": "You're all set. Let's start {possessive} plan.",
+      "returnedCanceled": "No payment was made. Your plan is still here when you're ready."
+    }
+  },
+  "savePlan": {
+    "title": "Save your plan to come back on another device",
+    "body": "Optional. Without it, your plan stays in this browser.",
+    "emailLabel": "Email",
+    "cta": "Save my plan",
+    "skip": "Skip for now",
+    "note": "We'll only email you about your plan. No marketing without your OK."
+  },
+  "errors": {
+    "generic": "Something went wrong. Your answers are safe in this browser. Please try again.",
+    "restoreFailed": "We couldn't restore your plan, so we started a new one."
+  }
+}
