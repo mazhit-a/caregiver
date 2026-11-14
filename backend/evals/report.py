@@ -13,6 +13,7 @@ from typing import Any, Final
 
 from evals import rule
 from evals.metrics import ConfigMetrics, PriceTable
+from evals.quality import QualityResult
 from evals.runner import Measured
 from evals.selection import SelectionResult
 
@@ -27,6 +28,7 @@ class ConfigRun:
     metrics: ConfigMetrics
     measured: Sequence[Measured]
     fingerprint: Mapping[str, Any]
+    quality: QualityResult | None = None  # judged quality detail; None when --judge was not used
 
 
 def _case_rows(measured: Sequence[Measured]) -> list[dict[str, Any]]:
@@ -59,6 +61,13 @@ def _case_rows(measured: Sequence[Measured]) -> list[dict[str, Any]]:
             }
         )
     return rows
+
+
+def _judge_json(q: QualityResult) -> dict[str, Any]:
+    """Numbers only: the judge's one-line reasons can quote model output, so they stay out."""
+    out = asdict(q)
+    out.pop("reasons", None)
+    return out
 
 
 def build_report(
@@ -95,6 +104,7 @@ def build_report(
                 "name": r.metrics.config.name,
                 "fingerprint": dict(r.fingerprint),
                 "metrics": asdict(r.metrics),
+                "judge": None if r.quality is None else _judge_json(r.quality),
                 "cases": _case_rows(r.measured),
             }
             for r in runs
@@ -148,6 +158,19 @@ def render_markdown(
             f"argued {_pct(a.argued_accuracy)}; flag precision {_pct(a.flag_precision)}, "
             f"recall {_pct(a.flag_recall)}"
         )
+    judged = [r for r in runs if r.quality is not None]
+    if judged:
+        out += ["", "## Judged quality", ""]
+        for r in judged:
+            q = r.quality
+            assert q is not None  # noqa: S101 - filtered above
+            items = ", ".join(f"{k} {_pct(v)}" for k, v in q.per_item.items())
+            skipped = ", ".join(f"{k} {n}" for k, n in q.unjudged.items()) or "none"
+            out.append(
+                f"- {r.metrics.config.name}: quality {_pct(q.quality)} ({items}); "
+                f"{q.judged} judged, unjudged: {skipped}; judge {q.judge_model} "
+                f"{q.judge_effort}, prompt {q.judge_prompt_version}, {q.calls} calls"
+            )
     out += ["", "## Selection", ""]
     if selection is None:
         out.append("Not applied (single exploratory run).")

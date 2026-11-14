@@ -7,11 +7,17 @@ The estimate shown for the gate is the WORST CASE (no cache hits); the cached fi
 """
 
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Final
 
-from app.infrastructure.llm.prompt import INPUT_FORMAT_NOTE, build_user_message, load_prompt
+from app.infrastructure.llm.parallel_split import HARNESS_ID as PARALLEL_SPLIT
+from app.infrastructure.llm.prompt import (
+    INPUT_FORMAT_NOTE,
+    PromptLoadError,
+    build_user_message,
+    load_prompt,
+)
 from evals.case import EvalCase
 from evals.client import CoachConfig
 from evals.metrics import PriceTable
@@ -24,23 +30,31 @@ OUTPUT_TOKENS_BY_EFFORT: Final[dict[str, int]] = {
     "high": 1500,
 }
 DEFAULT_OUTPUT_TOKENS: Final = 700
+# parallel_split parent call: only parentReaction + parentMood, assumed half the coach allowance.
+PARENT_OUTPUT_DIVISOR: Final = 2
 
 
 @dataclass(frozen=True)
 class TokenEstimate:
+    """Tokens per call. For `parallel_split` this is the COACH call and `parent` is the PARENT
+    call (its own prompt, model and output size); both calls are made on every turn."""
+
     input_tokens: int  # uncached input per call (prompt + user message)
     output_tokens: int
     cacheable_input_tokens: int = 0  # part of the input that a warm cache serves at read price
+    parent: "TokenEstimate | None" = None
 
 
 @dataclass(frozen=True)
 class ConfigEstimate:
     config_name: str
     model: str
-    calls: int
+    calls: int  # real model calls (parallel_split: two per turn)
     tokens: TokenEstimate
     usd: float  # no cache hits
     usd_with_cache: float  # the static prefix read from cache on every call but the first
+    turns: int = 0  # cases to run; equals `calls` except for parallel_split
+    parent_model: str | None = None  # parallel_split only: the model of the parent call
 
 
 @dataclass(frozen=True)
@@ -61,38 +75,73 @@ class CostEstimate:
         return sum(line.usd_with_cache for line in self.lines)
 
 
+def _tokens(system: str, note_chars: int, user_chars: Sequence[int], effort: str) -> TokenEstimate:
+    prefix = int((len(system) + note_chars) / CHARS_PER_TOKEN)
+    mean_user = int(sum(user_chars) / len(user_chars) / CHARS_PER_TOKEN) if user_chars else 0
+    return TokenEstimate(
+        input_tokens=prefix + mean_user,
+        output_tokens=OUTPUT_TOKENS_BY_EFFORT.get(effort, DEFAULT_OUTPUT_TOKENS),
+        cacheable_input_tokens=prefix,
+    )
+
+
 def table_token_estimate(
     config: CoachConfig, cases: Sequence[EvalCase], content_dir: Path
 ) -> TokenEstimate:
-    """Table estimate from the real prompt file and the real user-message builder."""
-    system = load_prompt(content_dir, config.prompt_version).system
-    prefix = int((len(system) + len(INPUT_FORMAT_NOTE)) / CHARS_PER_TOKEN)
+    """Table estimate from the real prompt file and the real user-message builder. For
+    `parallel_split` the estimate is per role: the coach call (`coach_system`) with `.parent` the
+    parent call (`parent_system`, whose output is only the reaction and mood: assumed half of the
+    coach allowance). Raises `PromptLoadError` for a prompt version without the call sections."""
+    prompt = load_prompt(content_dir, config.prompt_version)
     user = [len(build_user_message(c.to_coach_input())) for c in cases]
-    mean_user = int(sum(user) / len(user) / CHARS_PER_TOKEN) if user else 0
-    return TokenEstimate(
-        input_tokens=prefix + mean_user,
-        output_tokens=OUTPUT_TOKENS_BY_EFFORT.get(config.effort, DEFAULT_OUTPUT_TOKENS),
-        cacheable_input_tokens=prefix,
+    if config.harness != PARALLEL_SPLIT:
+        note = len(INPUT_FORMAT_NOTE) if prompt.input_format_note else 0
+        return _tokens(prompt.system, note, user, config.effort)
+    if prompt.coach_system is None or prompt.parent_system is None:
+        raise PromptLoadError(
+            f"Prompt v{prompt.version} has no coach/parent call sections for parallel_split"
+        )
+    coach = _tokens(prompt.coach_system, 0, user, config.effort)
+    parent = _tokens(prompt.parent_system, 0, user, config.effort)
+    parent = replace(parent, output_tokens=max(parent.output_tokens // PARENT_OUTPUT_DIVISOR, 1))
+    return replace(coach, parent=parent)
+
+
+def _call_usd(model: str, t: TokenEstimate, n: int, prices: PriceTable) -> tuple[float, float]:
+    """(no cache, warm cache) USD for `n` calls of `t` on `model`."""
+    p = prices.price(model)
+    out = t.output_tokens * p.output_per_mtok
+    full = (t.input_tokens * p.input_per_mtok + out) * n / 1_000_000
+    uncached_part = t.input_tokens - t.cacheable_input_tokens
+    warm = (
+        (uncached_part * p.input_per_mtok + t.cacheable_input_tokens * p.cache_read_per_mtok + out)
+        * n
+        / 1_000_000
     )
+    return full, min(warm, full)
 
 
 def estimate_config(
     config: CoachConfig, calls: int, tokens: TokenEstimate, prices: PriceTable
 ) -> ConfigEstimate:
-    p = prices.price(config.model)
-    out = tokens.output_tokens * p.output_per_mtok
-    full = (tokens.input_tokens * p.input_per_mtok + out) * calls / 1_000_000
-    uncached_part = tokens.input_tokens - tokens.cacheable_input_tokens
-    warm = (
-        (
-            uncached_part * p.input_per_mtok
-            + tokens.cacheable_input_tokens * p.cache_read_per_mtok
-            + out
-        )
-        * calls
-        / 1_000_000
+    """`calls` = turns to run. A parallel_split turn is two model calls, each priced with its own
+    model (`config.model` for the coach call, `config.parent_model or config.model` for the
+    parent call) and its own token estimate."""
+    full, warm = _call_usd(config.model, tokens, calls, prices)
+    if tokens.parent is None:
+        return ConfigEstimate(config.name, config.model, calls, tokens, full, warm, calls)
+    parent_model = config.parent_model or config.model
+    p_full, p_warm = _call_usd(parent_model, tokens.parent, calls, prices)
+    return ConfigEstimate(
+        config.name,
+        config.model,
+        calls * 2,
+        tokens,
+        full + p_full,
+        warm + p_warm,
+        calls,
+        parent_model,
     )
-    return ConfigEstimate(config.name, config.model, calls, tokens, full, min(warm, full))
 
 
 def estimate_run(
@@ -110,9 +159,20 @@ def format_estimate(est: CostEstimate, runs: int, case_count: int) -> str:
         f"(cache hits not counted; prices retrieved {est.prices_retrieved_on}, re-check them)"
     ]
     for ln in est.lines:
+        if ln.tokens.parent is None:
+            shape = (
+                f"{ln.calls:>5} calls x "
+                f"{ln.tokens.input_tokens} in / {ln.tokens.output_tokens} out tokens"
+            )
+        else:
+            p = ln.tokens.parent
+            shape = (
+                f"{ln.turns:>5} turns x 2 calls ({ln.calls} calls): coach {ln.model} "
+                f"{ln.tokens.input_tokens} in / {ln.tokens.output_tokens} out, parent "
+                f"{ln.parent_model} {p.input_tokens} in / {p.output_tokens} out tokens"
+            )
         rows.append(
-            f"  {ln.config_name:<24} {ln.model:<20} {ln.calls:>5} calls x "
-            f"{ln.tokens.input_tokens} in / {ln.tokens.output_tokens} out tokens = "
+            f"  {ln.config_name:<24} {ln.model:<20} {shape} = "
             f"${ln.usd:.4f} (about ${ln.usd_with_cache:.4f} with prompt-cache hits)"
         )
     rows.append(

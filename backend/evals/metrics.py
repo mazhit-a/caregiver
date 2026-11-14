@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any, Final
 
 from app.domain.roleplay.verdict import CoachOutcome
+from app.infrastructure.llm.anthropic_coach import CallMetrics
 from evals.case import EvalCase
 from evals.client import CoachConfig
 from evals.graders.code import SafetyRecall, safety_recall
@@ -290,13 +291,8 @@ def latency_metrics(measured: Sequence[Measured], concurrency: int = 1) -> Laten
     )
 
 
-def call_cost_usd(m: Measured, prices: PriceTable, *, with_cache: bool) -> float | None:
-    """USD for one call from its usage. Without cache: cache reads and writes are charged as
-    plain input tokens."""
-    if m.call is None:
-        return None
-    p = prices.price(m.call.model)
-    c = m.call
+def _one_call_usd(c: CallMetrics, prices: PriceTable, *, with_cache: bool) -> float:
+    p = prices.price(c.model)
     if with_cache:
         input_cost = (
             c.input_tokens * p.input_per_mtok
@@ -308,6 +304,16 @@ def call_cost_usd(m: Measured, prices: PriceTable, *, with_cache: bool) -> float
             c.input_tokens + c.cache_read_tokens + c.cache_creation_tokens
         ) * p.input_per_mtok
     return (input_cost + c.output_tokens * p.output_per_mtok) / 1_000_000
+
+
+def call_cost_usd(m: Measured, prices: PriceTable, *, with_cache: bool) -> float | None:
+    """USD for one case from its usage: the SUM over all its model calls (parallel_split pays for
+    the coach call and the parent call, each at its own model's price). Without cache: cache reads
+    and writes are charged as plain input tokens."""
+    calls = m.usage_calls
+    if not calls:
+        return None
+    return sum(_one_call_usd(c, prices, with_cache=with_cache) for c in calls)
 
 
 def cost_metrics(measured: Sequence[Measured], prices: PriceTable) -> CostMetrics | None:

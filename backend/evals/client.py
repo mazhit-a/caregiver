@@ -1,9 +1,10 @@
 """How the runner gets a `Coach` for a configuration, and the model-client seam.
 
-The eval never re-implements the prompt: it builds the production `AnthropicCoach` (same system
-prompt loading, request building, parsing and failure mapping) with its own model / effort /
-thinking / prompt version. `ModelClient` is the seam: the real `AsyncAnthropic` in a manual run, a
-fake SDK-shaped object in tests, so the real adapter code runs offline.
+The eval never re-implements the prompt: it builds the production coach through `make_coach` (the
+HARNESSES registry: `AnthropicCoach` or `ParallelSplitCoach`; same system prompt loading, request
+building, parsing and failure mapping) with its own model / effort / thinking / prompt version.
+`ModelClient` is the seam: the real `AsyncAnthropic` in a manual run, a fake SDK-shaped object in
+tests, so the real adapter code runs offline.
 """
 
 from collections.abc import Callable
@@ -14,7 +15,8 @@ from anthropic import AsyncAnthropic
 
 from app.application.ports import Coach
 from app.infrastructure.config import Settings
-from app.infrastructure.llm.anthropic_coach import HARNESS_ID, AnthropicCoach, CallMetrics
+from app.infrastructure.llm.anthropic_coach import HARNESS_ID, CallMetrics
+from app.infrastructure.llm.factory import HARNESSES, make_coach
 from app.infrastructure.llm.prompt import load_prompt
 
 
@@ -34,6 +36,7 @@ class CoachConfig:
     prompt_version: str
     harness: str = HARNESS_ID
     thinking: dict[str, str] | None = None
+    parent_model: str | None = None  # parallel_split only; None = the same model as `model`
 
 
 class UnknownHarness(ValueError):
@@ -48,6 +51,7 @@ def production_config(settings: Settings) -> CoachConfig:
         effort=settings.coach_effort,
         prompt_version=settings.coach_prompt_version,
         harness=settings.coach_harness,
+        parent_model=settings.coach_parent_model or None,
     )
 
 
@@ -73,12 +77,14 @@ def build_eval_coach(
     metrics_sink: Callable[[CallMetrics], None] | None = None,
 ) -> Coach:
     """The production adapter for `config`. Raises `UnknownHarness` / `PromptLoadError`."""
-    if config.harness != HARNESS_ID:
+    if config.harness not in HARNESSES:
         raise UnknownHarness(f"Harness {config.harness!r} is not implemented")
-    return AnthropicCoach(
+    return make_coach(
+        config.harness,
         cast(AsyncAnthropic | None, client),
         prompt=load_prompt(settings.content_dir, config.prompt_version),
         model=config.model,
+        parent_model=config.parent_model,
         effort=config.effort,
         timeout_seconds=settings.llm_timeout_seconds,
         thinking=config.thinking,

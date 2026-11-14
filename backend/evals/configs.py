@@ -1,10 +1,12 @@
 """Named candidate configurations (search plan, ai.md section 4).
 
-A candidate name is `<model-effort>[@<prompt version>][+<harness>]`, for example `opus-low@2` or
-`opus-low+parallel_split`. Without `@` the version comes from `--prompt-version` (or the settings);
-without `+` the harness is `single_call`. Stages: `prompt` (v1 vs v2 on opus-low), `model-effort`,
-`harness` (single_call vs parallel_split; run with `--prompt-version 2`, the only version that has
-the coach/parent sections, and pass `--config` to use the stage-2 winners instead of opus-low).
+A candidate name is `<model-effort>[@<prompt version>][+<harness>[:<parent model>]]`, for example
+`opus-low@2`, `opus-low+parallel_split` or `opus-low+parallel_split:haiku` (the parent call of
+parallel_split on a cheaper model: `haiku`, `sonnet` or `opus`; the effort is shared).
+Without `@` the version comes from `--prompt-version` (or the settings); without `+` the harness
+is `single_call`. Stages: `prompt` (v1 vs v2 on opus-low), `model-effort`, `harness` (single_call
+vs parallel_split; run with `--prompt-version 2`, the only version that has the coach/parent
+sections, and pass `--config` to use the stage-2 winners instead of opus-low).
 """
 
 from evals.client import CoachConfig
@@ -24,18 +26,27 @@ STAGES: dict[str, tuple[str, ...]] = {
     "harness": ("opus-low+single_call", "opus-low+parallel_split"),
 }
 HARNESS_IDS: tuple[str, ...] = ("single_call", "parallel_split")
+PARENT_MODELS: dict[str, str] = {
+    "haiku": "claude-haiku-5-5",
+    "sonnet": "claude-sonnet-5-5",
+    "opus": "claude-opus-5-5",
+}
 
 
 def candidate(name: str, prompt_version: str) -> CoachConfig:
     base, _, harness = name.partition("+")
     base, _, pinned = base.partition("@")
     version = pinned or prompt_version
-    harness = harness or "single_call"
-    if harness not in HARNESS_IDS:
+    harness, _, parent = (harness or "single_call").partition(":")
+    if harness not in HARNESS_IDS or (parent and harness != "parallel_split"):
         raise KeyError(name)
+    if parent and parent not in PARENT_MODELS:
+        raise KeyError(name)
+    parent_model = PARENT_MODELS[parent] if parent else None
     for n, model, effort, thinking in _STAGE2:
         if n == base:
             suffix = "" if harness == "single_call" else f"-{harness}"
+            suffix += f"-parent-{parent}" if parent else ""
             return CoachConfig(
                 name=f"{n}-v{version}{suffix}",
                 model=model,
@@ -43,6 +54,7 @@ def candidate(name: str, prompt_version: str) -> CoachConfig:
                 prompt_version=version,
                 harness=harness,
                 thinking=thinking,
+                parent_model=parent_model,
             )
     raise KeyError(name)
 

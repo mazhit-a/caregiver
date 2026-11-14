@@ -7,11 +7,12 @@ scripted fake coach. It never calls a model on its own.
 
 import asyncio
 import time
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 from contextlib import contextmanager
 from contextvars import ContextVar
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
+from typing import Final
 
 from app.application.ports import Coach, CoachUnavailable
 from app.domain.roleplay.errors import InvalidCoachOutput
@@ -133,6 +134,14 @@ class Measured:
     wall_ms: float
     call: CallMetrics | None
     cached: bool = False
+    calls: tuple[CallMetrics, ...] = ()  # every model call of the case (parallel_split: 2)
+
+    @property
+    def usage_calls(self) -> tuple[CallMetrics, ...]:
+        """The calls to price: all of them, or the single `call`."""
+        if self.calls:
+            return self.calls
+        return () if self.call is None else (self.call,)
 
 
 class CallRecorder:
@@ -157,6 +166,55 @@ class CallRecorder:
             self._slot.reset(token)
 
 
+# Worst outcome wins when a case made several calls. `cancelled` is only ever the sibling of a
+# call that failed, so the real failure ranks above it; an unknown outcome ranks above all known.
+_OUTCOME_SEVERITY: Final = (
+    "ok",
+    "cancelled",
+    "invalid_output",
+    "max_tokens",
+    "api_error",
+    "refusal",
+    "timeout",
+    "no_api_key",
+)
+_ROLES: Final = ("single", "coach", "parent")
+
+
+def _role_order(c: CallMetrics) -> int:
+    return _ROLES.index(c.role) if c.role in _ROLES else len(_ROLES)
+
+
+def _severity(outcome: str) -> int:
+    return (
+        _OUTCOME_SEVERITY.index(outcome) if outcome in _OUTCOME_SEVERITY else len(_OUTCOME_SEVERITY)
+    )
+
+
+def aggregate_calls(calls: Sequence[CallMetrics], wall_ms: float) -> CallMetrics | None:
+    """One headline record per case. One call: itself, unchanged (single_call behaviour). Several
+    (parallel_split: coach + parent): tokens and cache tokens SUMMED, latency = the measured case
+    wall time (the calls ran concurrently: the max, never the sum), outcome = the worst of them.
+    Model, effort, harness and prompt version come from the first call (coach role first); cost is
+    priced per call from `Measured.calls`, not from this record."""
+    if not calls:
+        return None
+    if len(calls) == 1:
+        return calls[0]
+    ordered = sorted(calls, key=_role_order)
+    first = ordered[0]
+    return replace(
+        first,
+        latency_ms=wall_ms,
+        input_tokens=sum(c.input_tokens for c in ordered),
+        output_tokens=sum(c.output_tokens for c in ordered),
+        cache_read_tokens=sum(c.cache_read_tokens for c in ordered),
+        cache_creation_tokens=sum(c.cache_creation_tokens for c in ordered),
+        outcome=max((c.outcome for c in ordered), key=_severity),
+        role="merged",
+    )
+
+
 async def _measure_one(
     coach: Coach,
     case: EvalCase,
@@ -170,16 +228,18 @@ async def _measure_one(
         hit = cache.get(case, run_index, fingerprint)
         if hit is not None:
             result = grade_attempt(case, ctx, run_index, hit.verdict, None)
-            return Measured(case, result, hit.wall_ms, hit.call, cached=True)
+            return Measured(case, result, hit.wall_ms, hit.call, cached=True, calls=hit.calls)
     recorder = recorder or CallRecorder()
     with recorder.capture() as calls:
         started = time.perf_counter()
         verdict, error = await _ask(coach, case)
         wall_ms = round((time.perf_counter() - started) * 1000, 1)
-    call = calls[-1] if calls else None
+    call = aggregate_calls(calls, wall_ms)
+    kept = tuple(sorted(calls, key=_role_order)) if len(calls) > 1 else ()
     if verdict is not None and cache is not None and fingerprint is not None:
-        cache.put(case, run_index, fingerprint, CacheEntry(verdict, wall_ms, call))
-    return Measured(case, grade_attempt(case, ctx, run_index, verdict, error), wall_ms, call)
+        cache.put(case, run_index, fingerprint, CacheEntry(verdict, wall_ms, call, kept))
+    graded = grade_attempt(case, ctx, run_index, verdict, error)
+    return Measured(case, graded, wall_ms, call, calls=kept)
 
 
 async def run_measured(
