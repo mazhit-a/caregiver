@@ -1,0 +1,10 @@
+{
+  "screenId": "s2_scenario",
+  "type": "scenario",
+  "result": {
+    "answerId": "a1",
+    "verdict": "okay",
+    "feedback": "Clear and practical. But it answers the fact, not the feeling behind the call, so Mom may call again soon.",
+    "savePhrase": false
+  }
+}

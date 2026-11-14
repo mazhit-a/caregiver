@@ -1,0 +1,236 @@
+{
+  "id": "m1_l5",
+  "moduleId": "m1_talking",
+  "title": "Your phrase book: review and practice",
+  "minutes": 6,
+  "skill": "communication",
+  "skillLabel": "Putting the steps together",
+  "variant": null,
+  "unlockOn": "2026-01-12",
+  "pattern": {
+    "name": "The three steps",
+    "steps": [
+      {
+        "id": "notice",
+        "label": "Notice the feeling",
+        "example": "You sound worried."
+      },
+      {
+        "id": "reassure",
+        "label": "Reassure",
+        "example": "I'm here, and we'll sort it out."
+      },
+      {
+        "id": "offer",
+        "label": "Offer something to do",
+        "example": "Shall we do it together, or would you like a choice?"
+      }
+    ]
+  },
+  "screens": [
+    {
+      "id": "s1_look_back",
+      "type": "learn",
+      "title": "One pattern, four moments.",
+      "body": "You've used the same three steps when Margaret asked again, when there was too much to take in, when something went missing, and when Margaret said no. Now you'll look at your saved phrases and try a mix.",
+      "bullets": null,
+      "extra": null,
+      "patternTip": null,
+      "pattern": {
+        "name": "The three steps",
+        "steps": [
+          {
+            "id": "notice",
+            "label": "Notice the feeling",
+            "example": "You sound worried."
+          },
+          {
+            "id": "reassure",
+            "label": "Reassure",
+            "example": "I'm here, and we'll sort it out."
+          },
+          {
+            "id": "offer",
+            "label": "Offer something to do",
+            "example": "Shall we do it together, or would you like a choice?"
+          }
+        ]
+      },
+      "miniTask": null
+    },
+    {
+      "id": "s2_phrases",
+      "type": "phrases_review",
+      "title": "Your phrase book",
+      "intro": "These are the phrases you saved. Read them out loud once. Which one sounds most like you?",
+      "emptyText": "You haven't saved a phrase yet. When you practice, tap Save on one you like, and it will show up here.",
+      "phrases": [
+        {
+          "id": "5fec744a-aad6-40e3-9340-ffe98674cc50",
+          "text": "You sound worried. I'm here. Want some tea?",
+          "source": "roleplay",
+          "lessonId": "m1_l1"
+        },
+        {
+          "id": "2a2a6c21-66d6-45e9-ba64-2cf291be3f35",
+          "text": "No rush. Take my arm?",
+          "source": "scenario",
+          "lessonId": null
+        }
+      ]
+    },
+    {
+      "id": "s3_hardest_step",
+      "type": "learn",
+      "title": "Which step is hardest for you?",
+      "body": "Most people find one step harder than the others. That's normal. Pick yours, and watch for it in the practice round.",
+      "bullets": null,
+      "extra": null,
+      "patternTip": null,
+      "pattern": null,
+      "miniTask": {
+        "question": "Which step do you find hardest?",
+        "options": [
+          {
+            "id": "notice",
+            "label": "Noticing the feeling"
+          },
+          {
+            "id": "reassure",
+            "label": "Reassuring"
+          },
+          {
+            "id": "offer",
+            "label": "Offering something to do"
+          }
+        ]
+      }
+    },
+    {
+      "id": "s4_practice",
+      "type": "roleplay",
+      "title": "Practice: a mix from the lessons",
+      "intro": "Three moments from the lessons, in a new order. Margaret is an AI practice partner. Type what you'd say. The coach will show what worked.",
+      "goals": [
+        "notice",
+        "reassure",
+        "offer"
+      ],
+      "rounds": [
+        {
+          "stage": "Later that evening, the day before an appointment.",
+          "line": "Why won't you just tell me? You're hiding something.",
+          "mood": "suspicious"
+        },
+        {
+          "stage": "You've been looking for something together for a few minutes.",
+          "line": "Somebody took it. I know somebody took it.",
+          "mood": "upset"
+        },
+        {
+          "stage": "You offer to help with the shower.",
+          "line": "I don't need your help. Leave me alone.",
+          "mood": "irritated"
+        }
+      ],
+      "labels": {
+        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
+        "thinking": "Margaret is thinking…",
+        "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
+      },
+      "summary": {
+        "title": "Your practice",
+        "bestPhraseLabel": "Your best phrase",
+        "saveButton": "Save",
+        "againButton": "Practice again"
+      }
+    },
+    {
+      "id": "s5_handle_now",
+      "type": "learn",
+      "title": "What you can handle now",
+      "body": "Look at what you can do today that was harder before:",
+      "bullets": [
+        "When Margaret asks the same thing again, you can answer the feeling first.",
+        "When there's a lot to take in, you can say one thing, slowly.",
+        "When Margaret says something was taken, you can join the search instead of arguing.",
+        "When Margaret says no, you can offer a small choice."
+      ],
+      "extra": null,
+      "patternTip": "A hard day doesn't undo this. Come back to your phrase book any time.",
+      "pattern": null,
+      "miniTask": null
+    },
+    {
+      "id": "s6_reset",
+      "type": "learn",
+      "title": "One pause that works for you.",
+      "body": "Whatever Margaret says, a small pause before you answer helps you stay kind. Choose the one you'll really use.",
+      "bullets": null,
+      "extra": null,
+      "patternTip": null,
+      "pattern": null,
+      "miniTask": {
+        "question": "Pick your pause for next time:",
+        "options": [
+          {
+            "id": "breath",
+            "label": "One slow breath before I answer"
+          },
+          {
+            "id": "feeling_talking",
+            "label": "Tell myself: this is a feeling, not a fight"
+          },
+          {
+            "id": "step_away",
+            "label": "Step away for a minute, if it's safe"
+          }
+        ]
+      }
+    },
+    {
+      "id": "s7_plan",
+      "type": "plan",
+      "title": "Your plan for next time",
+      "ifThen": {
+        "cue": "If Margaret is upset or says no,",
+        "responseLabel": "then I'll say:",
+        "responseEditable": true,
+        "resetLabel": "And first, I'll:",
+        "resetFrom": "s6_reset"
+      },
+      "doNow": {
+        "title": "One thing to do now",
+        "text": "Choose the one phrase from your phrase book you'll use first. Put it where you'll see it, like a note on your phone or the fridge.",
+        "action": "copy_phrase",
+        "button": "Copy my phrase"
+      },
+      "remindButton": "Remind me tomorrow",
+      "doneButton": "Done",
+      "noteTemplate": {
+        "title": "Margaret's note",
+        "example": "I'm here. We'll sort it out together. — [your name]"
+      }
+    },
+    {
+      "id": "s8_wrap",
+      "type": "wrap",
+      "skillLine": "You've put the three steps together.",
+      "phraseLine": "Your phrases stay on Margaret's page and care card.",
+      "patternLine": "Notice the feeling, reassure, offer something to do. The words change, and the steps stay the same.",
+      "confidenceCheck": null,
+      "tomorrowLine": "Tomorrow: a quick check-in and a 2-minute practice round.",
+      "nextLine": "More lessons are on the way."
+    }
+  ],
+  "progress": {
+    "step": 0,
+    "startedAt": "2026-01-12T09:00:00Z",
+    "doneAt": null
+  },
+  "recap": {
+    "fromLessonId": "m1_l4",
+    "text": "Last time you practiced answering no: notice the feeling, reassure, offer a small choice."
+  }
+}

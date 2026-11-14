@@ -1,0 +1,22 @@
+{
+  "skills": [],
+  "confidence": {
+    "day0": 2,
+    "first": null,
+    "latest": null
+  },
+  "counts": {
+    "scenariosPractised": 0,
+    "phrasesSaved": 0,
+    "tasksTried": 0,
+    "tasksHelped": 0
+  },
+  "next": {
+    "lessonId": "m1_l1",
+    "title": "When Mom asks again",
+    "moduleId": "m1_talking",
+    "reason": "Everyone starts here. Talking with Mom comes up every day, from the first weeks on.",
+    "status": "available",
+    "unlockOn": "2026-01-05"
+  }
+}

@@ -14,6 +14,7 @@ from app.application.billing.payments import (
     CustomerRef,
 )
 from app.application.roleplay.dto import CoachInput
+from app.domain.app_copy.render import AppCopy
 from app.domain.billing.entities import Subscription, SubscriptionHistoryEntry
 from app.domain.billing.exit_copy import GentleExitCopy
 from app.domain.billing.pricing import Pricing
@@ -452,6 +453,10 @@ class ContentProvider(Protocol):
 
     def today_copy(self) -> TodayCopy:
         """The Today screen wording and its two day counts (placeholders unfilled)."""
+        ...
+
+    def app_copy(self) -> AppCopy:
+        """The after-paywall app strings by section (placeholders unfilled)."""
         ...
 
     def funnel_copy(self) -> FunnelCopy:

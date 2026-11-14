@@ -1,0 +1,22 @@
+{
+  "screenId": "s8_plan",
+  "type": "plan",
+  "result": {
+    "ifThen": {
+      "cue": "If Mom calls with the same question again,",
+      "response": "I point to the note and say: you're safe, I'm here.",
+      "reset": "One slow breath before I answer"
+    },
+    "task": {
+      "text": "Save your phrase where you'll see it when Mom calls.",
+      "action": "copy_phrase"
+    },
+    "reminder": {
+      "title": "Your plan for next time",
+      "description": "If Mom calls with the same question again, then I'll say: I point to the note and say: you're safe, I'm here.\nSave your phrase where you'll see it when Mom calls.",
+      "startsAt": "2026-01-05T19:00:00-05:00",
+      "timezone": "America/New_York",
+      "url": "http://localhost:3000/lessons/m1_l1"
+    }
+  }
+}

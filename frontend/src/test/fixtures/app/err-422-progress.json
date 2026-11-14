@@ -1,0 +1,11 @@
+{
+  "error": {
+    "code": "invalid_lesson_step",
+    "message": "This step is not part of the lesson.",
+    "details": {
+      "lesson": "m1_l1",
+      "step": 99,
+      "screenCount": 9
+    }
+  }
+}

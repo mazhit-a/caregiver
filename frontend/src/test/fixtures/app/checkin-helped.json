@@ -1,0 +1,14 @@
+{
+  "planId": "m1_l1",
+  "cameUp": "yes",
+  "outcome": "helped",
+  "responseText": "That's real progress. The three steps get easier every time you use them.",
+  "followUps": [],
+  "plan": {
+    "cue": "If Mom calls with the same question again,",
+    "response": "I point to the note and say: you're safe, I'm here.",
+    "reset": "One slow breath before I answer"
+  },
+  "observationAdded": true,
+  "taskDone": true
+}

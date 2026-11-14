@@ -1,0 +1,87 @@
+{
+  "status": "update_available",
+  "link": "http://localhost:3000/card/REDACTED_CARD_ID",
+  "published": {
+    "displayName": "Margaret",
+    "enjoys": [],
+    "calms": [
+      "tea"
+    ],
+    "avoid": [],
+    "rhythm": "",
+    "contacts": [],
+    "helplines": [
+      {
+        "name": "Emergency services",
+        "phone": "911",
+        "description": "If this is happening now, call 911."
+      },
+      {
+        "name": "988 Suicide & Crisis Lifeline",
+        "phone": "988",
+        "description": "Call or text 988, any time, for you or someone you care about."
+      },
+      {
+        "name": "Alzheimer's Association 24/7 Helpline",
+        "phone": "1-800-272-3900",
+        "description": "Free support and advice from trained staff, day or night."
+      },
+      {
+        "name": "Adult Protective Services",
+        "phone": "1-800-677-1116",
+        "description": "If you worry that an older adult is being harmed or neglected. This is the Eldercare Locator, which connects you to your local agency."
+      }
+    ],
+    "phrases": [],
+    "updatedOn": "2026-01-05",
+    "caregiverFirstName": null
+  },
+  "preview": {
+    "displayName": "Margaret",
+    "enjoys": [],
+    "calms": [
+      "tea",
+      "music"
+    ],
+    "avoid": [],
+    "rhythm": "",
+    "contacts": [],
+    "helplines": [
+      {
+        "name": "Emergency services",
+        "phone": "911",
+        "description": "If this is happening now, call 911."
+      },
+      {
+        "name": "988 Suicide & Crisis Lifeline",
+        "phone": "988",
+        "description": "Call or text 988, any time, for you or someone you care about."
+      },
+      {
+        "name": "Alzheimer's Association 24/7 Helpline",
+        "phone": "1-800-272-3900",
+        "description": "Free support and advice from trained staff, day or night."
+      },
+      {
+        "name": "Adult Protective Services",
+        "phone": "1-800-677-1116",
+        "description": "If you worry that an older adult is being harmed or neglected. This is the Eldercare Locator, which connects you to your local agency."
+      }
+    ],
+    "phrases": [],
+    "updatedOn": "2026-01-05",
+    "caregiverFirstName": null
+  },
+  "chosenPhraseIds": [],
+  "availablePhrases": [
+    {
+      "id": "63e05eae-0376-4c9c-9964-439cc6ca04ac",
+      "text": "No rush. Take my arm?"
+    }
+  ],
+  "newPhraseCount": 1,
+  "publishedAt": "2026-01-05T09:00:00Z",
+  "updatedAt": "2026-01-05T09:00:00Z",
+  "lastOpenedAt": null,
+  "revokedAt": null
+}

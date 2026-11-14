@@ -1,0 +1,18 @@
+{
+  "error": {
+    "code": "validation_error",
+    "message": "The request is not valid.",
+    "details": {
+      "errors": [
+        {
+          "loc": [
+            "body",
+            "diagnosis"
+          ],
+          "type": "extra_forbidden",
+          "message": "Extra inputs are not permitted"
+        }
+      ]
+    }
+  }
+}

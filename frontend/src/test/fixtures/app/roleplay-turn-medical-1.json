@@ -1,0 +1,27 @@
+{
+  "mode": "ai",
+  "runMode": "ai",
+  "round": 1,
+  "roundsTotal": 3,
+  "coach": {
+    "aiGenerated": true,
+    "score": 0,
+    "goals": {
+      "notice": false,
+      "reassure": false,
+      "offer": false
+    },
+    "argued": false,
+    "flags": [
+      "medical"
+    ],
+    "tip": "For medical questions, ask Mom's doctor or pharmacist. Let's keep practicing the conversation.",
+    "betterPhrase": "",
+    "parentReaction": "",
+    "parentMood": "same"
+  },
+  "kind": null,
+  "resources": [],
+  "emergencyText": null,
+  "fallbackScenarios": []
+}

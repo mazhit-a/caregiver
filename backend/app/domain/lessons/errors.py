@@ -63,3 +63,15 @@ class InvalidScreenAnswer(DomainError):
         super().__init__(
             "This answer does not fit the screen.", {"screen": screen_id, "reason": reason}
         )
+
+
+class InvalidLessonStep(DomainError):
+    """The step is not a screen index of the lesson as the learner currently sees it."""
+
+    code = "invalid_lesson_step"
+
+    def __init__(self, lesson_id: str, step: int, screen_count: int) -> None:
+        super().__init__(
+            "This step is not part of the lesson.",
+            {"lesson": lesson_id, "step": step, "screenCount": screen_count},
+        )

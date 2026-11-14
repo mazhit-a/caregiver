@@ -1,0 +1,27 @@
+{
+  "planId": "m1_l1",
+  "cameUp": "yes",
+  "outcome": "didnt_help",
+  "responseText": "That happens. Here are a few more ways to try.",
+  "followUps": [
+    {
+      "title": "Look for a pattern",
+      "text": "Does it happen at a certain time of day, when Mom is tired, hungry or has nothing to do? Answering that need can help more than any words."
+    },
+    {
+      "title": "Shorter, and written down",
+      "text": "Use fewer words, the same each time, and point to the note: \"It's on the board. I'll tell you when.\""
+    },
+    {
+      "title": "Give her something to do",
+      "text": "Folding towels, sorting photos, helping with dinner. Busy hands quiet a worried loop."
+    }
+  ],
+  "plan": {
+    "cue": "If Mom asks the same question again,",
+    "response": "I say: you're safe, I'm here.",
+    "reset": "One slow breath before I answer"
+  },
+  "observationAdded": false,
+  "taskDone": false
+}

@@ -1,0 +1,16 @@
+{
+  "lessonId": "m1_l5",
+  "doneAt": "2026-01-12T09:00:00Z",
+  "wrap": {
+    "id": "s8_wrap",
+    "type": "wrap",
+    "skillLine": "You've put the three steps together.",
+    "phraseLine": "Your phrases stay on Margaret's page and care card.",
+    "patternLine": "Notice the feeling, reassure, offer something to do. The words change, and the steps stay the same.",
+    "confidenceCheck": null,
+    "tomorrowLine": "Tomorrow: a quick check-in and a 2-minute practice round.",
+    "nextLine": "More lessons are on the way."
+  },
+  "nextLesson": null,
+  "allDoneLine": "That's every lesson ready for you so far. More are on the way. Come back to Today to practice again."
+}

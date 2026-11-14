@@ -1,0 +1,10 @@
+{
+  "screenId": "s2_scenario",
+  "type": "scenario",
+  "result": {
+    "answerId": "a3",
+    "verdict": "try_again",
+    "feedback": "Almost everyone says this, especially in the middle of a workday. But it reminds her of forgetting, and Mom may feel like a bother.",
+    "savePhrase": false
+  }
+}

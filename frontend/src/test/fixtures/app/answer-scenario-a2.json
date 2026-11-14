@@ -1,0 +1,10 @@
+{
+  "screenId": "s2_scenario",
+  "type": "scenario",
+  "result": {
+    "answerId": "a2",
+    "verdict": "okay",
+    "feedback": "Warm. But \"don't worry\" can brush the feeling aside.",
+    "savePhrase": false
+  }
+}

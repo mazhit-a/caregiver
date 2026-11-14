@@ -41,16 +41,25 @@ interface SendOptions {
   signal?: AbortSignal;
   /** Adds the X-Session-Token header when a token exists. */
   auth: boolean;
+  /** Overrides the default timeout (role-play turns wait longer than the server's 12 s). */
+  timeoutMs?: number;
 }
 
 /** One place for the timeout, the abort wiring and the error mapping. Never logs. */
-async function send<T>({ method, path, body, signal, auth }: SendOptions): Promise<T> {
+async function send<T>({
+  method,
+  path,
+  body,
+  signal,
+  auth,
+  timeoutMs = REQUEST_TIMEOUT_MS,
+}: SendOptions): Promise<T> {
   const controller = new AbortController();
   let timedOut = false;
   const timer = setTimeout(() => {
     timedOut = true;
     controller.abort();
-  }, REQUEST_TIMEOUT_MS);
+  }, timeoutMs);
   const onAbort = (): void => controller.abort();
   signal?.addEventListener("abort", onAbort);
   const headers: Record<string, string> = { Accept: "application/json" };
@@ -65,7 +74,9 @@ async function send<T>({ method, path, body, signal, auth }: SendOptions): Promi
       signal: controller.signal,
     });
     if (!response.ok) throw await toApiError(response);
-    return (await response.json()) as T;
+    // 204 and empty bodies (DELETE /phrases/:id) resolve to undefined.
+    const text = response.status === 204 ? "" : await response.text();
+    return (text === "" ? undefined : JSON.parse(text)) as T;
   } catch (err) {
     if (err instanceof ApiError) {
       if (auth && err.status === 401) clearToken();
@@ -92,6 +103,8 @@ export interface ApiRequestOptions {
   signal?: AbortSignal;
   /** True: send X-Session-Token. A 401 clears the stored token. */
   auth: boolean;
+  /** Default 10 s. */
+  timeoutMs?: number;
 }
 
 /** Session-aware request (JSON body, same timeout and ApiError as apiGet). Never logs. */

@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "phrase_not_found",
+    "message": "We could not find this phrase.",
+    "details": {
+      "phraseId": "5fec744a-aad6-40e3-9340-ffe98674cc50"
+    }
+  }
+}

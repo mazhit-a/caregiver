@@ -1,0 +1,43 @@
+{
+  "skills": [
+    {
+      "id": "communication",
+      "label": "Communication",
+      "roleplay": {
+        "runs": 1,
+        "firstScore": 3,
+        "latestScore": 3,
+        "maxScore": 3
+      },
+      "scenarios": {
+        "practised": 1,
+        "best": 1
+      }
+    }
+  ],
+  "confidence": {
+    "day0": 2,
+    "first": {
+      "repeat": 3,
+      "visits": 5,
+      "refusal": 1,
+      "evenings": 4,
+      "accusations": 2
+    },
+    "latest": null
+  },
+  "counts": {
+    "scenariosPractised": 1,
+    "phrasesSaved": 1,
+    "tasksTried": 1,
+    "tasksHelped": 0
+  },
+  "next": {
+    "lessonId": "m1_l2",
+    "title": "Talking so it lands",
+    "moduleId": "m1_talking",
+    "reason": "Everyone starts here. Talking with Mom comes up every day, from the first weeks on.",
+    "status": "locked",
+    "unlockOn": "2026-01-07"
+  }
+}

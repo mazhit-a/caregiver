@@ -1,22 +1,24 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { type ApiFailure, classifyError } from "./errors";
 
-export type RequestState<T> =
+export type RequestState<T, F = ApiFailure> =
   | { status: "loading"; data: undefined; error: undefined }
-  | { status: "error"; data: undefined; error: ApiFailure }
+  | { status: "error"; data: undefined; error: F }
   | { status: "ready"; data: T; error: undefined };
 
-export type Request<T> = RequestState<T> & { retry: () => void };
+export type Request<T, F = ApiFailure> = RequestState<T, F> & { retry: () => void };
 
 /**
  * Runs `fn` on mount and whenever `deps` change; `retry()` runs it again.
  * Per-component state: nothing is cached across sessions. Aborts on unmount.
  */
-export function useRequest<T>(
+export function useRequest<T, F = ApiFailure>(
   fn: (signal: AbortSignal) => Promise<T>,
   deps: readonly unknown[],
-): Request<T> {
-  const [state, setState] = useState<RequestState<T>>({
+  /** Default `classifyError`; the app screens pass `classifyAppError`. */
+  classify: (error: unknown) => F = classifyError as unknown as (error: unknown) => F,
+): Request<T, F> {
+  const [state, setState] = useState<RequestState<T, F>>({
     status: "loading",
     data: undefined,
     error: undefined,
@@ -35,7 +37,7 @@ export function useRequest<T>(
       })
       .catch((err: unknown) => {
         if (!controller.signal.aborted) {
-          setState({ status: "error", data: undefined, error: classifyError(err) });
+          setState({ status: "error", data: undefined, error: classify(err) });
         }
       });
     return () => controller.abort();
@@ -43,5 +45,5 @@ export function useRequest<T>(
   }, [...deps, attempt]);
 
   const retry = useCallback(() => setAttempt((n) => n + 1), []);
-  return { ...state, retry } as Request<T>;
+  return { ...state, retry } as Request<T, F>;
 }

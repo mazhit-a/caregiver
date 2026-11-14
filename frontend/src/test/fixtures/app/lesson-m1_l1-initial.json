@@ -1,0 +1,63 @@
+{
+  "id": "m1_l1",
+  "moduleId": "m1_talking",
+  "title": "When Mom asks again",
+  "minutes": 8,
+  "skill": "communication",
+  "skillLabel": "Handling repeated questions",
+  "variant": null,
+  "unlockOn": "2026-01-05",
+  "pattern": {
+    "name": "The three steps",
+    "steps": [
+      {
+        "id": "notice",
+        "label": "Notice the feeling",
+        "example": "You're wondering about tomorrow."
+      },
+      {
+        "id": "reassure",
+        "label": "Reassure",
+        "example": "We have plenty of time. I'll tell you when it's time."
+      },
+      {
+        "id": "offer",
+        "label": "Offer something to do",
+        "example": "Want to help me with the tea?"
+      }
+    ]
+  },
+  "screens": [
+    {
+      "id": "s1_setup",
+      "type": "setup_question",
+      "speaker": "rosa",
+      "text": "Let's start with the moment that comes up most.",
+      "question": "Where do Mom's repeated questions usually reach you?",
+      "options": [
+        {
+          "id": "in_person",
+          "label": "In person"
+        },
+        {
+          "id": "phone",
+          "label": "On the phone"
+        },
+        {
+          "id": "both",
+          "label": "Both"
+        },
+        {
+          "id": "not_yet",
+          "label": "I haven't noticed it yet"
+        }
+      ]
+    }
+  ],
+  "progress": {
+    "step": 0,
+    "startedAt": "2026-01-05T09:00:00Z",
+    "doneAt": null
+  },
+  "recap": null
+}

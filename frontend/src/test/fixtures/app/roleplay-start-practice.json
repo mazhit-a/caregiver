@@ -1,0 +1,32 @@
+{
+  "runId": "a4cab2c2-e557-4030-80f2-d4386e356d67",
+  "lessonId": "m1_l1",
+  "context": "practice_round",
+  "variant": "phone",
+  "roundsTotal": 2,
+  "rounds": [
+    {
+      "stage": "Mom calls in the evening. You called this morning.",
+      "line": "I haven't heard from you all week.",
+      "mood": "lonely"
+    },
+    {
+      "stage": "A few minutes later.",
+      "line": "Nobody calls me anymore.",
+      "mood": "hurt"
+    }
+  ],
+  "title": "2-minute practice: a new version",
+  "goals": [
+    "notice",
+    "reassure",
+    "offer"
+  ],
+  "intro": null,
+  "labels": {
+    "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+    "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
+    "thinking": "Mom is thinking…",
+    "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
+  }
+}

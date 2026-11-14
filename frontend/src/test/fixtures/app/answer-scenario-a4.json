@@ -1,0 +1,10 @@
+{
+  "screenId": "s2_scenario",
+  "type": "scenario",
+  "result": {
+    "answerId": "a4",
+    "verdict": "best",
+    "feedback": "This names the feeling, takes the job of remembering off her, and moves the talk to something new.",
+    "savePhrase": true
+  }
+}

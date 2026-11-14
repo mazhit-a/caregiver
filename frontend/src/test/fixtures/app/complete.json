@@ -1,0 +1,47 @@
+{
+  "lessonId": "m1_l1",
+  "doneAt": "2026-01-05T09:00:00Z",
+  "wrap": {
+    "id": "s9_wrap",
+    "type": "wrap",
+    "skillLine": "New skill: handling repeated questions.",
+    "phraseLine": "Your phrase is saved to Mom's page and care card.",
+    "patternLine": "You've learned the three steps: notice the feeling, reassure, offer something to do. Every lesson in this module builds on them.",
+    "confidenceCheck": {
+      "title": "How ready do you feel for these?",
+      "scale": "1 to 5",
+      "items": [
+        {
+          "id": "repeat",
+          "label": "When Mom asks the same question again"
+        },
+        {
+          "id": "accusations",
+          "label": "When Mom thinks someone took something"
+        },
+        {
+          "id": "evenings",
+          "label": "When Mom gets upset in the evening"
+        },
+        {
+          "id": "refusal",
+          "label": "When Mom says no to help"
+        },
+        {
+          "id": "visits",
+          "label": "Getting what you need from a doctor visit"
+        }
+      ]
+    },
+    "tomorrowLine": "Tomorrow: a quick check-in and a 2-minute practice round.",
+    "nextLine": "Next in this module: \"Talking so it lands\", making every conversation easier, not just the answers."
+  },
+  "nextLesson": {
+    "id": "m1_l2",
+    "title": "Talking so it lands",
+    "moduleId": "m1_talking",
+    "reason": "Everyone starts here. Talking with Mom comes up every day, from the first weeks on.",
+    "unlockOn": "2026-01-07"
+  },
+  "allDoneLine": null
+}

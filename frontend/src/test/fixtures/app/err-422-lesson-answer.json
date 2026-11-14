@@ -1,0 +1,10 @@
+{
+  "error": {
+    "code": "invalid_screen_answer",
+    "message": "This answer does not fit the screen.",
+    "details": {
+      "screen": "s1_setup",
+      "reason": "option_not_on_screen"
+    }
+  }
+}

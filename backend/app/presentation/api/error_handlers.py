@@ -40,6 +40,7 @@ DOMAIN_ERROR_STATUS: dict[str, int] = {
     "lesson_not_available": 404,
     "lesson_locked": 423,
     "unknown_screen": 422,
+    "invalid_lesson_step": 422,
     "invalid_screen_answer": 422,
     "no_subscription_period": 409,
     "no_active_subscription": 409,

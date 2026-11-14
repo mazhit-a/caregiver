@@ -9,6 +9,7 @@ from typing import Any
 from pydantic import BaseModel, ValidationError
 
 from app.infrastructure.content.schemas import (
+    AppCopyFile,
     CrisisResourcesFile,
     FunnelCopyFile,
     LessonFile,
@@ -21,6 +22,7 @@ from app.infrastructure.content.schemas import (
 )
 
 _SINGLE_FILES = (
+    "app-copy.json",
     "quiz.json",
     "plan-rules.json",
     "phrases.json",
@@ -39,6 +41,7 @@ class ContentLoadError(Exception):
 
 @dataclass(frozen=True)
 class ContentBundle:
+    app_copy: AppCopyFile
     quiz: QuizFile
     plan_rules: PlanRulesFile
     phrases: PhrasesFile
@@ -108,6 +111,7 @@ def load_content(content_dir: Path) -> ContentBundle:
                 raise ContentLoadError(f"{name}: id: lesson id '{lesson.id}' must match file name")
             lessons[lesson.id] = lesson
     return ContentBundle(
+        app_copy=_parse("app-copy.json", raw["app-copy.json"], AppCopyFile),
         quiz=_parse("quiz.json", raw["quiz.json"], QuizFile),
         plan_rules=_parse("plan-rules.json", raw["plan-rules.json"], PlanRulesFile),
         phrases=_parse("phrases.json", raw["phrases.json"], PhrasesFile),

@@ -1,0 +1,68 @@
+{
+  "title": "Today with Margaret",
+  "order": [
+    "careCardNudge",
+    "nextStep",
+    "weeklyRhythm",
+    "readiness",
+    "subscriptionNotice",
+    "demo"
+  ],
+  "checkIn": null,
+  "practiceRound": null,
+  "careCardNudge": {
+    "newPhraseCount": 1,
+    "text": "Your care card has 1 new phrase. Update it?"
+  },
+  "nextStep": {
+    "kind": "lesson",
+    "message": null,
+    "lesson": {
+      "lessonId": "m1_l1",
+      "title": "When Mom asks again",
+      "moduleId": "m1_talking",
+      "reason": "Everyone starts here. Talking with Mom comes up every day, from the first weeks on.",
+      "status": "available",
+      "unlockOn": "2026-01-05",
+      "minutes": 8,
+      "skillLabel": "Communication"
+    },
+    "unlockText": null
+  },
+  "weeklyRhythm": {
+    "done": 0,
+    "target": 4,
+    "text": "This week: 0 of 4 practice sessions."
+  },
+  "readiness": {
+    "done": 0,
+    "total": 12,
+    "text": "Margaret's plan: 0 of 12 lessons done"
+  },
+  "subscriptionNotice": {
+    "kind": "renews_on",
+    "on": "2026-02-02",
+    "text": "Your plan renews on February 2."
+  },
+  "welcomeBack": null,
+  "visitSheetLink": {
+    "label": "Prepare for a doctor visit",
+    "path": "/api/visit-sheet"
+  },
+  "demo": {
+    "label": "Demo controls: simulated time, not real time.",
+    "appNow": "2026-01-05T09:05:00Z",
+    "appToday": "2026-01-05",
+    "clockOffsetSeconds": 0,
+    "controls": [
+      {
+        "id": "nextDay",
+        "label": "Simulate next day (demo)"
+      },
+      {
+        "id": "jumpToRenewal",
+        "label": "Jump to renewal (demo)"
+      }
+    ]
+  }
+}

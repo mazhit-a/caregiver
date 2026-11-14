@@ -1,0 +1,305 @@
+{
+  "id": "m1_l1",
+  "moduleId": "m1_talking",
+  "title": "When Mom asks again",
+  "minutes": 8,
+  "skill": "communication",
+  "skillLabel": "Handling repeated questions",
+  "variant": "in_person",
+  "unlockOn": "2026-01-05",
+  "pattern": {
+    "name": "The three steps",
+    "steps": [
+      {
+        "id": "notice",
+        "label": "Notice the feeling",
+        "example": "You're wondering about tomorrow."
+      },
+      {
+        "id": "reassure",
+        "label": "Reassure",
+        "example": "We have plenty of time. I'll tell you when it's time."
+      },
+      {
+        "id": "offer",
+        "label": "Offer something to do",
+        "example": "Want to help me with the tea?"
+      }
+    ]
+  },
+  "screens": [
+    {
+      "id": "s1_setup",
+      "type": "setup_question",
+      "speaker": "rosa",
+      "text": "Let's start with the moment that comes up most.",
+      "question": "Where do Mom's repeated questions usually reach you?",
+      "options": [
+        {
+          "id": "in_person",
+          "label": "In person"
+        },
+        {
+          "id": "phone",
+          "label": "On the phone"
+        },
+        {
+          "id": "both",
+          "label": "Both"
+        },
+        {
+          "id": "not_yet",
+          "label": "I haven't noticed it yet"
+        }
+      ]
+    },
+    {
+      "id": "s2_scenario",
+      "type": "scenario",
+      "intro": null,
+      "setup": "It's 6 pm. Mom's doctor appointment is tomorrow. For the fifth time today, Mom asks:",
+      "line": "When are we going to the doctor?",
+      "question": "What would you say?",
+      "answers": [
+        {
+          "id": "a1",
+          "text": "It's tomorrow at 2. I wrote it on the calendar for you."
+        },
+        {
+          "id": "a2",
+          "text": "Don't worry, I've got it all handled."
+        },
+        {
+          "id": "a3",
+          "text": "Mom, I told you already. It's tomorrow."
+        },
+        {
+          "id": "a4",
+          "text": "You're wondering about tomorrow. We have plenty of time. I'll tell you when it's time. Want to help me with the tea?"
+        }
+      ],
+      "verdictLabels": {
+        "best": "Best",
+        "okay": "Okay",
+        "try_again": "Try again"
+      },
+      "afterChoice": "You can try another answer to compare.",
+      "saveButton": "Save this phrase"
+    },
+    {
+      "id": "s3_first_time",
+      "type": "learn",
+      "title": "Each time feels like the first time to her.",
+      "body": "Mom isn't testing you, and isn't doing it on purpose. The memory of asking fades, but the feeling behind the question stays. To her, the question really is new.",
+      "bullets": null,
+      "extra": null,
+      "patternTip": null,
+      "pattern": null,
+      "miniTask": {
+        "question": "What might be behind the question?",
+        "options": [
+          {
+            "id": "worried",
+            "label": "Worry"
+          },
+          {
+            "id": "bored",
+            "label": "Boredom"
+          },
+          {
+            "id": "on_purpose",
+            "label": "Doing it on purpose"
+          }
+        ]
+      }
+    },
+    {
+      "id": "s4_feeling_first",
+      "type": "learn",
+      "title": "Answer the feeling first. Keep it short and the same.",
+      "body": "Use the three steps: notice the feeling, reassure, offer something to do. Then say it the same short way each time. Long explanations are harder for her to follow and tiring for you.",
+      "bullets": null,
+      "extra": null,
+      "patternTip": null,
+      "pattern": {
+        "name": "The three steps",
+        "steps": [
+          {
+            "id": "notice",
+            "label": "Notice the feeling",
+            "example": "You're wondering about tomorrow."
+          },
+          {
+            "id": "reassure",
+            "label": "Reassure",
+            "example": "We have plenty of time. I'll tell you when it's time."
+          },
+          {
+            "id": "offer",
+            "label": "Offer something to do",
+            "example": "Want to help me with the tea?"
+          }
+        ]
+      },
+      "miniTask": {
+        "question": "Which reply follows all three steps?",
+        "options": [
+          {
+            "id": "x1",
+            "label": "It's at 2, like I said. The doctor just wants to check on you, nothing to worry about, and then we'll go home."
+          },
+          {
+            "id": "x2",
+            "label": "You're wondering about it. I've got it covered. Want to fold these towels with me?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "s5_aha",
+      "type": "learn",
+      "title": "Make the answer easy to find, and don't announce plans too early.",
+      "body": null,
+      "bullets": [
+        "Put the answer where Mom can see it: a note or whiteboard, like \"Doctor: Thursday 2 pm. I'll pick you up.\"",
+        "Mention plans closer to the time. A plan announced days ahead gives the worry more time to grow."
+      ],
+      "extra": null,
+      "patternTip": "Look for a pattern: does it happen at a certain time of day, or after something specific?",
+      "pattern": null,
+      "miniTask": null
+    },
+    {
+      "id": "s6_fifth_time",
+      "type": "learn",
+      "title": "The fifth time is the hardest.",
+      "body": "Feeling frustrated is normal. It doesn't make you a bad daughter or son. What helps is a small reset before you answer.",
+      "bullets": null,
+      "extra": null,
+      "patternTip": null,
+      "pattern": null,
+      "miniTask": {
+        "question": "Pick your reset for next time:",
+        "options": [
+          {
+            "id": "breath",
+            "label": "One slow breath before I answer"
+          },
+          {
+            "id": "slow",
+            "label": "Say the first words slowly"
+          },
+          {
+            "id": "step_away",
+            "label": "Step away for a minute, if it's safe"
+          }
+        ]
+      }
+    },
+    {
+      "id": "s7_practice",
+      "type": "roleplay",
+      "title": "Practice: Mom asks again",
+      "intro": "Now try it out loud. Mom is an AI practice partner. Type what you'd say. The coach will show what worked.",
+      "goals": [
+        "notice",
+        "reassure",
+        "offer"
+      ],
+      "rounds": [
+        {
+          "stage": "It's 6 pm. The appointment is tomorrow.",
+          "line": "When are we going to the doctor?",
+          "mood": "worried"
+        },
+        {
+          "stage": "Ten minutes later.",
+          "line": "Something's wrong, isn't it? Why are we going to the doctor?",
+          "mood": "anxious"
+        },
+        {
+          "stage": "Later that evening.",
+          "line": "Why won't you just tell me? You're hiding something.",
+          "mood": "suspicious"
+        }
+      ],
+      "labels": {
+        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
+        "thinking": "Mom is thinking…",
+        "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
+      },
+      "summary": {
+        "title": "Your practice",
+        "bestPhraseLabel": "Your best phrase",
+        "saveButton": "Save",
+        "againButton": "Practice again"
+      }
+    },
+    {
+      "id": "s8_plan",
+      "type": "plan",
+      "title": "Your plan for next time",
+      "ifThen": {
+        "cue": "If Mom asks the same question again,",
+        "responseLabel": "then I'll say:",
+        "responseEditable": true,
+        "resetLabel": "And first, I'll:",
+        "resetFrom": "s6_fifth_time"
+      },
+      "doNow": {
+        "title": "One thing to do now",
+        "text": "Write the answer on a note for the fridge or a whiteboard.",
+        "action": "print_note_template",
+        "button": "Print a note template"
+      },
+      "remindButton": "Remind me tomorrow",
+      "doneButton": "Done",
+      "noteTemplate": {
+        "title": "Mom's note",
+        "example": "Doctor: [day] [time]. I'll pick you up. — [your name]"
+      }
+    },
+    {
+      "id": "s9_wrap",
+      "type": "wrap",
+      "skillLine": "New skill: handling repeated questions.",
+      "phraseLine": "Your phrase is saved to Mom's page and care card.",
+      "patternLine": "You've learned the three steps: notice the feeling, reassure, offer something to do. Every lesson in this module builds on them.",
+      "confidenceCheck": {
+        "title": "How ready do you feel for these?",
+        "scale": "1 to 5",
+        "items": [
+          {
+            "id": "repeat",
+            "label": "When Mom asks the same question again"
+          },
+          {
+            "id": "accusations",
+            "label": "When Mom thinks someone took something"
+          },
+          {
+            "id": "evenings",
+            "label": "When Mom gets upset in the evening"
+          },
+          {
+            "id": "refusal",
+            "label": "When Mom says no to help"
+          },
+          {
+            "id": "visits",
+            "label": "Getting what you need from a doctor visit"
+          }
+        ]
+      },
+      "tomorrowLine": "Tomorrow: a quick check-in and a 2-minute practice round.",
+      "nextLine": "Next in this module: \"Talking so it lands\", making every conversation easier, not just the answers."
+    }
+  ],
+  "progress": {
+    "step": 0,
+    "startedAt": "2026-01-05T09:00:00Z",
+    "doneAt": null
+  },
+  "recap": null
+}

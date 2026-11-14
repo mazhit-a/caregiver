@@ -1,0 +1,108 @@
+{
+  "title": "Today with Mom",
+  "order": [
+    "checkIn",
+    "practiceRound",
+    "nextStep",
+    "weeklyRhythm",
+    "readiness",
+    "subscriptionNotice",
+    "demo"
+  ],
+  "checkIn": {
+    "planId": "m1_l1",
+    "question": "Did Mom ask the same question again since yesterday?",
+    "options": [
+      {
+        "id": "yes",
+        "label": "Yes"
+      },
+      {
+        "id": "not_yet",
+        "label": "Not yet"
+      }
+    ],
+    "followUp": {
+      "ifAnswer": "yes",
+      "question": "How did your plan go?",
+      "options": [
+        {
+          "id": "helped",
+          "label": "It helped"
+        },
+        {
+          "id": "partly",
+          "label": "Partly"
+        },
+        {
+          "id": "didnt_help",
+          "label": "It didn't help"
+        }
+      ]
+    },
+    "plan": {
+      "cue": "If Mom calls with the same question again,",
+      "response": "I point to the note and say: you're safe, I'm here.",
+      "reset": "One slow breath before I answer"
+    }
+  },
+  "practiceRound": {
+    "lessonId": "m1_l1",
+    "title": "2-minute practice: a new version",
+    "roundsTotal": 2,
+    "variant": "phone",
+    "context": "practice_round"
+  },
+  "careCardNudge": null,
+  "nextStep": {
+    "kind": "rest",
+    "message": "You're done for today. Rest counts too.",
+    "lesson": {
+      "lessonId": "m1_l2",
+      "title": "Talking so it lands",
+      "moduleId": "m1_talking",
+      "reason": "Everyone starts here. Talking with Mom comes up every day, from the first weeks on.",
+      "status": "locked",
+      "unlockOn": "2026-01-07",
+      "minutes": 7,
+      "skillLabel": "Communication"
+    },
+    "unlockText": "Your next lesson opens on January 7."
+  },
+  "weeklyRhythm": {
+    "done": 3,
+    "target": 4,
+    "text": "This week: 3 of 4 practice sessions."
+  },
+  "readiness": {
+    "done": 1,
+    "total": 12,
+    "text": "Mom's plan: 1 of 12 lessons done"
+  },
+  "subscriptionNotice": {
+    "kind": "renews_on",
+    "on": "2026-02-02",
+    "text": "Your plan renews on February 2."
+  },
+  "welcomeBack": null,
+  "visitSheetLink": {
+    "label": "Prepare for a doctor visit",
+    "path": "/api/visit-sheet"
+  },
+  "demo": {
+    "label": "Demo controls: simulated time, not real time.",
+    "appNow": "2026-01-06T09:00:00Z",
+    "appToday": "2026-01-06",
+    "clockOffsetSeconds": 86400,
+    "controls": [
+      {
+        "id": "nextDay",
+        "label": "Simulate next day (demo)"
+      },
+      {
+        "id": "jumpToRenewal",
+        "label": "Jump to renewal (demo)"
+      }
+    ]
+  }
+}

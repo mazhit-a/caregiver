@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, Request
 
 from app.application.lessons.answer import AnswerLesson
 from app.application.lessons.complete import CompleteLesson
+from app.application.lessons.progress import SaveLessonStep
 from app.application.lessons.use_cases import GetLesson
 from app.application.ports import Clock, ContentProvider, UnitOfWork
 from app.presentation.api.deps import SubscribedSession, get_clock, get_uow
@@ -18,6 +19,7 @@ from app.presentation.api.schemas.lessons import (
     NextLessonOut,
     PatternOut,
     RecapOut,
+    StepRequest,
 )
 
 router = APIRouter(tags=["lessons"])
@@ -50,6 +52,15 @@ def _complete_lesson(
 ) -> CompleteLesson:
     content: ContentProvider = request.app.state.content
     return CompleteLesson(uow, content, clock)
+
+
+def _save_step(
+    request: Request,
+    uow: Annotated[UnitOfWork, Depends(get_uow)],
+    clock: Annotated[Clock, Depends(get_clock)],
+) -> SaveLessonStep:
+    content: ContentProvider = request.app.state.content
+    return SaveLessonStep(uow, content, clock)
 
 
 @router.get("/lessons/{lesson_id}", response_model=LessonResponse)
@@ -120,3 +131,14 @@ async def complete_lesson(
             "allDoneLine": view.all_done_line,
         }
     )
+
+
+@router.put("/lessons/{lesson_id}/progress", response_model=LessonProgressOut)
+async def save_lesson_step(
+    lesson_id: str,
+    body: StepRequest,
+    session: SubscribedSession,
+    use_case: Annotated[SaveLessonStep, Depends(_save_step)],
+) -> LessonProgressOut:
+    view = await use_case.execute(session, lesson_id, body.step)
+    return LessonProgressOut(step=view.step, started_at=view.started_at, done_at=view.done_at)

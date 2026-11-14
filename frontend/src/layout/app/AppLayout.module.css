@@ -1,0 +1,94 @@
+.shell {
+  min-height: 100dvh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: var(--space-5) var(--space-4)
+    calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px) + var(--space-5));
+}
+
+.main:focus {
+  outline: none;
+}
+
+.shell[data-fullscreen="true"] .main {
+  padding-bottom: var(--space-5);
+}
+
+.column {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.disclaimer {
+  color: var(--text-secondary);
+  font: var(--text-small);
+  text-align: center;
+}
+
+.notice {
+  padding: var(--space-4);
+  border-radius: var(--radius-card);
+  background: var(--warning-soft);
+  color: var(--warning-text);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+
+.noticeLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-button);
+  background: var(--surface);
+  border: var(--border-width) solid var(--border-control);
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* 1024px: the desktop sidebar layout (see useIsDesktop). */
+@media (min-width: 1024px) {
+  .shell {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .main {
+    padding: 40px var(--space-5) var(--space-8);
+  }
+}
+
+/* Added to <html> while the app shell is mounted: sticky bars never cover a focused element. */
+.rootPadding {
+  scroll-padding-top: var(--space-5);
+  scroll-padding-bottom: calc(
+    var(--tabbar-h) + env(safe-area-inset-bottom, 0px) + var(--space-4)
+  );
+}
+
+@page {
+  size: Letter;
+  margin: 0.6in;
+}
+
+@media print {
+  [data-app-chrome] {
+    display: none !important;
+  }
+
+  .main {
+    padding: 0;
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "screenId": "s2_scenario",
+  "type": "scenario",
+  "result": {
+    "answerId": "a1",
+    "verdict": "okay",
+    "feedback": "Kind and practical. But it answers the fact, not the worry, so the question may come back soon.",
+    "savePhrase": false
+  }
+}

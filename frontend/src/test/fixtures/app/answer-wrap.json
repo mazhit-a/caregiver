@@ -1,0 +1,14 @@
+{
+  "screenId": "s9_wrap",
+  "type": "wrap",
+  "result": {
+    "saved": true,
+    "ratings": {
+      "repeat": 3,
+      "accusations": 2,
+      "evenings": 4,
+      "refusal": 1,
+      "visits": 5
+    }
+  }
+}

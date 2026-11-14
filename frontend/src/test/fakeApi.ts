@@ -22,6 +22,8 @@ import pricingFixture from "./fixtures/pricing.json";
 import quizFixture from "./fixtures/quiz.json";
 import subscriptionDemo from "./fixtures/subscription-demo.json";
 import type { AccessReason } from "../api/errors";
+import { gateFake } from "./fakeApp/core";
+import { type AppScenario, DEFAULT_APP_SCENARIO, type FakeRes, serveFakeAreas } from "./fakeApp/registry";
 
 export type Persona = "a" | "b" | "c";
 
@@ -56,7 +58,7 @@ export interface Injected {
   times: number;
 }
 
-export interface FakeScenario {
+export interface FakeScenario extends AppScenario {
   /** POST /session answers 429 rate_limited. */
   sessionRateLimited: boolean;
   /** POST /events answers 429 rate_limited. */
@@ -71,11 +73,13 @@ export interface FakeScenario {
   networkDown: boolean;
 }
 
-interface SessionState {
+export interface SessionState {
   answers: Record<string, unknown>;
   lastQuestionId: string | null;
   completed: boolean;
   subscribed: boolean;
+  /** Scratch space of the app fakes (`src/test/fakeApp`). */
+  app: Record<string, unknown>;
 }
 
 export interface FakeApi {
@@ -101,6 +105,10 @@ function json(status: number, body: unknown): Response {
     status,
     headers: { "Content-Type": "application/json" },
   });
+}
+
+function toResponse(res: FakeRes): Response {
+  return res.status === 204 ? new Response(null, { status: 204 }) : json(res.status, res.body);
 }
 
 const apiError = (status: number, code: string, message: string, details = {}): Response =>
@@ -133,6 +141,7 @@ export function installFakeApi(initial: Partial<FakeScenario> = {}): FakeApi {
     checkoutPaid: true,
     accessReason: null,
     networkDown: false,
+    ...DEFAULT_APP_SCENARIO,
     ...initial,
   };
   const sessions = new Map<string, SessionState>();
@@ -155,7 +164,13 @@ export function installFakeApi(initial: Partial<FakeScenario> = {}): FakeApi {
       }
       counter += 1;
       const created = `fake-token-${counter}`;
-      sessions.set(created, { answers: {}, lastQuestionId: null, completed: false, subscribed: false });
+      sessions.set(created, {
+        answers: {},
+        lastQuestionId: null,
+        completed: false,
+        subscribed: false,
+        app: {},
+      });
       return json(201, { token: created, timezone: "America/New_York" });
     }
 
@@ -166,6 +181,11 @@ export function installFakeApi(initial: Partial<FakeScenario> = {}): FakeApi {
         ...pricingFixture,
         plans: pricingFixture.plans.map((p) => ({ ...p, firstRenewalDate: null })),
       });
+    }
+    if (method === "GET" && path.startsWith("/cards/")) {
+      // The public care card: no token, no session.
+      const served = serveFakeAreas(appRequest(method, path, token, body, undefined));
+      if (served) return toResponse(served);
     }
     if (!state) return json(401, errors["401"]);
 
@@ -240,8 +260,24 @@ export function installFakeApi(initial: Partial<FakeScenario> = {}): FakeApi {
       const events = Array.isArray(body["events"]) ? body["events"] : [];
       return json(200, { ...eventsFixture, stored: events.length });
     }
+    const req = appRequest(method, path, token, body, {
+      completed: state.completed,
+      subscribed: state.subscribed,
+      app: state.app,
+      destroy: () => sessions.delete(token ?? ""),
+    });
+    const served = gateFake(req) ?? serveFakeAreas(req);
+    if (served) return toResponse(served);
     return apiError(404, "not_found", "Not found.");
   };
+
+  const appRequest = (
+    method: string,
+    path: string,
+    token: string | null,
+    body: Record<string, unknown>,
+    session: Parameters<typeof serveFakeAreas>[0]["session"],
+  ): Parameters<typeof serveFakeAreas>[0] => ({ method, path, token, body, scenario, session });
 
   function branchOf(state: SessionState): string | null {
     return state.answers["q3_situation"] === undefined ? null : PERSONAS[personaOf(state)].branch;

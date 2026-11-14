@@ -5,6 +5,8 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
+from app.domain.lessons.errors import InvalidLessonStep
+
 
 @dataclass
 class LessonProgress:
@@ -18,6 +20,14 @@ class LessonProgress:
     step: int = 0
     screen_answers: dict[str, Any] = field(default_factory=dict)
     done_at: datetime | None = None
+
+    def move_to(self, step: int, screen_count: int) -> None:
+        """Remember the screen the learner is on. The index must exist; a finished lesson keeps
+        its step (a done lesson never moves back)."""
+        if not 0 <= step < screen_count:
+            raise InvalidLessonStep(self.lesson_id, step, screen_count)
+        if self.done_at is None:
+            self.step = step
 
 
 @dataclass(frozen=True)
