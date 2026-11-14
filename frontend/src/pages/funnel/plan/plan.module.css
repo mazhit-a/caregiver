@@ -1,0 +1,20 @@
+.stack { display: flex; flex-direction: column; gap: var(--space-2); }
+.h2 { margin: 0; font-size: 1.25rem; line-height: 1.25; }
+.h3 { margin: 0; font-size: 1.0625rem; line-height: 1.3; }
+.body { margin: 0; }
+.source { margin: 0; font-size: 0.875rem; }
+.card { display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-2); border: var(--border-width) solid var(--border); border-radius: 16px; }
+.pair { display: flex; flex-direction: column; gap: var(--space-2); }
+.pairGrid { display: flex; flex-direction: column; gap: var(--space-2); }
+.modules { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-2); }
+.module { display: flex; flex-direction: column; gap: 6px; padding: var(--space-2); border: var(--border-width) solid var(--border); border-radius: 16px; }
+.moduleFirst { background: var(--butter, var(--info-soft)); }
+.moduleMeta { margin: 0; display: flex; align-items: center; gap: var(--space-1); font-size: 0.875rem; }
+.number { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; border: var(--border-width) solid currentColor; font-weight: 700; }
+.lessons { margin: 0; font-size: 0.875rem; }
+.chips { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-1); }
+.chip { padding: 8px 12px; border: var(--border-width) solid var(--border); border-radius: 999px; font-size: 0.9375rem; }
+.chipOn { font-weight: 600; border-color: var(--accent); background: var(--info-soft); }
+.proof { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-2); }
+.textLink { color: inherit; font-weight: 600; min-height: var(--tap-min); display: inline-flex; align-items: center; }
+.secondary, .secondaryLink { display: inline-flex; align-items: center; justify-content: center; min-height: var(--tap-min); padding: 0 var(--space-3); font: inherit; font-weight: 600; border-radius: 999px; border: var(--border-width) solid var(--accent); background: none; color: inherit; cursor: pointer; text-decoration: none; }
