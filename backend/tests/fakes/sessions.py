@@ -29,6 +29,9 @@ class InMemorySessionRepository:
     async def save(self, session: Session) -> None:
         self.rows[session.id] = replace(session)
 
+    async def delete(self, session_id: UUID) -> None:
+        self.rows.pop(session_id, None)
+
 
 class InMemoryActiveDayRepository:
     def __init__(self) -> None:

@@ -15,6 +15,7 @@ from app.application.billing.payments import (
 )
 from app.application.roleplay.dto import CoachInput
 from app.domain.billing.entities import Subscription, SubscriptionHistoryEntry
+from app.domain.billing.exit_copy import GentleExitCopy
 from app.domain.billing.pricing import Pricing
 from app.domain.care_card.entities import CareCard
 from app.domain.lessons.plans import ConfidenceRatings, IfThenPlan, Task
@@ -52,6 +53,10 @@ class SessionRepository(Protocol):
 
     async def save(self, session: Session) -> None:
         """Persist the mutable fields (offset, last_seen_at, recipient_key, display_name)."""
+        ...
+
+    async def delete(self, session_id: UUID) -> None:
+        """Delete the session; every session-owned row goes with it (ON DELETE CASCADE)."""
         ...
 
 
@@ -434,6 +439,10 @@ class ContentProvider(Protocol):
 
     def today_copy(self) -> TodayCopy:
         """The Today screen wording and its two day counts (placeholders unfilled)."""
+        ...
+
+    def gentle_exit_copy(self) -> GentleExitCopy:
+        """The gentle-exit condolence, grief-support resources and clear-data confirmation."""
         ...
 
     def crisis_resources_need_verification(self) -> bool:

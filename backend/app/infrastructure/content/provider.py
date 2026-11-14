@@ -5,6 +5,7 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
+from app.domain.billing.exit_copy import GentleExitCopy, GentleExitResourceCopy
 from app.domain.billing.pricing import Pricing, PricingPlan
 from app.domain.plan.entities import PhraseSheetText, PhraseText, PlanRules
 from app.domain.quiz.definition import QuizDefinition
@@ -106,6 +107,19 @@ class JsonContentProvider:
             demo_controls=tuple(DemoControlCopy(c.id, c.label) for c in t.demo.controls),
             welcome_back_after_days=t.welcome_back_after_days,
             renewed_notice_days=t.renewed_notice_days,
+        )
+
+    def gentle_exit_copy(self) -> GentleExitCopy:
+        g = self._bundle.funnel_copy.gentle_exit
+        return GentleExitCopy(
+            title=g.title,
+            condolence=g.condolence,
+            resources_intro=g.resources_intro,
+            resources=tuple(
+                GentleExitResourceCopy(r.id, r.name, r.description, r.phone, r.url)
+                for r in g.resources
+            ),
+            clear_data_confirmation=g.clear_data_confirmation,
         )
 
     def crisis_resources_need_verification(self) -> bool:

@@ -7,6 +7,7 @@ from app.presentation.api.v1.billing import router as billing_router
 from app.presentation.api.v1.care_card import router as care_card_router
 from app.presentation.api.v1.checkins import router as checkins_router
 from app.presentation.api.v1.demo import router as demo_router
+from app.presentation.api.v1.exit import router as exit_router
 from app.presentation.api.v1.lessons import router as lessons_router
 from app.presentation.api.v1.phrases import router as phrases_router
 from app.presentation.api.v1.plan import router as plan_router
@@ -34,6 +35,7 @@ router.include_router(roleplay_router)
 router.include_router(visit_sheet_router)
 router.include_router(demo_router)
 router.include_router(session_router)
+router.include_router(exit_router)
 router.include_router(skills_router)
 router.include_router(today_router)
 router.include_router(webhooks_router)

@@ -3,7 +3,7 @@
 from datetime import date
 from uuid import UUID
 
-from sqlalchemy import select, update
+from sqlalchemy import delete, select, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -42,6 +42,9 @@ class SqlSessionRepository:
                 display_name=session.display_name,
             )
         )
+
+    async def delete(self, session_id: UUID) -> None:
+        await self._db.execute(delete(SessionRow).where(SessionRow.id == session_id))
 
 
 class SqlActiveDayRepository:

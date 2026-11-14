@@ -522,6 +522,22 @@ class TodayCopyFile(ContentModel):
     renewed_notice_days: int = Field(ge=1)
 
 
+class GentleExitResource(ContentModel):
+    id: str
+    name: str
+    description: str
+    phone: str | None = None
+    url: str | None = None
+
+
+class GentleExitCopyFile(ContentModel):
+    title: str
+    condolence: str
+    resources_intro: str
+    resources: list[GentleExitResource]
+    clear_data_confirmation: str
+
+
 class FunnelCopyFile(Notes):
     version: int
     common: dict[str, str]
@@ -532,6 +548,7 @@ class FunnelCopyFile(Notes):
     paywall: Paywall
     save_plan: SavePlan
     today: TodayCopyFile
+    gentle_exit: GentleExitCopyFile
     errors: dict[str, str]
 
 

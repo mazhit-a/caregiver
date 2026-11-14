@@ -117,3 +117,16 @@ class InvalidWebhookSignature(DomainError):
 
     def __init__(self) -> None:
         super().__init__("The webhook signature is missing or not valid.")
+
+
+class BillingCancelFailed(DomainError):
+    """The card subscription could not be canceled, so nothing was deleted (HTTP 503, retryable)."""
+
+    code = "billing_cancel_failed"
+
+    def __init__(self) -> None:
+        super().__init__(
+            "We could not cancel your subscription just now, so nothing has been deleted. "
+            "Please try again in a moment.",
+            {"retryable": True},
+        )
