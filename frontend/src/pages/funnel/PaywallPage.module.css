@@ -1,5 +1,16 @@
+/* Values from the quiz-funnel mockup (390px artboard). */
 .page,
 .state {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.state {
+  gap: var(--space-3);
+}
+
+.head {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -7,102 +18,126 @@
 
 .title {
   margin: 0;
-  font-size: 1.75rem;
-  line-height: 1.2;
+  font: 800 28px/34px var(--font-sans);
+  color: var(--text);
 }
 
-.subhead,
-.hint,
-.footer {
+.title:focus {
+  outline: none;
+}
+
+.subhead {
   margin: 0;
-}
-
-.hint,
-.footer {
-  font-size: 0.875rem;
+  font: 400 16px/24px var(--font-sans);
+  color: var(--text-secondary);
 }
 
 .h2 {
   margin: 0;
-  font-size: 1.125rem;
+  font: 700 16px/24px var(--font-sans);
+  color: var(--text);
+}
+
+.includesBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
 .includes {
   margin: 0;
-  padding-left: 1.25rem;
+  padding-left: 20px;
   display: flex;
   flex-direction: column;
   gap: 6px;
+  font: 400 15px/22px var(--font-sans);
 }
 
 .banner {
-  margin: 0 0 var(--space-2);
-  padding: var(--space-2);
-  border: var(--border-width) solid var(--border);
-  border-radius: 16px;
+  margin: 0 0 20px;
+  padding: 12px 14px;
+  border-radius: var(--radius-button);
+  background: var(--info-soft);
+  color: var(--info-text);
+  font: 400 15px/22px var(--font-sans);
 }
 
 .picker {
   margin: 0;
   padding: 0;
+  min-width: 0;
   border: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1, 8px);
+  gap: var(--space-3);
 }
 
 .legend {
   padding: 0;
-  margin-bottom: 8px;
-  font-weight: 600;
+  margin-bottom: var(--space-3);
+  font: 700 16px/24px var(--font-sans);
 }
 
 .plan {
+  position: relative;
   display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  min-height: var(--tap-min);
-  padding: var(--space-2);
+  padding: 17px;
   border: var(--border-width) solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
   cursor: pointer;
 }
 
-.plan:focus-within {
-  outline: 3px solid var(--accent);
+.plan:has(.radio:focus-visible) {
+  outline: 3px solid var(--focus);
   outline-offset: 2px;
 }
 
 .planOn {
-  border-color: var(--accent);
-  border-width: 2px;
+  padding: 16px;
+  border: var(--border-width-strong) solid var(--accent);
+  box-shadow: var(--shadow-2);
 }
 
 .radio {
-  margin-top: 4px;
-  width: 20px;
-  height: 20px;
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
 }
 
 .planText {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 4px var(--space-2);
 }
 
 .planLabel {
-  font-weight: 600;
+  font: 800 18px/24px var(--font-sans);
+  color: var(--text);
 }
 
 .planPrice {
-  font-size: 1.25rem;
-  font-weight: 700;
+  font: 800 22px/28px var(--font-sans);
+  color: var(--text);
+}
+
+.planDetail {
+  grid-column: 1 / -1;
+  font: 400 14px/20px var(--font-sans);
+  color: var(--text-secondary);
 }
 
 .disclosure {
-  padding: var(--space-2);
-  border: var(--border-width) solid var(--border);
+  padding: 14px 16px;
   border-radius: 16px;
+  background: var(--surface-muted);
+  font: 400 15px/22px var(--font-sans);
 }
 
 .disclosureText {
@@ -117,25 +152,45 @@
 
 .consentLabel {
   display: flex;
-  gap: 12px;
+  gap: var(--space-3);
   align-items: flex-start;
   min-height: var(--tap-min);
+  padding: 4px 0;
+  font: 400 15px/22px var(--font-sans);
+  cursor: pointer;
 }
 
 .consentLabel input {
-  margin-top: 3px;
-  width: 22px;
-  height: 22px;
+  margin: 1px 0 0;
+  width: 24px;
+  height: 24px;
   flex: none;
+  accent-color: var(--accent);
 }
 
 .error {
   margin: 0;
-  font-weight: 600;
+  font: 400 14px/20px var(--font-sans);
+  color: var(--error-text);
 }
 
 .error[hidden] {
   display: none;
+}
+
+.hint {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: var(--radius-button);
+  background: var(--info-soft);
+  color: var(--info-text);
+  font: 400 14px/20px var(--font-sans);
+}
+
+.footer {
+  margin: 0;
+  font: 400 13px/18px var(--font-sans);
+  color: var(--text-secondary);
 }
 
 .primary,
@@ -144,11 +199,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: var(--tap-min);
+  width: 100%;
+  min-height: 56px;
   padding: 0 var(--space-3);
-  font: inherit;
-  font-weight: 600;
-  border-radius: 999px;
+  font: var(--text-button);
+  border-radius: var(--radius-button);
   text-align: center;
 }
 
@@ -156,14 +211,20 @@
   cursor: pointer;
   border: 0;
   background: var(--accent);
-  color: var(--on-accent, #fff);
+  color: var(--on-accent);
+}
+
+.primary:hover {
+  background: var(--accent-hover);
 }
 
 .secondary {
+  min-height: 52px;
+  font-size: 16px;
   cursor: pointer;
   background: transparent;
-  color: inherit;
-  border: var(--border-width) solid var(--border);
+  color: var(--accent);
+  border: var(--border-width-strong) solid var(--accent);
 }
 
 .primary[aria-disabled="true"],
@@ -172,6 +233,30 @@
   cursor: not-allowed;
 }
 
+.primary:focus-visible,
+.secondary:focus-visible,
+.link:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
 .link {
-  color: inherit;
+  min-height: var(--tap-min);
+  color: var(--accent);
+  text-decoration: none;
+}
+
+@media (min-width: 768px) {
+  .picker {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .legend {
+    width: 100%;
+  }
+
+  .plan {
+    flex: 1 1 0;
+  }
 }

@@ -9,18 +9,18 @@ import styles from "./plan.module.css";
 export function GiftCard() {
   const gift = useRequest((signal) => getGift(signal), []);
   return (
-    <section className={styles.card} aria-labelledby="gift-title">
-      <h2 id="gift-title" className={styles.h2}>
+    <section className={styles.gift} aria-labelledby="gift-title">
+      <h2 id="gift-title" className={styles.giftTitle}>
         {gift.status === "ready" ? gift.data.title : GIFT_CARD.title}
       </h2>
       {gift.status === "loading" && (
-        <p role="status" className={styles.body}>
+        <p role="status" className={styles.giftBody}>
           Getting your sheet…
         </p>
       )}
       {gift.status === "error" && (
         <div role="alert" className={styles.stack}>
-          <p className={styles.body}>We couldn't load your free sheet just now.</p>
+          <p className={styles.giftBody}>We couldn't load your free sheet just now.</p>
           <button type="button" className={styles.secondary} onClick={gift.retry}>
             Try again
           </button>
@@ -28,11 +28,11 @@ export function GiftCard() {
       )}
       {gift.status === "ready" && (
         <>
-          <p className={styles.body}>{gift.data.intro}</p>
+          <p className={styles.giftBody}>{gift.data.intro}</p>
           <Link to={ROUTES.gift} className={styles.secondaryLink}>
             {GIFT_CARD.cta}
           </Link>
-          <p className={styles.source}>{GIFT_CARD.note}</p>
+          <p className={styles.small}>{GIFT_CARD.note}</p>
         </>
       )}
     </section>

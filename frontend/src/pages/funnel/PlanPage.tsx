@@ -3,7 +3,6 @@ import { useNavigate } from "react-router";
 import { getFunnelCopy, getPlanPreview } from "../../api/funnel";
 import { gateRoute } from "../../api/errors";
 import { useRequest } from "../../api/useRequest";
-import { DISCLAIMER } from "../../content/funnel";
 import { FunnelScreen } from "../../layout/funnel/FunnelScreen";
 import { Seo, pageTitle } from "../../layout/Seo";
 import { ROUTES } from "../../routes";
@@ -74,10 +73,12 @@ export default function PlanPage() {
       )}
       {plan.status === "ready" && (
         <div className={styles.page}>
-          <h1 data-funnel-heading tabIndex={-1} className={styles.title}>
-            {plan.data.copy.planPreview.title}
-          </h1>
-          <p className={styles.intro}>{plan.data.preview.planIntro}</p>
+          <div className={styles.head}>
+            <h1 data-funnel-heading tabIndex={-1} className={styles.title}>
+              {plan.data.copy.planPreview.title}
+            </h1>
+            <p className={styles.intro}>{plan.data.preview.planIntro}</p>
+          </div>
           <WhatWeHeard sentences={plan.data.preview.whatWeHeard} />
           <BeforeAfterCards value={plan.data.preview.beforeAfter} />
           <First30Days modules={plan.data.preview.modules} paceLabel={plan.data.preview.pace.label} />
@@ -87,7 +88,6 @@ export default function PlanPage() {
           />
           <WhyThisWorks />
           <GiftCard />
-          <p className={styles.disclaimer}>{DISCLAIMER}</p>
         </div>
       )}
     </FunnelScreen>

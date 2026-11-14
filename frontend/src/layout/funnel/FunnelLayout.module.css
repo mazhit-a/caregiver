@@ -6,6 +6,7 @@
 }
 
 .footer {
+  order: 2; /* above the action bar (order 3), so the sticky bar never covers the last content */
   padding: var(--space-4) 20px var(--space-5);
   text-align: center;
   color: var(--text-secondary);
@@ -15,4 +16,12 @@
 .footer p {
   max-width: var(--content-max);
   margin: 0 auto;
+}
+
+/* Added to <html> by FunnelLayout while the funnel is mounted (never leaks to the marketing pages). */
+@media (min-height: 600px) and (min-width: 320px) {
+  .rootPadding {
+    scroll-padding-top: 100px;
+    scroll-padding-bottom: 160px;
+  }
 }

@@ -1,20 +1,48 @@
-.stack { display: flex; flex-direction: column; gap: var(--space-2); }
-.h2 { margin: 0; font-size: 1.25rem; line-height: 1.25; }
-.h3 { margin: 0; font-size: 1.0625rem; line-height: 1.3; }
-.body { margin: 0; }
-.source { margin: 0; font-size: 0.875rem; }
-.card { display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-2); border: var(--border-width) solid var(--border); border-radius: 16px; }
-.pair { display: flex; flex-direction: column; gap: var(--space-2); }
-.pairGrid { display: flex; flex-direction: column; gap: var(--space-2); }
-.modules { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-2); }
-.module { display: flex; flex-direction: column; gap: 6px; padding: var(--space-2); border: var(--border-width) solid var(--border); border-radius: 16px; }
-.moduleFirst { background: var(--butter, var(--info-soft)); }
-.moduleMeta { margin: 0; display: flex; align-items: center; gap: var(--space-1); font-size: 0.875rem; }
-.number { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; border: var(--border-width) solid currentColor; font-weight: 700; }
-.lessons { margin: 0; font-size: 0.875rem; }
-.chips { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-1); }
-.chip { padding: 8px 12px; border: var(--border-width) solid var(--border); border-radius: 999px; font-size: 0.9375rem; }
-.chipOn { font-weight: 600; border-color: var(--accent); background: var(--info-soft); }
-.proof { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-2); }
-.textLink { color: inherit; font-weight: 600; min-height: var(--tap-min); display: inline-flex; align-items: center; }
-.secondary, .secondaryLink { display: inline-flex; align-items: center; justify-content: center; min-height: var(--tap-min); padding: 0 var(--space-3); font: inherit; font-weight: 600; border-radius: 999px; border: var(--border-width) solid var(--accent); background: none; color: inherit; cursor: pointer; text-decoration: none; }
+/* Values from the quiz-funnel mockup (390px artboard): sizes, colours, radii and gaps. */
+.stack { display: flex; flex-direction: column; gap: var(--space-3); }
+.h2 { margin: 0; font: 800 20px/26px var(--font-sans); color: var(--text); }
+.h2Small { margin: 0; font: 800 18px/24px var(--font-sans); color: var(--text); }
+.body { margin: 0; font: 400 16px/24px var(--font-sans); color: var(--text); }
+.small { margin: 0; font: 400 14px/20px var(--font-sans); color: var(--text-secondary); }
+
+/* What we heard */
+.heard { display: flex; flex-direction: column; gap: var(--space-2); padding: 18px; border-radius: var(--radius-card); background: var(--info-soft); }
+.heardHead { display: flex; justify-content: space-between; align-items: center; gap: var(--space-2); }
+.heardTitle { margin: 0; font: 700 15px/22px var(--font-sans); color: var(--info-text); }
+.textLink { display: inline-flex; align-items: center; min-height: var(--tap-min); padding: 0 var(--space-1); color: var(--accent-pressed); font: 700 14px/20px var(--font-sans); }
+
+/* Today / In 30 days */
+.pair { display: flex; flex-direction: column; gap: 10px; }
+.pairCard { padding: 14px 16px; border-radius: 16px; background: var(--surface-muted); }
+.pairCardAfter { background: var(--butter-100); }
+.pairLabel { margin: 0; font: 700 13px/18px var(--font-sans); color: var(--text-secondary); }
+.pairText { margin: 4px 0 0; font: 400 16px/24px var(--font-sans); color: var(--text); }
+
+/* First 30 days */
+.modules { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-3); }
+.module { padding: var(--space-4); border-radius: var(--radius-card); background: var(--surface); border: var(--border-width) solid var(--border); }
+.moduleFirst { background: var(--butter-100); border-color: var(--butter-100); }
+.moduleHead { display: flex; gap: 10px; align-items: baseline; }
+.number { font: 800 15px/22px var(--font-sans); color: var(--accent); }
+.moduleTitle { margin: 0; flex: 1; font: 700 17px/24px var(--font-sans); color: var(--text); }
+.count { font: 400 13px/18px var(--font-sans); color: var(--text-secondary); }
+.reason { margin: 6px 0 0; font: 400 14px/20px var(--font-sans); color: var(--text-secondary); }
+.lessons { margin: 6px 0 0; font: 400 14px/20px var(--font-sans); color: var(--text); }
+
+/* Quick guides */
+.guides { display: flex; flex-direction: column; gap: var(--space-2); }
+.chips { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.chip { padding: 8px 12px; border-radius: 999px; background: var(--surface); border: var(--border-width) solid var(--border); color: var(--text); font: 600 14px/20px var(--font-sans); }
+.chipOn { background: var(--butter-100); border-color: var(--butter-100); font-weight: 700; }
+
+/* Why this works */
+.proof { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.proofText { margin: 0; font: 400 15px/22px var(--font-sans); color: var(--text); }
+.source { margin: 0; font: 400 13px/18px var(--font-sans); color: var(--text-secondary); }
+
+/* Gift card */
+.gift { display: flex; flex-direction: column; gap: 10px; padding: 18px; border-radius: var(--radius-card); background: var(--butter-100); }
+.giftTitle { margin: 0; font: 800 17px/24px var(--font-sans); color: var(--text); }
+.giftBody { margin: 0; font: 400 15px/22px var(--font-sans); color: var(--text); }
+.secondary, .secondaryLink { align-self: flex-start; display: inline-flex; align-items: center; justify-content: center; min-height: var(--tap-min); padding: 0 18px; font: 700 16px/22px var(--font-sans); border-radius: var(--radius-button); border: var(--border-width-strong) solid var(--accent); background: var(--surface); color: var(--accent); cursor: pointer; text-decoration: none; }
+.secondary:focus-visible, .secondaryLink:focus-visible, .textLink:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }

@@ -2,27 +2,34 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-3);
+  gap: 20px;
+  padding-top: var(--space-4);
   text-align: center;
 }
 
 .ollie {
-  max-width: 40vw;
+  width: 150px;
+  max-width: 100%;
   height: auto;
+  filter: drop-shadow(0 8px 12px rgba(42, 37, 71, 0.18));
 }
 
 .block {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-2);
+  gap: 20px;
   width: 100%;
 }
 
 .title {
   margin: 0;
-  font-size: 1.75rem;
-  line-height: 1.2;
+  font: 800 26px/32px var(--font-sans);
+  color: var(--text);
+}
+
+.title:focus {
+  outline: none;
 }
 
 .lines {
@@ -31,20 +38,33 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-3);
+  align-self: stretch;
   text-align: left;
 }
 
 .line {
   display: flex;
-  gap: var(--space-1);
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  font: 400 16px/24px var(--font-sans);
+  color: var(--text);
+  background: var(--surface);
+  border: var(--border-width) solid var(--border);
+  border-radius: 16px;
   animation: reveal 200ms ease-out both;
 }
 
 .line::before {
   content: "\2713";
-  font-weight: 700;
-  color: var(--accent);
+  flex: 0 0 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--success-soft);
+  color: var(--success-text);
+  font: 800 13px/22px var(--font-sans);
+  text-align: center;
 }
 
 /* Stagger of 150 ms per line; lines beyond the eighth appear with the eighth. */
@@ -74,13 +94,21 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: var(--tap-min);
-  padding: 0 var(--space-3);
-  font: inherit;
-  font-weight: 600;
+  min-height: 56px;
+  padding: 0 var(--space-5);
+  font: var(--text-button);
   cursor: pointer;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--radius-button);
   background: var(--accent);
-  color: var(--on-accent, #fff);
+  color: var(--on-accent);
+}
+
+.button:hover {
+  background: var(--accent-hover);
+}
+
+.button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
 }

@@ -67,7 +67,7 @@ export default function BuildingPage() {
       <Seo title={pageTitle("Building your plan")} description="Kelper care plan." />
       <meta name="robots" content="noindex" />
       <div className={styles.screen}>
-        <img src={ollieBuilding} alt="" width={160} height={160} className={styles.ollie} />
+        <img src={ollieBuilding} alt="" width={150} height={186} className={styles.ollie} />
         {build.status === "loading" && (
           <div role="status" className={styles.block}>
             <h1 data-funnel-heading tabIndex={-1} className={styles.title}>

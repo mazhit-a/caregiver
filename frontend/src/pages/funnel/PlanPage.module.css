@@ -1,6 +1,11 @@
-.page { display: flex; flex-direction: column; gap: var(--space-3); }
-.title { margin: 0; font-size: 1.75rem; line-height: 1.2; }
-.intro { margin: 0; }
-.state { display: flex; flex-direction: column; gap: var(--space-2); }
-.button { display: inline-flex; align-items: center; justify-content: center; min-height: var(--tap-min); padding: 0 var(--space-3); font: inherit; font-weight: 600; border: 0; border-radius: 999px; background: var(--accent); color: var(--on-accent, #fff); cursor: pointer; }
-.disclaimer { margin: 0; font-size: 0.875rem; }
+/* Values from the quiz-funnel mockup (390px artboard). */
+.page { display: flex; flex-direction: column; gap: var(--space-5); }
+.head { display: flex; flex-direction: column; gap: var(--space-2); }
+.title { margin: 0; font: 800 28px/34px var(--font-sans); color: var(--text); }
+.title:focus { outline: none; }
+.intro { margin: 0; font: 400 16px/24px var(--font-sans); color: var(--text-secondary); }
+.state { display: flex; flex-direction: column; gap: var(--space-3); }
+.state p { margin: 0; }
+.button { display: inline-flex; align-items: center; justify-content: center; width: 100%; min-height: 56px; padding: 0 var(--space-5); font: var(--text-button); border: 0; border-radius: var(--radius-button); background: var(--accent); color: var(--on-accent); cursor: pointer; }
+.button:hover { background: var(--accent-hover); }
+.button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }

@@ -138,16 +138,20 @@ export default function PaywallPage() {
       )}
       {paywall && plan && probe === "open" && (
         <div className={styles.page}>
-          <h1 data-funnel-heading tabIndex={-1} className={styles.title}>
-            {paywall.headline}
-          </h1>
-          <p className={styles.subhead}>{paywall.subhead}</p>
-          <h2 className={styles.h2}>{PAYWALL.includesTitle}</h2>
-          <ul className={styles.includes}>
-            {paywall.includes.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
+          <div className={styles.head}>
+            <h1 data-funnel-heading tabIndex={-1} className={styles.title}>
+              {paywall.headline}
+            </h1>
+            <p className={styles.subhead}>{paywall.subhead}</p>
+          </div>
+          <div className={styles.includesBlock}>
+            <h2 className={styles.h2}>{PAYWALL.includesTitle}</h2>
+            <ul className={styles.includes}>
+              {paywall.includes.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
           <PlanPicker
             plans={paywall.plans}
             value={plan.id}

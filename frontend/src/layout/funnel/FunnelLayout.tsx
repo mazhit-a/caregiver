@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Outlet, useOutletContext } from "react-router";
 import { HelpSheet } from "../HelpSheet";
 import { NOT_MEDICAL_ADVICE } from "../nav";
@@ -19,6 +19,14 @@ export function useFunnelContext(): FunnelContext {
 export function FunnelLayout() {
   const [helpOpen, setHelpOpen] = useState(false);
   const seenFirst = useRef(false);
+  useEffect(() => {
+    const root = document.documentElement;
+    const name = styles["rootPadding"] ?? "";
+    if (name) root.classList.add(name);
+    return () => {
+      if (name) root.classList.remove(name);
+    };
+  }, []);
   const context: FunnelContext = {
     openHelp: () => setHelpOpen(true),
     shouldFocusStep: () => {

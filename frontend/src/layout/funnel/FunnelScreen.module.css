@@ -1,9 +1,6 @@
 /* Values from the quiz-funnel mockup (390px artboard): side padding 20px, bar padding 12/20/20.
    Fidelity values win over tokens where they differ, so they are local custom properties. */
 .header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
   background: var(--bg);
   border-bottom: var(--border-width) solid var(--border);
 }
@@ -12,15 +9,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap; /* at 200% text the three items wrap to a second row instead of overflowing */
   gap: var(--space-2);
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: var(--space-2) 20px;
+  padding: 8px 12px 4px;
 }
 
 .side {
   flex: 1 1 0;
-  min-width: 0;
+  min-width: max-content;
   display: flex;
 }
 
@@ -35,7 +33,7 @@
 }
 
 .logo img {
-  height: 36px;
+  height: 26px; /* mockup */
   width: auto;
 }
 
@@ -48,7 +46,7 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-button);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -61,15 +59,23 @@
 }
 
 .help {
-  border: var(--border-width) solid var(--safety);
-  background: var(--safety-soft);
+  /* mockup: plain 14px bold red text, no box; never wraps, so the header stays one row at 320px */
+  border: 0;
+  background: transparent;
   color: var(--safety-text);
+  font-size: 14px;
+  white-space: nowrap;
+  padding: 0 var(--space-2);
+}
+
+.help:hover {
+  text-decoration: underline;
 }
 
 .progress {
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: 0 20px var(--space-3);
+  padding: 0 20px 12px;
 }
 
 .main {
@@ -85,22 +91,30 @@
 }
 
 .bar {
+  order: 3;
   background: var(--bg);
   border-top: var(--border-width) solid var(--border);
   padding: 12px 20px 20px;
 }
 
 .barInner {
-  max-width: var(--content-max);
+  max-width: calc(var(--content-max) - 40px); /* same width as the content column */
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
 }
 
-/* Sticky only when the viewport is tall and wide enough, so at 200% zoom or on small
-   screens it flows in the page and never covers a focused control (WCAG 2.4.11). */
+/* Header and bar are sticky only when the viewport is tall and wide enough, so at 200% zoom or on
+   small screens they flow in the page and never cover a focused control (WCAG 2.4.11). When they
+   are sticky, FunnelLayout adds the scroll padding below so keyboard focus scrolls clear of both. */
 @media (min-height: 600px) and (min-width: 320px) {
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+
   .bar {
     position: sticky;
     bottom: 0;

@@ -1,5 +1,7 @@
-.frame { display: flex; flex-direction: column; gap: var(--space-3); }
+.frame { display: flex; flex-direction: column; gap: 20px; }
+.head { display: flex; flex-direction: column; gap: var(--space-2); }
 .title { margin: 0; font: 800 26px/32px var(--font-sans); color: var(--text); }
 .title:focus { outline: none; }
-.subtitle { margin: 0; font: var(--text-body); color: var(--text-secondary); }
-.note { margin: var(--space-2) 0 0; font: var(--text-small); color: var(--text-secondary); }
+.subtitle { margin: 0; font: 400 16px/24px var(--font-sans); color: var(--text-secondary); }
+.note { margin: 0; display: flex; gap: var(--space-2); align-items: flex-start; font: 400 14px/20px var(--font-sans); color: var(--text-secondary); }
+.lock { flex: 0 0 auto; margin-top: 1px; }
