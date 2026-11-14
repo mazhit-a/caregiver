@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
     coach_harness: str = "single_call"
     coach_model: str = "claude-opus-5-5"
+    coach_parent_model: str = ""  # parallel_split only; empty means the same as COACH_MODEL
     coach_effort: str = "low"
     coach_prompt_version: str = "1"
     llm_timeout_seconds: float = 12

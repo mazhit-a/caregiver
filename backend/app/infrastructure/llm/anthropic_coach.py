@@ -13,15 +13,12 @@ from dataclasses import dataclass
 from typing import Any, Final, Literal
 
 from anthropic import AsyncAnthropic
+from pydantic import BaseModel
 
 from app.application.ports import CoachUnavailable
 from app.application.roleplay.dto import CoachInput
 from app.domain.roleplay.verdict import CoachVerdict
-from app.infrastructure.llm.prompt import (
-    INPUT_FORMAT_NOTE,
-    PromptSpec,
-    build_user_message,
-)
+from app.infrastructure.llm.prompt import PromptSpec, build_user_message
 from app.infrastructure.llm.schema import CoachResponse
 
 logger = logging.getLogger(__name__)
@@ -35,7 +32,7 @@ FALLBACK_BETA: Final = "server-side-fallback-2026-07-01"
 FALLBACK_MODELS: Final = frozenset({"claude-opus-5-5"})
 
 Effort = Literal["low", "medium", "high", "xhigh", "max"]
-_EFFORTS: Final = ("low", "medium", "high", "xhigh", "max")
+EFFORTS: Final = ("low", "medium", "high", "xhigh", "max")
 
 
 @dataclass(frozen=True)
@@ -52,6 +49,7 @@ class CallMetrics:
     cache_read_tokens: int
     cache_creation_tokens: int
     outcome: str  # ok | no_api_key | timeout | api_error | refusal | max_tokens | invalid_output
+    role: str = "single"  # single | coach | parent (parallel_split reports one record per call)
 
 
 class AnthropicCoach:
@@ -70,8 +68,8 @@ class AnthropicCoach:
         thinking: dict[str, str] | None = None,
         metrics_sink: Callable[[CallMetrics], None] | None = None,
     ) -> None:
-        if effort not in _EFFORTS:
-            raise ValueError(f"COACH_EFFORT must be one of {_EFFORTS}, got {effort!r}")
+        if effort not in EFFORTS:
+            raise ValueError(f"COACH_EFFORT must be one of {EFFORTS}, got {effort!r}")
         self._client = client
         self._prompt = prompt
         self._model = model
@@ -79,103 +77,145 @@ class AnthropicCoach:
         self._timeout = timeout_seconds
         self._thinking = thinking
         self._sink = metrics_sink
-        # Static prefix: byte-stable, cache breakpoint on the last static block.
-        self._system: list[dict[str, Any]] = [
-            {"type": "text", "text": prompt.system},
-            {
-                "type": "text",
-                "text": INPUT_FORMAT_NOTE,
-                "cache_control": {"type": "ephemeral"},
-            },
-        ]
+        self._system = build_system(prompt.system, prompt.input_format_note)
 
     async def turn(self, coach_input: CoachInput) -> CoachVerdict:
         started = time.perf_counter()
         usage = (0, 0, 0, 0)
         try:
             if self._client is None:
-                raise _Failure("no_api_key")
+                raise CallFailure("no_api_key")
             response = await asyncio.wait_for(self._call(coach_input), timeout=self._timeout)
-            usage = _usage(response)
-            if response.stop_reason == "refusal":
-                raise _Failure("refusal")
-            if response.stop_reason == "max_tokens":
-                raise _Failure("max_tokens")
-            parsed = response.parsed_output
-            if not isinstance(parsed, CoachResponse):
-                raise _Failure("invalid_output")
+            usage = usage_of(response)
+            parsed = parsed_output(response, CoachResponse)
             verdict = parsed.to_verdict()
-        except _Failure as failure:
+        except CallFailure as failure:
             self._record(failure.outcome, started, usage)
             raise CoachUnavailable("The coach is unavailable.") from None
         except TimeoutError:
             self._record("timeout", started, usage)
             raise CoachUnavailable("The coach is unavailable.") from None
         except Exception as exc:
-            self._record(_classify(exc), started, usage)
+            self._record(classify_error(exc), started, usage)
             raise CoachUnavailable("The coach is unavailable.") from None
         self._record("ok", started, usage)
         return verdict
 
     async def _call(self, coach_input: CoachInput) -> Any:
         assert self._client is not None  # noqa: S101 - narrowed by the caller
-        client = self._client.with_options(max_retries=0, timeout=self._timeout)
-        common: dict[str, Any] = {
-            "model": self._model,
-            "max_tokens": MAX_TOKENS,
-            "system": self._system,
-            "messages": [{"role": "user", "content": build_user_message(coach_input)}],
-            "output_config": {"effort": self._effort},
-            "output_format": CoachResponse,
-        }
-        if self._thinking is not None:
-            common["thinking"] = self._thinking
-        if self._model in FALLBACK_MODELS:
-            return await client.beta.messages.parse(
-                **common, fallbacks="default", betas=[FALLBACK_BETA]
-            )
-        return await client.messages.parse(**common)
-
-    def _record(self, outcome: str, started: float, usage: tuple[int, int, int, int]) -> None:
-        metrics = CallMetrics(
-            harness=HARNESS_ID,
+        return await send_structured(
+            self._client,
             model=self._model,
             effort=self._effort,
-            prompt_version=self._prompt.version,
-            latency_ms=round((time.perf_counter() - started) * 1000, 1),
-            input_tokens=usage[0],
-            output_tokens=usage[1],
-            cache_read_tokens=usage[2],
-            cache_creation_tokens=usage[3],
-            outcome=outcome,
+            thinking=self._thinking,
+            system=self._system,
+            user=build_user_message(coach_input),
+            schema=CoachResponse,
+            sdk_timeout=self._timeout,
         )
-        logger.info(
-            "coach_call harness=%s model=%s effort=%s prompt_version=%s latency_ms=%s "
-            "input_tokens=%s output_tokens=%s cache_read_tokens=%s cache_creation_tokens=%s "
-            "outcome=%s",
-            metrics.harness,
-            metrics.model,
-            metrics.effort,
-            metrics.prompt_version,
-            metrics.latency_ms,
-            metrics.input_tokens,
-            metrics.output_tokens,
-            metrics.cache_read_tokens,
-            metrics.cache_creation_tokens,
-            metrics.outcome,
-            extra={"coach_metrics": metrics},
+
+    def _record(self, outcome: str, started: float, usage: tuple[int, int, int, int]) -> None:
+        emit_metrics(
+            CallMetrics(
+                harness=HARNESS_ID,
+                model=self._model,
+                effort=self._effort,
+                prompt_version=self._prompt.version,
+                latency_ms=round((time.perf_counter() - started) * 1000, 1),
+                input_tokens=usage[0],
+                output_tokens=usage[1],
+                cache_read_tokens=usage[2],
+                cache_creation_tokens=usage[3],
+                outcome=outcome,
+            ),
+            self._sink,
         )
-        if self._sink is not None:
-            self._sink(metrics)
 
 
-class _Failure(Exception):
+class CallFailure(Exception):
+    """A call that must become `CoachUnavailable`; `outcome` is the metrics outcome."""
+
     def __init__(self, outcome: str) -> None:
         super().__init__(outcome)
         self.outcome = outcome
 
 
-def _usage(response: Any) -> tuple[int, int, int, int]:
+def build_system(text: str, note: str | None = None) -> list[dict[str, Any]]:
+    """Static prefix: byte-stable, cache breakpoint on the last static block."""
+    if note is None:
+        return [{"type": "text", "text": text, "cache_control": {"type": "ephemeral"}}]
+    return [
+        {"type": "text", "text": text},
+        {"type": "text", "text": note, "cache_control": {"type": "ephemeral"}},
+    ]
+
+
+async def send_structured(
+    client: AsyncAnthropic,
+    *,
+    model: str,
+    effort: str,
+    thinking: dict[str, str] | None,
+    system: list[dict[str, Any]],
+    user: str,
+    schema: type[BaseModel],
+    sdk_timeout: float,
+) -> Any:
+    """One structured-output request: no temperature, prefill, tools or retries."""
+    scoped = client.with_options(max_retries=0, timeout=sdk_timeout)
+    common: dict[str, Any] = {
+        "model": model,
+        "max_tokens": MAX_TOKENS,
+        "system": system,
+        "messages": [{"role": "user", "content": user}],
+        "output_config": {"effort": effort},
+        "output_format": schema,
+    }
+    if thinking is not None:
+        common["thinking"] = thinking
+    if model in FALLBACK_MODELS:
+        return await scoped.beta.messages.parse(
+            **common, fallbacks="default", betas=[FALLBACK_BETA]
+        )
+    return await scoped.messages.parse(**common)
+
+
+def parsed_output[T: BaseModel](response: Any, schema: type[T]) -> T:
+    """The parsed model output, or `CallFailure` for a refusal, truncation or wrong shape."""
+    if response.stop_reason == "refusal":
+        raise CallFailure("refusal")
+    if response.stop_reason == "max_tokens":
+        raise CallFailure("max_tokens")
+    parsed = response.parsed_output
+    if not isinstance(parsed, schema):
+        raise CallFailure("invalid_output")
+    return parsed
+
+
+def emit_metrics(metrics: CallMetrics, sink: Callable[[CallMetrics], None] | None) -> None:
+    """Log one call (counts and outcome only, never text) and hand it to the sink."""
+    logger.info(
+        "coach_call harness=%s role=%s model=%s effort=%s prompt_version=%s latency_ms=%s "
+        "input_tokens=%s output_tokens=%s cache_read_tokens=%s cache_creation_tokens=%s "
+        "outcome=%s",
+        metrics.harness,
+        metrics.role,
+        metrics.model,
+        metrics.effort,
+        metrics.prompt_version,
+        metrics.latency_ms,
+        metrics.input_tokens,
+        metrics.output_tokens,
+        metrics.cache_read_tokens,
+        metrics.cache_creation_tokens,
+        metrics.outcome,
+        extra={"coach_metrics": metrics},
+    )
+    if sink is not None:
+        sink(metrics)
+
+
+def usage_of(response: Any) -> tuple[int, int, int, int]:
     u = response.usage
     return (
         int(u.input_tokens),
@@ -185,8 +225,7 @@ def _usage(response: Any) -> tuple[int, int, int, int]:
     )
 
 
-def _classify(exc: Exception) -> str:
-    # Local import of the exception types keeps the module header small.
+def classify_error(exc: Exception) -> str:
     from anthropic import APIError, APITimeoutError
 
     if isinstance(exc, APITimeoutError):

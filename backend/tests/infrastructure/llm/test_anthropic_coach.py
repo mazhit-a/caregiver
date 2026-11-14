@@ -278,7 +278,7 @@ def test_unknown_prompt_version_fails_startup() -> None:
 
 def test_unknown_harness_fails_startup() -> None:
     with pytest.raises(UnknownHarnessError):
-        build_coach(Settings(_env_file=None, coach_harness="parallel_split"))
+        build_coach(Settings(_env_file=None, coach_harness="bogus"))
 
 
 def test_prompt_v1_loads_the_system_prompt_only() -> None:

@@ -45,3 +45,37 @@ class CoachResponse(_Strict):
                 parent_mood=self.parent_mood,
             )
         )
+
+
+class CoachAnalysisResponse(_Strict):
+    """Output of the COACH call of `parallel_split`: everything except the parent's reaction."""
+
+    goals: GoalsOut
+    argued: bool
+    score: int
+    tip: str
+    better_phrase: str
+    flags: list[Literal["medical", "crisis", "off_topic", "too_short"]]
+
+
+class ParentResponse(_Strict):
+    """Output of the PARENT call of `parallel_split`."""
+
+    parent_reaction: str
+    parent_mood: Literal["calmer", "same", "more_upset"]
+
+
+def merge_verdict(coach: CoachAnalysisResponse, parent: ParentResponse) -> CoachVerdict:
+    """One verdict with the single-call contract. When the flags require an empty parent line
+    (medical, crisis) it is blanked here too; `apply_rules` enforces it again in the domain."""
+    reaction = "" if {"medical", "crisis"} & set(coach.flags) else parent.parent_reaction
+    return CoachResponse(
+        goals=coach.goals,
+        argued=coach.argued,
+        score=coach.score,
+        tip=coach.tip,
+        better_phrase=coach.better_phrase,
+        parent_reaction=reaction,
+        parent_mood=parent.parent_mood,
+        flags=coach.flags,
+    ).to_verdict()

@@ -29,10 +29,33 @@ class PromptLoadError(Exception):
     """The prompt file or version is missing or malformed: startup must fail."""
 
 
+# Prompt versions whose file describes a JSON input: the adapter appends INPUT_FORMAT_NOTE for them.
+# Later versions describe the XML input inside the file and need no code-level note.
+_NOTE_VERSIONS = frozenset({"1"})
+_COACH_BLOCK = re.compile(
+    r"^## Coach call system prompt\s*\n+```[^\n]*\n(.*?)\n```", re.DOTALL | re.MULTILINE
+)
+_PARENT_BLOCK = re.compile(
+    r"^## Parent call system prompt\s*\n+```[^\n]*\n(.*?)\n```", re.DOTALL | re.MULTILINE
+)
+
+
 @dataclass(frozen=True)
 class PromptSpec:
+    """`input_format_note` is appended after `system` as a second static block (v1 only).
+
+    `coach_system` / `parent_system` are the two prompts of the `parallel_split` harness (v2+).
+    """
+
     version: str
     system: str
+    input_format_note: str | None = None
+    coach_system: str | None = None
+    parent_system: str | None = None
+
+
+def uses_input_format_note(version: str) -> bool:
+    return version in _NOTE_VERSIONS
 
 
 def load_prompt(content_dir: Path, version: str) -> PromptSpec:
@@ -41,10 +64,19 @@ def load_prompt(content_dir: Path, version: str) -> PromptSpec:
     path = content_dir / "prompts" / f"roleplay-turn.v{version}.md"
     if not path.is_file():
         raise PromptLoadError(f"Prompt file not found for COACH_PROMPT_VERSION={version}: {path}")
-    match = _SYSTEM_BLOCK.search(path.read_text(encoding="utf-8"))
+    text = path.read_text(encoding="utf-8")
+    match = _SYSTEM_BLOCK.search(text)
     if match is None or not match.group(1).strip():
         raise PromptLoadError(f"No '## System prompt' code block in {path}")
-    return PromptSpec(version=version, system=match.group(1).strip())
+    coach = _COACH_BLOCK.search(text)
+    parent = _PARENT_BLOCK.search(text)
+    return PromptSpec(
+        version=version,
+        system=match.group(1).strip(),
+        input_format_note=INPUT_FORMAT_NOTE if uses_input_format_note(version) else None,
+        coach_system=coach.group(1).strip() if coach else None,
+        parent_system=parent.group(1).strip() if parent else None,
+    )
 
 
 def _tag(name: str, body: str) -> str:
