@@ -1,0 +1,36 @@
+.section {
+  padding: var(--space-7) var(--space-5);
+}
+
+.inner {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.plain {
+  background: transparent;
+}
+
+.butter {
+  background: var(--butter-100);
+}
+
+.muted {
+  background: var(--surface-muted);
+}
+
+.plum {
+  background: var(--plum-900);
+  color: var(--bg);
+}
+
+.plum :is(h1, h2, h3, p, li) {
+  color: inherit;
+}
+
+/* 768px is --bp-tablet */
+@media (min-width: 768px) {
+  .section {
+    padding-block: 80px;
+  }
+}

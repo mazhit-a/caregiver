@@ -1,0 +1,66 @@
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  align-items: center;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.eyebrow {
+  margin: 0;
+  font: var(--text-caption);
+  color: var(--accent-pressed);
+}
+
+.title {
+  margin: 0;
+  font: var(--text-h2);
+}
+
+.text p {
+  margin: 0;
+  font: var(--text-body);
+  color: var(--text-secondary);
+}
+
+.visual {
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* 768px is --bp-tablet */
+@media (min-width: 768px) {
+  .row {
+    flex-direction: row;
+    gap: var(--space-8);
+  }
+
+  .reverse {
+    flex-direction: row-reverse;
+  }
+
+  .text,
+  .visual {
+    flex: 1 1 0;
+  }
+
+  .title {
+    font: var(--text-h2-lg);
+  }
+
+  .text p {
+    font: var(--text-body-lg);
+  }
+
+  .visual {
+    display: flex;
+    justify-content: center;
+  }
+}

@@ -18,4 +18,20 @@ export default tseslint.config(
       "@typescript-eslint/no-explicit-any": "error",
     },
   },
+  {
+    files: ["src/components/practice/**/*.{ts,tsx}", "src/content/practiceScript.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/api", "**/api/*"],
+              message: "The practice preview is canned data and must never call the API.",
+            },
+          ],
+        },
+      ],
+    },
+  },
 );

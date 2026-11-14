@@ -1,0 +1,59 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background: var(--coach);
+  border: var(--border-width) solid var(--coach-border);
+  border-radius: var(--radius-card);
+  padding: 18px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  border-radius: var(--radius-chip);
+  border: var(--border-width-strong) solid var(--surface);
+}
+
+.name,
+.score {
+  color: var(--info-text);
+  font-weight: 700;
+}
+
+.name {
+  font-size: 15px;
+}
+
+.score {
+  margin-left: auto;
+  font-size: 13px;
+}
+
+.tip {
+  margin: 0;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.mom {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: var(--space-3) 14px;
+}
+
+.momLabel {
+  margin: 0 0 2px;
+  font: var(--text-caption);
+  color: var(--text-secondary);
+}
+
+.momText {
+  margin: 0;
+  font-size: 16px;
+  line-height: 24px;
+}
