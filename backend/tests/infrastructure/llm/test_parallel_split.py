@@ -284,7 +284,10 @@ async def test_parallel_split_one_call_failing_raises_CoachUnavailable(
     coach, wire = make("parallel_split", handler, sink=seen.append)
     with pytest.raises(CoachUnavailable):
         await coach.turn(coach_input())
-    assert len(wire.requests) == 2  # no retries
+    # No retries: the failing call was sent exactly once, the other at most once (it may be
+    # cancelled before its request leaves, depending on scheduling).
+    assert len(wire.bodies(failing)) == 1
+    assert len(wire.requests) <= 2
     assert {m.role for m in seen} == {"coach", "parent"}
     assert {m.role: m.outcome for m in seen}[failing] != "ok"
 
