@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "notes": [
+    "Crisis and emergency lists are extracted from the 'Local safety check' table in prompts/roleplay-turn.md. Matching: lowercase the reply, whole words only, so 'fellow' does not match 'fell'. 'missing the bus' must not trigger the term 'missing' (excludedPhrases).",
+    "SAFETY-SENSITIVE: changes need the content owner's explicit approval. Review before launch.",
+    "The medical list is NOT in the prompt file; it was drafted for the offline graders (no medical terms in the parent line) and needs review."
+  ],
+  "matching": {
+    "mode": "whole_word",
+    "caseInsensitive": true,
+    "excludedPhrases": [
+      "missing the bus"
+    ]
+  },
+  "crisis": [
+    "kill myself",
+    "end my life",
+    "suicide",
+    "hurt myself",
+    "want to die",
+    "hurt her",
+    "hit her",
+    "hurt him",
+    "hit him"
+  ],
+  "emergency": [
+    "fell",
+    "bleeding",
+    "not breathing",
+    "unconscious",
+    "can't find her",
+    "can't find him",
+    "missing"
+  ],
+  "medical": [
+    "medication",
+    "medicine",
+    "medicines",
+    "dose",
+    "dosage",
+    "prescription",
+    "pills",
+    "diagnosis",
+    "diagnose",
+    "symptom",
+    "symptoms",
+    "side effects",
+    "donepezil",
+    "memantine",
+    "aricept",
+    "namenda",
+    "antipsychotic",
+    "sedative",
+    "blood pressure",
+    "infection"
+  ]
+}

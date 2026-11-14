@@ -9,15 +9,27 @@ from typing import Any
 from pydantic import BaseModel, ValidationError
 
 from app.infrastructure.content.schemas import (
+    CrisisResourcesFile,
     FunnelCopyFile,
     LessonFile,
     PhrasesFile,
     PlanRulesFile,
     PricingFile,
     QuizFile,
+    SafetyTermsFile,
+    VisitQuestionsFile,
 )
 
-_SINGLE_FILES = ("quiz.json", "plan-rules.json", "phrases.json", "pricing.json", "funnel-copy.json")
+_SINGLE_FILES = (
+    "quiz.json",
+    "plan-rules.json",
+    "phrases.json",
+    "pricing.json",
+    "funnel-copy.json",
+    "safety-terms.json",
+    "crisis-resources.json",
+    "visit-questions.json",
+)
 _LESSONS_DIR = "lessons"
 
 
@@ -32,6 +44,9 @@ class ContentBundle:
     phrases: PhrasesFile
     pricing: PricingFile
     funnel_copy: FunnelCopyFile
+    safety_terms: SafetyTermsFile
+    crisis_resources: CrisisResourcesFile
+    visit_questions: VisitQuestionsFile
     lessons: dict[str, LessonFile]
     content_version: str
 
@@ -98,6 +113,13 @@ def load_content(content_dir: Path) -> ContentBundle:
         phrases=_parse("phrases.json", raw["phrases.json"], PhrasesFile),
         pricing=_parse("pricing.json", raw["pricing.json"], PricingFile),
         funnel_copy=_parse("funnel-copy.json", raw["funnel-copy.json"], FunnelCopyFile),
+        safety_terms=_parse("safety-terms.json", raw["safety-terms.json"], SafetyTermsFile),
+        crisis_resources=_parse(
+            "crisis-resources.json", raw["crisis-resources.json"], CrisisResourcesFile
+        ),
+        visit_questions=_parse(
+            "visit-questions.json", raw["visit-questions.json"], VisitQuestionsFile
+        ),
         lessons=lessons,
         content_version=compute_content_version(raw),
     )

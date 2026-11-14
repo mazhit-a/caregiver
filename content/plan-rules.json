@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "notes": [
     "v2: the plan is built from MODULES. Lessons inside a module are fixed and the same for everyone. The quiz decides the ORDER of modules (after Module 1, which is always first) and the reason shown for each.",
     "Personalize the surface, keep the path the same: lesson variants (in person / phone / not noticed yet) change examples and tasks, never which lesson comes next.",
@@ -519,7 +519,12 @@
       "pace:15": 5,
       "default": 4
     },
-    "label": "About {minutes} minutes a lesson, {perWeek} lessons a week"
+    "label": "About {minutes} minutes a lesson, {perWeek} lessons a week",
+    "unlockRule": {
+      "formula": "unlockOffsetDays(k) = ceil(k * daysPerWeek / lessonsPerWeek) + firstLessonOffsetDays; k is the 0-based position among the plan's built lessons",
+      "daysPerWeek": 7,
+      "firstLessonOffsetDays": 0
+    }
   },
   "skills": {
     "communication": "Communication",

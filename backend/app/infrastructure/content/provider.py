@@ -4,6 +4,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
+from app.domain.safety.resources import CrisisResource
 from app.domain.shared.errors import DomainError
 from app.domain.shared.labels import RecipientLabels, lesson_labels, render_text
 from app.infrastructure.content.loader import ContentBundle, load_content
@@ -47,6 +48,15 @@ class JsonContentProvider:
     def lesson_recipient_labels(self, key: str) -> RecipientLabels:
         self.recipient_labels(key)  # validates the key
         return lesson_labels(key, self._labels)
+
+    def crisis_resources(self) -> list[CrisisResource]:
+        return [
+            CrisisResource(id=r.id, name=r.name, phone=r.phone, description=r.description)
+            for r in self._bundle.crisis_resources.resources
+        ]
+
+    def crisis_resources_need_verification(self) -> bool:
+        return self._bundle.crisis_resources.verify_before_launch
 
     def lesson_ids(self) -> list[str]:
         return sorted(self._bundle.lessons)

@@ -179,9 +179,18 @@ class QuickGuide(ContentModel):
     highlight_if: list[str]
 
 
+class UnlockRule(ContentModel):
+    """Parameters of `ceil(k * days_per_week / lessons_per_week) + first_lesson_offset_days`."""
+
+    formula: str
+    days_per_week: int = Field(gt=0)
+    first_lesson_offset_days: int = Field(ge=0)
+
+
 class Pace(ContentModel):
     lessons_per_week: dict[str, int]
     label: str
+    unlock_rule: UnlockRule
 
 
 class HeardSentence(ContentModel):
@@ -276,6 +285,7 @@ class PricingPlan(ContentModel):
     renew_period_text: str
     stripe_intro_price_id: str
     stripe_renew_price_id: str
+    stripe_intro_coupon_id: str
     status: str
 
 
@@ -284,6 +294,53 @@ class PricingFile(Notes):
     currency: str
     default_plan_id: str
     plans: list[PricingPlan]
+
+
+# ---------------------------------------------------------------- safety-terms.json
+
+
+class SafetyMatching(ContentModel):
+    mode: Literal["whole_word"]
+    case_insensitive: bool
+    excluded_phrases: list[str] = []
+
+
+class SafetyTermsFile(Notes):
+    version: int
+    matching: SafetyMatching
+    crisis: list[str] = Field(min_length=1)
+    emergency: list[str] = Field(min_length=1)
+    medical: list[str] = Field(min_length=1)
+
+
+# ---------------------------------------------------------------- crisis-resources.json
+
+
+class CrisisResourceModel(ContentModel):
+    id: str
+    name: str
+    phone: str
+    description: str
+
+
+class CrisisResourcesFile(Notes):
+    version: int
+    verify_before_launch: bool
+    resources: list[CrisisResourceModel] = Field(min_length=1)
+
+
+# ---------------------------------------------------------------- visit-questions.json
+
+
+class VisitQuestion(ContentModel):
+    id: str
+    text: str
+
+
+class VisitQuestionsFile(Notes):
+    version: int
+    footer: str
+    questions: list[VisitQuestion] = Field(min_length=1)
 
 
 # ---------------------------------------------------------------- funnel-copy.json
