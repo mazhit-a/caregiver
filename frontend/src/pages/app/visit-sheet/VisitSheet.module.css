@@ -1,0 +1,298 @@
+/* Visit sheet. Colours and spacing from tokens. The printable block is `.sheet`. */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.back {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  color: var(--accent-pressed);
+  font: var(--text-button);
+}
+
+.h1 {
+  margin: 0;
+  font: var(--text-h1);
+  color: var(--text);
+}
+
+.h2 {
+  margin: 0;
+  font: var(--text-h2);
+}
+
+.h3 {
+  margin: var(--space-3) 0 0;
+  font: var(--text-h3);
+}
+
+.hint {
+  margin: 0;
+  color: var(--text-secondary);
+  font: var(--text-small);
+}
+
+.status {
+  min-height: 22px;
+  color: var(--text-secondary);
+  font: var(--text-small);
+}
+
+.error {
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width) solid var(--error);
+  border-radius: var(--radius-input);
+  background: var(--error-soft);
+  color: var(--error-text);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.error p {
+  margin: 0;
+}
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .row {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font: var(--text-caption);
+  color: var(--text-secondary);
+}
+
+.field input,
+.card textarea {
+  min-height: var(--tap-min);
+  padding: var(--space-2) var(--space-3);
+  border: 2px solid var(--border-control);
+  border-radius: var(--radius-input);
+  background: var(--surface);
+  color: var(--text);
+  font: var(--text-body);
+}
+
+.card textarea {
+  resize: vertical;
+}
+
+.counter {
+  margin: 0;
+  align-self: flex-end;
+  color: var(--text-secondary);
+  font: var(--text-caption);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-input);
+}
+
+.itemText {
+  flex: 1 1 220px;
+  font: var(--text-body);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.ownForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+
+.ownForm .field {
+  flex: 1 1 240px;
+}
+
+.primary,
+.secondary,
+.icon {
+  min-height: var(--tap-min);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-button);
+  font: var(--text-button);
+  cursor: pointer;
+}
+
+.primary {
+  align-self: flex-start;
+  border: var(--border-width) solid var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.secondary,
+.icon {
+  border: 2px solid var(--accent);
+  background: var(--surface);
+  color: var(--accent-pressed);
+}
+
+.icon {
+  min-width: var(--tap-min);
+  padding: 0;
+}
+
+.secondary:disabled,
+.icon:disabled {
+  border-color: var(--border-control);
+  color: var(--text-secondary);
+  cursor: not-allowed;
+}
+
+/* The printable sheet: shown on screen as the preview, alone on paper when printing. */
+.sheet {
+  padding: var(--space-5);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-card);
+  background: #fff;
+  color: #000;
+}
+
+.sheetTitle {
+  margin: 0 0 var(--space-1);
+  font: var(--text-h2);
+}
+
+.sheetMeta {
+  margin: 0 0 var(--space-3);
+  font: var(--text-small);
+}
+
+.sheetFacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  margin: 0 0 var(--space-3);
+}
+
+.sheetFacts dt {
+  font: var(--text-caption);
+}
+
+.sheetFacts dd {
+  min-width: 160px;
+  margin: 0;
+  border-bottom: 1px solid #000;
+  font: var(--text-body);
+}
+
+.sheetHeading {
+  margin: var(--space-4) 0 var(--space-1);
+  font: var(--text-h3);
+}
+
+.sheetNotes {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: var(--text-body);
+}
+
+.sheetQuestions {
+  margin: 0;
+  padding-left: var(--space-5);
+  font: var(--text-body);
+}
+
+.answerLines {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-top: 20px;
+}
+
+.answerLines span {
+  border-bottom: 1px solid #000;
+}
+
+.sheetFooter {
+  margin: var(--space-4) 0 0;
+  font: var(--text-small);
+}
+
+@page {
+  size: Letter;
+  margin: 0.5in;
+}
+
+@media print {
+  /* Only the sheet reaches the paper: everything else (shell, editor, buttons) is hidden. */
+  body * {
+    visibility: hidden;
+  }
+
+  .sheet,
+  .sheet * {
+    visibility: visible;
+  }
+
+  .sheet {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: #fff;
+    color: #000;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
