@@ -25,6 +25,14 @@ class SqlScenarioAnswerRepository:
             )
         )
 
+    async def list_for_session(self, session_id: UUID) -> list[ScenarioAnswer]:
+        result = await self._db.execute(
+            select(ScenarioAnswerRow)
+            .where(ScenarioAnswerRow.session_id == session_id)
+            .order_by(ScenarioAnswerRow.id)
+        )
+        return [self._to_domain(row) for row in result.scalars()]
+
     async def list_for_lesson(self, session_id: UUID, lesson_id: str) -> list[ScenarioAnswer]:
         result = await self._db.execute(
             select(ScenarioAnswerRow)
@@ -34,14 +42,15 @@ class SqlScenarioAnswerRepository:
             )
             .order_by(ScenarioAnswerRow.id)
         )
-        return [
-            ScenarioAnswer(
-                row.session_id,
-                row.lesson_id,
-                row.screen_id,
-                row.answer_id,
-                row.verdict,
-                row.answered_at,
-            )
-            for row in result.scalars()
-        ]
+        return [self._to_domain(row) for row in result.scalars()]
+
+    @staticmethod
+    def _to_domain(row: ScenarioAnswerRow) -> ScenarioAnswer:
+        return ScenarioAnswer(
+            row.session_id,
+            row.lesson_id,
+            row.screen_id,
+            row.answer_id,
+            row.verdict,
+            row.answered_at,
+        )

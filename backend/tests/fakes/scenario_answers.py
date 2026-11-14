@@ -12,3 +12,6 @@ class InMemoryScenarioAnswerRepository:
 
     async def list_for_lesson(self, session_id: UUID, lesson_id: str) -> list[ScenarioAnswer]:
         return [r for r in self.rows if r.session_id == session_id and r.lesson_id == lesson_id]
+
+    async def list_for_session(self, session_id: UUID) -> list[ScenarioAnswer]:
+        return [r for r in self.rows if r.session_id == session_id]

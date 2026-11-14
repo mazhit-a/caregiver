@@ -29,6 +29,10 @@ class InMemoryRoleplayRunRepository:
     async def save(self, record: RunRecord) -> None:
         self.rows[record.id] = deepcopy(record)
 
+    async def list_finished(self, session_id: UUID) -> list[RunRecord]:
+        done = [r for r in self.rows.values() if r.session_id == session_id and r.finished_at]
+        return [deepcopy(r) for r in sorted(done, key=lambda r: r.finished_at or r.started_at)]
+
 
 class FakeCoach:
     """Scripted `Coach`: each item is a verdict to return or an exception to raise (use

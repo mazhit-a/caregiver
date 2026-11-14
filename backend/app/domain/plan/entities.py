@@ -1,7 +1,7 @@
 """Plain domain objects for the plan builder: rules (input) and the built plan (output)."""
 
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Literal
 from uuid import UUID
@@ -29,6 +29,7 @@ class ModuleRule:
     reason: str | None
     base_score: int | None
     lessons: tuple[LessonRule, ...]
+    skill: str = ""  # id of the skill the module teaches (a key of `PlanRules.skills`)
 
 
 @dataclass(frozen=True)
@@ -101,6 +102,7 @@ class PlanRules:
     loader_lines: tuple[LoaderLineRule, ...]
     phrases: tuple[PhraseRule, ...]
     gift_phrase_count: int
+    skills: Mapping[str, str] = field(default_factory=dict)  # skill id -> label
 
 
 @dataclass(frozen=True)

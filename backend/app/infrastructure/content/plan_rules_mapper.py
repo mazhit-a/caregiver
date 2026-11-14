@@ -29,6 +29,7 @@ def to_plan_rules(rules: PlanRulesFile, phrases: PhrasesFile) -> PlanRules:
                 reason=m.reason,
                 base_score=m.base_score,
                 lessons=tuple(LessonRule(x.id, x.title, x.minutes, x.built) for x in m.lessons),
+                skill=m.skill,
             )
             for m in rules.modules
         ),
@@ -75,4 +76,5 @@ def to_plan_rules(rules: PlanRulesFile, phrases: PhrasesFile) -> PlanRules:
         ),
         phrases=tuple(PhraseRule(p.id, tuple(p.tags)) for p in phrases.phrases),
         gift_phrase_count=rules.gift_phrases.count,
+        skills=dict(rules.skills),
     )
