@@ -1,0 +1,70 @@
+.page { display: flex; flex-direction: column; gap: var(--space-5); }
+.header h1 { margin: 0; font: var(--text-h1); color: var(--text); }
+.purpose { margin: var(--space-2) 0 0; font: var(--text-body); color: var(--text-secondary); }
+.statusRow { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+.statusLabel { font: var(--text-small); color: var(--text-secondary); }
+.chip {
+  display: inline-flex; align-items: center; min-height: 36px; padding: 0 var(--space-3);
+  border-radius: var(--radius-chip); font: var(--text-small); background: var(--info-soft); color: var(--info-text);
+}
+.chipPublished { background: var(--success-soft); color: var(--success-text); }
+.chipUpdate { background: var(--warning-soft); color: var(--warning-text); }
+.chipRevoked { background: var(--surface-muted); color: var(--text-secondary); }
+.section { display: flex; flex-direction: column; gap: var(--space-3); }
+.section h2 { margin: 0; font: var(--text-h2); color: var(--text); }
+.card {
+  padding: var(--space-4); border-radius: var(--radius-card);
+  background: var(--surface); border: var(--border-width) solid var(--border); box-shadow: var(--shadow-1);
+}
+.hint { margin: 0; font: var(--text-small); color: var(--text-secondary); }
+.preview { display: flex; flex-direction: column; gap: var(--space-3); }
+.preview h3 { margin: 0; font: var(--text-h2); color: var(--text); }
+.preview h4 { margin: 0 0 var(--space-1); font: var(--text-body-strong); color: var(--text); }
+.preview p, .preview li { margin: 0; font: var(--text-body); color: var(--text); }
+.preview ul { margin: 0; padding-left: var(--space-5); }
+.muted { color: var(--text-secondary) !important; }
+.helplineDesc { font: var(--text-small); color: var(--text-secondary); }
+.picker { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.picker legend { font: var(--text-body-strong); color: var(--text); padding: 0; margin-bottom: var(--space-1); }
+.option {
+  display: flex; align-items: flex-start; gap: var(--space-3); min-height: var(--tap-min);
+  padding: var(--space-2) var(--space-3); border: var(--border-width) solid var(--border-control);
+  border-radius: var(--radius-input); background: var(--surface); cursor: pointer; font: var(--text-body); color: var(--text);
+}
+.option input { width: 24px; height: 24px; flex: none; margin: 0; }
+.row { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+.btn {
+  min-height: var(--tap-min); padding: 0 var(--space-4);
+  border: var(--border-width) solid var(--border-control); border-radius: var(--radius-button);
+  background: var(--surface); color: var(--text); font: var(--text-button); cursor: pointer;
+  display: inline-flex; align-items: center; text-decoration: none;
+}
+.btn:hover { background: var(--surface-muted); }
+.btn[aria-disabled="true"] { opacity: 0.6; cursor: default; }
+.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.primary:hover { background: var(--accent-hover); }
+.danger { color: var(--error-text); }
+.confirm { padding: var(--space-3); border-radius: var(--radius-input); background: var(--warning-soft); color: var(--warning-text); display: flex; flex-direction: column; gap: var(--space-2); }
+.confirm h3 { margin: 0; font: var(--text-body-strong); }
+.confirm p { margin: 0; font: var(--text-small); }
+.linkInput {
+  min-height: var(--tap-min); padding: var(--space-2) var(--space-3); flex: 1 1 240px; min-width: 0;
+  border: var(--border-width) solid var(--border-control); border-radius: var(--radius-input);
+  background: var(--surface-muted); color: var(--text); font: var(--text-body); box-sizing: border-box;
+}
+.linkLabel { font: var(--text-body-strong); color: var(--text); }
+.error { margin: 0; padding: var(--space-3); border-radius: var(--radius-input); background: var(--error-soft); color: var(--error-text); font: var(--text-small); }
+.notice { margin: 0; padding: var(--space-3); border-radius: var(--radius-input); background: var(--info-soft); color: var(--info-text); font: var(--text-small); }
+.btn:focus-visible, .linkInput:focus-visible, .option:focus-within { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+@media print {
+  .noPrint { display: none !important; }
+  .page { gap: 0; }
+  .card { box-shadow: none; border: 1px solid #000; background: #fff; color: #000; break-inside: avoid; }
+  .preview h3, .preview h4, .preview p, .preview li, .preview .helplineDesc, .preview .muted { color: #000 !important; }
+}
+
+@page {
+  size: Letter;
+  margin: 0.6in;
+}

@@ -1,0 +1,71 @@
+.page { display: flex; flex-direction: column; gap: var(--space-5); }
+.header {
+  display: flex; align-items: center; gap: var(--space-4);
+  padding: var(--space-5); border-radius: var(--radius-card);
+  background: var(--butter-100); border: var(--border-width) solid var(--border);
+}
+.avatar {
+  flex: none; width: 72px; height: 72px; border-radius: 50%; overflow: hidden;
+  display: grid; place-items: center; background: var(--surface);
+  font: var(--text-h1); color: var(--text);
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.headerText { flex: 1 1 auto; min-width: 0; }
+.headerText h1 { margin: 0; font: var(--text-h1); color: var(--text); }
+.note { margin: var(--space-1) 0 0; font: var(--text-small); color: var(--text-secondary); }
+.section { display: flex; flex-direction: column; gap: var(--space-3); }
+.section h2 { margin: 0; font: var(--text-h2); color: var(--text); }
+.card {
+  padding: var(--space-4); border-radius: var(--radius-card);
+  background: var(--surface); border: var(--border-width) solid var(--border);
+  box-shadow: var(--shadow-1);
+}
+.card h3 { margin: 0 0 var(--space-2); font: var(--text-h3); color: var(--text); }
+.card p { margin: 0; font: var(--text-body); color: var(--text); }
+.muted { color: var(--text-secondary) !important; }
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
+.chip {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  min-height: 36px; padding: 0 var(--space-3); border-radius: var(--radius-chip);
+  background: var(--info-soft); color: var(--info-text); font: var(--text-small);
+}
+.chipRemove {
+  min-width: var(--tap-min); min-height: var(--tap-min); margin: calc(var(--space-2) * -1) calc(var(--space-3) * -1) calc(var(--space-2) * -1) 0;
+  border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; border-radius: var(--radius-chip);
+}
+.contacts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.phraseCard { display: flex; flex-direction: column; gap: var(--space-3); }
+.quote { display: flex; gap: var(--space-3); }
+.glyph { flex: none; font: var(--text-display); color: var(--iris-400); line-height: 0.8; }
+.source { font: var(--text-caption); color: var(--text-secondary); }
+.row { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+.btn {
+  min-height: var(--tap-min); padding: 0 var(--space-4);
+  border: var(--border-width) solid var(--border-control); border-radius: var(--radius-button);
+  background: var(--surface); color: var(--text); font: var(--text-button); cursor: pointer;
+  display: inline-flex; align-items: center; text-decoration: none;
+}
+.btn:hover { background: var(--surface-muted); }
+.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.primary:hover { background: var(--accent-hover); }
+.danger { color: var(--error-text); }
+.confirm { padding: var(--space-3); border-radius: var(--radius-input); background: var(--warning-soft); color: var(--warning-text); }
+.confirm p { font: var(--text-small); margin: 0 0 var(--space-2); }
+.empty { display: flex; align-items: center; gap: var(--space-4); }
+.empty img { width: 96px; height: auto; flex: none; }
+.form { display: flex; flex-direction: column; gap: var(--space-5); }
+.field { display: flex; flex-direction: column; gap: var(--space-2); }
+.field label, .field legend { font: var(--text-body-strong); color: var(--text); }
+.hint { font: var(--text-small); color: var(--text-secondary); margin: 0; }
+.input, .textarea {
+  min-height: var(--tap-min); padding: var(--space-2) var(--space-3);
+  border: var(--border-width) solid var(--border-control); border-radius: var(--radius-input);
+  background: var(--surface); color: var(--text); font: var(--text-body); width: 100%; box-sizing: border-box;
+}
+.textarea { min-height: 120px; resize: vertical; }
+.addRow { display: flex; gap: var(--space-2); }
+.addRow .input { flex: 1 1 auto; }
+.contactBlock { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-3); border: var(--border-width) solid var(--border); border-radius: var(--radius-input); }
+.error { margin: 0; padding: var(--space-3); border-radius: var(--radius-input); background: var(--error-soft); color: var(--error-text); font: var(--text-small); }
+.fieldError { margin: 0; color: var(--error-text); font: var(--text-small); }
+.btn:focus-visible, .input:focus-visible, .textarea:focus-visible, .chipRemove:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
