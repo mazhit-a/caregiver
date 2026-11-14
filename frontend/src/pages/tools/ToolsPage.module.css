@@ -1,0 +1,71 @@
+.hero { display: flex; flex-direction: column; gap: var(--space-6); align-items: center; }
+.heroText { display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; }
+.heroTitle { margin: 0; font: var(--text-display); }
+.heroLead { margin: 0; font: var(--text-body); color: var(--text-secondary); max-width: 620px; }
+.heroImage { width: 160px; height: auto; filter: drop-shadow(0 8px 12px rgba(42, 37, 71, 0.18)); }
+
+.lead { margin: 0; font: var(--text-body); color: var(--text-secondary); }
+.small { margin: 0; font: var(--text-small); color: var(--text-secondary); }
+
+.figure { margin: 0; width: 100%; display: flex; flex-direction: column; gap: var(--space-2); align-items: center; }
+.caption { font: var(--text-caption); color: var(--text-secondary); }
+
+.label { margin: 0; font-size: 14px; font-weight: 700; }
+.value { margin: 4px 0 0; font: var(--text-small); }
+
+.fields {
+  width: 100%; box-sizing: border-box; background: var(--surface); border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-sheet); padding: var(--space-4); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4);
+}
+.field { border-radius: 16px; padding: var(--space-4); }
+.butter { background: var(--butter-100); }
+.iris { background: var(--info-soft); }
+.muted { background: var(--surface-muted); }
+.phrases { border-top: var(--border-width) solid var(--border); padding-top: var(--space-4); display: flex; flex-direction: column; gap: 4px; }
+
+.band { background: var(--info-soft); }
+.card {
+  width: 100%; max-width: 420px; box-sizing: border-box; background: var(--surface); border-radius: var(--radius-sheet);
+  padding: var(--space-5); display: flex; flex-direction: column; gap: 14px; box-shadow: var(--shadow-2);
+}
+.cardMeta { margin: 0; font: var(--text-caption); color: var(--text-secondary); }
+.cardTitle { margin: 0; font: var(--text-h2); }
+.contacts { background: var(--surface-muted); border-radius: 16px; padding: 14px var(--space-4); }
+.bullets { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: var(--space-2); font: var(--text-body); }
+
+.sheet {
+  width: 100%; max-width: 460px; box-sizing: border-box; background: var(--surface); border: 1px solid #d9d4c2;
+  padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-4); box-shadow: var(--shadow-2);
+}
+.sheetHead { display: flex; justify-content: space-between; gap: var(--space-3); border-bottom: 2px solid var(--plum-900); padding-bottom: var(--space-3); }
+.sheetTitle { margin: 0; font-size: 20px; font-weight: 800; }
+.sheetWhen { margin: 0; font-size: 14px; color: var(--text-secondary); }
+.sheetText { margin: 4px 0 0; font-size: 15px; line-height: 22px; }
+.questions { margin: 4px 0 0; padding-left: 20px; font-size: 15px; line-height: 22px; display: flex; flex-direction: column; gap: 4px; }
+.answers { border-top: 1px dashed var(--border-control); padding-top: var(--space-3); }
+.answerLine { height: 48px; border-bottom: 1px solid var(--border); }
+.sheetNote { margin: 0; font-size: 12px; color: var(--text-secondary); }
+
+.phraseBlock {
+  background: var(--butter-100); border-radius: var(--radius-sheet); padding: var(--space-5);
+  display: flex; flex-direction: column; gap: var(--space-5);
+}
+.phraseText { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+.phraseTitle { margin: 0; font: var(--text-h1); }
+.samples { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.samples li { background: var(--surface); border-radius: 16px; padding: 14px var(--space-4); font: var(--text-small); }
+
+/* 768px is --bp-tablet */
+@media (min-width: 768px) {
+  .hero { flex-direction: row; justify-content: space-between; gap: var(--space-7); }
+  .heroTitle { font: var(--text-display-lg); }
+  .heroLead { font: var(--text-body-lg); }
+  .heroImage { width: 200px; flex: 0 0 auto; }
+  .lead { font: var(--text-body-lg); }
+  .fields { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 28px; }
+  .phrases { grid-column: 1 / -1; }
+  .sheet { padding: 36px; }
+  .phraseBlock { flex-direction: row; align-items: center; padding: 40px; }
+  .phraseText, .samples { flex: 1 1 420px; }
+  .phraseTitle { font: var(--text-h1-lg); }
+}
