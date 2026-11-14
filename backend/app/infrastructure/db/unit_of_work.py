@@ -10,6 +10,7 @@ from app.infrastructure.db.repositories.lesson_progress import SqlLessonProgress
 from app.infrastructure.db.repositories.lesson_schedule import SqlLessonScheduleRepository
 from app.infrastructure.db.repositories.plans import SqlPlanRepository
 from app.infrastructure.db.repositories.quiz_states import SqlQuizStateRepository
+from app.infrastructure.db.repositories.scenario_answers import SqlScenarioAnswerRepository
 from app.infrastructure.db.repositories.sessions import SqlActiveDayRepository, SqlSessionRepository
 from app.infrastructure.db.repositories.subscriptions import (
     SqlSubscriptionHistoryRepository,
@@ -23,6 +24,7 @@ class SqlAlchemyUnitOfWork:
     quiz: SqlQuizStateRepository
     lesson_schedule: SqlLessonScheduleRepository
     lesson_progress: SqlLessonProgressRepository
+    scenario_answers: SqlScenarioAnswerRepository
     plans: SqlPlanRepository
     confidence: SqlConfidenceRepository
     subscriptions: SqlSubscriptionRepository
@@ -39,6 +41,7 @@ class SqlAlchemyUnitOfWork:
         self.quiz = SqlQuizStateRepository(self._db)
         self.lesson_schedule = SqlLessonScheduleRepository(self._db)
         self.lesson_progress = SqlLessonProgressRepository(self._db)
+        self.scenario_answers = SqlScenarioAnswerRepository(self._db)
         self.plans = SqlPlanRepository(self._db)
         self.confidence = SqlConfidenceRepository(self._db)
         self.subscriptions = SqlSubscriptionRepository(self._db)

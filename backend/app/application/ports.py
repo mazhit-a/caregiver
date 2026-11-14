@@ -6,9 +6,15 @@ from types import TracebackType
 from typing import Any, Protocol, Self
 from uuid import UUID
 
+from app.application.billing.payments import (
+    CheckoutRequest,
+    CheckoutSessionInfo,
+    CheckoutSessionRef,
+    CustomerRef,
+)
 from app.domain.billing.entities import Subscription, SubscriptionHistoryEntry
 from app.domain.billing.pricing import Pricing
-from app.domain.lessons.progress import LessonProgress
+from app.domain.lessons.progress import LessonProgress, ScenarioAnswer
 from app.domain.plan.entities import PhraseSheetText, PhraseText, PlanRules, StoredPlan
 from app.domain.quiz.definition import QuizDefinition
 from app.domain.quiz.entities import QuizState
@@ -74,6 +80,16 @@ class PlanRepository(Protocol):
         ...
 
 
+class ScenarioAnswerRepository(Protocol):
+    async def add(self, answer: ScenarioAnswer) -> None:
+        """Record one scenario pick; retries add rows."""
+        ...
+
+    async def list_for_lesson(self, session_id: UUID, lesson_id: str) -> list[ScenarioAnswer]:
+        """The picks of the lesson, oldest first."""
+        ...
+
+
 class ConfidenceRepository(Protocol):
     async def get_day0(self, session_id: UUID) -> int | None: ...
 
@@ -109,6 +125,7 @@ class UnitOfWork(Protocol):
     quiz: QuizStateRepository
     lesson_schedule: LessonScheduleRepository
     lesson_progress: LessonProgressRepository
+    scenario_answers: ScenarioAnswerRepository
     plans: PlanRepository
     confidence: ConfidenceRepository
     subscriptions: SubscriptionRepository
@@ -129,10 +146,28 @@ class UnitOfWork(Protocol):
 
 
 class PaymentGateway(Protocol):
-    """Payments adapter (Stripe). Declared early; used from the Stripe increments on."""
+    """Payments adapter (Stripe). Every provider failure is raised as `PaymentGatewayError`."""
+
+    async def create_customer(self, session_id: UUID, clock_frozen_at: datetime) -> CustomerRef:
+        """Create a customer on a new Test Clock frozen at `clock_frozen_at` (the app time)."""
+        ...
+
+    async def create_checkout_session(self, request: CheckoutRequest) -> CheckoutSessionRef:
+        """A subscription Checkout Session: the plan's renewal price plus the intro coupon."""
+        ...
+
+    async def retrieve_checkout_session(self, checkout_id: str) -> CheckoutSessionInfo: ...
+
+    async def cancel_at_period_end(self, subscription_id: str) -> None: ...
+
+    async def cancel_now(self, subscription_id: str) -> None: ...
 
     async def advance_test_clock(self, test_clock_id: str, to: datetime) -> None:
         """Move a Stripe Test Clock forward to `to` (never backward)."""
+        ...
+
+    async def attach_failing_payment_method(self, customer_id: str) -> None:
+        """Make the customer's next charge fail (test card that is declined)."""
         ...
 
 

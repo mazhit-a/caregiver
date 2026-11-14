@@ -10,6 +10,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 logger = logging.getLogger(__name__)
 
 _TEST_KEY_PREFIXES = ("sk_test_", "rk_test_")
+# The placeholder key of .env.example: configured, but not a real Stripe account.
+DUMMY_STRIPE_KEY = "sk_test_dummy"
 
 
 class Settings(BaseSettings):
@@ -42,6 +44,11 @@ class Settings(BaseSettings):
         if not self.anthropic_api_key:
             logger.warning("ANTHROPIC_API_KEY is empty: role-play will use the fallback only")
         return self
+
+    @property
+    def stripe_enabled(self) -> bool:
+        """Stripe is on when a key is configured that is not the `.env.example` dummy."""
+        return bool(self.stripe_secret_key) and self.stripe_secret_key != DUMMY_STRIPE_KEY
 
     @property
     def cors_origin_list(self) -> list[str]:

@@ -11,6 +11,8 @@ from app.infrastructure.config import Settings
 from app.infrastructure.content.provider import JsonContentProvider
 from app.infrastructure.db.session import create_engine, create_session_factory
 from app.infrastructure.db.unit_of_work import SqlAlchemyUnitOfWork
+from app.infrastructure.payments.pricing_check import ensure_stripe_ids_resolved
+from app.infrastructure.payments.stripe_gateway import StripePaymentGateway
 from app.infrastructure.tokens import SecretsTokenGenerator, UuidGenerator
 from app.presentation.api.deps import AppInfo
 from app.presentation.api.error_handlers import register_error_handlers
@@ -25,6 +27,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         # Invalid or missing content raises ContentLoadError here, so the app refuses to start.
         app.state.content = JsonContentProvider.from_directory(settings.content_dir)
+        if settings.stripe_enabled:
+            # Refuse to start with placeholder price/coupon ids: checkout would fail at runtime.
+            ensure_stripe_ids_resolved(app.state.content.pricing())
         yield
         await app.state.engine.dispose()
 
@@ -42,6 +47,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.engine = engine
     app.state.uow_factory = lambda: SqlAlchemyUnitOfWork(session_factory)
     app.state.clock = SystemClock()
+    # None without a real Stripe test key: checkout then answers 502 with the demo-mode hint.
+    app.state.payment_gateway = (
+        StripePaymentGateway.from_api_key(settings.stripe_secret_key)
+        if settings.stripe_enabled
+        else None
+    )
     app.state.token_generator = SecretsTokenGenerator()
     app.state.id_generator = UuidGenerator()
     if settings.cors_origin_list:

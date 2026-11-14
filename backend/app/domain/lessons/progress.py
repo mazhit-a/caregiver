@@ -18,3 +18,15 @@ class LessonProgress:
     step: int = 0
     screen_answers: dict[str, Any] = field(default_factory=dict)
     done_at: datetime | None = None
+
+
+@dataclass(frozen=True)
+class ScenarioAnswer:
+    """One pick on a scenario screen. Retries add rows; nothing is overwritten."""
+
+    session_id: UUID
+    lesson_id: str
+    screen_id: str
+    answer_id: str
+    verdict: str
+    answered_at: datetime

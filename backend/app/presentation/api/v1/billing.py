@@ -4,16 +4,20 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Request
 
+from app.application.billing.checkout import CreateCheckout, ReconcileCheckout
 from app.application.billing.use_cases import (
     GetPricing,
     GetSubscription,
     StartDemoSubscription,
     StartSubscription,
 )
-from app.application.ports import Clock, ContentProvider, UnitOfWork
+from app.application.ports import Clock, ContentProvider, PaymentGateway, UnitOfWork
 from app.domain.billing.entities import Subscription
-from app.presentation.api.deps import CurrentSession, get_clock, get_uow
+from app.presentation.api.deps import CurrentSession, get_clock, get_payment_gateway, get_uow
 from app.presentation.api.schemas.billing import (
+    CheckoutRequestBody,
+    CheckoutResponse,
+    CheckoutStatusResponse,
     DemoSubscribeRequest,
     PricingPlanOut,
     PricingResponse,
@@ -39,6 +43,26 @@ def _start_demo(
 ) -> StartDemoSubscription:
     content: ContentProvider = request.app.state.content
     return StartDemoSubscription(uow, StartSubscription(uow, content, clock))
+
+
+def _create_checkout(
+    request: Request,
+    uow: Annotated[UnitOfWork, Depends(get_uow)],
+    clock: Annotated[Clock, Depends(get_clock)],
+    gateway: Annotated[PaymentGateway, Depends(get_payment_gateway)],
+) -> CreateCheckout:
+    content: ContentProvider = request.app.state.content
+    return CreateCheckout(uow, content, clock, gateway, request.app.state.settings.public_app_url)
+
+
+def _reconcile_checkout(
+    request: Request,
+    uow: Annotated[UnitOfWork, Depends(get_uow)],
+    clock: Annotated[Clock, Depends(get_clock)],
+    gateway: Annotated[PaymentGateway, Depends(get_payment_gateway)],
+) -> ReconcileCheckout:
+    content: ContentProvider = request.app.state.content
+    return ReconcileCheckout(uow, content, clock, gateway, StartSubscription(uow, content, clock))
 
 
 def _to_response(subscription: Subscription) -> SubscriptionResponse:
@@ -92,3 +116,27 @@ async def get_subscription(
     session: CurrentSession, use_case: Annotated[GetSubscription, Depends(_get_subscription)]
 ) -> SubscriptionResponse:
     return _to_response(await use_case.execute(session))
+
+
+@router.post("/billing/checkout", response_model=CheckoutResponse)
+async def create_checkout(
+    body: CheckoutRequestBody,
+    session: CurrentSession,
+    use_case: Annotated[CreateCheckout, Depends(_create_checkout)],
+) -> CheckoutResponse:
+    ref = await use_case.execute(session, body.auto_renew_consent, body.plan_id)
+    return CheckoutResponse(checkout_id=ref.id, url=ref.url)
+
+
+@router.get("/billing/checkout/{checkout_id}", response_model=CheckoutStatusResponse)
+async def reconcile_checkout(
+    checkout_id: str,
+    session: CurrentSession,
+    use_case: Annotated[ReconcileCheckout, Depends(_reconcile_checkout)],
+) -> CheckoutStatusResponse:
+    result = await use_case.execute(session, checkout_id)
+    return CheckoutStatusResponse(
+        paid=result.paid,
+        message=None if result.paid else "No payment has been received for this checkout.",
+        subscription=_to_response(result.subscription),
+    )

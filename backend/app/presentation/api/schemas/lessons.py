@@ -5,9 +5,9 @@ correctness never appear in any screen schema.
 """
 
 from datetime import date, datetime
-from typing import Annotated, Literal
+from typing import Annotated, Any, Literal
 
-from pydantic import Field
+from pydantic import Field, JsonValue
 
 from app.presentation.api.schemas.base import CamelModel
 
@@ -180,3 +180,21 @@ class LessonResponse(CamelModel):
     pattern: PatternOut
     screens: list[ScreenOut]
     progress: LessonProgressOut
+
+
+class AnswerRequest(CamelModel):
+    """`value` is an option id for the setup, scenario and mini-task screens; other screen
+    types will take structured values, so the schema accepts any JSON and the screen's handler
+    decides whether the type fits."""
+
+    screen_id: str = Field(min_length=1, max_length=64)
+    value: JsonValue
+
+
+class AnswerResponse(CamelModel):
+    """`result` depends on the screen type: setup `{variant}`; scenario `{answerId, verdict,
+    feedback, savePhrase}`; mini-task `{optionId, response, correct?}`."""
+
+    screen_id: str
+    type: str
+    result: dict[str, Any]

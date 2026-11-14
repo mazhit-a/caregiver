@@ -6,8 +6,16 @@ from fastapi import Depends, Header, HTTPException, Request
 
 from app.application.billing.use_cases import CheckAccess
 from app.application.demo.renewals import RollDemoRenewals
-from app.application.ports import Clock, ContentProvider, IdGenerator, TokenGenerator, UnitOfWork
+from app.application.ports import (
+    Clock,
+    ContentProvider,
+    IdGenerator,
+    PaymentGateway,
+    TokenGenerator,
+    UnitOfWork,
+)
 from app.application.session.use_cases import CreateSession, ResolveSession
+from app.domain.billing.errors import PaymentGatewayError
 from app.domain.session.entities import Session
 from app.presentation.api.schemas.base import CamelModel
 
@@ -37,6 +45,14 @@ def get_uow(request: Request) -> UnitOfWork:
 def get_clock(request: Request) -> Clock:
     clock: Clock = request.app.state.clock
     return clock
+
+
+def get_payment_gateway(request: Request) -> PaymentGateway:
+    """The payment gateway, or `PaymentGatewayError` (502, demo hint) when Stripe is not set up."""
+    gateway: PaymentGateway | None = request.app.state.payment_gateway
+    if gateway is None:
+        raise PaymentGatewayError("Card payments are not configured on this server.")
+    return gateway
 
 
 def get_token_generator(request: Request) -> TokenGenerator:

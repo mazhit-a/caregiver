@@ -9,6 +9,7 @@ from tests.fakes.lesson_progress import InMemoryLessonProgressRepository
 from tests.fakes.lesson_schedule import InMemoryLessonScheduleRepository
 from tests.fakes.plans import InMemoryConfidenceRepository, InMemoryPlanRepository
 from tests.fakes.quiz import InMemoryQuizStateRepository
+from tests.fakes.scenario_answers import InMemoryScenarioAnswerRepository
 from tests.fakes.sessions import InMemoryActiveDayRepository, InMemorySessionRepository
 
 
@@ -21,6 +22,7 @@ class FakeUnitOfWork:
         self.quiz = InMemoryQuizStateRepository()
         self.lesson_schedule = InMemoryLessonScheduleRepository()
         self.lesson_progress = InMemoryLessonProgressRepository()
+        self.scenario_answers = InMemoryScenarioAnswerRepository()
         self.plans = InMemoryPlanRepository()
         self.confidence = InMemoryConfidenceRepository()
         self.subscriptions = InMemorySubscriptionRepository()

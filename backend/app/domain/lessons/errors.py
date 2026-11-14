@@ -40,3 +40,26 @@ class LessonContentError(DomainError):
     """A lesson file's variant map does not cover the chosen variant (an authoring error)."""
 
     code = "lesson_content_error"
+
+
+class UnknownScreen(DomainError):
+    """The screen id is not part of the lesson as the learner currently sees it."""
+
+    code = "unknown_screen"
+
+    def __init__(self, lesson_id: str, screen_id: str) -> None:
+        super().__init__(
+            "This screen is not part of the lesson.", {"lesson": lesson_id, "screen": screen_id}
+        )
+
+
+class InvalidScreenAnswer(DomainError):
+    """The answer does not fit the screen (wrong value type, option not on the screen, or a
+    screen type that takes no answer)."""
+
+    code = "invalid_screen_answer"
+
+    def __init__(self, screen_id: str, reason: str) -> None:
+        super().__init__(
+            "This answer does not fit the screen.", {"screen": screen_id, "reason": reason}
+        )

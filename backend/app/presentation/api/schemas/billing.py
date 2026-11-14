@@ -36,3 +36,19 @@ class SubscriptionResponse(CamelModel):
     current_period_end: datetime | None
     renewal_count: int
     auto_renew_consent_at: datetime | None
+
+
+class CheckoutRequestBody(CamelModel):
+    auto_renew_consent: bool
+    plan_id: str | None = None
+
+
+class CheckoutResponse(CamelModel):
+    checkout_id: str
+    url: str
+
+
+class CheckoutStatusResponse(CamelModel):
+    paid: bool
+    message: str | None
+    subscription: SubscriptionResponse

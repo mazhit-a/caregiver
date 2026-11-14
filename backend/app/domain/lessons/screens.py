@@ -147,9 +147,7 @@ def render_lesson(lesson: Json, variant: str | None, is_first_lesson: bool) -> R
     including that question only; the rest depends on the answer.
     """
     ctx = RenderContext(variant, lesson["pattern"], is_first_lesson)
-    screens = list(lesson["screens"])
-    if variant is None:
-        screens = _until_setup(screens)
+    screens = visible_screens(lesson, variant)
     return RenderedLesson(
         id=lesson["id"],
         module_id=lesson["moduleId"],
@@ -161,6 +159,13 @@ def render_lesson(lesson: Json, variant: str | None, is_first_lesson: bool) -> R
         pattern=lesson["pattern"],
         screens=[SCREEN_RENDERERS[s["type"]](s, ctx) for s in screens],
     )
+
+
+def visible_screens(lesson: Json, variant: str | None) -> list[Json]:
+    """The raw screens a learner can see: all of them, or up to the setup question until a
+    variant is chosen."""
+    screens: list[Json] = list(lesson["screens"])
+    return screens if variant is not None else _until_setup(screens)
 
 
 def _until_setup(screens: list[Json]) -> list[Json]:

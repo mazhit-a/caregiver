@@ -65,3 +65,28 @@ class NoSubscriptionPeriod(DomainError):
 
     def __init__(self) -> None:
         super().__init__("There is no subscription period to jump to. Start a subscription first.")
+
+
+class PaymentGatewayError(DomainError):
+    """The payment provider failed or is not configured (HTTP 502).
+
+    Every provider SDK error is translated into this one type by the adapter. The details carry
+    a hint that the demo path (`POST /api/billing/demo`) still works.
+    """
+
+    code = "payment_gateway_error"
+
+    def __init__(self, message: str = "The payment service is unavailable right now.") -> None:
+        super().__init__(
+            message,
+            {"hint": "demo_mode", "demoEndpoint": "/api/billing/demo"},
+        )
+
+
+class CheckoutNotFound(DomainError):
+    """The checkout session does not exist for this session."""
+
+    code = "checkout_not_found"
+
+    def __init__(self) -> None:
+        super().__init__("This checkout could not be found.")
