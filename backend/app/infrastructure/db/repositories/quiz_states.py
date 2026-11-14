@@ -30,6 +30,7 @@ class SqlQuizStateRepository:
             "last_question_id": state.last_question_id,
             "completed_at": state.completed_at,
             "locked": state.locked,
+            "health_answers_purged_at": state.health_answers_purged_at,
         }
         stmt = insert(QuizStateRow).values(session_id=state.session_id, **values)
         await self._db.execute(

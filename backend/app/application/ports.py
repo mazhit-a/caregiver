@@ -6,6 +6,8 @@ from types import TracebackType
 from typing import Any, Protocol, Self
 from uuid import UUID
 
+from app.domain.billing.entities import Subscription, SubscriptionHistoryEntry
+from app.domain.billing.pricing import Pricing
 from app.domain.plan.entities import PhraseSheetText, PhraseText, PlanRules, StoredPlan
 from app.domain.quiz.definition import QuizDefinition
 from app.domain.quiz.entities import QuizState
@@ -71,6 +73,22 @@ class ConfidenceRepository(Protocol):
         ...
 
 
+class SubscriptionRepository(Protocol):
+    async def get(self, session_id: UUID) -> Subscription | None: ...
+
+    async def save(self, subscription: Subscription) -> None:
+        """Insert or update the subscription row of the session (history is separate)."""
+        ...
+
+
+class SubscriptionHistoryRepository(Protocol):
+    async def add(self, entry: SubscriptionHistoryEntry) -> None: ...
+
+    async def list_for_session(self, session_id: UUID) -> list[SubscriptionHistoryEntry]:
+        """All entries of the session, oldest first."""
+        ...
+
+
 class UnitOfWork(Protocol):
     """Transaction boundary: `async with uow:` ... `await uow.commit()`.
 
@@ -83,6 +101,8 @@ class UnitOfWork(Protocol):
     lesson_schedule: LessonScheduleRepository
     plans: PlanRepository
     confidence: ConfidenceRepository
+    subscriptions: SubscriptionRepository
+    subscription_history: SubscriptionHistoryRepository
 
     async def __aenter__(self) -> Self: ...
 
@@ -153,6 +173,10 @@ class ContentProvider(Protocol):
         variant: str | None = None,
         runtime_values: Mapping[str, str] | None = None,
     ) -> dict[str, Any]: ...
+
+    def pricing(self) -> Pricing:
+        """The plans of pricing.json with the disclosure values the paywall needs."""
+        ...
 
     def crisis_resources(self) -> list[CrisisResource]: ...
 

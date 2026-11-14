@@ -4,6 +4,7 @@ from typing import Annotated
 
 from fastapi import Depends, Header, Request
 
+from app.application.billing.use_cases import CheckAccess
 from app.application.ports import Clock, IdGenerator, TokenGenerator, UnitOfWork
 from app.application.session.use_cases import CreateSession, ResolveSession
 from app.domain.session.entities import Session
@@ -72,3 +73,28 @@ async def get_current_session(
 
 
 CurrentSession = Annotated[Session, Depends(get_current_session)]
+
+
+# --- access gate ---
+
+
+def get_check_access(
+    uow: Annotated[UnitOfWork, Depends(get_uow)],
+    clock: Annotated[Clock, Depends(get_clock)],
+) -> CheckAccess:
+    return CheckAccess(uow, clock)
+
+
+async def require_subscription(
+    session: CurrentSession, check: Annotated[CheckAccess, Depends(get_check_access)]
+) -> Session:
+    """The access gate: authenticates, then asks `Subscription.can_access()`.
+
+    Raises `AccessDenied` (402, `details.reason` = no_plan | no_subscription | past_due | ended).
+    """
+    await check.execute(session)
+    return session
+
+
+SubscribedSession = Annotated[Session, Depends(require_subscription)]
+"""Use as the session parameter of every gated app route (instead of `CurrentSession`)."""

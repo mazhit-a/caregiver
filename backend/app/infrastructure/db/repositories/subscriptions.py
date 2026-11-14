@@ -1,0 +1,94 @@
+"""Postgres repositories for the subscription and its status history."""
+
+from typing import cast
+from uuid import UUID
+
+from sqlalchemy import select
+from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.domain.billing.entities import (
+    Subscription,
+    SubscriptionHistoryEntry,
+    SubscriptionSource,
+    SubscriptionStatus,
+)
+from app.infrastructure.db.orm_models import SubscriptionHistoryRow, SubscriptionRow
+
+
+class SqlSubscriptionRepository:
+    def __init__(self, db: AsyncSession) -> None:
+        self._db = db
+
+    async def get(self, session_id: UUID) -> Subscription | None:
+        result = await self._db.execute(
+            select(SubscriptionRow).where(SubscriptionRow.session_id == session_id)
+        )
+        row = result.scalar_one_or_none()
+        if row is None:
+            return None
+        return Subscription(
+            session_id=row.session_id,
+            status=cast(SubscriptionStatus, row.status),
+            plan_id=row.plan_id,
+            source=cast(SubscriptionSource | None, row.source),
+            current_period_start=row.current_period_start,
+            current_period_end=row.current_period_end,
+            renewal_count=row.renewal_count,
+            auto_renew_consent_at=row.auto_renew_consent_at,
+            stripe_customer_id=row.stripe_customer_id,
+            stripe_subscription_id=row.stripe_subscription_id,
+        )
+
+    async def save(self, subscription: Subscription) -> None:
+        values = {
+            "status": subscription.status,
+            "plan_id": subscription.plan_id,
+            "source": subscription.source,
+            "current_period_start": subscription.current_period_start,
+            "current_period_end": subscription.current_period_end,
+            "renewal_count": subscription.renewal_count,
+            "auto_renew_consent_at": subscription.auto_renew_consent_at,
+            "stripe_customer_id": subscription.stripe_customer_id,
+            "stripe_subscription_id": subscription.stripe_subscription_id,
+        }
+        stmt = insert(SubscriptionRow).values(session_id=subscription.session_id, **values)
+        await self._db.execute(
+            stmt.on_conflict_do_update(index_elements=[SubscriptionRow.session_id], set_=values)
+        )
+
+
+class SqlSubscriptionHistoryRepository:
+    def __init__(self, db: AsyncSession) -> None:
+        self._db = db
+
+    async def add(self, entry: SubscriptionHistoryEntry) -> None:
+        self._db.add(
+            SubscriptionHistoryRow(
+                session_id=entry.session_id,
+                at=entry.at,
+                from_status=entry.from_status,
+                to_status=entry.to_status,
+                event=entry.event,
+                source=entry.source,
+            )
+        )
+        await self._db.flush()
+
+    async def list_for_session(self, session_id: UUID) -> list[SubscriptionHistoryEntry]:
+        result = await self._db.execute(
+            select(SubscriptionHistoryRow)
+            .where(SubscriptionHistoryRow.session_id == session_id)
+            .order_by(SubscriptionHistoryRow.id)
+        )
+        return [
+            SubscriptionHistoryEntry(
+                r.session_id,
+                r.at,
+                cast(SubscriptionStatus, r.from_status),
+                cast(SubscriptionStatus, r.to_status),
+                r.event,
+                r.source,
+            )
+            for r in result.scalars()
+        ]

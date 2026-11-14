@@ -20,6 +20,7 @@ class QuizState:
     last_question_id: str | None = None
     completed_at: datetime | None = None
     locked: bool = False
+    health_answers_purged_at: datetime | None = None
 
     def answer(self, definition: QuizDefinition, question_id: str, value: Any) -> None:
         """Validate and save one answer, then recompute tags, branch and the resume point."""
@@ -48,3 +49,19 @@ class QuizState:
         if missing:
             raise QuizIncomplete("Some questions still need an answer.", {"questionIds": missing})
         self.completed_at = at
+
+    def purge_health_answers(self, definition: QuizDefinition, at: datetime) -> bool:
+        """Delete the raw Q3/Q5 answers; tags, branch and the plan stay. Runs once.
+
+        Returns True when it purged now, False when it had already run.
+        """
+        if self.health_answers_purged_at is not None:
+            return False
+        for question_id in definition.health_question_ids():
+            self.answers.pop(question_id, None)
+        self.health_answers_purged_at = at
+        return True
+
+    def lock(self) -> None:
+        """No answer or completion changes after the subscription started."""
+        self.locked = True

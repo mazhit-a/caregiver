@@ -10,6 +10,10 @@ from app.infrastructure.db.repositories.lesson_schedule import SqlLessonSchedule
 from app.infrastructure.db.repositories.plans import SqlPlanRepository
 from app.infrastructure.db.repositories.quiz_states import SqlQuizStateRepository
 from app.infrastructure.db.repositories.sessions import SqlActiveDayRepository, SqlSessionRepository
+from app.infrastructure.db.repositories.subscriptions import (
+    SqlSubscriptionHistoryRepository,
+    SqlSubscriptionRepository,
+)
 
 
 class SqlAlchemyUnitOfWork:
@@ -19,6 +23,8 @@ class SqlAlchemyUnitOfWork:
     lesson_schedule: SqlLessonScheduleRepository
     plans: SqlPlanRepository
     confidence: SqlConfidenceRepository
+    subscriptions: SqlSubscriptionRepository
+    subscription_history: SqlSubscriptionHistoryRepository
 
     def __init__(self, session_factory: async_sessionmaker[AsyncSession]) -> None:
         self._factory = session_factory
@@ -32,6 +38,8 @@ class SqlAlchemyUnitOfWork:
         self.lesson_schedule = SqlLessonScheduleRepository(self._db)
         self.plans = SqlPlanRepository(self._db)
         self.confidence = SqlConfidenceRepository(self._db)
+        self.subscriptions = SqlSubscriptionRepository(self._db)
+        self.subscription_history = SqlSubscriptionHistoryRepository(self._db)
         return self
 
     async def __aexit__(

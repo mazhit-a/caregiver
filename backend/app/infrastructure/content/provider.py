@@ -1,9 +1,11 @@
 """ContentProvider adapter over the loaded content bundle."""
 
 from collections.abc import Mapping
+from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
+from app.domain.billing.pricing import Pricing, PricingPlan
 from app.domain.plan.entities import PhraseSheetText, PhraseText, PlanRules
 from app.domain.quiz.definition import QuizDefinition
 from app.domain.safety.resources import CrisisResource
@@ -63,6 +65,29 @@ class JsonContentProvider:
 
     def crisis_resources_need_verification(self) -> bool:
         return self._bundle.crisis_resources.verify_before_launch
+
+    def pricing(self) -> Pricing:
+        file = self._bundle.pricing
+        return Pricing(
+            currency=file.currency,
+            default_plan_id=file.default_plan_id,
+            plans=tuple(
+                PricingPlan(
+                    id=p.id,
+                    label=p.label,
+                    intro_price=Decimal(str(p.intro_price)),
+                    intro_days=p.intro_days,
+                    intro_period_text=p.intro_period_text,
+                    renew_price=Decimal(str(p.renew_price)),
+                    renew_days=p.renew_days,
+                    renew_period_text=p.renew_period_text,
+                    stripe_intro_price_id=p.stripe_intro_price_id,
+                    stripe_renew_price_id=p.stripe_renew_price_id,
+                    stripe_intro_coupon_id=p.stripe_intro_coupon_id,
+                )
+                for p in file.plans
+            ),
+        )
 
     def quiz_definition(self) -> QuizDefinition:
         return self._quiz_definition

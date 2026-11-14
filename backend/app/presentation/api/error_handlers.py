@@ -31,7 +31,11 @@ DOMAIN_ERROR_STATUS: dict[str, int] = {
     "invalid_answer": 422,
     "unknown_question": 404,
     "quiz_incomplete": 422,
-    "payment_required": 402,  # NoPlan now; the access gate (increment 9) reuses it
+    "payment_required": 402,  # NoPlan and AccessDenied (the access gate), with details.reason
+    "consent_required": 422,
+    "unknown_plan": 422,
+    "already_subscribed": 409,
+    "invalid_transition": 409,
 }
 
 

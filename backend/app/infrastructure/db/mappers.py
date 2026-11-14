@@ -40,4 +40,5 @@ def quiz_state_to_domain(row: QuizStateRow) -> QuizState:
         last_question_id=row.last_question_id,
         completed_at=row.completed_at,
         locked=row.locked,
+        health_answers_purged_at=row.health_answers_purged_at,
     )
