@@ -6,7 +6,7 @@ from evals.case import EvalCase
 from evals.dataset import GOLDEN_PATH, read_jsonl
 
 REAL_CONTENT = Path(__file__).resolve().parents[3] / "content"
-NEW_LESSONS = ("m1_l2", "m1_l3")
+NEW_LESSONS = ("m1_l2", "m1_l3", "m1_l4", "m1_l5")
 
 
 def _lesson_cases() -> dict[str, list[EvalCase]]:
@@ -49,3 +49,16 @@ def test_new_lesson_cases_use_the_lesson_round_lines() -> None:
             assert case.rounds_total == len(rounds)
             line = rounds[case.round - 1].line
             assert case.parent_line == line, case.id
+
+
+def test_eval_case_count_per_lesson_at_least_3() -> None:
+    by_lesson = _lesson_cases()
+    for lesson_id in NEW_LESSONS:
+        assert len(by_lesson[lesson_id]) >= 3, lesson_id
+
+
+def test_golden_set_holds_the_package_cases_plus_at_least_12_lesson_cases() -> None:
+    cases = read_jsonl(GOLDEN_PATH)
+    assert sum(1 for c in cases if c.source == "package") >= 14
+    assert sum(1 for c in cases if c.source == "lesson") >= 12
+    assert len({c.id for c in cases}) == len(cases)

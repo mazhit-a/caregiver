@@ -7,8 +7,8 @@ the answer handlers. Each screen type has one renderer in `SCREEN_RENDERERS`; a 
 needs one entry there.
 """
 
-from collections.abc import Callable, Mapping
-from dataclasses import dataclass
+from collections.abc import Callable, Mapping, Sequence
+from dataclasses import dataclass, replace
 from typing import Any
 
 from app.domain.lessons.variants import pick
@@ -20,6 +20,7 @@ Json = Mapping[str, Any]
 # lesson). The lesson read renders them as empty and drops the fields that contain them.
 RUNTIME_PLACEHOLDERS = ("savedPhrase", "firstScore", "lastScore")
 SETUP_SCREEN_TYPE = "setup_question"
+PHRASES_REVIEW_TYPE = "phrases_review"
 
 
 @dataclass(frozen=True)
@@ -84,6 +85,14 @@ def _learn(screen: Json, ctx: RenderContext) -> Screen:
     return out
 
 
+def _phrases_review(screen: Json, ctx: RenderContext) -> Screen:
+    """The saved phrases are not content: the lesson use case fills `phrases` (see
+    `with_saved_phrases`)."""
+    out = _copy(screen, ("id", "type", "title", "intro", "emptyText"))
+    out["phrases"] = []
+    return out
+
+
 def _roleplay(screen: Json, ctx: RenderContext) -> Screen:
     out = _copy(screen, ("id", "type", "title", "intro", "goals", "labels"))
     out["rounds"] = [
@@ -134,6 +143,7 @@ SCREEN_RENDERERS: dict[str, ScreenRenderer] = {
     "setup_question": _setup,
     "scenario": _scenario,
     "learn": _learn,
+    "phrases_review": _phrases_review,
     "roleplay": _roleplay,
     "plan": _plan,
     "wrap": _wrap,
@@ -159,6 +169,19 @@ def render_lesson(lesson: Json, variant: str | None, is_first_lesson: bool) -> R
         pattern=lesson["pattern"],
         screens=[SCREEN_RENDERERS[s["type"]](s, ctx) for s in screens],
     )
+
+
+def with_saved_phrases(lesson: RenderedLesson, phrases: Sequence[Json]) -> RenderedLesson:
+    """The lesson with every `phrases_review` screen holding `phrases` (newest last)."""
+    screens = [
+        {**s, "phrases": [dict(p) for p in phrases]} if s["type"] == PHRASES_REVIEW_TYPE else s
+        for s in lesson.screens
+    ]
+    return replace(lesson, screens=screens)
+
+
+def has_phrases_review(lesson: RenderedLesson) -> bool:
+    return any(s["type"] == PHRASES_REVIEW_TYPE for s in lesson.screens)
 
 
 def visible_screens(lesson: Json, variant: str | None) -> list[Json]:

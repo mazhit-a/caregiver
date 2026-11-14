@@ -6,7 +6,13 @@ from typing import Any
 import pytest
 
 from app.domain.lessons.errors import LessonContentError
-from app.domain.lessons.screens import RUNTIME_PLACEHOLDERS, RenderedLesson, render_lesson
+from app.domain.lessons.screens import (
+    RUNTIME_PLACEHOLDERS,
+    RenderedLesson,
+    has_phrases_review,
+    render_lesson,
+    with_saved_phrases,
+)
 from app.domain.lessons.variants import pick
 from app.infrastructure.content.provider import JsonContentProvider
 
@@ -87,3 +93,26 @@ def test_runtime_placeholders_never_reach_the_output(content: JsonContentProvide
 def test_confidence_check_only_in_the_first_lesson(content: JsonContentProvider) -> None:
     assert "confidenceCheck" in screen(lesson(content, "phone", first=True), "s9_wrap")
     assert "confidenceCheck" not in screen(lesson(content, "phone", first=False), "s9_wrap")
+
+
+def review_lesson(content: JsonContentProvider) -> RenderedLesson:
+    data = content.render_lesson("m1_l5", "mom", None, BLANKS)
+    return render_lesson(data, None, False)
+
+
+def test_phrases_review_screen_renders_empty_until_filled(content: JsonContentProvider) -> None:
+    result = review_lesson(content)
+    assert has_phrases_review(result) and not has_phrases_review(lesson(content, "in_person"))
+    shown = screen(result, "s2_phrases")
+    assert shown["phrases"] == [] and shown["emptyText"]
+
+
+def test_with_saved_phrases_fills_only_the_review_screen(content: JsonContentProvider) -> None:
+    result = review_lesson(content)
+    saved = [{"id": "1", "text": "I'm here.", "source": "roleplay", "lessonId": "m1_l1"}]
+    filled = with_saved_phrases(result, saved)
+    assert screen(filled, "s2_phrases")["phrases"] == saved
+    assert [s for s in filled.screens if s["id"] != "s2_phrases"] == [
+        s for s in result.screens if s["id"] != "s2_phrases"
+    ]
+    assert screen(result, "s2_phrases")["phrases"] == []  # the input is not changed

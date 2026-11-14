@@ -1,0 +1,368 @@
+{
+  "id": "m1_l5",
+  "version": 1,
+  "moduleId": "m1_talking",
+  "title": "Your phrase book: review and practice",
+  "minutes": 6,
+  "skill": "communication",
+  "skillLabel": "Putting the steps together",
+  "notes": [
+    "DRAFT for content-owner review. REVIEW lesson: no setup question, no variants, no new teaching. Every by-variant block has one 'default' entry and every *VariantMap is empty.",
+    "The 'phrases_review' screen is filled by the server with the phrases the learner saved; emptyText is shown when there are none.",
+    "The mixed practice round copies rounds (line and mood) and fallback scenarios (line and answers) from lessons m1_l1, m1_l3 and m1_l4; a test checks that every one of them exists in lessons 1 to 4. Stage and setup texts are rewritten so they make sense without the original lesson.",
+    "Placeholders as in quiz.json: {recipient}, {Recipient}, {possessive}, {Possessive}, {object}. The subject is always {recipient}, never {pronoun}.",
+    "Every screen shows the line from common.notMedicalAdvice in the footer."
+  ],
+  "pattern": {
+    "name": "The three steps",
+    "steps": [
+      {
+        "id": "notice",
+        "label": "Notice the feeling",
+        "example": "You sound worried."
+      },
+      {
+        "id": "reassure",
+        "label": "Reassure",
+        "example": "I'm here, and we'll sort it out."
+      },
+      {
+        "id": "offer",
+        "label": "Offer something to do",
+        "example": "Shall we do it together, or would you like a choice?"
+      }
+    ]
+  },
+  "screens": [
+    {
+      "id": "s1_look_back",
+      "type": "learn",
+      "title": "One pattern, four moments.",
+      "body": "You've used the same three steps when {recipient} asked again, when there was too much to take in, when something went missing, and when {recipient} said no. Now you'll look at your saved phrases and try a mix.",
+      "showPattern": true
+    },
+    {
+      "id": "s2_phrases",
+      "type": "phrases_review",
+      "title": "Your phrase book",
+      "intro": "These are the phrases you saved. Read them out loud once. Which one sounds most like you?",
+      "emptyText": "You haven't saved a phrase yet. When you practice, tap Save on one you like, and it will show up here."
+    },
+    {
+      "id": "s3_hardest_step",
+      "type": "learn",
+      "title": "Which step is hardest for you?",
+      "body": "Most people find one step harder than the others. That's normal. Pick yours, and watch for it in the practice round.",
+      "miniTask": {
+        "question": "Which step do you find hardest?",
+        "options": [
+          {
+            "id": "notice",
+            "label": "Noticing the feeling",
+            "response": "That one takes practice. Try starting with \"You sound...\" or \"It's upsetting when...\"."
+          },
+          {
+            "id": "reassure",
+            "label": "Reassuring",
+            "response": "A short \"I'm here\" is enough. You don't need to promise anything."
+          },
+          {
+            "id": "offer",
+            "label": "Offering something to do",
+            "response": "Keep it small: one thing to do together, or a choice of two."
+          }
+        ]
+      }
+    },
+    {
+      "id": "s4_practice",
+      "type": "roleplay",
+      "promptFile": "prompts/roleplay-turn.md",
+      "title": "Practice: a mix from the lessons",
+      "intro": "Three moments from the lessons, in a new order. {Recipient} is an AI practice partner. Type what you'd say. The coach will show what worked.",
+      "goals": [
+        "notice",
+        "reassure",
+        "offer"
+      ],
+      "roundsByVariant": {
+        "default": [
+          {
+            "stage": "Later that evening, the day before an appointment.",
+            "line": "Why won't you just tell me? You're hiding something.",
+            "mood": "suspicious"
+          },
+          {
+            "stage": "You've been looking for something together for a few minutes.",
+            "line": "Somebody took it. I know somebody took it.",
+            "mood": "upset"
+          },
+          {
+            "stage": "You offer to help with the shower.",
+            "line": "I don't need your help. Leave me alone.",
+            "mood": "irritated"
+          }
+        ]
+      },
+      "roundsVariantMap": {},
+      "summary": {
+        "title": "Your practice",
+        "firstVsLast": "First try: {firstScore} of 3 · Last try: {lastScore} of 3",
+        "bestPhraseLabel": "Your best phrase",
+        "saveButton": "Save",
+        "againButton": "Practice again"
+      },
+      "labels": {
+        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
+        "thinking": "{Recipient} is thinking…",
+        "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
+      },
+      "fallbackScenarios": [
+        "fb1",
+        "fb2",
+        "fb3"
+      ]
+    },
+    {
+      "id": "s5_handle_now",
+      "type": "learn",
+      "title": "What you can handle now",
+      "body": "Look at what you can do today that was harder before:",
+      "bullets": {
+        "default": [
+          "When {recipient} asks the same thing again, you can answer the feeling first.",
+          "When there's a lot to take in, you can say one thing, slowly.",
+          "When {recipient} says something was taken, you can join the search instead of arguing.",
+          "When {recipient} says no, you can offer a small choice."
+        ]
+      },
+      "patternTip": "A hard day doesn't undo this. Come back to your phrase book any time."
+    },
+    {
+      "id": "s6_reset",
+      "type": "learn",
+      "title": "One pause that works for you.",
+      "body": "Whatever {recipient} says, a small pause before you answer helps you stay kind. Choose the one you'll really use.",
+      "miniTask": {
+        "question": "Pick your pause for next time:",
+        "storeAs": "reset",
+        "options": [
+          {
+            "id": "breath",
+            "label": "One slow breath before I answer"
+          },
+          {
+            "id": "feeling_talking",
+            "label": "Tell myself: this is a feeling, not a fight"
+          },
+          {
+            "id": "step_away",
+            "label": "Step away for a minute, if it's safe"
+          }
+        ]
+      }
+    },
+    {
+      "id": "s7_plan",
+      "type": "plan",
+      "title": "Your plan for next time",
+      "ifThen": {
+        "cueByVariant": {
+          "default": "If {recipient} is upset or says no,"
+        },
+        "cueVariantMap": {},
+        "responseLabel": "then I'll say:",
+        "responseDefault": "the best phrase from practice, else a phrase from my phrase book",
+        "responseEditable": true,
+        "resetLabel": "And first, I'll:",
+        "resetFrom": "s6_reset"
+      },
+      "doNow": {
+        "title": "One thing to do now",
+        "byVariant": {
+          "default": {
+            "text": "Choose the one phrase from your phrase book you'll use first. Put it where you'll see it, like a note on your phone or the fridge.",
+            "action": "copy_phrase",
+            "button": "Copy my phrase"
+          }
+        }
+      },
+      "remindButton": "Remind me tomorrow",
+      "doneButton": "Done",
+      "noteTemplate": {
+        "title": "{Possessive} note",
+        "example": "I'm here. We'll sort it out together. — [your name]"
+      }
+    },
+    {
+      "id": "s8_wrap",
+      "type": "wrap",
+      "skillLine": "You've put the three steps together.",
+      "phraseLine": "Your phrases stay on {possessive} page and care card.",
+      "patternLine": "Notice the feeling, reassure, offer something to do. The words change, and the steps stay the same.",
+      "tomorrowLine": "Tomorrow: a quick check-in and a 2-minute practice round.",
+      "nextLine": "More lessons are on the way.",
+      "allDoneLine": "That's every lesson ready for you so far. More are on the way. Come back to Today to practice again."
+    }
+  ],
+  "fallbackScenarios": [
+    {
+      "id": "fb1",
+      "setup": "Later that evening, the day before an appointment, {recipient} says:",
+      "line": "Why won't you just tell me? You're hiding something.",
+      "answers": [
+        {
+          "text": "I'm not hiding anything. I've told you five times.",
+          "verdict": "try_again",
+          "feedback": "Defending yourself is natural, but it turns into an argument."
+        },
+        {
+          "text": "It sounds like you feel left out. I'll tell you everything as it happens. Want to look at the calendar together?",
+          "verdict": "best",
+          "feedback": "You named the feeling and gave a calm, shared next step."
+        },
+        {
+          "text": "Okay, okay. It's at 2 tomorrow.",
+          "verdict": "okay",
+          "feedback": "It answers the question, but not the feeling of being left out."
+        }
+      ]
+    },
+    {
+      "id": "fb2",
+      "setup": "You've been looking for something together for a few minutes. {Recipient} says:",
+      "line": "Somebody took it. I know somebody took it.",
+      "answers": [
+        {
+          "text": "Nobody took it, I promise.",
+          "verdict": "okay",
+          "feedback": "Kind and honest, but it doesn't touch the worry."
+        },
+        {
+          "text": "Nobody took it! It's here somewhere!",
+          "verdict": "try_again",
+          "feedback": "Almost everyone feels this. But raising your voice adds to the upset."
+        },
+        {
+          "text": "You're really worried about it. I'm with you, and we'll keep looking. Want to check your coat pockets?",
+          "verdict": "best",
+          "feedback": "You named the worry, stayed on {possessive} side, and gave one small step."
+        }
+      ]
+    },
+    {
+      "id": "fb3",
+      "setup": "You offer to help with the shower. {Recipient} says:",
+      "line": "I don't need your help. Leave me alone.",
+      "answers": [
+        {
+          "text": "I'm only trying to help! Why are you so difficult?",
+          "verdict": "try_again",
+          "feedback": "Being pushed away hurts. Stepping back from the sting, even silently, helps you stay calm."
+        },
+        {
+          "text": "I'm only trying to help, but fine.",
+          "verdict": "okay",
+          "feedback": "It ends the tension. A word about how {recipient} feels would make it warmer."
+        },
+        {
+          "text": "You'd like to do this on your own. I'm nearby if you need me. Shall I set out a towel, or wait outside?",
+          "verdict": "best",
+          "feedback": "You named the wish for independence, stayed close, and gave a small choice."
+        }
+      ]
+    }
+  ],
+  "day2": {
+    "checkIn": {
+      "byVariant": {
+        "default": {
+          "question": "Did you use one of your saved phrases since yesterday?",
+          "options": [
+            {
+              "id": "yes",
+              "label": "Yes"
+            },
+            {
+              "id": "not_yet",
+              "label": "Not yet",
+              "response": "That's fine. Your phrase book is ready when you need it."
+            }
+          ],
+          "followUp": {
+            "ifAnswer": "yes",
+            "question": "How did it go?",
+            "showPlan": true,
+            "options": [
+              {
+                "id": "helped",
+                "label": "It helped",
+                "response": "That's real progress. Your words are becoming your own."
+              },
+              {
+                "id": "partly",
+                "label": "Partly",
+                "response": "That's normal at first. Keep the same calm words for a few days. Familiar words help."
+              },
+              {
+                "id": "didnt_help",
+                "label": "It didn't help",
+                "response": "That happens. Here are a few more ways to try.",
+                "next": "followUpsDidntHelp"
+              }
+            ]
+          }
+        }
+      },
+      "checkInVariantMap": {}
+    },
+    "followUpsDidntHelp": [
+      {
+        "title": "Shorter is better",
+        "text": "If your phrase felt long, trim it to the feeling and one small offer. Short words are easier to take in."
+      },
+      {
+        "title": "Say it slower",
+        "text": "The same words, said slowly and quietly, often land better than new words."
+      },
+      {
+        "title": "Try it at a calmer moment",
+        "text": "Say your phrase when things are quiet, so it comes easily when they aren't."
+      }
+    ],
+    "doctorNote": {
+      "text": "If something you've seen worries you, write it down and mention it at the next doctor visit.",
+      "button": "Add to the doctor-visit sheet"
+    },
+    "practiceRound": {
+      "title": "2-minute practice: a new version",
+      "promptFile": "prompts/roleplay-turn.md",
+      "goals": [
+        "notice",
+        "reassure",
+        "offer"
+      ],
+      "roundsByVariant": {
+        "default": [
+          {
+            "stage": "Morning. You're getting ready to go out.",
+            "line": "Which coat? I don't know which one.",
+            "mood": "unsure"
+          },
+          {
+            "stage": "Morning. You're about to leave the house.",
+            "line": "Where are my keys? Somebody moved them.",
+            "mood": "worried"
+          }
+        ]
+      },
+      "roundsVariantMap": {}
+    },
+    "nextLessonPrompt": "Come back to Today to practice again."
+  },
+  "recapForNextLesson": {
+    "text": "Last time you looked back at your phrase book and practiced a mix. Your phrase was: \"{savedPhrase}\".",
+    "ifCheckInHelped": "You said it helped. Keep using the words that feel like yours."
+  }
+}

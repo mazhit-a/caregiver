@@ -44,7 +44,7 @@ def test_all_content_files_load() -> None:
     assert bundle.phrases.phrases
     assert [p.id for p in bundle.pricing.plans] == ["four_week", "twelve_week"]
     assert bundle.funnel_copy.common["notMedicalAdvice"]
-    assert set(bundle.lessons) == {"m1_l1", "m1_l2", "m1_l3"}
+    assert set(bundle.lessons) == {"m1_l1", "m1_l2", "m1_l3", "m1_l4", "m1_l5"}
     assert len(bundle.content_version) == 16
 
 

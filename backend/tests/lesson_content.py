@@ -1,5 +1,6 @@
 """A temp copy of `content/` with exactly two built lessons: `m1_l1` and a fixture `m1_l2` (no
-variants). The real `m1_l2`/`m1_l3` are replaced/removed so these tests do not depend on them."""
+variants). The real `m1_l2` is replaced and `m1_l3` to `m1_l5` are removed (marked unbuilt) so
+these tests do not depend on them."""
 
 import copy
 import json
@@ -8,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 REPO = Path(__file__).resolve().parents[2]
+UNBUILT_REAL_LESSONS = frozenset({"m1_l3", "m1_l4", "m1_l5"})
 
 
 def _drop_variants(lesson: dict[str, Any]) -> dict[str, Any]:
@@ -49,10 +51,11 @@ def make_content_dir(target: Path) -> Path:
         for lesson in module["lessons"]:
             if lesson["id"] == "m1_l2":
                 lesson["built"] = True
-            elif lesson["id"] == "m1_l3":
-                lesson["built"] = False  # the real m1_l3 is built; fixtures keep only l1 and l2
+            elif lesson["id"] in UNBUILT_REAL_LESSONS:
+                lesson["built"] = False  # the real ones are built; fixtures keep only l1 and l2
     rules_path.write_text(json.dumps(rules))
-    (target / "lessons" / "m1_l3.json").unlink(missing_ok=True)
+    for lesson_id in UNBUILT_REAL_LESSONS:
+        (target / "lessons" / f"{lesson_id}.json").unlink(missing_ok=True)
     source = json.loads((target / "lessons" / "m1_l1.json").read_text())
     fixture = _drop_variants(copy.deepcopy(source))
     (target / "lessons" / "m1_l2.json").write_text(json.dumps(fixture))

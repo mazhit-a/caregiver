@@ -7,12 +7,17 @@ from pathlib import Path
 import pytest
 
 from app.infrastructure.content.loader import load_content
-from app.infrastructure.content.schemas import LearnScreen, LessonFile, RoleplayScreen
+from app.infrastructure.content.schemas import (
+    LearnScreen,
+    LessonFile,
+    PhrasesReviewScreen,
+    RoleplayScreen,
+)
 
 REAL_CONTENT = Path(__file__).resolve().parents[4] / "content"
 BUNDLE = load_content(REAL_CONTENT)
 LESSONS: dict[str, LessonFile] = dict(BUNDLE.lessons)
-NEW_LESSONS = ["m1_l2", "m1_l3"]
+NEW_LESSONS = ["m1_l2", "m1_l3", "m1_l4", "m1_l5"]
 BUILT_IN_RULES = {
     lesson.id for module in BUNDLE.plan_rules.modules for lesson in module.lessons if lesson.built
 }
@@ -174,3 +179,55 @@ def test_roleplay_lines_of_new_lessons_are_short_and_neutral() -> None:
             for r in rounds:
                 assert _words(r.line) <= 15
                 assert not re.search(r"[A-Z]{4,}|!{2,}", r.line)
+
+
+def test_lesson_5_has_a_phrases_review_screen_with_an_empty_state_text() -> None:
+    screens = [s for s in LESSONS["m1_l5"].screens if isinstance(s, PhrasesReviewScreen)]
+    assert len(screens) == 1
+    assert screens[0].empty_text.strip() and screens[0].intro.strip()
+
+
+def test_lesson_5_has_what_you_can_handle_now_screen() -> None:
+    learn = [s for s in LESSONS["m1_l5"].screens if isinstance(s, LearnScreen)]
+    screen = next(s for s in learn if s.title == "What you can handle now")
+    items = (screen.bullets or {})["default"]
+    assert len(items) == 4  # one line for each of the four lessons before it
+
+
+def _round_keys(lesson: LessonFile) -> set[tuple[str, str]]:
+    """(line, mood) of every round of a lesson: the role-play and the day-2 practice round."""
+    blocks = [next(s for s in lesson.screens if isinstance(s, RoleplayScreen)).rounds_by_variant]
+    blocks.append(lesson.day2.practice_round.rounds_by_variant)
+    return {
+        (r.line, r.mood) for rounds_by in blocks for rounds in rounds_by.values() for r in rounds
+    }
+
+
+def test_lesson_5_mixed_practice_round_draws_rounds_from_earlier_lessons() -> None:
+    review = LESSONS["m1_l5"]
+    screen = next(s for s in review.screens if isinstance(s, RoleplayScreen))
+    earlier = [LESSONS[f"m1_l{n}"] for n in range(1, 5)]
+    earlier_rounds = [_round_keys(lesson) for lesson in earlier]
+    mixed = [(r.line, r.mood) for r in screen.rounds_by_variant["default"]]
+    assert len(mixed) == 3
+    for key in mixed:
+        assert any(key in rounds for rounds in earlier_rounds), key
+    # more than one lesson is drawn from
+    assert sum(any(key in rounds for key in mixed) for rounds in earlier_rounds) >= 2
+
+
+def test_lesson_5_fallbacks_are_the_earlier_lessons_fallbacks_for_the_same_lines() -> None:
+    review = LESSONS["m1_l5"]
+    screen = next(s for s in review.screens if isinstance(s, RoleplayScreen))
+    earlier = {
+        (f.line, tuple(a.text for a in f.answers))
+        for n in range(1, 5)
+        for f in LESSONS[f"m1_l{n}"].fallback_scenarios
+    }
+    by_id = {f.id: f for f in review.fallback_scenarios}
+    rounds = screen.rounds_by_variant["default"]
+    assert len(screen.fallback_scenarios) == len(rounds)
+    for scenario_id, round_ in zip(screen.fallback_scenarios, rounds, strict=True):
+        scenario = by_id[scenario_id]
+        assert scenario.line == round_.line
+        assert (scenario.line, tuple(a.text for a in scenario.answers)) in earlier

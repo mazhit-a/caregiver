@@ -1,0 +1,420 @@
+{
+  "id": "m1_l4",
+  "version": 1,
+  "moduleId": "m1_talking",
+  "title": "When {recipient} says no",
+  "minutes": 8,
+  "skill": "communication",
+  "skillLabel": "Handling no",
+  "notes": [
+    "DRAFT for content-owner review. Same for everyone: no setup question and no variants. Every by-variant block has one 'default' entry and every *VariantMap is empty.",
+    "Placeholders as in quiz.json: {recipient}, {Recipient}, {possessive}, {Possessive}, {object}. The subject is always {recipient}, never {pronoun}.",
+    "Default example is a refused shower and getting dressed: neutral everyday moments. Heavier refusals are not covered here.",
+    "Same three steps as lessons 1 to 3; here the third step is a small choice instead of 'help look'.",
+    "Every screen shows the line from common.notMedicalAdvice in the footer."
+  ],
+  "pattern": {
+    "name": "The three steps",
+    "steps": [
+      {
+        "id": "notice",
+        "label": "Notice the feeling",
+        "example": "You'd rather not right now."
+      },
+      {
+        "id": "reassure",
+        "label": "Reassure",
+        "example": "That's okay. I'm here, and there's no rush."
+      },
+      {
+        "id": "offer",
+        "label": "Offer a small choice",
+        "example": "Would you like to wash up now, or after your tea?"
+      }
+    ]
+  },
+  "screens": [
+    {
+      "id": "s1_scenario",
+      "type": "scenario",
+      "byVariant": {
+        "default": {
+          "setup": "It's morning. You say it's time for a shower. {Recipient} crosses {possessive} arms and says:",
+          "line": "I don't want a shower. I don't need one."
+        }
+      },
+      "question": "What would you say?",
+      "answers": {
+        "default": [
+          {
+            "id": "a1",
+            "text": "You have to. You haven't had one in ages.",
+            "verdict": "try_again",
+            "feedback": "Almost everyone says this. You care about {possessive} comfort. But \"you have to\" tends to make the no firmer."
+          },
+          {
+            "id": "a2",
+            "text": "Just get in. It'll only take five minutes.",
+            "verdict": "try_again",
+            "feedback": "It's hopeful and quick. But pushing can feel like being rushed, and a rushed person often digs in."
+          },
+          {
+            "id": "a3",
+            "text": "All right, we'll skip it today.",
+            "verdict": "okay",
+            "feedback": "Kind, and it ends the standoff. It gives no way forward, though, so the same moment comes back tomorrow."
+          },
+          {
+            "id": "a4",
+            "text": "You'd rather not right now. That's okay, there's no rush. Would you like to wash up now, or after your tea?",
+            "verdict": "best",
+            "feedback": "This names the feeling, reassures {object}, and offers a small choice. {Recipient} still has a say, and you get a way forward.",
+            "savePhrase": true
+          }
+        ]
+      },
+      "answersVariantMap": {},
+      "verdictLabels": {
+        "best": "Best",
+        "okay": "Okay",
+        "try_again": "Try again"
+      },
+      "afterChoice": "You can try another answer to compare.",
+      "saveButton": "Save this phrase"
+    },
+    {
+      "id": "s2_no_has_a_reason",
+      "type": "learn",
+      "title": "A no often has a feeling behind it.",
+      "body": "Help with private things, like washing or getting dressed, can feel rushed or scary. A no can mean \"I'm cold\", \"I'm tired\", or \"I want a say.\" {Recipient} isn't trying to make your day hard. Often, it's the feeling of losing control that says no.",
+      "miniTask": {
+        "question": "What is {recipient} most likely feeling?",
+        "options": [
+          {
+            "id": "control",
+            "label": "Rushed, or not in control",
+            "correct": true,
+            "response": "Often, yes. Having a say matters, especially in private moments."
+          },
+          {
+            "id": "annoy",
+            "label": "Wanting to make my day hard",
+            "correct": false,
+            "response": "It can feel that way when you're tired. Good instinct to take it seriously. Usually it's a feeling about the moment, not about you."
+          },
+          {
+            "id": "clean",
+            "label": "Not caring about being clean",
+            "correct": false,
+            "response": "It can look like that. Often it's the experience of being helped that is hard, not the cleaning."
+          }
+        ]
+      }
+    },
+    {
+      "id": "s3_choice",
+      "type": "learn",
+      "title": "Don't push. Offer a small choice.",
+      "body": "A choice gives back a bit of control. Use the three steps: notice the feeling, reassure {object} that there's no rush, and offer two easy options, both fine with you. Avoid yes-or-no questions, since \"no\" is an easy answer.",
+      "showPattern": true,
+      "miniTask": {
+        "question": "Which reply follows all three steps?",
+        "options": [
+          {
+            "id": "x1",
+            "label": "Come on, it's shower time. Do you want to do it or not?",
+            "correct": false,
+            "response": "Understandable. But a yes-or-no question invites another no, and it skips the feeling."
+          },
+          {
+            "id": "x2",
+            "label": "You'd rather not right now. That's okay, I'm here. Shower now, or after breakfast?",
+            "correct": true,
+            "response": "Yes: feeling, reassurance, and a small choice."
+          }
+        ]
+      }
+    },
+    {
+      "id": "s4_keep_it_small",
+      "type": "learn",
+      "title": "Keep the choice small, and try again later.",
+      "body": "Two options is plenty: the blue top or the green one, now or after tea. If the answer is still no, let it rest. Try again in a little while, after a snack or a quiet moment. A no at nine can be a yes at eleven."
+    },
+    {
+      "id": "s5_reset",
+      "type": "learn",
+      "title": "Hearing no again and again is tiring. Pause first.",
+      "body": "It's normal to feel worn down, even when you know the no isn't about you. A small pause before you answer helps you stay kind.",
+      "miniTask": {
+        "question": "Pick your pause for next time:",
+        "storeAs": "reset",
+        "options": [
+          {
+            "id": "breath",
+            "label": "One slow breath before I answer"
+          },
+          {
+            "id": "feeling_talking",
+            "label": "Tell myself: this is a feeling, not a fight"
+          },
+          {
+            "id": "try_later",
+            "label": "Step away and try again in a little while, if it's safe"
+          }
+        ]
+      }
+    },
+    {
+      "id": "s6_practice",
+      "type": "roleplay",
+      "promptFile": "prompts/roleplay-turn.md",
+      "title": "Practice: when {recipient} says no",
+      "intro": "Now try it out loud. {Recipient} is an AI practice partner. Type what you'd say. The coach will show what worked.",
+      "goals": [
+        "notice",
+        "reassure",
+        "offer"
+      ],
+      "roundsByVariant": {
+        "default": [
+          {
+            "stage": "Morning. It's time to get dressed.",
+            "line": "I'm not getting dressed. I don't want to.",
+            "mood": "stubborn"
+          },
+          {
+            "stage": "Later, you mention the shower.",
+            "line": "I don't need your help. Leave me alone.",
+            "mood": "irritated"
+          },
+          {
+            "stage": "Afternoon. You hold out {possessive} jacket for a short walk.",
+            "line": "No. I'm staying right here.",
+            "mood": "firm"
+          }
+        ]
+      },
+      "roundsVariantMap": {},
+      "summary": {
+        "title": "Your practice",
+        "firstVsLast": "First try: {firstScore} of 3 · Last try: {lastScore} of 3",
+        "bestPhraseLabel": "Your best phrase",
+        "saveButton": "Save",
+        "againButton": "Practice again"
+      },
+      "labels": {
+        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
+        "thinking": "{Recipient} is thinking…",
+        "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
+      },
+      "fallbackScenarios": [
+        "fb1",
+        "fb2",
+        "fb3"
+      ]
+    },
+    {
+      "id": "s7_plan",
+      "type": "plan",
+      "title": "Your plan for next time",
+      "ifThen": {
+        "cueByVariant": {
+          "default": "If {recipient} says no to help,"
+        },
+        "cueVariantMap": {},
+        "responseLabel": "then I'll say:",
+        "responseDefault": "the best phrase from practice, else the saved scenario phrase",
+        "responseEditable": true,
+        "resetLabel": "And first, I'll:",
+        "resetFrom": "s5_reset"
+      },
+      "doNow": {
+        "title": "One thing to do now",
+        "byVariant": {
+          "default": {
+            "text": "Save your phrase where you'll see it, like a note on your phone. Then think of two easy choices for the morning, like the blue top or the green one.",
+            "action": "copy_phrase",
+            "button": "Copy my phrase"
+          }
+        }
+      },
+      "remindButton": "Remind me tomorrow",
+      "doneButton": "Done",
+      "noteTemplate": {
+        "title": "{Possessive} note",
+        "example": "Blue top or green top? You choose. — [your name]"
+      }
+    },
+    {
+      "id": "s8_wrap",
+      "type": "wrap",
+      "skillLine": "New skill: answering \"no\" with a small choice.",
+      "phraseLine": "Your phrase is saved to {possessive} page and care card.",
+      "patternLine": "Same three steps again: notice the feeling, reassure, and this time offer a small choice. You don't have to push, and you don't have to give up.",
+      "tomorrowLine": "Tomorrow: a quick check-in and a 2-minute practice round.",
+      "nextLine": "Next in this module: your phrase book, a look back at the phrases you saved and one mixed practice round.",
+      "allDoneLine": "That's every lesson ready for you so far. More are on the way. Come back to Today to practice again."
+    }
+  ],
+  "fallbackScenarios": [
+    {
+      "id": "fb1",
+      "setup": "Morning. It's time to get dressed. {Recipient} says:",
+      "line": "I'm not getting dressed. I don't want to.",
+      "answers": [
+        {
+          "text": "You can't stay in your nightclothes all day.",
+          "verdict": "try_again",
+          "feedback": "It's true, and you're trying to get things moving. But it can sound like an order, and the no gets firmer."
+        },
+        {
+          "text": "You don't feel like it yet. That's okay, no rush. Would you like the blue top or the green one?",
+          "verdict": "best",
+          "feedback": "Feeling, reassurance, and a small choice."
+        },
+        {
+          "text": "Okay, let's wait a bit.",
+          "verdict": "okay",
+          "feedback": "Calm and gentle. Adding a kind word and a small choice would give a way forward."
+        }
+      ]
+    },
+    {
+      "id": "fb2",
+      "setup": "Later, you mention the shower. {Recipient} says:",
+      "line": "I don't need your help. Leave me alone.",
+      "answers": [
+        {
+          "text": "I'm only trying to help! Why are you so difficult?",
+          "verdict": "try_again",
+          "feedback": "Being pushed away hurts. Stepping back from the sting, even silently, helps you stay calm."
+        },
+        {
+          "text": "I'm only trying to help, but fine.",
+          "verdict": "okay",
+          "feedback": "It ends the tension. A word about how {recipient} feels would make it warmer."
+        },
+        {
+          "text": "You'd like to do this on your own. I'm nearby if you need me. Shall I set out a towel, or wait outside?",
+          "verdict": "best",
+          "feedback": "You named the wish for independence, stayed close, and gave a small choice."
+        }
+      ]
+    },
+    {
+      "id": "fb3",
+      "setup": "Afternoon. You hold out {possessive} jacket for a short walk. {Recipient} says:",
+      "line": "No. I'm staying right here.",
+      "answers": [
+        {
+          "text": "Come on, some fresh air will do you good.",
+          "verdict": "try_again",
+          "feedback": "Well meant. But it's a push, and a firm no often gets firmer."
+        },
+        {
+          "text": "Staying put feels better right now. That's okay. Shall we go out for a few minutes now, or sit by the window and have tea first?",
+          "verdict": "best",
+          "feedback": "You noticed the feeling, took the pressure off, and offered a choice."
+        },
+        {
+          "text": "Okay, we'll stay here.",
+          "verdict": "okay",
+          "feedback": "Kind and calm. A small choice for later would keep the door open."
+        }
+      ]
+    }
+  ],
+  "day2": {
+    "checkIn": {
+      "byVariant": {
+        "default": {
+          "question": "Did {recipient} say no to help since yesterday?",
+          "options": [
+            {
+              "id": "yes",
+              "label": "Yes"
+            },
+            {
+              "id": "not_yet",
+              "label": "Not yet",
+              "response": "Your plan is ready for when it does."
+            }
+          ],
+          "followUp": {
+            "ifAnswer": "yes",
+            "question": "How did your plan go?",
+            "showPlan": true,
+            "options": [
+              {
+                "id": "helped",
+                "label": "It helped",
+                "response": "That's real progress. A small choice gives back a sense of control."
+              },
+              {
+                "id": "partly",
+                "label": "Partly",
+                "response": "That's normal at first. Keep the same calm words for a few days. Familiar words help."
+              },
+              {
+                "id": "didnt_help",
+                "label": "It didn't help",
+                "response": "That happens. Here are a few more ways to try.",
+                "next": "followUpsDidntHelp"
+              }
+            ]
+          }
+        }
+      },
+      "checkInVariantMap": {}
+    },
+    "followUpsDidntHelp": [
+      {
+        "title": "Try again later",
+        "text": "A no in the morning can become a yes after a snack or a rest. Let it go for now and come back in a little while."
+      },
+      {
+        "title": "Keep the same order",
+        "text": "Doing things at the same time and in the same order each day makes them feel less like a request."
+      },
+      {
+        "title": "Let {recipient} do a part",
+        "text": "Hand over the washcloth or the brush. Doing one small part feels like having a say."
+      }
+    ],
+    "doctorNote": {
+      "text": "If {recipient} suddenly says no to things that used to be fine, or seems uncomfortable when helped, mention it at the next doctor visit.",
+      "button": "Add to the doctor-visit sheet"
+    },
+    "practiceRound": {
+      "title": "2-minute practice: a new version",
+      "promptFile": "prompts/roleplay-turn.md",
+      "goals": [
+        "notice",
+        "reassure",
+        "offer"
+      ],
+      "roundsByVariant": {
+        "default": [
+          {
+            "stage": "Morning. You lay out clothes for the day.",
+            "line": "I don't like that shirt. I'm not wearing it.",
+            "mood": "stubborn"
+          },
+          {
+            "stage": "A minute later.",
+            "line": "I said no. Stop asking me.",
+            "mood": "annoyed"
+          }
+        ]
+      },
+      "roundsVariantMap": {}
+    },
+    "nextLessonPrompt": "Ready for the next step? Your phrase book brings together everything you've practiced."
+  },
+  "recapForNextLesson": {
+    "text": "Last time you practiced answering no: notice the feeling, reassure, offer a small choice. Your phrase was: \"{savedPhrase}\".",
+    "ifCheckInHelped": "You said it helped. Today we'll look back at your phrases and practice a mix."
+  }
+}

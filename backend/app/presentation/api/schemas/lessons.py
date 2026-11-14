@@ -72,6 +72,24 @@ class LearnScreenOut(CamelModel):
     mini_task: MiniTaskOut | None = None
 
 
+class ReviewPhraseOut(CamelModel):
+    id: str
+    text: str
+    source: str
+    lesson_id: str | None = None
+
+
+class PhrasesReviewScreenOut(CamelModel):
+    """`phrases` is empty when the learner has saved none: show `empty_text`."""
+
+    id: str
+    type: Literal["phrases_review"]
+    title: str
+    intro: str
+    empty_text: str
+    phrases: list[ReviewPhraseOut]
+
+
 class RoundOut(CamelModel):
     stage: str
     line: str
@@ -155,6 +173,7 @@ ScreenOut = Annotated[
     SetupQuestionScreenOut
     | ScenarioScreenOut
     | LearnScreenOut
+    | PhrasesReviewScreenOut
     | RoleplayScreenOut
     | PlanScreenOut
     | WrapScreenOut,

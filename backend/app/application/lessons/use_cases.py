@@ -3,7 +3,12 @@
 from app.application.lessons.access import LessonAccess, valid_variant
 from app.application.lessons.dto import LessonView, ProgressView, RecapView
 from app.application.ports import Clock, ContentProvider, UnitOfWork
-from app.domain.lessons.screens import RUNTIME_PLACEHOLDERS, render_lesson
+from app.domain.lessons.screens import (
+    RUNTIME_PLACEHOLDERS,
+    has_phrases_review,
+    render_lesson,
+    with_saved_phrases,
+)
 from app.domain.phrases.entities import RECAP_PHRASE_MARKER, fill_recap
 from app.domain.session.entities import Session
 
@@ -27,12 +32,24 @@ class GetLesson:
             runtime_values=dict.fromkeys(RUNTIME_PLACEHOLDERS, ""),
             display_name=session.display_name,
         )
+        lesson = render_lesson(data, variant, is_first_lesson=row.seq == 0)
+        if has_phrases_review(lesson):
+            lesson = with_saved_phrases(lesson, await self._saved_phrases(session))
         return LessonView(
-            lesson=render_lesson(data, variant, is_first_lesson=row.seq == 0),
+            lesson=lesson,
             unlock_on=row.unlock_on,
             progress=ProgressView(progress.step, progress.started_at, progress.done_at),
             recap=await self._recap(session, row.seq),
         )
+
+    async def _saved_phrases(self, session: Session) -> list[dict[str, str | None]]:
+        """The phrases the learner saved, oldest first, as the review screen shows them."""
+        async with self._uow:
+            phrases = await self._uow.saved_phrases.list_for_session(session.id)
+        return [
+            {"id": str(p.id), "text": p.text, "source": p.source, "lessonId": p.lesson_id}
+            for p in phrases
+        ]
 
     async def _recap(self, session: Session, seq: int) -> RecapView | None:
         """The previous lesson's `recapForNextLesson` with the phrase saved for it; lesson 1
