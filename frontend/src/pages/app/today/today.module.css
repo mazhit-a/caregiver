@@ -1,0 +1,52 @@
+.header { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-5); }
+.avatar { width: 56px; height: 56px; border-radius: 50%; flex: none; }
+.title { margin: 0; font: var(--text-h1); color: var(--text); }
+.stack { display: flex; flex-direction: column; gap: var(--space-4); }
+
+.hero, .card, .notice, .banner {
+  padding: var(--space-5);
+  border-radius: var(--radius-card);
+  border: var(--border-width) solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+  margin: 0;
+}
+.hero { background: var(--butter-100); }
+.notice { background: var(--info-soft); border-color: var(--coach-border); display: flex; flex-direction: column; gap: var(--space-3); align-items: flex-start; }
+.banner { background: var(--info-soft); border-color: var(--coach-border); color: var(--info-text); font: var(--text-body); }
+.bannerTitle { margin: 0 0 var(--space-2); font: var(--text-h3); }
+
+.kicker { margin: 0 0 var(--space-2); font: var(--text-caption); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; }
+.heroTitle { margin: 0 0 var(--space-2); font: var(--text-h2); color: var(--text); }
+.cardTitle { margin: 0 0 var(--space-3); font: var(--text-h3); color: var(--text); }
+.body { margin: 0; font: var(--text-body); color: var(--text-secondary); }
+.unlock { margin: var(--space-3) 0 0; font: var(--text-body-strong); color: var(--text); }
+.upNext { margin-top: var(--space-3); }
+.upNextTitle { margin: 0; font: var(--text-body-strong); color: var(--text); }
+
+.cta, .secondary {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: var(--tap-min); padding: 0 var(--space-5);
+  margin-top: var(--space-4);
+  border-radius: var(--radius-button);
+  font: var(--text-button); text-decoration: none;
+}
+.cta { background: var(--accent); color: var(--on-accent); }
+.cta:hover { background: var(--accent-hover); }
+.cta:active { background: var(--accent-pressed); }
+.secondary { margin-top: 0; border: var(--border-width-strong) solid var(--accent); color: var(--accent-pressed); background: var(--surface); }
+.card .secondary { margin-top: var(--space-4); }
+
+.bar { height: 12px; border-radius: var(--radius-chip); background: var(--surface-muted); overflow: hidden; margin-bottom: var(--space-3); }
+.barFill { display: block; height: 100%; background: var(--accent); border-radius: var(--radius-chip); }
+.segments { display: flex; gap: var(--space-2); margin-bottom: var(--space-3); }
+.segOn, .segOff { flex: 1; height: 12px; border-radius: var(--radius-chip); }
+.segOn { background: var(--accent); }
+.segOff { background: var(--surface-muted); }
+
+.links { display: flex; flex-direction: column; gap: var(--space-2); margin-top: var(--space-2); }
+.link { display: inline-flex; align-items: center; min-height: var(--tap-min); color: var(--accent-pressed); font: var(--text-body-strong); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .barFill { transition: width var(--motion-medium) var(--motion-easing); }
+}
