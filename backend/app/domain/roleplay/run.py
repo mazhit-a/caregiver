@@ -2,7 +2,9 @@
 
 from collections.abc import Sequence
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import StrEnum
+from uuid import UUID
 
 from app.domain.roleplay.errors import InvalidReply
 from app.domain.roleplay.verdict import Goals
@@ -14,6 +16,11 @@ PERFECT_SCORE = 3
 class RunMode(StrEnum):
     AI = "ai"
     FALLBACK = "fallback"
+
+
+class RunContext(StrEnum):
+    LESSON = "lesson"
+    PRACTICE_ROUND = "practice_round"
 
 
 def validate_reply(text: str) -> str:
@@ -79,3 +86,21 @@ def best_phrase(turns: Sequence[TurnPhrases]) -> str | None:
         if turn.score == PERFECT_SCORE:
             return turn.reply
     return turns[-1].better_phrase if turns else None
+
+
+@dataclass
+class RunRecord:
+    """A stored run: scores, goals, context, mode and timestamps only (no text, ever)."""
+
+    id: UUID
+    session_id: UUID
+    lesson_id: str
+    context: RunContext
+    variant: str | None
+    started_at: datetime
+    run: RoleplayRun
+    finished_at: datetime | None = None
+
+    @property
+    def is_finished(self) -> bool:
+        return self.finished_at is not None

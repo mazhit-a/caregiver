@@ -14,6 +14,8 @@ from app.infrastructure.db.repositories.lesson_progress import SqlLessonProgress
 from app.infrastructure.db.repositories.lesson_schedule import SqlLessonScheduleRepository
 from app.infrastructure.db.repositories.plans import SqlPlanRepository
 from app.infrastructure.db.repositories.quiz_states import SqlQuizStateRepository
+from app.infrastructure.db.repositories.roleplay_runs import SqlRoleplayRunRepository
+from app.infrastructure.db.repositories.saved_phrases import SqlSavedPhraseRepository
 from app.infrastructure.db.repositories.scenario_answers import SqlScenarioAnswerRepository
 from app.infrastructure.db.repositories.sessions import SqlActiveDayRepository, SqlSessionRepository
 from app.infrastructure.db.repositories.stripe_events import SqlStripeEventRepository
@@ -37,6 +39,8 @@ class SqlAlchemyUnitOfWork:
     subscriptions: SqlSubscriptionRepository
     subscription_history: SqlSubscriptionHistoryRepository
     stripe_events: SqlStripeEventRepository
+    roleplay_runs: SqlRoleplayRunRepository
+    saved_phrases: SqlSavedPhraseRepository
 
     def __init__(self, session_factory: async_sessionmaker[AsyncSession]) -> None:
         self._factory = session_factory
@@ -57,6 +61,8 @@ class SqlAlchemyUnitOfWork:
         self.subscriptions = SqlSubscriptionRepository(self._db)
         self.subscription_history = SqlSubscriptionHistoryRepository(self._db)
         self.stripe_events = SqlStripeEventRepository(self._db)
+        self.roleplay_runs = SqlRoleplayRunRepository(self._db)
+        self.saved_phrases = SqlSavedPhraseRepository(self._db)
         return self
 
     async def __aexit__(

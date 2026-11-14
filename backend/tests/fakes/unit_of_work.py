@@ -11,6 +11,8 @@ from tests.fakes.lesson_progress import InMemoryLessonProgressRepository
 from tests.fakes.lesson_schedule import InMemoryLessonScheduleRepository
 from tests.fakes.plans import InMemoryConfidenceRepository, InMemoryPlanRepository
 from tests.fakes.quiz import InMemoryQuizStateRepository
+from tests.fakes.roleplay import InMemoryRoleplayRunRepository
+from tests.fakes.saved_phrases import InMemorySavedPhraseRepository
 from tests.fakes.scenario_answers import InMemoryScenarioAnswerRepository
 from tests.fakes.sessions import InMemoryActiveDayRepository, InMemorySessionRepository
 
@@ -32,6 +34,8 @@ class FakeUnitOfWork:
         self.subscriptions = InMemorySubscriptionRepository()
         self.subscription_history = InMemorySubscriptionHistoryRepository()
         self.stripe_events = InMemoryStripeEventRepository()
+        self.roleplay_runs = InMemoryRoleplayRunRepository()
+        self.saved_phrases = InMemorySavedPhraseRepository()
         self.committed = False
         self.rolled_back = False
 

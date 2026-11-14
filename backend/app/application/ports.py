@@ -13,16 +13,22 @@ from app.application.billing.payments import (
     CheckoutSessionRef,
     CustomerRef,
 )
+from app.application.roleplay.dto import CoachInput
 from app.domain.billing.entities import Subscription, SubscriptionHistoryEntry
 from app.domain.billing.pricing import Pricing
 from app.domain.lessons.plans import ConfidenceRatings, IfThenPlan, Task
 from app.domain.lessons.progress import LessonProgress, ScenarioAnswer
+from app.domain.phrases.entities import SavedPhrase
 from app.domain.plan.entities import PhraseSheetText, PhraseText, PlanRules, StoredPlan
 from app.domain.quiz.definition import QuizDefinition
 from app.domain.quiz.entities import QuizState
+from app.domain.roleplay.run import RunRecord
+from app.domain.roleplay.verdict import CoachTips, CoachVerdict
+from app.domain.safety.check import SafetyTerms
 from app.domain.safety.resources import CrisisResource
 from app.domain.schedule.entities import ScheduledLesson
 from app.domain.session.entities import Session
+from app.domain.shared.errors import DomainError
 from app.domain.shared.labels import RecipientLabels
 
 
@@ -65,6 +71,10 @@ class LessonProgressRepository(Protocol):
 
     async def save(self, progress: LessonProgress) -> None:
         """Insert or update the progress row of the lesson."""
+        ...
+
+    async def list_for_session(self, session_id: UUID) -> list[LessonProgress]:
+        """The progress rows of every lesson the session has started."""
         ...
 
 
@@ -155,6 +165,28 @@ class StripeEventRepository(Protocol):
     async def mark_processed(self, event_id: str, processed_at: datetime) -> None: ...
 
 
+class SavedPhraseRepository(Protocol):
+    async def add(self, phrase: SavedPhrase) -> None: ...
+
+    async def count(self, session_id: UUID) -> int: ...
+
+    async def list_for_session(self, session_id: UUID) -> list[SavedPhrase]:
+        """The session's phrases, oldest first."""
+        ...
+
+    async def delete(self, session_id: UUID, phrase_id: UUID) -> bool:
+        """Delete the phrase when it belongs to the session; False when there is no such row."""
+        ...
+
+
+class RoleplayRunRepository(Protocol):
+    async def get(self, run_id: UUID) -> RunRecord | None: ...
+
+    async def save(self, record: RunRecord) -> None:
+        """Insert or update the run (scores, goals, mode, finished_at; never any text)."""
+        ...
+
+
 class UnitOfWork(Protocol):
     """Transaction boundary: `async with uow:` ... `await uow.commit()`.
 
@@ -174,6 +206,8 @@ class UnitOfWork(Protocol):
     subscriptions: SubscriptionRepository
     subscription_history: SubscriptionHistoryRepository
     stripe_events: StripeEventRepository
+    roleplay_runs: RoleplayRunRepository
+    saved_phrases: SavedPhraseRepository
 
     async def __aenter__(self) -> Self: ...
 
@@ -187,6 +221,26 @@ class UnitOfWork(Protocol):
     async def commit(self) -> None: ...
 
     async def rollback(self) -> None: ...
+
+
+class CoachUnavailable(DomainError):
+    """The only failure a `Coach` raises: timeout, API error, refusal or invalid JSON."""
+
+    code = "coach_unavailable"
+
+
+class Coach(Protocol):
+    """The role-play coach (LLM). One call per caregiver reply; never decides scores."""
+
+    async def turn(self, coach_input: CoachInput) -> CoachVerdict:
+        """The model's judgement of the reply. Raises `CoachUnavailable` on any failure."""
+        ...
+
+
+class RateLimiter(Protocol):
+    async def allow(self, key: str, now: datetime) -> bool:
+        """Record one hit for `key` and say whether it is within the limit."""
+        ...
 
 
 class PaymentGateway(Protocol):
@@ -285,6 +339,14 @@ class ContentProvider(Protocol):
         ...
 
     def crisis_resources(self) -> list[CrisisResource]: ...
+
+    def safety_terms(self) -> SafetyTerms:
+        """Crisis and emergency terms and excluded phrases for the local safety check."""
+        ...
+
+    def coach_tips(self) -> CoachTips:
+        """The fixed coach tips (medical, off topic, too short); `{label}` still unfilled."""
+        ...
 
     def crisis_resources_need_verification(self) -> bool:
         """True while the phone numbers are still marked "to be verified before launch"."""

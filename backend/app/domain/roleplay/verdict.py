@@ -3,9 +3,14 @@
 from dataclasses import dataclass
 from enum import StrEnum
 
+from app.domain.roleplay.errors import InvalidCoachOutput
 from app.domain.shared.labels import RecipientLabels, render_text
 
 MAX_SCORE_WHEN_ARGUED = 2
+
+
+KNOWN_FLAGS = frozenset({"medical", "crisis", "off_topic", "too_short"})
+KNOWN_MOODS = frozenset({"calmer", "same", "more_upset"})
 
 
 class OutcomeKind(StrEnum):
@@ -38,6 +43,14 @@ class CoachVerdict:
     better_phrase: str
     parent_reaction: str
     parent_mood: str
+
+
+def validate_verdict(verdict: CoachVerdict) -> CoachVerdict:
+    """Strict check of a model output: known flags and mood. Raises `InvalidCoachOutput`."""
+    unknown = [f for f in verdict.flags if f not in KNOWN_FLAGS]
+    if unknown or verdict.parent_mood not in KNOWN_MOODS:
+        raise InvalidCoachOutput("The coach output is not valid.")
+    return verdict
 
 
 @dataclass(frozen=True)

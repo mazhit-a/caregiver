@@ -8,12 +8,15 @@ from typing import Any
 from app.domain.billing.pricing import Pricing, PricingPlan
 from app.domain.plan.entities import PhraseSheetText, PhraseText, PlanRules
 from app.domain.quiz.definition import QuizDefinition
+from app.domain.roleplay.verdict import CoachTips
+from app.domain.safety.check import SafetyTerms
 from app.domain.safety.resources import CrisisResource
 from app.domain.shared.errors import DomainError
 from app.domain.shared.labels import RecipientLabels, lesson_labels, render_text
 from app.infrastructure.content.loader import ContentBundle, load_content
 from app.infrastructure.content.plan_rules_mapper import to_plan_rules
 from app.infrastructure.content.quiz_mapper import to_quiz_definition
+from app.infrastructure.content.safety_mapper import to_coach_tips, to_safety_terms
 from app.infrastructure.content.schemas import LessonFile
 
 _AUTHORING_KEYS = frozenset({"notes"})
@@ -62,6 +65,12 @@ class JsonContentProvider:
             CrisisResource(id=r.id, name=r.name, phone=r.phone, description=r.description)
             for r in self._bundle.crisis_resources.resources
         ]
+
+    def safety_terms(self) -> SafetyTerms:
+        return to_safety_terms(self._bundle.safety_terms)
+
+    def coach_tips(self) -> CoachTips:
+        return to_coach_tips(self._bundle.safety_terms)
 
     def crisis_resources_need_verification(self) -> bool:
         return self._bundle.crisis_resources.verify_before_launch

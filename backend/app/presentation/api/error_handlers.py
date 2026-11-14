@@ -45,6 +45,9 @@ DOMAIN_ERROR_STATUS: dict[str, int] = {
     "payment_gateway_error": 502,
     "checkout_not_found": 404,
     "invalid_webhook_signature": 400,
+    "invalid_phrase": 422,
+    "phrase_limit_reached": 422,
+    "phrase_not_found": 404,
 }
 
 

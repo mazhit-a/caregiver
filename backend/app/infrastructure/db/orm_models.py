@@ -194,6 +194,19 @@ class ScenarioAnswerRow(Base):
     answered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
 
+class SavedPhraseRow(Base):
+    __tablename__ = "saved_phrases"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True)
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("sessions.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    text: Mapped[str] = mapped_column(String(300), nullable=False)
+    source: Mapped[str] = mapped_column(String(16), nullable=False)
+    lesson_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    saved_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
 class StripeEventRow(Base):
     __tablename__ = "stripe_events"
 
@@ -201,3 +214,25 @@ class StripeEventRow(Base):
     type: Mapped[str] = mapped_column(String(100), nullable=False)
     received_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     processed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class RoleplayRunRow(Base):
+    """Scores, goals, context, mode and timestamps only. No text columns, by design."""
+
+    __tablename__ = "roleplay_runs"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True)
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("sessions.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    lesson_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    context: Mapped[str] = mapped_column(String(16), nullable=False)
+    variant: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    mode: Mapped[str] = mapped_column(String(16), nullable=False)
+    rounds_total: Mapped[int] = mapped_column(Integer, nullable=False)
+    turn_scores: Mapped[list[int]] = mapped_column(JSONB, nullable=False, server_default="[]")
+    goals_hit: Mapped[list[dict[str, bool]]] = mapped_column(
+        JSONB, nullable=False, server_default="[]"
+    )
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
