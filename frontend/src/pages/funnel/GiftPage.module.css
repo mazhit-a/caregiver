@@ -1,0 +1,123 @@
+.state,
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.stateTitle,
+.title {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.intro {
+  margin: 0;
+}
+
+.phrases {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.phrase {
+  padding: var(--space-2);
+  border: var(--border-width) solid var(--border);
+  border-radius: 16px;
+  break-inside: avoid;
+}
+
+.text {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.when {
+  margin: 4px 0 0;
+}
+
+.footer {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-2);
+}
+
+.button,
+.link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap-min);
+  padding: 0 var(--space-3);
+  font: inherit;
+  font-weight: 600;
+  border-radius: 999px;
+}
+
+.button {
+  cursor: pointer;
+  border: 0;
+  background: var(--accent);
+  color: var(--on-accent, #fff);
+}
+
+.link {
+  color: inherit;
+}
+
+@media print {
+  @page {
+    size: Letter;
+    margin: 0.6in;
+  }
+
+  /* Shell chrome from the funnel layout: header row, action bar, disclaimer footer. */
+  :global(body) :global(header),
+  :global(body) :global(footer),
+  .actions {
+    display: none !important;
+  }
+
+  :global(body),
+  :global(main) {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .sheet {
+    gap: 12pt;
+    color: #000;
+  }
+
+  .title {
+    font-size: 22pt;
+  }
+
+  .phrase {
+    border: 1pt solid #000;
+    border-radius: 0;
+    background: none;
+  }
+
+  .text {
+    font-size: 14pt;
+  }
+
+  .footer {
+    border-top: 1pt solid #000;
+    padding-top: 8pt;
+    font-size: 10pt;
+  }
+}

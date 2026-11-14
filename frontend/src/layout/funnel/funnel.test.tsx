@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { axe } from "vitest-axe";
 import { crisisStore } from "../../api/useCrisisResources";
 import { routes } from "../../router";
+import giftFixture from "../../test/fixtures/gift-b.json";
 
 // jsdom's AbortSignal is rejected by Node's Request, which React Router builds on navigation.
 const NodeRequest = Request;
@@ -22,7 +23,16 @@ beforeEach(() => {
   vi.stubGlobal("fetch", fetchMock);
   fetchMock.mockReset();
   crisisStore.reset();
-  fetchMock.mockImplementation(() => Promise.resolve(crisisResponse()));
+  fetchMock.mockImplementation((input) =>
+    Promise.resolve(
+      String(input).includes("/api/plan/gift")
+        ? new Response(JSON.stringify(giftFixture), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          })
+        : crisisResponse(),
+    ),
+  );
   window.scrollTo = vi.fn();
   Element.prototype.scrollIntoView = vi.fn();
 });
@@ -58,7 +68,7 @@ const FUNNEL: [string, string][] = [
   ["/quiz/reassure_1", "Quiz"],
   ["/quiz/building", "Building your plan"],
   ["/your-plan", "Your plan"],
-  ["/your-plan/gift", "Your free phrase sheet"],
+  ["/your-plan/gift", "Phrases that calm Mom"],
   ["/paywall", "Start your plan"],
   ["/checkout/return", "Checking your payment"],
   ["/today", "Today is coming soon"],
@@ -80,11 +90,15 @@ describe("funnel routes", () => {
       expect(
         within(footer).getByText(/don’t give medical advice/),
       ).toBeInTheDocument();
-      // Only the shared help sheet may call the API (public crisis list); the pages fetch nothing.
+      // Only the shared help sheet may call the API (public crisis list); only the gift page fetches its own sheet.
       const urls = fetchMock.mock.calls.map(([u]) => String(u));
-      expect(urls.filter((u) => !u.includes("/api/resources/crisis"))).toEqual(
-        [],
-      );
+      expect(
+        urls.filter(
+          (u) =>
+            !u.includes("/api/resources/crisis") &&
+            !u.includes("/api/plan/gift"),
+        ),
+      ).toEqual([]);
     },
   );
 
@@ -122,7 +136,6 @@ describe("funnel header", () => {
   it.each(FUNNEL.map(([p]) => p))(
     "opens help from %s and returns focus",
     async (path) => {
-      fetchMock.mockImplementation(() => Promise.resolve(crisisResponse()));
       const user = userEvent.setup();
       await renderAt(path);
       const trigger = within(screen.getByRole("banner")).getByRole("button", {
