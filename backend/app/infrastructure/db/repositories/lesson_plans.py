@@ -1,8 +1,9 @@
 """Postgres repositories for the if-then plan and the do-now task of a lesson."""
 
+from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -19,6 +20,20 @@ class SqlIfThenPlanRepository:
             select(IfThenPlanRow).where(
                 IfThenPlanRow.session_id == session_id, IfThenPlanRow.lesson_id == lesson_id
             )
+        )
+        row = result.scalar_one_or_none()
+        if row is None:
+            return None
+        return IfThenPlan(
+            row.session_id, row.lesson_id, row.cue, row.response, row.reset, row.created_at
+        )
+
+    async def latest(self, session_id: UUID) -> IfThenPlan | None:
+        result = await self._db.execute(
+            select(IfThenPlanRow)
+            .where(IfThenPlanRow.session_id == session_id)
+            .order_by(IfThenPlanRow.created_at.desc(), IfThenPlanRow.lesson_id.desc())
+            .limit(1)
         )
         row = result.scalar_one_or_none()
         if row is None:
@@ -53,14 +68,19 @@ class SqlTaskRepository:
         row = result.scalar_one_or_none()
         if row is None:
             return None
-        return Task(
-            row.session_id,
-            row.lesson_id,
-            row.text,
-            row.action,
-            row.reminder_downloaded,
-            row.created_at,
-            row.done_at,
+        return _task(row)
+
+    async def list_for_session(self, session_id: UUID) -> list[Task]:
+        result = await self._db.execute(
+            select(TaskRow).where(TaskRow.session_id == session_id).order_by(TaskRow.created_at)
+        )
+        return [_task(row) for row in result.scalars()]
+
+    async def mark_done(self, session_id: UUID, lesson_id: str, done_at: datetime) -> None:
+        await self._db.execute(
+            update(TaskRow)
+            .where(TaskRow.session_id == session_id, TaskRow.lesson_id == lesson_id)
+            .values(done_at=done_at)
         )
 
     async def save(self, task: Task) -> None:
@@ -82,3 +102,15 @@ class SqlTaskRepository:
                 index_elements=[TaskRow.session_id, TaskRow.lesson_id], set_=values
             )
         )
+
+
+def _task(row: TaskRow) -> Task:
+    return Task(
+        row.session_id,
+        row.lesson_id,
+        row.text,
+        row.action,
+        row.reminder_downloaded,
+        row.created_at,
+        row.done_at,
+    )

@@ -41,9 +41,10 @@ class GetLesson:
         async with self._uow:
             schedule = await self._uow.lesson_schedule.list_for_session(session.id)
             phrases = await self._uow.saved_phrases.list_for_session(session.id)
-        previous = next((s for s in schedule if s.seq == seq - 1), None)
-        if previous is None:
-            return None
+            previous = next((s for s in schedule if s.seq == seq - 1), None)
+            if previous is None:
+                return None
+            checkin = await self._uow.checkins.get(session.id, previous.lesson_id)
         saved = [p.text for p in phrases if p.lesson_id == previous.lesson_id]
         data = self._content.render_lesson(
             previous.lesson_id,
@@ -55,4 +56,6 @@ class GetLesson:
             },
         )
         text = fill_recap(data["recapForNextLesson"]["text"], saved[-1] if saved else None)
+        if checkin is not None and checkin.outcome == "helped":
+            text = f"{text} {data['recapForNextLesson']['ifCheckInHelped']}"
         return RecapView(previous.lesson_id, text)
