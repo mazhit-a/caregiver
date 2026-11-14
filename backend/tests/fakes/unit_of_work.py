@@ -5,6 +5,7 @@ from tests.fakes.billing import (
     InMemorySubscriptionHistoryRepository,
     InMemorySubscriptionRepository,
 )
+from tests.fakes.lesson_progress import InMemoryLessonProgressRepository
 from tests.fakes.lesson_schedule import InMemoryLessonScheduleRepository
 from tests.fakes.plans import InMemoryConfidenceRepository, InMemoryPlanRepository
 from tests.fakes.quiz import InMemoryQuizStateRepository
@@ -19,6 +20,7 @@ class FakeUnitOfWork:
         self.active_days = InMemoryActiveDayRepository()
         self.quiz = InMemoryQuizStateRepository()
         self.lesson_schedule = InMemoryLessonScheduleRepository()
+        self.lesson_progress = InMemoryLessonProgressRepository()
         self.plans = InMemoryPlanRepository()
         self.confidence = InMemoryConfidenceRepository()
         self.subscriptions = InMemorySubscriptionRepository()

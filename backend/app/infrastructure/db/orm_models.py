@@ -133,3 +133,19 @@ class SubscriptionHistoryRow(Base):
     to_status: Mapped[str] = mapped_column(String(16), nullable=False)
     event: Mapped[str] = mapped_column(String(32), nullable=False)
     source: Mapped[str] = mapped_column(String(16), nullable=False)
+
+
+class LessonProgressRow(Base):
+    __tablename__ = "lesson_progress"
+
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("sessions.id", ondelete="CASCADE"), primary_key=True
+    )
+    lesson_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    variant: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    step: Mapped[int] = mapped_column(Integer, nullable=False, server_default="0")
+    screen_answers: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, server_default="{}"
+    )
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    done_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

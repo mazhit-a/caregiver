@@ -56,3 +56,12 @@ class UnknownPlan(DomainError):
     """The plan id is not in pricing.json."""
 
     code = "unknown_plan"
+
+
+class NoSubscriptionPeriod(DomainError):
+    """The demo clock cannot jump to a renewal: there is no live subscription period."""
+
+    code = "no_subscription_period"
+
+    def __init__(self) -> None:
+        super().__init__("There is no subscription period to jump to. Start a subscription first.")

@@ -36,6 +36,10 @@ DOMAIN_ERROR_STATUS: dict[str, int] = {
     "unknown_plan": 422,
     "already_subscribed": 409,
     "invalid_transition": 409,
+    "unknown_lesson": 404,
+    "lesson_not_available": 404,
+    "lesson_locked": 423,
+    "no_subscription_period": 409,
 }
 
 

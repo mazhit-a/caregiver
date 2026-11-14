@@ -2,6 +2,7 @@
 
 from datetime import timedelta
 
+from app.application.demo.renewals import RollDemoRenewals
 from app.application.ports import Clock, IdGenerator, TokenGenerator, UnitOfWork
 from app.application.session.dto import CreatedSession
 from app.domain.session.entities import DEFAULT_TIMEZONE, Session, validate_timezone
@@ -38,11 +39,14 @@ class CreateSession:
 
 
 class ResolveSession:
-    """Find the session for a token, touch last_seen_at, record the app day."""
+    """Find the session for a token, touch last_seen_at, record the app day, roll demo renewals."""
 
-    def __init__(self, uow: UnitOfWork, clock: Clock) -> None:
+    def __init__(
+        self, uow: UnitOfWork, clock: Clock, roll_renewals: RollDemoRenewals | None = None
+    ) -> None:
         self._uow = uow
         self._clock = clock
+        self._roll_renewals = roll_renewals
 
     async def execute(self, token: str | None) -> Session:
         if not token:
@@ -55,5 +59,7 @@ class ResolveSession:
             session.touch(real_now)
             await self._uow.sessions.save(session)
             await self._uow.active_days.record(session.id, session.app_today(real_now))
+            if self._roll_renewals is not None:
+                await self._roll_renewals.execute(session, session.app_now(real_now))
             await self._uow.commit()
         return session

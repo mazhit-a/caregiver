@@ -6,6 +6,7 @@ from typing import Self
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.infrastructure.db.repositories.confidence import SqlConfidenceRepository
+from app.infrastructure.db.repositories.lesson_progress import SqlLessonProgressRepository
 from app.infrastructure.db.repositories.lesson_schedule import SqlLessonScheduleRepository
 from app.infrastructure.db.repositories.plans import SqlPlanRepository
 from app.infrastructure.db.repositories.quiz_states import SqlQuizStateRepository
@@ -21,6 +22,7 @@ class SqlAlchemyUnitOfWork:
     active_days: SqlActiveDayRepository
     quiz: SqlQuizStateRepository
     lesson_schedule: SqlLessonScheduleRepository
+    lesson_progress: SqlLessonProgressRepository
     plans: SqlPlanRepository
     confidence: SqlConfidenceRepository
     subscriptions: SqlSubscriptionRepository
@@ -36,6 +38,7 @@ class SqlAlchemyUnitOfWork:
         self.active_days = SqlActiveDayRepository(self._db)
         self.quiz = SqlQuizStateRepository(self._db)
         self.lesson_schedule = SqlLessonScheduleRepository(self._db)
+        self.lesson_progress = SqlLessonProgressRepository(self._db)
         self.plans = SqlPlanRepository(self._db)
         self.confidence = SqlConfidenceRepository(self._db)
         self.subscriptions = SqlSubscriptionRepository(self._db)

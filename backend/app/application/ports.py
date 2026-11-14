@@ -8,6 +8,7 @@ from uuid import UUID
 
 from app.domain.billing.entities import Subscription, SubscriptionHistoryEntry
 from app.domain.billing.pricing import Pricing
+from app.domain.lessons.progress import LessonProgress
 from app.domain.plan.entities import PhraseSheetText, PhraseText, PlanRules, StoredPlan
 from app.domain.quiz.definition import QuizDefinition
 from app.domain.quiz.entities import QuizState
@@ -47,6 +48,14 @@ class LessonScheduleRepository(Protocol):
         ...
 
     async def add_many(self, session_id: UUID, lessons: list[ScheduledLesson]) -> None: ...
+
+
+class LessonProgressRepository(Protocol):
+    async def get(self, session_id: UUID, lesson_id: str) -> LessonProgress | None: ...
+
+    async def save(self, progress: LessonProgress) -> None:
+        """Insert or update the progress row of the lesson."""
+        ...
 
 
 class QuizStateRepository(Protocol):
@@ -99,6 +108,7 @@ class UnitOfWork(Protocol):
     active_days: ActiveDayRepository
     quiz: QuizStateRepository
     lesson_schedule: LessonScheduleRepository
+    lesson_progress: LessonProgressRepository
     plans: PlanRepository
     confidence: ConfidenceRepository
     subscriptions: SubscriptionRepository
@@ -116,6 +126,14 @@ class UnitOfWork(Protocol):
     async def commit(self) -> None: ...
 
     async def rollback(self) -> None: ...
+
+
+class PaymentGateway(Protocol):
+    """Payments adapter (Stripe). Declared early; used from the Stripe increments on."""
+
+    async def advance_test_clock(self, test_clock_id: str, to: datetime) -> None:
+        """Move a Stripe Test Clock forward to `to` (never backward)."""
+        ...
 
 
 class TokenGenerator(Protocol):

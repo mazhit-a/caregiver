@@ -2,10 +2,11 @@
 
 from typing import Annotated
 
-from fastapi import Depends, Header, Request
+from fastapi import Depends, Header, HTTPException, Request
 
 from app.application.billing.use_cases import CheckAccess
-from app.application.ports import Clock, IdGenerator, TokenGenerator, UnitOfWork
+from app.application.demo.renewals import RollDemoRenewals
+from app.application.ports import Clock, ContentProvider, IdGenerator, TokenGenerator, UnitOfWork
 from app.application.session.use_cases import CreateSession, ResolveSession
 from app.domain.session.entities import Session
 from app.presentation.api.schemas.base import CamelModel
@@ -58,10 +59,14 @@ def get_create_session(
 
 
 def get_resolve_session(
+    request: Request,
     uow: Annotated[UnitOfWork, Depends(get_uow)],
     clock: Annotated[Clock, Depends(get_clock)],
 ) -> ResolveSession:
-    return ResolveSession(uow, clock)
+    # Content is loaded by the lifespan; without it (bare test apps) no renewal can roll.
+    content: ContentProvider | None = getattr(request.app.state, "content", None)
+    roll = RollDemoRenewals(uow, content) if content is not None else None
+    return ResolveSession(uow, clock, roll)
 
 
 async def get_current_session(
@@ -98,3 +103,12 @@ async def require_subscription(
 
 SubscribedSession = Annotated[Session, Depends(require_subscription)]
 """Use as the session parameter of every gated app route (instead of `CurrentSession`)."""
+
+
+# --- demo controls guard ---
+
+
+def require_demo_controls(info: AppInfoDep) -> None:
+    """404 in the shared error shape unless `DEMO_CONTROLS=true` (the routes look absent)."""
+    if not info.demo_controls:
+        raise HTTPException(status_code=404, detail="Not Found")
