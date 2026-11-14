@@ -159,6 +159,35 @@
     "skip": "Skip for now",
     "note": "We'll only email you about your plan. No marketing without your OK."
   },
+  "today": {
+    "title": "Today with {recipient}",
+    "restMessage": "You're done for today. Rest counts too.",
+    "allBuiltDone": "You've finished every lesson built so far. New lessons are coming.",
+    "nextUnlock": "Your next lesson opens on {date}.",
+    "careCardNudgeOne": "Your care card has 1 new phrase. Update it?",
+    "careCardNudgeMany": "Your care card has {count} new phrases. Update it?",
+    "weeklyRhythm": "This week: {done} of {target} practice sessions.",
+    "readiness": "{Possessive} plan: {done} of {total} lessons done",
+    "subscription": {
+      "renewsOn": "Your plan renews on {date}.",
+      "renewed": "Your plan renewed on {date}.",
+      "endsOn": "Your plan ends on {date}. You keep full access until then."
+    },
+    "welcomeBack": {
+      "title": "Welcome back",
+      "body": "Pick up whenever you're ready. One short step is plenty."
+    },
+    "visitSheetLink": "Prepare for a doctor visit",
+    "demo": {
+      "label": "Demo controls: simulated time, not real time.",
+      "controls": [
+        { "id": "nextDay", "label": "Simulate next day (demo)" },
+        { "id": "jumpToRenewal", "label": "Jump to renewal (demo)" }
+      ]
+    },
+    "welcomeBackAfterDays": 7,
+    "renewedNoticeDays": 7
+  },
   "errors": {
     "generic": "Something went wrong. Your answers are safe in this browser. Please try again.",
     "restoreFailed": "We couldn't restore your plan, so we started a new one."

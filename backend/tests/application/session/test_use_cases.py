@@ -55,3 +55,19 @@ async def test_resolve_rejects_missing_and_wrong_token(
     for token in (None, "", "nope"):
         with pytest.raises(InvalidSessionToken):
             await resolve.execute(token)
+
+
+async def test_resolve_exposes_the_previous_last_seen_before_updating_it(
+    uow: FakeUnitOfWork,
+) -> None:
+    clock = FixedClock(datetime(2026, 1, 5, 15, 0, tzinfo=UTC))
+    created = await CreateSession(
+        uow, FakeTokenGenerator(["tok"]), FakeIdGenerator(), clock
+    ).execute(None)
+    resolve = ResolveSession(uow, clock)
+    first_visit = clock.now()
+    clock.advance(timedelta(days=7))
+    session = await resolve.execute("tok")
+    assert session.previous_last_seen_at == first_visit
+    assert session.last_seen_at == clock.now()
+    assert created.session.id == session.id

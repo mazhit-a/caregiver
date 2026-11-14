@@ -1,6 +1,6 @@
 """The anonymous session and its app clock (real now + offset, in the session timezone)."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
 from uuid import UUID
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -28,6 +28,9 @@ class Session:
     last_seen_at: datetime
     recipient_key: str | None = None
     display_name: str | None = None
+    # App time of the visit before this request, set by `touch`; never stored (Today's
+    # welcome-back reads it, then the stored last_seen_at is the new request).
+    previous_last_seen_at: datetime | None = field(default=None, compare=False, repr=False)
 
     def app_now(self, real_now: datetime) -> datetime:
         """App time: real now plus the session offset (zero in normal use)."""
@@ -38,4 +41,5 @@ class Session:
         return self.app_now(real_now).astimezone(ZoneInfo(self.timezone)).date()
 
     def touch(self, real_now: datetime) -> None:
+        self.previous_last_seen_at = self.last_seen_at
         self.last_seen_at = self.app_now(real_now)
