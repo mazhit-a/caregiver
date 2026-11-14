@@ -18,4 +18,9 @@
 		# rate limiters key on the last hop.
 		reverse_proxy api:8000
 	}
+
+	handle {
+		header Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self'; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'"
+		reverse_proxy web:80
+	}
 }
