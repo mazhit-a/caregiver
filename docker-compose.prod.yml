@@ -1,0 +1,20 @@
+# Production overlay for a VPS that already runs a shared reverse proxy (proxy-caddy on the
+# external Docker network "web"). Our Caddy stops publishing 80/443 and is reached by the shared
+# proxy as kelper-edge:80. db, api and web stay on this project's private default network.
+#
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
+#
+# Needs Docker Compose 2.24+ for the !override tag.
+services:
+  caddy:
+    ports: !override []
+    networks:
+      default: {}
+      shared_proxy:
+        aliases:
+          - kelper-edge
+
+networks:
+  shared_proxy:
+    external: true
+    name: web

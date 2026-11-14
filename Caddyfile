@@ -1,3 +1,11 @@
+{
+	# Behind a shared reverse proxy on the same host: keep the X-Forwarded-For it sets, so the
+	# app's rate limiters see the real visitor and not the proxy.
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
 {$SITE_ADDRESS::80} {
 	# Security headers. HSTS is only honoured by browsers over HTTPS (set SITE_ADDRESS to the
 	# domain so Caddy serves TLS); it is harmless on plain HTTP in local development.
