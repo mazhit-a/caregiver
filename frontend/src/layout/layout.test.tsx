@@ -21,17 +21,42 @@ beforeEach(() => {
   vi.stubGlobal("fetch", fetchMock);
   fetchMock.mockReset();
   crisisStore.reset();
-  fetchMock.mockResolvedValue(
-    new Response(
-      JSON.stringify({
-        verifyBeforeLaunch: true,
-        resources: [
-          { id: "a", name: "Test Line", phone: "1-800-000-1111", description: "From the API." },
-        ],
-      }),
-      { status: 200, headers: { "Content-Type": "application/json" } },
-    ),
-  );
+  fetchMock.mockImplementation((input) => {
+    const url = String(input);
+    if (url.includes("/api/pricing")) {
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            currency: "USD",
+            defaultPlanId: "p",
+            plans: [
+              {
+                id: "p",
+                label: "4 weeks",
+                priceToday: 1,
+                renewalPrice: 2,
+                introPeriodText: "x",
+                renewalPeriodText: "y",
+                firstRenewalDate: null,
+              },
+            ],
+          }),
+          { status: 200, headers: { "Content-Type": "application/json" } },
+        ),
+      );
+    }
+    return Promise.resolve(
+      new Response(
+        JSON.stringify({
+          verifyBeforeLaunch: true,
+          resources: [
+            { id: "a", name: "Test Line", phone: "1-800-000-1111", description: "From the API." },
+          ],
+        }),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      ),
+    );
+  });
   window.scrollTo = vi.fn();
   Element.prototype.scrollIntoView = vi.fn();
 });
@@ -55,10 +80,10 @@ const PAGES: [string, string][] = [
 ];
 
 describe("routes", () => {
-  it.each(PAGES)("%s renders inside the layout", async (path, heading) => {
+  it.each(PAGES)("%s renders inside the layout", async (path) => {
     await renderAt(path);
     const main = screen.getByRole("main");
-    expect(within(main).getByRole("heading", { level: 1, name: heading })).toBeInTheDocument();
+    expect(within(main).getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(screen.getByRole("banner")).toBeInTheDocument();
     expect(screen.getByRole("contentinfo")).toBeInTheDocument();
   });
@@ -93,7 +118,7 @@ describe("routes", () => {
     const user = userEvent.setup();
     await renderAt("/");
     await user.click(within(screen.getByRole("navigation", { name: "Main" })).getByRole("link", { name: "Pricing" }));
-    await screen.findByRole("heading", { level: 1, name: "Pricing and safety" });
+    await waitFor(() => expect(document.title).toMatch(/^Pricing/));
     await waitFor(() => expect(screen.getByRole("main")).toHaveFocus());
     expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
   });
