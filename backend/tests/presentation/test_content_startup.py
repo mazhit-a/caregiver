@@ -5,6 +5,7 @@ import pytest
 
 from app.infrastructure.config import Settings
 from app.infrastructure.content.loader import ContentLoadError
+from app.infrastructure.llm.prompt import PromptLoadError
 from app.infrastructure.payments.pricing_check import StripePricingNotConfigured
 from app.main import create_app
 
@@ -37,8 +38,15 @@ async def test_app_refuses_to_start_on_invalid_content(tmp_path: Path) -> None:
 
 
 async def test_app_refuses_to_start_when_content_dir_is_missing(tmp_path: Path) -> None:
-    app = create_app(_settings(tmp_path / "nowhere"))
-    with pytest.raises(ContentLoadError, match="content directory not found"):
+    # The coach prompt lives in the content dir, so create_app already refuses (PromptLoadError);
+    # the lifespan check below still covers a content dir that has the prompt but nothing else.
+    with pytest.raises(PromptLoadError):
+        create_app(_settings(tmp_path / "nowhere"))
+    prompts = tmp_path / "only_prompt" / "prompts"
+    prompts.mkdir(parents=True)
+    shutil.copy(REAL_CONTENT / "prompts" / "roleplay-turn.v1.md", prompts)
+    app = create_app(_settings(tmp_path / "only_prompt"))
+    with pytest.raises(ContentLoadError):
         async with app.router.lifespan_context(app):
             pass
 

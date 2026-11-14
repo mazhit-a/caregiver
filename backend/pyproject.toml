@@ -13,6 +13,7 @@ dependencies = [
     "pydantic-settings>=2.6",
     "tzdata>=2026.6",
     "stripe>=17.0.0",
+    "anthropic>=2.8.0",
 ]
 
 [dependency-groups]
