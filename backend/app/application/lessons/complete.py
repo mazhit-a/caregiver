@@ -47,6 +47,7 @@ class CompleteLesson:
             session.recipient_key or "",
             variant,
             runtime_values=dict.fromkeys(RUNTIME_PLACEHOLDERS, ""),
+            display_name=session.display_name,
         )
         wrap = next((s for s in visible_screens(data, variant) if s["type"] == WRAP_TYPE), None)
         ctx = RenderContext(variant, data["pattern"], row.seq == 0)

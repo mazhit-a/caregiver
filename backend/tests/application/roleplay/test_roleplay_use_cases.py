@@ -11,6 +11,7 @@ import pytest
 
 from app.application.roleplay.dto import CoachInput, PreviousTurn, TurnMode, TurnPhrase
 from app.domain.lessons.errors import LessonLocked
+from app.domain.profile.entities import Profile
 from app.domain.roleplay.errors import (
     InvalidReply,
     RateLimited,
@@ -369,3 +370,30 @@ async def test_no_reply_text_in_persisted_run_rows_or_log_records(
     assert caplog.records
     for text in (secret_reply, "ZEBRA", *model_texts):
         assert text not in rows and text not in logs
+
+
+async def test_roleplay_input_uses_profile_calms(rig: Rig) -> None:
+    profile = Profile.create(
+        rig.session.id,
+        ["gardening"],
+        ["quiet music", "a cup of tea"],
+        ["loud rooms"],
+        "",
+        [],
+        None,
+        rig.clock.now(),
+    )
+    await rig.uow.profiles.save(profile)
+    view = await rig.start()
+    coach = FakeCoach()
+    await rig.turn_use_case(coach).execute(rig.session, view.run_id, 1, REPLY)
+    (sent,) = coach.calls
+    assert sent.calms == ("quiet music", "a cup of tea")
+    blob = repr(asdict(sent)).lower()
+    assert "gardening" not in blob and "loud rooms" not in blob  # only `calms` is passed on
+    quiz = await rig.uow.quiz.get(rig.session.id)
+    assert quiz is not None
+    for answer in quiz.answers.values():
+        for item in answer if isinstance(answer, list) else [answer]:
+            if isinstance(item, str) and len(item) > 3:
+                assert item.lower() not in blob  # still no quiz answers in the coach input

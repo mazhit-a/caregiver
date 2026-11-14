@@ -43,6 +43,7 @@ class AnswerLesson:
             session.recipient_key or "",
             variant,
             runtime_values=dict.fromkeys(RUNTIME_PLACEHOLDERS, ""),
+            display_name=session.display_name,
         )
         screen = next((s for s in visible_screens(data, variant) if s["id"] == screen_id), None)
         if screen is None:

@@ -95,9 +95,19 @@ class SubmitRoleplayTurn:
         if record.run.mode is RunMode.FALLBACK:
             return self._fallback(record, lesson, round_number)
 
-        labels = self._content.lesson_recipient_labels(session.recipient_key or "")
+        labels = self._content.lesson_recipient_labels(
+            session.recipient_key or "", session.display_name
+        )
+        async with self._uow:
+            profile = await self._uow.profiles.get(session.id)
         coach_input = _coach_input(
-            labels, record, rounds[round_number - 1], round_number, reply, previous_turns
+            labels,
+            record,
+            rounds[round_number - 1],
+            round_number,
+            reply,
+            previous_turns,
+            profile.calms if profile is not None else (),
         )
         outcome = await self._ask(coach_input, labels)
         if outcome is None:
@@ -182,8 +192,9 @@ def _coach_input(
     round_number: int,
     reply: str,
     previous_turns: Sequence[PreviousTurn],
+    calms: tuple[str, ...],
 ) -> CoachInput:
-    """Only the prompt-contract fields. `calms` stays empty until the profile exists."""
+    """Only the prompt-contract fields; `calms` comes from the profile (empty without one)."""
     return CoachInput(
         label=labels.recipient,
         variant=record.variant,
@@ -192,7 +203,7 @@ def _coach_input(
         stage=current.stage,
         parent_line=current.line,
         parent_mood=current.mood,
-        calms=(),
+        calms=calms,
         previous_turns=tuple(previous_turns),
         caregiver_reply=reply,
     )

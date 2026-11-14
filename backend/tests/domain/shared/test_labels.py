@@ -5,6 +5,7 @@ from app.domain.shared.labels import (
     UnknownPlaceholder,
     lesson_labels,
     render_text,
+    with_display_name,
 )
 
 MOM = RecipientLabels("Mom", "Mom's", "she", "her", "was", "is", "has", "lives")
@@ -46,3 +47,12 @@ def test_labels_for_both_use_singular_parent() -> None:
 
 def test_lesson_labels_for_other_keys_are_the_quiz_labels() -> None:
     assert lesson_labels("mom", {"both": BOTH, "mom": MOM}) is MOM
+
+
+def test_display_name_replaces_recipient_and_possessive_only() -> None:
+    named = with_display_name(MOM, "Margaret")
+    out = render_text(
+        "{Recipient} says {pronoun} loves {possessive} tea, give {object} some.", named
+    )
+    assert out == "Margaret says she loves Margaret's tea, give her some."
+    assert with_display_name(MOM, None) is MOM and with_display_name(MOM, "") is MOM

@@ -2,7 +2,7 @@
 
 import re
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from app.domain.shared.errors import DomainError
 
@@ -77,6 +77,14 @@ class RecipientLabels:
 
 def _capitalize(text: str) -> str:
     return text[:1].upper() + text[1:]
+
+
+def with_display_name(labels: RecipientLabels, display_name: str | None) -> RecipientLabels:
+    """The onboarding / profile name replaces `{recipient}` and `{possessive}` ("Margaret",
+    "Margaret's"); pronouns and verbs stay. No name leaves the labels unchanged."""
+    if not display_name:
+        return labels
+    return replace(labels, recipient=display_name, possessive=f"{display_name}'s")
 
 
 def lesson_labels(key: str, labels_by_key: Mapping[str, RecipientLabels]) -> RecipientLabels:

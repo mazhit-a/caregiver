@@ -28,6 +28,7 @@ def render(
         session.recipient_key or "",
         valid_variant(content, lesson_id, variant),
         runtime_values=values,
+        display_name=session.display_name,
     )
 
 

@@ -69,6 +69,7 @@ def checkin_block(
         session.recipient_key or "",
         valid_variant(content, lesson_id, variant),
         runtime_values=dict.fromkeys(RUNTIME_PLACEHOLDERS, ""),
+        display_name=session.display_name,
     )
     day2: dict[str, Any] = data["day2"]
     check_in: dict[str, Any] = pick(

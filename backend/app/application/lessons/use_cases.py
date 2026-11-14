@@ -25,6 +25,7 @@ class GetLesson:
             session.recipient_key or "",
             variant,
             runtime_values=dict.fromkeys(RUNTIME_PLACEHOLDERS, ""),
+            display_name=session.display_name,
         )
         return LessonView(
             lesson=render_lesson(data, variant, is_first_lesson=row.seq == 0),
@@ -54,6 +55,7 @@ class GetLesson:
                 **dict.fromkeys(RUNTIME_PLACEHOLDERS, ""),
                 "savedPhrase": RECAP_PHRASE_MARKER,
             },
+            display_name=session.display_name,
         )
         text = fill_recap(data["recapForNextLesson"]["text"], saved[-1] if saved else None)
         if checkin is not None and checkin.outcome == "helped":
