@@ -1,0 +1,530 @@
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.heroPreview {
+  min-width: 0;
+}
+
+.eyebrow {
+  margin: 0;
+  font: 600 15px/22px var(--font-sans);
+  color: var(--text-secondary);
+}
+
+.h1 {
+  margin: 0;
+  font: var(--text-display);
+  letter-spacing: -0.5px;
+}
+
+.heroLead {
+  margin: 0;
+  max-width: 520px;
+  font: 400 17px/28px var(--font-sans);
+  color: var(--text-secondary);
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+.note {
+  font: var(--text-small);
+  color: var(--text-secondary);
+}
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background: var(--surface);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-sheet);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-2);
+}
+
+.previewHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.previewTitle {
+  margin: 0;
+  font: 700 21px/28px var(--font-sans);
+}
+
+.badge {
+  font: var(--text-caption);
+  color: var(--text-secondary);
+}
+
+.footnote {
+  margin: 0;
+  font: var(--text-caption);
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.reset {
+  align-self: flex-start;
+  font: var(--text-button);
+  color: var(--accent);
+  background: transparent;
+  border: 0;
+  padding: var(--space-3) 0;
+  min-height: var(--tap-min);
+  cursor: pointer;
+}
+
+.reset:hover {
+  color: var(--accent-hover);
+}
+
+/* Gap */
+.gap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.gapStat {
+  margin: 0;
+  flex: 1 1 560px;
+  font: var(--text-display);
+}
+
+.gapText {
+  margin: 0;
+  flex: 0 1 360px;
+  font: 400 16px/24px var(--font-sans);
+  color: #e7e3fa;
+}
+
+.gapSource {
+  font-size: 13px;
+  color: #cfcbef;
+}
+
+/* Ollie */
+.ollie {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  align-items: flex-start;
+}
+
+.ollieImage {
+  width: 200px;
+  height: auto;
+  filter: drop-shadow(0 8px 12px rgba(42, 37, 71, 0.18));
+}
+
+.ollieText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.h2 {
+  margin: 0;
+  font: var(--text-h1);
+}
+
+.h3 {
+  margin: 0;
+  font: var(--text-h3);
+}
+
+.quote {
+  margin: 0;
+  font: 400 19px/28px var(--font-sans);
+}
+
+.small {
+  margin: 0;
+  font: 400 16px/24px var(--font-sans);
+  color: var(--text-secondary);
+}
+
+/* Steps */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.stepsHead {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-4);
+}
+
+.stepsHead .h2 {
+  max-width: 640px;
+}
+
+.textLink {
+  font: var(--text-button);
+  min-height: var(--tap-min);
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Features */
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.featureText {
+  margin: 0;
+  font: 400 17px/26px var(--font-sans);
+  color: var(--text-secondary);
+}
+
+.mockLabel {
+  margin: 0;
+  font: 700 15px/22px var(--font-sans);
+  color: var(--info-text);
+}
+
+.mockBody {
+  margin: 0;
+  font: 400 16px/24px var(--font-sans);
+}
+
+.mockPractice {
+  background: var(--coach);
+  border-radius: var(--radius-sheet);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.scoreRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.scoreCard {
+  flex: 1 1 140px;
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  padding: 20px;
+}
+
+.scoreCardLast {
+  border: var(--border-width-strong) solid var(--accent);
+}
+
+.scoreCaption {
+  margin: 0;
+  font: var(--text-caption);
+  color: var(--text-secondary);
+}
+
+.score {
+  margin: 4px 0 0;
+  font: var(--text-display);
+  font-size: 30px;
+}
+
+.scoreLast {
+  color: var(--info-text);
+}
+
+.mockCourse {
+  background: var(--surface);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-sheet);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.moduleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 14px 16px;
+}
+
+.moduleFirst {
+  background: var(--butter-100);
+  border-radius: 16px;
+}
+
+.moduleRule {
+  border-bottom: var(--border-width) solid var(--border);
+}
+
+.startHere {
+  font: 700 13px/18px var(--font-sans);
+  background: var(--warning);
+  border-radius: var(--radius-chip);
+  padding: 4px 10px;
+}
+
+.moduleName {
+  font: var(--text-body-strong);
+}
+
+.moduleCount {
+  margin-left: auto;
+  font: 400 14px/20px var(--font-sans);
+  color: var(--text-secondary);
+}
+
+.why {
+  margin: 0 16px;
+  font: 400 14px/20px var(--font-sans);
+  color: var(--text-secondary);
+}
+
+.mockCard {
+  background: var(--surface);
+  border: var(--border-width) solid var(--border);
+  border-radius: 8px;
+  padding: var(--space-6);
+  box-shadow: var(--shadow-2);
+  transform: rotate(-1.2deg);
+}
+
+.cardTitle {
+  margin: 4px 0 16px;
+  font: 800 24px/30px var(--font-sans);
+}
+
+.cardLabel {
+  margin: 0 0 4px;
+  font: 700 14px/20px var(--font-sans);
+}
+
+.cardGap {
+  margin-bottom: 14px;
+}
+
+.places {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-3);
+}
+
+.place {
+  border-radius: var(--radius-card);
+  padding: 20px;
+}
+
+.placeButter {
+  background: var(--butter-100);
+}
+
+.placeIris {
+  background: var(--coach);
+}
+
+.placeWhite {
+  background: var(--surface);
+  border: var(--border-width) solid var(--border);
+}
+
+.placeTitle {
+  margin: 0;
+  font: 700 15px/22px var(--font-sans);
+}
+
+.placeText {
+  margin: 6px 0 0;
+  font: var(--text-small);
+  color: var(--text-secondary);
+}
+
+/* Safe */
+.safe {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.safeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-5);
+}
+
+.safeCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Pricing teaser */
+.price {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  align-items: center;
+  justify-content: space-between;
+  border: var(--border-width) solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-sheet);
+  padding: var(--space-5);
+}
+
+.priceText {
+  flex: 1 1 320px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.priceTitle {
+  margin: 0;
+  font: 800 24px/30px var(--font-sans);
+}
+
+.priceDetail {
+  margin: 0;
+  font: var(--text-body);
+  color: var(--text-secondary);
+}
+
+.outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 24px;
+  border-radius: var(--radius-button);
+  border: var(--border-width-strong) solid var(--accent);
+  color: var(--accent);
+  font: var(--text-button);
+  text-decoration: none;
+}
+
+.outline:hover {
+  color: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+/* FAQ */
+.faq {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.faqTitle {
+  margin: 0;
+  font: var(--text-h1);
+}
+
+/* 768px is --bp-tablet */
+@media (min-width: 768px) {
+  .hero {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .heroText {
+    flex: 1 1 460px;
+  }
+
+  .heroPreview {
+    flex: 1 1 420px;
+  }
+
+  .h1 {
+    font: var(--text-display-lg);
+    letter-spacing: -0.5px;
+  }
+
+  .heroLead {
+    font: 400 19px/30px var(--font-sans);
+  }
+
+  .previewTitle {
+    font-size: 21px;
+  }
+
+  .preview {
+    padding: 28px;
+  }
+
+  .gap {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .gapStat {
+    font-size: 34px;
+    line-height: 42px;
+  }
+
+  .ollie {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-7);
+  }
+
+  .ollieImage {
+    width: 260px;
+    flex: 0 0 auto;
+  }
+
+  .ollieText {
+    flex: 1 1 480px;
+  }
+
+  .h2,
+  .faqTitle {
+    font: var(--text-h1-lg);
+  }
+
+  .quote {
+    font: 400 22px/32px var(--font-sans);
+  }
+
+  .score {
+    font-size: 34px;
+    line-height: 40px;
+  }
+
+  .price {
+    padding: var(--space-7);
+  }
+
+  .priceTitle {
+    font-size: 28px;
+    line-height: 34px;
+  }
+}

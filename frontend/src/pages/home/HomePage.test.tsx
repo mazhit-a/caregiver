@@ -1,0 +1,202 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { createMemoryRouter, RouterProvider } from "react-router";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { axe } from "vitest-axe";
+import { pricingStore } from "../../api/usePricing";
+import { HOME_ROUND } from "../../content/practiceScript";
+import HomePage from "./HomePage";
+
+const fetchMock = vi.fn<typeof fetch>();
+
+const pricingBody = {
+  currency: "USD",
+  defaultPlanId: "four_week",
+  plans: [
+    {
+      id: "four_week",
+      label: "4 weeks",
+      priceToday: 12.5,
+      renewalPrice: 31.25,
+      introPeriodText: "4 weeks",
+      renewPeriodText: "4 weeks",
+      introDays: 28,
+      renewDays: 28,
+      firstRenewalDate: null,
+    },
+  ],
+};
+
+function respondWithPricing() {
+  fetchMock.mockResolvedValue(new Response(JSON.stringify(pricingBody), { status: 200 }));
+}
+
+function renderHome() {
+  const router = createMemoryRouter([{ path: "/", element: <HomePage /> }]);
+  return render(<RouterProvider router={router} />);
+}
+
+beforeEach(() => {
+  vi.stubGlobal("fetch", fetchMock);
+  fetchMock.mockReset();
+  pricingStore.reset();
+  respondWithPricing();
+});
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
+
+describe("HomePage", () => {
+  it("has the section headings in order", async () => {
+    renderHome();
+    await screen.findByText("$12.50 for your first 4 weeks");
+    const names = screen.getAllByRole("heading").map((h) => h.textContent?.replace(/^Step \d+: /, ""));
+    const expected = [
+      "Mom’s diagnosis came with a brochure. Here’s the plan.",
+      "Try it: Mom asks again",
+      "Meet Ollie, your guide",
+      "From “what now?” to a plan in three steps",
+      "Tell us what’s happening",
+      "Get Mom’s plan",
+      "Learn, practice, try it for real",
+      "Practice the hard conversation before it happens",
+      "A course that follows Mom, not a pile of articles",
+      "What you learn, ready to share",
+      "Works wherever Mom is",
+      "Calm, honest and private",
+      "We teach, not treat",
+      "Your answers stay with you",
+      "Clear prices",
+      "Help is one tap away",
+      "$12.50 for your first 4 weeks",
+      "Questions",
+      "Start with one calm step",
+    ];
+    expect(names).toEqual(expected);
+  });
+
+  it("runs the canned preview: scores 0, 1 and 3, then resets, with no fetch for it", async () => {
+    renderHome();
+    await screen.findByText("$12.50 for your first 4 weeks");
+    const callsBefore = fetchMock.mock.calls.length;
+    const scores = [0, 1, 3];
+    for (const [index, score] of scores.entries()) {
+      const option = HOME_ROUND.options[index];
+      if (!option) throw new Error("missing option");
+      await userEvent.click(screen.getByRole("button", { name: option.text }));
+      const feedback = document.querySelector<HTMLElement>("[aria-live=polite]");
+      if (!feedback) throw new Error("missing feedback region");
+      expect(within(feedback).getByText(`${score} of 3`)).toBeInTheDocument();
+      expect(screen.getByText(option.tip)).toBeInTheDocument();
+      expect(screen.getByText(option.mom)).toBeInTheDocument();
+      await userEvent.click(screen.getByRole("button", { name: "Try another answer" }));
+      expect(screen.getByRole("button", { name: option.text })).toBeInTheDocument();
+    }
+    expect(fetchMock.mock.calls.length).toBe(callsBefore);
+  });
+
+  it("shows API prices in the teaser", async () => {
+    renderHome();
+    expect(await screen.findByText("$12.50 for your first 4 weeks")).toBeInTheDocument();
+    expect(screen.getByText("Then $31.25 every 4 weeks until you cancel. Cancel anytime in Settings.")).toBeInTheDocument();
+    expect(fetchMock.mock.calls[0]?.[0]).toBe("/api/pricing");
+    expect(screen.getByRole("link", { name: "See plans" })).toHaveAttribute("href", "/pricing");
+  });
+
+  it("shows an error with retry and no dollar amount when pricing fails", async () => {
+    fetchMock.mockResolvedValueOnce(
+      new Response(JSON.stringify({ error: { code: "x", message: "m", details: {} } }), { status: 500 }),
+    );
+    const { container } = renderHome();
+    expect(await screen.findByText("We could not load the prices.")).toBeInTheDocument();
+    expect(container.textContent).not.toMatch(/\$\d/);
+    respondWithPricing();
+    await userEvent.click(screen.getByRole("button", { name: "Try again" }));
+    expect(await screen.findByText("$12.50 for your first 4 weeks")).toBeInTheDocument();
+  });
+
+  it("opens FAQ items from the keyboard-reachable summary", async () => {
+    renderHome();
+    const summary = screen.getByText("What is Kelper?").closest("summary");
+    expect(summary).not.toBeNull();
+    const details = summary?.parentElement as HTMLDetailsElement;
+    expect(details.open).toBe(false);
+    await userEvent.click(summary as HTMLElement);
+    expect(details.open).toBe(true);
+  });
+
+  it("uses the privacy replacement copy and never says 'in your browser'", async () => {
+    const { container } = renderHome();
+    await screen.findByText("$12.50 for your first 4 weeks");
+    expect(screen.getAllByText(/Saved privately to this session/).length).toBeGreaterThan(0);
+    expect(container.textContent?.toLowerCase()).not.toContain("in your browser");
+    expect(container.textContent?.toLowerCase()).not.toContain("this browser");
+  });
+
+  it("points every start link to the quiz and keeps the section links internal", async () => {
+    renderHome();
+    await screen.findByText("$12.50 for your first 4 weeks");
+    for (const link of screen.getAllByRole("link", { name: "Get Mom’s plan" })) {
+      expect(link).toHaveAttribute("href", "/quiz");
+    }
+    const links: Record<string, string> = {
+      "See how it works": "/how-it-works",
+      "How practice works": "/practice",
+      "See the course": "/course",
+      "See the care tools": "/care-tools",
+      "How lessons adapt": "/how-it-works",
+    };
+    for (const [name, href] of Object.entries(links)) {
+      expect(screen.getByRole("link", { name })).toHaveAttribute("href", href);
+    }
+  });
+
+  it("has alt text on both Ollie images and hides the decorative mocks", async () => {
+    renderHome();
+    await screen.findByText("$12.50 for your first 4 weeks");
+    expect(screen.getByAltText("Ollie, a sea otter in a lavender sweater, waving hello")).toHaveAttribute("loading", "lazy");
+    expect(screen.getByAltText("Ollie pointing the way forward")).toBeInTheDocument();
+    expect(screen.getByText("Your practice").closest("[aria-hidden=true]")).not.toBeNull();
+    expect(screen.getByText("Start here").closest("[aria-hidden=true]")).not.toBeNull();
+  });
+
+  it("passes axe", async () => {
+    const router = createMemoryRouter([{ path: "/", element: <main><HomePage /></main> }]);
+    const { container } = render(<RouterProvider router={router} />);
+    await screen.findByText("$12.50 for your first 4 weeks");
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it("matches the design's visible text except for the allowed copy changes", async () => {
+    const html = readFileSync(
+      resolve(import.meta.dirname, "../../../../context/design/kelper-landing/home/index.html"),
+      "utf8",
+    );
+    const body = html.slice(html.indexOf("<main>"), html.indexOf("</main>"));
+    const designText = new Set(
+      body
+        .replace(/<script[\s\S]*?<\/script>/g, "")
+        .replace(/<br\s*\/?>/g, " ")
+        .split(/<[^>]+>/)
+        .map((t) => t.replace(/\s+/g, " ").trim())
+        .filter((t) => t && !t.includes("{{")),
+    );
+    const { container } = renderHome();
+    await screen.findByText("$12.50 for your first 4 weeks");
+    const rendered = container.textContent ?? "";
+    const allowedMissing = new Set([
+      // Shown only after a pick in the preview.
+      "Ollie’s feedback",
+      "Try another answer",
+      "$14.99 for your first 4 weeks",
+      "Then $29.99 every 4 weeks until you cancel. Cancel anytime in Settings.",
+      "Quiz answers stay in your browser. No ad tracking in the quiz or the course.",
+      "They stay in this browser. We don’t sell or share them, and there’s no ad tracking in the quiz or the course.",
+    ]);
+    const missing = [...designText].filter((t) => !rendered.includes(t) && !allowedMissing.has(t));
+    expect(missing).toEqual([]);
+  });
+});
