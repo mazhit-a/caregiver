@@ -65,13 +65,13 @@ def test_betterphrase_26_words_fails(ctx: EvalContext) -> None:
     assert "26 words" in result.detail
 
 
-def test_betterphrase_must_use_the_label(ctx: EvalContext) -> None:
+def test_betterphrase_need_not_name_the_parent(ctx: EvalContext) -> None:
+    """The phrase is spoken to the parent ("you"); the prompt's own examples never name them."""
     case = make_case()
     result = code.grade_better_phrase(
         case, outcome_of(ctx, make_verdict(better_phrase="You sound worried. Tea?"))
     )
-    assert not result.passed
-    assert "label" in result.detail
+    assert result.passed
 
 
 def test_medical_term_in_parent_reaction_fails(ctx: EvalContext) -> None:

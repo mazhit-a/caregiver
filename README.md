@@ -13,10 +13,11 @@ frontend (landing site, quiz funnel, paywall, the app after the paywall, the 24-
 the AI role-play room) are complete and tested against fakes. See [What is built](#what-is-built)
 and the one consolidated [Before launch checklist](#before-launch-checklist).
 
-**Not yet verified: the quality of the AI coach.** All automated tests run against a faked LLM
-and a faked Stripe. The real model has not been evaluated (the harness selection in
-`docs/decisions/llm-harness.md` is **NOT RUN**), and the production default has not been measured.
-See [Evals](#evals-not-yet-run).
+**Partly verified: the AI coach.** All automated tests run against a faked LLM and a faked Stripe.
+The coach default (Claude Haiku 5.5, thinking off, prompt v1) was measured against the real model
+on the code-based graders: all hard gates pass on the dev and held-out test sets. The judged
+**quality was not measured** and Opus was not compared under the same protocol (budget). See
+`docs/decisions/llm-harness.md` and [Evals](#evals-not-yet-run).
 
 ## Contents
 
@@ -100,7 +101,7 @@ increment plan and what was verified.
 | Part | Real | Test / demo | What is verified today |
 | --- | --- | --- | --- |
 | Plan from quiz | Real rules from `content/plan-rules.json` | - | Persona A, B, C tests give the exact expected plans. |
-| AI role-play | Real LLM call (Anthropic) | Multiple-choice fallback when the LLM fails, is slow, or no key is set | Tests use a **faked LLM**. The fallback path is tested (no key, forced timeout). **The real model has NOT been evaluated**: accuracy, quality, latency and cost of the coach are unmeasured. |
+| AI role-play | Real LLM call (Anthropic) | Multiple-choice fallback when the LLM fails, is slow, or no key is set | Tests use a **faked LLM**. The fallback path is tested (no key, forced timeout). **Measured on the code-based graders only** (Haiku 5.5: gates pass on dev and held-out test; judged quality not measured, see `docs/decisions/llm-harness.md`). |
 | Payments | - | Stripe test mode (card 4242 4242 4242 4242), or demo mode with no Stripe | Tests use a **faked Stripe**. The real Stripe flow has **not** been run: see the [manual checklist](#manual-stripe-test-mode-run-pending-user-action). |
 | Renewal | Stripe really issues the renewal invoice | Triggered by moving a Stripe Test Clock (Stripe path) or the app clock (demo path) | Demo renewal and webhook handling are tested with fakes. Test Clock behaviour against real Stripe is unverified. |
 | Time | Real time | "Simulate next day" and "Jump to renewal" (labelled demo controls, `DEMO_CONTROLS=true`) | Tested. |
@@ -509,13 +510,18 @@ and the earlier backend list). None of this is done by the code. Items marked `[
 
 **AI coach**
 
-- [ ] **Real-model evals are still pending** (increments 25 to 27, postponed by the owner): run
-      them or consciously accept the unmeasured default (`docs/decisions/llm-harness.md`; ask
-      first, they cost money). Re-run `uv run python -m evals.run --config production --set test`
-      before every demo.
+- [ ] **The model selection is partial** (budget): the default is Haiku 5.5, thinking off, prompt
+      v1; judged quality and an Opus comparison under the same protocol are still missing
+      (`docs/decisions/llm-harness.md`; they cost money, ask first). Re-run
+      `uv run python -m evals.run --config production --set test` before every demo and after any
+      prompt, model or SDK change. Set `ANTHROPIC_API_KEY` for the API process.
+- [ ] Content-owner review of the eval case `l5_r2_facts_only` (every model marks it `argued`) and
+      of the shaming-word hits on `l4_r3_pushes_and_complains` / `l5_r1_defends`.
+- [ ] Revoke the Anthropic key that was pasted into a chat during the eval runs and issue a new one.
 - [ ] Confirm the eval composite definition and the model/price assumptions in
       `docs/decisions/llm-harness.md`; decide on `FALLBACK_MODELS` (the server-side refusal
-      fallback for `claude-opus-5-5` was an assumption: verify against the API docs).
+      fallback for `claude-opus-5-5` was an assumption: verify against the API docs; Haiku is not in
+      `FALLBACK_MODELS`, so no server-side refusal fallback is enabled for it).
 
 ## Known limitations
 

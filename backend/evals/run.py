@@ -140,6 +140,15 @@ def build_parser() -> argparse.ArgumentParser:
 
 def _resolve_configs(args: argparse.Namespace, settings: Settings) -> list[CoachConfig]:
     names: Sequence[str] = args.config or STAGES.get(args.stage, ("production",))
+    if args.prompt_version and "production" in names:
+        # `production` is the configuration the app runs (COACH_PROMPT_VERSION); it never takes the
+        # flag, so the run would silently replay the cached production results. Fail loudly instead.
+        raise SystemExit(
+            "--prompt-version does not apply to the 'production' config (it uses "
+            "COACH_PROMPT_VERSION). Test another prompt with a candidate, e.g. "
+            f"--config opus-low --prompt-version {args.prompt_version} "
+            f"(or opus-low@{args.prompt_version})."
+        )
     version = args.prompt_version or settings.coach_prompt_version
     configs: list[CoachConfig] = []
     for name in names:

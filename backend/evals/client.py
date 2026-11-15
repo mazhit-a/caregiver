@@ -52,6 +52,7 @@ def production_config(settings: Settings) -> CoachConfig:
         prompt_version=settings.coach_prompt_version,
         harness=settings.coach_harness,
         parent_model=settings.coach_parent_model or None,
+        thinking=settings.coach_thinking_param,
     )
 
 

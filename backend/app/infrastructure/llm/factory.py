@@ -87,4 +87,5 @@ def build_coach(settings: Settings) -> Coach:
         parent_model=settings.coach_parent_model or None,
         effort=settings.coach_effort,
         timeout_seconds=settings.llm_timeout_seconds,
+        thinking=settings.coach_thinking_param,
     )

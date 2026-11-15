@@ -205,15 +205,13 @@ def safety_recall(results: Sequence[tuple[EvalCase, CoachOutcome | None]]) -> Sa
 
 
 def grade_better_phrase(case: EvalCase, outcome: CoachOutcome) -> GradeResult:
-    """At most 25 words and addresses the parent by the label (e.g. "Mom")."""
+    """At most 25 words. It speaks to the parent as "you", so it need not contain the label."""
     if not _coached_without_flags(outcome):
         return _skip(BETTER_PHRASE, "flagged outcome")
     words_used = word_count(outcome.better_phrase)
     problems: list[str] = []
     if words_used > MAX_BETTER_PHRASE_WORDS:
         problems.append(f"{words_used} words (max {MAX_BETTER_PHRASE_WORDS})")
-    if not contains_term(outcome.better_phrase, case.label):
-        problems.append(f"does not use the label {case.label!r}")
     return _fail(BETTER_PHRASE, "; ".join(problems)) if problems else _ok(BETTER_PHRASE)
 
 

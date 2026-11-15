@@ -1,29 +1,69 @@
 # Decision record: LLM harness for the role-play coach
 
-**Status: NOT RUN.** The harness selection has not been executed. This file records the plan, the
-rule and the commands only. **There are no results, no comparison table and no winner.** Nothing
-below may be read as a measured claim about the coach.
+**Status: PARTIAL, a budget-limited selection (2026-11-15).** The coach default is now
+`claude-haiku-5-5`, thinking disabled, effort low, prompt v1, `single_call`. It passed every hard
+gate on the dev set and on the held-out test set. The full staged search of this record was **not**
+run: the user had no budget for the Opus runs and has no judge labels, so **quality (judge) was
+never measured** and Opus was never measured under the same 3-run protocol. Read the result as
+"Haiku is good enough on the code-based graders", not as "Haiku is the best coach".
 
-Decided 2026-11-14 (user): the real-model eval runs (increments 25 to 27) are skipped for now: no
-API key, no spend, no judge labels. The user will run them later. TASK.md section 13 criterion 6
-("the harness selection has run ... comparison table ... the production configuration passes all
-hard gates on the held-out test set") is therefore **not met**.
+## Result
 
-## Current production default (UNMEASURED)
+All runs: real model calls, prompt v1 unless noted, `single_call`, dev = 32 cases, test = 11 cases
+(held out, run once). Reports: `backend/evals/reports/` (the `.md` files named below are committed).
+Prices are from `evals/data/prices.json` (retrieved 2026-11-14, cache-write and Haiku cache-read
+prices derived).
+
+| Config | Set | Runs | Safety recall | Accuracy | Consistency | p95 latency | $/turn | Report |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| opus-low (the old default), grader without label rule | dev | 1 | 100% (3/3) | 98.9% | n/a | 3.7 s | $0.0051 | `2026-11-15-v1-regrade.md` |
+| opus-low, prompt v2 | dev | 1 | 100% (3/3) | 98.9% | n/a | 3.2 s | $0.0059 | `2026-11-15-v2-regrade.md` |
+| haiku-low | dev | 3 | 100% (9/9) | 98.9% | 96.9% | 5.65 s (**fails the 5 s gate**) | $0.00018 | `2026-11-15-haiku.md` |
+| **haiku-nothink** | dev | 3 | 100% (9/9) | 97.5% | 90.6% | 3.25 s | $0.00012 | `2026-11-15-haiku.md` |
+| **haiku-nothink** | **test** | 3 | **100% (9/9)** | **100%** | **100%** | 2.6 s | $0.00011 | `2026-11-15-haiku-test.md` |
+
+Hard gates for haiku-nothink on the test set: safety recall 100%, schema failures 0%, refusals 0%,
+timeouts 0%, p95 2.6 s (gate 5 s): **all pass**. Cost per lesson (3 turns): about $0.0003 with
+caching, against about $0.015 for Opus.
+
+Observations
+- Accuracy is the same across Opus v1, Opus v2 and Haiku within one-run noise; the only recurring
+  miss on every model is the case `l5_r2_facts_only` (argued), whose expected value is marked
+  "needs content review" in the case file.
+- Format rules (parent reaction <= 2 sentences, tip <= 1 sentence, better phrase <= 25 words) fail
+  often on Haiku (mostly the parent reaction and tip length) and less on Opus; they do not affect
+  scores or safety. Prompt v2 halved the format failures on Opus (16 to 8 failing cases) at about
+  16% more cost per turn; v2 was not tried on Haiku.
+- The grader rule "better phrase must contain the label" was removed (commit `5d936fb`): the
+  prompt's own examples and the dataset's model answers never name the parent.
+- `thinking: {"type": "disabled"}` is accepted by the API for Haiku 5.5 (the runs succeeded).
+
+## Deviations from the approved rule (user-approved by budget, 2026-11-15)
+
+1. Selection was done without the judge, so the 0.3 quality weight is dropped and the others are
+   renormalised (accuracy 0.714, consistency 0.286). The rule said not to select a final winner
+   without the judge. **Quality is unmeasured.**
+2. Opus was run once per case on the dev set only (no consistency number, no test-set run), and
+   Sonnet, harness variants and the parallel split were not run at all. The staged plan below is
+   unfinished.
+3. Safety recall rests on 3 medical/crisis cases x 3 runs per set: small. A miss on a larger set
+   would change the decision. The code path that stops crisis words before any model call is
+   unaffected by the model choice.
+
+To revisit later (when there is budget): `--stage prompt` for Opus v1 vs v2 at 3 runs (about
+$1.1 to $2.2), the judge calibration below, and the full test-set comparison. The old default
+stays available: `COACH_MODEL=claude-opus-5-5`, `COACH_THINKING=` (empty).
+
+## Current production default
 
 | Setting | Value |
 | --- | --- |
 | Harness (`COACH_HARNESS`) | `single_call` |
-| Model (`COACH_MODEL`) | `claude-opus-5-5` |
+| Model (`COACH_MODEL`) | `claude-haiku-5-5` |
 | Effort (`COACH_EFFORT`) | `low` |
-| Prompt (`COACH_PROMPT_VERSION`) | `1` (`content/prompts/roleplay-turn.v1.md`, plus the fixed `INPUT_FORMAT_NOTE` in `infrastructure/llm/prompt.py`, which is part of the effective prompt v1) |
+| Thinking (`COACH_THINKING`) | `disabled` (empty keeps the model default; set it empty for models that need thinking) |
+| Prompt (`COACH_PROMPT_VERSION`) | `1` (`content/prompts/roleplay-turn.v1.md`, plus the fixed `INPUT_FORMAT_NOTE` in `infrastructure/llm/prompt.py`) |
 | Timeout (`LLM_TIMEOUT_SECONDS`) | 12 s, no retries |
-
-This default is the starting point named in `.claude/rules/ai.md`, **not a selected winner**. It
-has **NOT been measured against the real model**: its accuracy, judged quality, consistency,
-latency (p50/p95), cost per turn and safety-flag recall are unknown. What is verified is only the
-code path with a faked LLM, the local safety check and the deterministic rule re-application, and
-the multiple-choice fallback when the model is missing, slow or fails.
 
 ## Approved selection rule (fixed before any run)
 
@@ -57,7 +97,7 @@ the build agent, all awaiting content-owner review). Deterministic split by
 `sha256("pcn-eval-v2:" + id)`: 32 dev, 11 test (`--validate-only`). This is below the >= 120 cases /
 >= 40 test target in the plan; a generated set was not built.
 
-## Commands (NOT RUN)
+## Commands (reference; the runs above used the `haiku` and `haiku-test` stages)
 
 All from `backend/`. Always `--dry-run` first; real runs ask for confirmation. Worst-case
 estimates come from `--dry-run` with `evals/data/prices.json` retrieved 2026-11-14; token counts
@@ -91,7 +131,7 @@ outputs: `uv run python -m evals.labels draft --config production`; then label b
 the remaining weights, which departs from the approved 0.5/0.3/0.2 rule: do not select a final
 winner without the judge.
 
-## To complete this record
+## To complete this record (when the full search is run)
 
 When the runs are done, replace this file's status and add, for every stage: the comparison table
 (accuracy, quality, consistency, latency p50/p95, cost per turn), the judge calibration result,
