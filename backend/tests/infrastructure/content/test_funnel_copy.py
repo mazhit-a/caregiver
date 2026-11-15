@@ -58,11 +58,11 @@ def test_money_and_dates_come_from_pricing_json_and_the_given_day() -> None:
     assert view.default_plan_id == raw["defaultPlanId"]
     assert [p.id for p in view.plans] == [p["id"] for p in raw["plans"]]
     four = view.plans[0]
-    assert four.price_today == "$14.99"
-    assert four.detail == "for the first 4 weeks, then $29.99 every 4 weeks"
+    assert four.price_today == "$19.99"
+    assert four.detail == "for the first 4 weeks, then $39.99 every 4 weeks"
     assert four.first_renewal_date == "Dec 13"  # 2026-11-15 + 28 days
-    assert four.pay_button_label == "Pay $14.99 and start"
-    assert "$29.99" in four.consent_label and "agree" in four.consent_label
+    assert four.pay_button_label == "Pay $19.99 and start"
+    assert "$39.99" in four.consent_label and "agree" in four.consent_label
     assert view.plans[1].price_today == "$49.99" and view.plans[1].first_renewal_date == "Feb 7"
     assert view.paywall_headline == "Mom's 30-day plan is ready"
     # No price per day anywhere.
@@ -75,7 +75,7 @@ def test_disclosure_segments_mark_the_bold_parts() -> None:
         content.funnel_copy(), content.pricing(), content.recipient_labels("mom"), HEARD, TODAY
     )
     segments = view.plans[0].disclosure
-    assert segments[0] == TextSegment("Today: $14.99", strong=True)
+    assert segments[0] == TextSegment("Today: $19.99", strong=True)
     assert [s.strong for s in segments] == [True, False, True, False]
     text = "".join(s.text for s in segments)
     assert text.endswith("Cancel anytime in Settings → Manage my plan.")

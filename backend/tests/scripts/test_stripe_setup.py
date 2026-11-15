@@ -76,11 +76,11 @@ def test_stripe_setup_creates_products_prices_coupons_and_writes_ids_with_faked_
     assert len(fake.v1.coupons.objects) == 2
     by_key = {p["metadata"]["pcn_key"]: p for p in fake.v1.prices.params_seen}
     renew = by_key["four_week_renew"]
-    assert (renew["unit_amount"], renew["currency"]) == (2999, "usd")
+    assert (renew["unit_amount"], renew["currency"]) == (3999, "usd")
     assert renew["recurring"] == {"interval": "day", "interval_count": 28}
     assert by_key["twelve_week_intro"]["unit_amount"] == 4999
     coupon = fake.v1.coupons.params_seen[0]
-    assert coupon["amount_off"] == 1500 and coupon["duration"] == "once"  # 29.99 - 14.99
+    assert coupon["amount_off"] == 2000 and coupon["duration"] == "once"  # 39.99 - 19.99
 
     data = json.loads(pricing_file.read_text())
     four = data["plans"][0]
@@ -93,7 +93,7 @@ def test_stripe_setup_creates_products_prices_coupons_and_writes_ids_with_faked_
     }
     assert ids == {o.id for o in fake.v1.prices.objects}
     assert four["stripeIntroCouponId"] == fake.v1.coupons.objects[0].id
-    assert data["plans"][0]["introPrice"] == 14.99  # the rest of the file is untouched
+    assert data["plans"][0]["introPrice"] == 19.99  # the rest of the file is untouched
 
 
 def test_stripe_setup_second_run_creates_nothing_new(pricing_file: Path) -> None:

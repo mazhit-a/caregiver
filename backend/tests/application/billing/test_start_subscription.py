@@ -162,8 +162,8 @@ async def test_pricing_first_renewal_date_is_app_today_plus_intro_days(
     assert by_id["four_week"].first_renewal_date == today + timedelta(days=28)
     assert by_id["twelve_week"].first_renewal_date == today + timedelta(days=84)
     assert view.default_plan_id == "four_week"
-    assert str(by_id["four_week"].price_today) == "14.99"
-    assert str(by_id["four_week"].renewal_price) == "29.99"
+    assert str(by_id["four_week"].price_today) == "19.99"
+    assert str(by_id["four_week"].renewal_price) == "39.99"
 
 
 async def test_check_access_uses_plan_presence_for_status_none(
