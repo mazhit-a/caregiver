@@ -1,0 +1,933 @@
+{
+  "id": "m1_l1",
+  "version": 2,
+  "moduleId": "m1_talking",
+  "title": "When {recipient} asks again",
+  "minutes": 9,
+  "skill": "communication",
+  "skillLabel": "Handling repeated questions",
+  "notes": [
+    "v2: a full lesson, about 9 minutes and 24 screens. Teaching screens alternate with checks every 2–3 screens, the way good mobile courses work: content, then a quick quiz, a true/false, or the phrase builder.",
+    "Placeholders as in quiz.json. Lessons always use singular labels: if Q1 is 'both', use 'your parent' / 'your parent's' / 'them'.",
+    "Screen types: intro, setup (sets the variant), scenario (first instinct, no wrong answer), content (title, body or bodyByVariant, optional items, steps, dodont, examples, example note, keyIdea, tip, image), quiz (options [text, correct, feedback]; correct one turns green, a wrong pick turns warm, feedback always kind), builder (one pick per group, then the assembled reply), reset (stores the reset for the plan), practice, plan, wrap.",
+    "Every screen has Back (top-left arrow and a Back button) and Continue. Continue unlocks after an answer on scenario, quiz, builder and reset screens. Answers are kept when going back.",
+    "'sec' is the estimated time per screen; the total drives the 'about 9 minutes' label.",
+    "Variants (set on the setup screen) change examples and tasks only. The next lesson never depends on the variant.",
+    "Every screen shows common.notMedicalAdvice in the footer."
+  ],
+  "pattern": {
+    "name": "The three steps",
+    "steps": [
+      {
+        "id": "notice",
+        "label": "Notice the feeling",
+        "example": "You're wondering about tomorrow."
+      },
+      {
+        "id": "reassure",
+        "label": "Reassure",
+        "example": "We have plenty of time. I'll tell you when it's time."
+      },
+      {
+        "id": "offer",
+        "label": "Offer something to do",
+        "example": "Want to help me with the tea?"
+      }
+    ]
+  },
+  "screens": [
+    {
+      "id": "intro",
+      "type": "intro",
+      "minutes": 9,
+      "title": "When {recipient} asks again",
+      "body": "The same question, five times before dinner. It’s one of the most common changes families notice, and one of the most tiring. In 8 minutes you’ll learn why it happens and what to say instead.",
+      "bullets": [
+        "Why the question keeps coming back",
+        "Three steps that calm it",
+        "What to avoid, even when it’s true",
+        "Practice out loud, then make a plan"
+      ],
+      "image": "ollie-explaining",
+      "sec": 15
+    },
+    {
+      "id": "setup",
+      "type": "setup",
+      "title": "Where do {possessive} repeated questions usually reach you?",
+      "body": "Your answer changes the examples and your task, not the lesson.",
+      "options": [
+        [
+          "in_person",
+          "In person"
+        ],
+        [
+          "phone",
+          "On the phone"
+        ],
+        [
+          "both",
+          "Both"
+        ],
+        [
+          "not_yet",
+          "I haven’t noticed it yet"
+        ]
+      ],
+      "sec": 8
+    },
+    {
+      "id": "scenario",
+      "type": "scenario",
+      "title": "What would you say?",
+      "setupByVariant": {
+        "in_person": "It’s 6 pm. {Possessive} appointment is tomorrow. For the fifth time today, {pronoun} asks:",
+        "phone": "You’re at work. {Recipient} calls for the third time today:",
+        "not_yet": "Many families notice this first. It’s 6 pm. The appointment is tomorrow. For the fifth time today, {pronoun} asks:"
+      },
+      "lineByVariant": {
+        "in_person": "When are we going to the doctor?",
+        "phone": "When are you coming on Saturday?",
+        "not_yet": "When are we going to the doctor?"
+      },
+      "note": "Just your first instinct. There’s no wrong answer yet; we’ll come back to this.",
+      "optionsByVariant": {
+        "in_person": [
+          [
+            "It’s tomorrow at 2. I wrote it on the calendar for you.",
+            "okay",
+            "Kind and practical. It answers the fact. Keep it in mind: we’ll see what it misses."
+          ],
+          [
+            "Don’t worry, I’ve got it all handled.",
+            "okay",
+            "Warm. Hold on to it: we’ll look at what “don’t worry” does."
+          ],
+          [
+            "{Recipient}, I told you already. It’s tomorrow.",
+            "try",
+            "Almost everyone says this, especially the fifth time. We’ll see why it usually makes the question come back."
+          ],
+          [
+            "You’re wondering about tomorrow. We have plenty of time, I’ll tell you when. Want to help me with the tea?",
+            "best",
+            "Good instinct. By the end of this lesson you’ll know exactly why this works."
+          ]
+        ],
+        "phone": [
+          [
+            "Saturday morning, around ten. Write it down so you remember.",
+            "okay",
+            "Clear and practical. Keep it in mind: we’ll see what it misses."
+          ],
+          [
+            "Don’t worry, I’ll be there.",
+            "okay",
+            "Warm. Hold on to it: we’ll look at what “don’t worry” does."
+          ],
+          [
+            "{Recipient}, I told you already. Saturday. I’m at work.",
+            "try",
+            "Almost everyone says this mid-workday. We’ll see why it usually brings the next call sooner."
+          ],
+          [
+            "You’re wondering when I’ll come. I’ll call you before I leave, so you don’t have to keep track. What are you doing right now?",
+            "best",
+            "Good instinct. By the end of this lesson you’ll know exactly why this works."
+          ]
+        ]
+      },
+      "sec": 25
+    },
+    {
+      "id": "why1",
+      "type": "content",
+      "part": "Why it happens",
+      "title": "New information doesn’t stick",
+      "body": [
+        "Memory changes make it hard to hold on to something new, like a time or a plan. Older memories often last much longer.",
+        "So the answer you gave ten minutes ago may simply be gone. To {object}, the question is new."
+      ],
+      "keyIdea": "It’s not that {pronoun} isn’t listening. The answer didn’t stay.",
+      "image": "ollie-reading",
+      "sec": 22
+    },
+    {
+      "id": "why2",
+      "type": "content",
+      "part": "Why it happens",
+      "title": "The feeling stays, even when the memory fades",
+      "body": [
+        "Here’s the part most people don’t know: even when the memory of a conversation is gone, the feeling it left can stay.",
+        "If the last answer felt rushed or annoyed, {pronoun} may not remember why, but {pronoun} may still feel uneasy. If it felt calm, that calm can stay too."
+      ],
+      "keyIdea": "How you answer matters as much as what you answer.",
+      "sec": 22
+    },
+    {
+      "id": "q1",
+      "type": "quiz",
+      "part": "Quick check",
+      "title": "{Recipient} asks again five minutes after you answered. What’s most likely going on?",
+      "options": [
+        [
+          "{Pronoun}’s testing your patience.",
+          false,
+          "It can feel that way. But the memory of asking has faded, so this really is the first time for {object}."
+        ],
+        [
+          "{Pronoun} didn’t hear you the first time.",
+          false,
+          "Possible, but usually not. Even when {pronoun} heard you clearly, the answer may not stay."
+        ],
+        [
+          "The answer faded, but the worry behind the question didn’t.",
+          true,
+          "Exactly. That’s why the worry is what needs an answer."
+        ]
+      ],
+      "sec": 15
+    },
+    {
+      "id": "why3",
+      "type": "content",
+      "part": "Why it happens",
+      "title": "What’s often behind the question",
+      "body": [
+        "The words are about a time or a plan. The need underneath is usually something else:"
+      ],
+      "items": [
+        [
+          "Worry",
+          "Something is coming up and {pronoun} can’t keep track of it."
+        ],
+        [
+          "Feeling lost in time",
+          "Without a clear sense of the day, plans feel shaky."
+        ],
+        [
+          "Boredom",
+          "With nothing to do, the same thought loops."
+        ],
+        [
+          "Wanting you close",
+          "The question is a way to connect."
+        ]
+      ],
+      "image": "ollie-thinking",
+      "sec": 22
+    },
+    {
+      "id": "q2",
+      "type": "quiz",
+      "part": "Quick check",
+      "title": "{Pronoun}’s been sitting alone all afternoon and keeps asking when dinner is. What might help most?",
+      "options": [
+        [
+          "Tell {object} the exact time again, a bit louder.",
+          false,
+          "The time may not stay. The empty afternoon is the real issue here."
+        ],
+        [
+          "Give {object} something to do with you, like setting the table.",
+          true,
+          "Yes. Boredom often drives the loop, and doing something together answers it."
+        ],
+        [
+          "Ignore it until she stops.",
+          false,
+          "Understandable when you’re tired, but {pronoun} may feel brushed off, and that feeling lingers."
+        ]
+      ],
+      "sec": 15
+    },
+    {
+      "id": "steps",
+      "type": "content",
+      "part": "The three steps",
+      "title": "One pattern for the question that keeps coming back",
+      "body": [
+        "Instead of repeating the facts, answer in three short steps:"
+      ],
+      "steps": [
+        [
+          "1",
+          "Notice the feeling",
+          "“You’re wondering about tomorrow.”"
+        ],
+        [
+          "2",
+          "Reassure",
+          "“We have plenty of time. I’ll tell you when.”"
+        ],
+        [
+          "3",
+          "Offer something to do",
+          "“Want to help me with the tea?”"
+        ]
+      ],
+      "keyIdea": "You’ll use this same pattern in every lesson of this module.",
+      "image": "ollie-explaining",
+      "sec": 22
+    },
+    {
+      "id": "step1",
+      "type": "content",
+      "part": "The three steps",
+      "title": "Step 1: Notice the feeling",
+      "body": [
+        "Put the feeling into words before anything else. It tells {object} you’re on {possessive} side."
+      ],
+      "dodont": {
+        "do": [
+          "“You’re wondering about tomorrow.”",
+          "“It sounds like you’re worried.”",
+          "“You miss Dad’s company.”"
+        ],
+        "dont": [
+          "“Don’t worry about it.”",
+          "“There’s nothing to be upset about.”"
+        ]
+      },
+      "tip": "“Don’t worry” sounds kind, but it can tell {object} the feeling is wrong. Naming it works better.",
+      "sec": 22
+    },
+    {
+      "id": "q3",
+      "type": "quiz",
+      "part": "Quick check",
+      "title": "Which reply notices the feeling?",
+      "options": [
+        [
+          "“Don’t worry, it’s all fine.”",
+          false,
+          "Kind, but it brushes the feeling aside."
+        ],
+        [
+          "“You’re not sure what’s happening tomorrow, are you?”",
+          true,
+          "Yes. You named the feeling, gently."
+        ],
+        [
+          "“The appointment is at 2 pm on Thursday.”",
+          false,
+          "That’s the fact. Useful, but the feeling comes first."
+        ]
+      ],
+      "sec": 15
+    },
+    {
+      "id": "step2",
+      "type": "content",
+      "part": "The three steps",
+      "title": "Step 2: Reassure",
+      "body": [
+        "Take the job of remembering off {object}. Short, calm and the same each time.",
+        "Promise only what you’ll really do, like telling {object} when it’s time."
+      ],
+      "examples": [
+        [
+          "We have plenty of time. I’ll tell you when.",
+          "Takes the job of remembering off {object}"
+        ],
+        [
+          "I’ve got it covered. You don’t have to keep track.",
+          "Promises something you can keep"
+        ],
+        [
+          "I’m right here.",
+          "Simple, true and calming"
+        ]
+      ],
+      "sec": 22
+    },
+    {
+      "id": "step3",
+      "type": "content",
+      "part": "The three steps",
+      "title": "Step 3: Offer something to do",
+      "body": [
+        "A worried loop is hard to stop with words alone. Busy hands help.",
+        "Pick something small and familiar, ideally something {pronoun} enjoys."
+      ],
+      "items": [
+        [
+          "Tea together",
+          "Make it, pour it, sit down"
+        ],
+        [
+          "Fold or sort",
+          "Towels, socks, photos"
+        ],
+        [
+          "A short walk",
+          "To the garden or the mailbox"
+        ],
+        [
+          "A familiar song",
+          "Sinatra, hymns, old favourites"
+        ]
+      ],
+      "keyIdea": "You’re not distracting {object} from the truth. You’re helping the worry settle.",
+      "sec": 22
+    },
+    {
+      "id": "builder",
+      "type": "builder",
+      "part": "Try it",
+      "title": "Build a reply in three steps",
+      "body": "Pick one part for each step. Then read your reply out loud.",
+      "groups": [
+        [
+          "Notice the feeling",
+          [
+            [
+              "You’re wondering about tomorrow.",
+              true
+            ],
+            [
+              "I already told you.",
+              false
+            ],
+            [
+              "Don’t worry.",
+              false
+            ]
+          ]
+        ],
+        [
+          "Reassure",
+          [
+            [
+              "Like I said, it’s at 2.",
+              false
+            ],
+            [
+              "We have plenty of time. I’ll tell you when.",
+              true
+            ],
+            [
+              "Stop asking, it’s fine.",
+              false
+            ]
+          ]
+        ],
+        [
+          "Offer something to do",
+          [
+            [
+              "Want to help me with the tea?",
+              true
+            ],
+            [
+              "Go watch TV.",
+              false
+            ],
+            [
+              "Let’s talk about it later.",
+              false
+            ]
+          ]
+        ]
+      ],
+      "sec": 30
+    },
+    {
+      "id": "avoid",
+      "type": "content",
+      "part": "What to avoid",
+      "title": "Phrases that hurt, even when they’re true",
+      "body": [
+        "After the fifth time, these come out on their own. Each one points at the forgetting, so the worry grows instead of settling."
+      ],
+      "dodont": {
+        "do": [
+          "“I’ll tell you when.”",
+          "“You’re wondering about it.”"
+        ],
+        "dont": [
+          "“I told you already.”",
+          "“Don’t you remember?”",
+          "“Why do you keep asking?”",
+          "A long, detailed explanation"
+        ]
+      },
+      "tip": "If one slips out, it’s okay. Take a breath and start again with the feeling.",
+      "sec": 22
+    },
+    {
+      "id": "tf1",
+      "type": "quiz",
+      "part": "True or false",
+      "title": "Explaining the whole plan in detail helps {object} remember it.",
+      "options": [
+        [
+          "True",
+          false,
+          "It feels like it should. But long explanations are hard to hold on to and can add to the worry."
+        ],
+        [
+          "False",
+          true,
+          "Right. Short and the same each time works better than more detail."
+        ]
+      ],
+      "sec": 15
+    },
+    {
+      "id": "tools",
+      "type": "content",
+      "part": "Make it easier",
+      "title": "Make the answer easy to find",
+      "bodyByVariant": {
+        "in_person": [
+          "Put the answer where {pronoun} can see it: a note on the fridge or a small whiteboard.",
+          "Then you can point to it: “It’s on the board. I’ll tell you when.”"
+        ],
+        "phone": [
+          "Ask {object} to keep a note by the phone with your next visit: “Saturday. I’ll call before I leave.”",
+          "On calls you can say: “Check the note by the phone. I’ll call before I leave.”"
+        ],
+        "not_yet": [
+          "If it starts, a note or small whiteboard with the answer helps a lot.",
+          "Then you can point to it: “It’s on the board. I’ll tell you when.”"
+        ]
+      },
+      "example": [
+        "Doctor: Thursday 2 pm",
+        "I’ll pick you up. — [your name]"
+      ],
+      "tip": "In a care home, ask the staff to keep your visit days on a calendar in {possessive} room.",
+      "image": "ollie-note",
+      "sec": 22,
+      "keyIdea": "And mention plans closer to the time: less waiting means less worrying."
+    },
+    {
+      "id": "q4",
+      "type": "quiz",
+      "part": "Quick check",
+      "title": "{Recipient} has a dentist visit next Friday. When is a good time to tell {object}?",
+      "options": [
+        [
+          "Today, so she has plenty of notice.",
+          false,
+          "That gives the worry a whole week to grow."
+        ],
+        [
+          "The morning of the visit, with a note on the fridge.",
+          true,
+          "Yes. Close to the time, and easy to see."
+        ],
+        [
+          "Don’t tell her at all.",
+          false,
+          "Surprises can be upsetting too. Close to the time works best."
+        ]
+      ],
+      "sec": 15
+    },
+    {
+      "id": "pattern",
+      "type": "content",
+      "part": "Make it easier",
+      "title": "Look for a pattern",
+      "body": [
+        "Notice when the questions come. Is it the same time of day? After a nap? When {pronoun}’s hungry, tired or has nothing to do?",
+        "If you spot a pattern, you can get ahead of it: tea at 4, a walk before dinner."
+      ],
+      "tip": "If repeated questions are new or suddenly much worse, mention it at the next doctor visit.",
+      "sec": 22
+    },
+    {
+      "id": "you",
+      "type": "reset",
+      "part": "Taking care of you",
+      "title": "The fifth time is the hardest",
+      "body": "Feeling frustrated is normal. It doesn’t make you a bad daughter or son. A small reset before you answer makes a big difference.",
+      "question": "Pick your reset for next time:",
+      "options": [
+        "One slow breath before I answer",
+        "Say the first words slowly",
+        "Step away for a minute, if it’s safe"
+      ],
+      "image": "ollie-calm-none",
+      "sec": 20
+    },
+    {
+      "id": "recap",
+      "type": "quiz",
+      "part": "Final check",
+      "title": "{Recipient} asks for the fourth time when {possessive} daughter is visiting. Which reply follows all three steps?",
+      "options": [
+        [
+          "“She’s coming Sunday. I told you this morning.”",
+          false,
+          "True, but it skips the feeling and points at the forgetting."
+        ],
+        [
+          "“You’re looking forward to seeing her. She’s coming Sunday. Want to make a card for her?”",
+          true,
+          "Yes: the feeling, a short reassurance, and something to do together."
+        ],
+        [
+          "“Don’t worry, everything’s fine.”",
+          false,
+          "Warm, but it brushes the feeling aside and offers nothing to do."
+        ]
+      ],
+      "sec": 15
+    },
+    {
+      "id": "practice",
+      "type": "roleplay",
+      "promptFile": "prompts/roleplay-turn.md",
+      "title": "Practice: {Recipient} asks again",
+      "intro": "Now try it out loud. {Recipient} is an AI practice partner. Type what you'd say. The coach will show what worked.",
+      "goals": [
+        "notice",
+        "reassure",
+        "offer"
+      ],
+      "roundsByVariant": {
+        "in_person": [
+          {
+            "stage": "It's 6 pm. The appointment is tomorrow.",
+            "line": "When are we going to the doctor?",
+            "mood": "worried"
+          },
+          {
+            "stage": "Ten minutes later.",
+            "line": "Something's wrong, isn't it? Why are we going to the doctor?",
+            "mood": "anxious"
+          },
+          {
+            "stage": "Later that evening.",
+            "line": "Why won't you just tell me? You're hiding something.",
+            "mood": "suspicious"
+          }
+        ],
+        "phone": [
+          {
+            "stage": "You're at work. {Recipient} calls.",
+            "line": "When are you coming on Saturday?",
+            "mood": "worried"
+          },
+          {
+            "stage": "Twenty minutes later, {recipient} calls again.",
+            "line": "Are you still coming? Nobody tells me anything.",
+            "mood": "anxious"
+          },
+          {
+            "stage": "Another call, later that afternoon.",
+            "line": "You forgot about me, didn't you?",
+            "mood": "hurt"
+          }
+        ]
+      },
+      "roundsVariantMap": {
+        "in_person": "in_person",
+        "both": "in_person",
+        "phone": "phone",
+        "not_yet": "in_person"
+      },
+      "summary": {
+        "title": "Your practice",
+        "firstVsLast": "First try: {firstScore} of 3 · Last try: {lastScore} of 3",
+        "bestPhraseLabel": "Your best phrase",
+        "saveButton": "Save",
+        "againButton": "Practice again"
+      },
+      "labels": {
+        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
+        "thinking": "{Recipient} is thinking…",
+        "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
+      },
+      "fallbackScenarios": [
+        "fb1",
+        "fb2"
+      ],
+      "part": "Practice",
+      "sec": 80
+    },
+    {
+      "id": "plan",
+      "type": "plan",
+      "title": "Your plan for next time",
+      "ifThen": {
+        "cueByVariant": {
+          "in_person": "If {recipient} asks the same question again,",
+          "phone": "If {recipient} calls with the same question again,",
+          "not_yet": "If I notice {recipient} asking the same question again,"
+        },
+        "cueVariantMap": {
+          "in_person": "in_person",
+          "both": "in_person",
+          "phone": "phone",
+          "not_yet": "not_yet"
+        },
+        "responseLabel": "then I'll say:",
+        "responseDefault": "the best phrase from practice, else the saved scenario phrase",
+        "responseEditable": true,
+        "resetLabel": "And first, I'll:",
+        "resetFrom": "s6_fifth_time"
+      },
+      "doNow": {
+        "title": "One thing to do now",
+        "byVariant": {
+          "in_person": {
+            "text": "Write the answer on a note for the fridge or a whiteboard.",
+            "action": "print_note_template",
+            "button": "Print a note template"
+          },
+          "phone": {
+            "text": "Save your phrase where you'll see it when {recipient} calls.",
+            "action": "copy_phrase",
+            "button": "Copy my phrase"
+          },
+          "both": {
+            "text": "Write the answer on a note, and save your phrase for calls.",
+            "action": "print_and_copy",
+            "button": "Print and copy"
+          },
+          "not_yet": {
+            "text": "On your next call or visit, watch for repeated questions and note when they happen. We'll add your notes to the doctor-visit sheet.",
+            "action": "add_observation",
+            "button": "Add a note now"
+          }
+        }
+      },
+      "remindButton": "Remind me tomorrow",
+      "doneButton": "Done",
+      "noteTemplate": {
+        "title": "{Possessive} note",
+        "example": "Doctor: [day] [time]. I'll pick you up. — [your name]"
+      },
+      "part": "Your plan",
+      "sec": 30
+    },
+    {
+      "id": "wrap",
+      "type": "wrap",
+      "skillLine": "New skill: handling repeated questions.",
+      "phraseLine": "Your phrase is saved to {possessive} page and care card.",
+      "patternLine": "You've learned the three steps: notice the feeling, reassure, offer something to do. Every lesson in this module builds on them.",
+      "confidenceCheck": {
+        "onlyFirstLesson": true,
+        "title": "How ready do you feel for these?",
+        "scale": "1 to 5",
+        "items": [
+          {
+            "id": "repeat",
+            "label": "When {recipient} asks the same question again"
+          },
+          {
+            "id": "accusations",
+            "label": "When {recipient} thinks someone took something"
+          },
+          {
+            "id": "evenings",
+            "label": "When {recipient} gets upset in the evening"
+          },
+          {
+            "id": "refusal",
+            "label": "When {recipient} says no to help"
+          },
+          {
+            "id": "visits",
+            "label": "Getting what you need from a doctor visit"
+          }
+        ]
+      },
+      "tomorrowLine": "Tomorrow: a quick check-in and a 2-minute practice round.",
+      "nextLine": "Next in this module: \"Talking so it lands\", making every conversation easier, not just the answers.",
+      "learned": [
+        "The answer fades, but the feeling stays.",
+        "Answer the feeling first: notice, reassure, offer something to do.",
+        "Skip “I told you already”. Short and the same each time.",
+        "Make the answer easy to find, and mention plans closer to the time."
+      ],
+      "title": "New skill: handling repeated questions",
+      "sec": 25
+    }
+  ],
+  "fallbackScenarios": [
+    {
+      "id": "fb1",
+      "setup": "Ten minutes later, {recipient} asks again, a little more worried:",
+      "line": "Something's wrong, isn't it?",
+      "answers": [
+        {
+          "text": "No, nothing's wrong. I already said it's just a checkup.",
+          "verdict": "okay",
+          "feedback": "True, but \"already said\" points at the forgetting."
+        },
+        {
+          "text": "You sound worried. I'm right here, and everything's taken care of. Come sit with me?",
+          "verdict": "best",
+          "feedback": "Feeling, reassurance, something to do."
+        },
+        {
+          "text": "Why do you keep asking?",
+          "verdict": "try_again",
+          "feedback": "It can feel like blame, and {recipient} may not know why either."
+        }
+      ]
+    },
+    {
+      "id": "fb2",
+      "setup": "Later that evening:",
+      "line": "Why won't you just tell me? You're hiding something.",
+      "answers": [
+        {
+          "text": "I'm not hiding anything. I've told you five times.",
+          "verdict": "try_again",
+          "feedback": "Defending yourself is natural, but it turns into an argument."
+        },
+        {
+          "text": "It sounds like you feel left out. I'll tell you everything as it happens. Want to look at the calendar together?",
+          "verdict": "best",
+          "feedback": "You named the feeling and gave a calm, shared next step."
+        },
+        {
+          "text": "Okay, okay. It's at 2 tomorrow.",
+          "verdict": "okay",
+          "feedback": "It answers the question, but not the feeling of being left out."
+        }
+      ]
+    }
+  ],
+  "day2": {
+    "checkIn": {
+      "byVariant": {
+        "default": {
+          "question": "Did {recipient} ask the same question again since yesterday?",
+          "options": [
+            {
+              "id": "yes",
+              "label": "Yes"
+            },
+            {
+              "id": "not_yet",
+              "label": "Not yet",
+              "response": "Your plan is ready for when it does."
+            }
+          ],
+          "followUp": {
+            "ifAnswer": "yes",
+            "question": "How did your plan go?",
+            "showPlan": true,
+            "options": [
+              {
+                "id": "helped",
+                "label": "It helped",
+                "response": "That's real progress. The three steps get easier every time you use them."
+              },
+              {
+                "id": "partly",
+                "label": "Partly",
+                "response": "That's normal at first. Keep the same words for a few days. Familiar words help."
+              },
+              {
+                "id": "didnt_help",
+                "label": "It didn't help",
+                "response": "That happens. Here are a few more ways to try.",
+                "next": "followUpsDidntHelp"
+              }
+            ]
+          }
+        },
+        "not_yet": {
+          "question": "Did you notice {recipient} asking the same question again?",
+          "options": [
+            {
+              "id": "noted",
+              "label": "Yes, I noted it",
+              "response": "Thank you. Your notes are on the doctor-visit sheet."
+            },
+            {
+              "id": "no",
+              "label": "No",
+              "response": "Good to know. Keep an eye out on your next call or visit."
+            },
+            {
+              "id": "not_sure",
+              "label": "Not sure",
+              "response": "That's okay. Small changes are easy to miss. Keep your notes handy."
+            }
+          ]
+        }
+      },
+      "checkInVariantMap": {
+        "in_person": "default",
+        "phone": "default",
+        "both": "default",
+        "not_yet": "not_yet"
+      }
+    },
+    "followUpsDidntHelp": [
+      {
+        "title": "Look for a pattern",
+        "text": "Does it happen at a certain time of day, when {recipient} is tired, hungry or has nothing to do? Answering that need can help more than any words."
+      },
+      {
+        "title": "Shorter, and written down",
+        "text": "Use fewer words, the same each time, and point to the note: \"It's on the board. I'll tell you when.\""
+      },
+      {
+        "title": "Give {object} something to do",
+        "text": "Folding towels, sorting photos, helping with dinner. Busy hands quiet a worried loop."
+      }
+    ],
+    "doctorNote": {
+      "text": "If repeated questions are new or suddenly much worse, mention it at the next doctor visit.",
+      "button": "Add to the doctor-visit sheet"
+    },
+    "practiceRound": {
+      "title": "2-minute practice: a new version",
+      "promptFile": "prompts/roleplay-turn.md",
+      "goals": [
+        "notice",
+        "reassure",
+        "offer"
+      ],
+      "roundsByVariant": {
+        "in_person": [
+          {
+            "stage": "Morning, at breakfast.",
+            "line": "What day is it today?",
+            "mood": "confused"
+          },
+          {
+            "stage": "A minute later.",
+            "line": "What day is it? I feel like I should be somewhere.",
+            "mood": "anxious"
+          }
+        ],
+        "phone": [
+          {
+            "stage": "{Recipient} calls in the evening. You called this morning.",
+            "line": "I haven't heard from you all week.",
+            "mood": "lonely"
+          },
+          {
+            "stage": "A few minutes later.",
+            "line": "Nobody calls me anymore.",
+            "mood": "hurt"
+          }
+        ]
+      },
+      "roundsVariantMap": {
+        "in_person": "in_person",
+        "both": "in_person",
+        "phone": "phone",
+        "not_yet": "in_person"
+      }
+    },
+    "nextLessonPrompt": "Ready for the next step? \"Talking so it lands\" builds on what you just practiced."
+  },
+  "recapForNextLesson": {
+    "text": "Last time you practiced the three steps: notice the feeling, reassure, offer something to do. Your phrase was: \"{savedPhrase}\".",
+    "ifCheckInHelped": "You said it helped. Today we'll make every conversation a little easier."
+  }
+}

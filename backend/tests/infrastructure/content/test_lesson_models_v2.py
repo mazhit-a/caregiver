@@ -23,7 +23,7 @@ from app.infrastructure.content.schemas import (
 
 REPO = Path(__file__).resolve().parents[3].parent
 REAL = REPO / "content"
-PACKAGE_LESSON = REPO / "context" / "design" / "content-package" / "lessons" / "m1_l1.json"
+PACKAGE_LESSON = Path(__file__).resolve().parents[2] / "fixtures" / "package_m1_l1_unpatched.json"
 VARIANTS = {"a": "A", "b": "B"}
 
 SCREENS: dict[str, dict[str, Any]] = {
