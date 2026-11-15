@@ -92,9 +92,9 @@ describe("Gentle exit", () => {
     const { container } = renderAt("/settings/gentle-exit");
     await userEvent.click(await screen.findByRole("button", { name: EXIT.continue }));
     await userEvent.click(screen.getByRole("button", { name: EXIT.confirm }));
-    await screen.findByRole("heading", { level: 1, name: "We're so sorry" });
+    await screen.findByRole("heading", { level: 1, name: "Your plan is closed" });
     expect(screen.getByTestId("where")).toHaveTextContent("/goodbye");
-    expect(screen.getByText(/The time you spent caring/)).toBeInTheDocument();
+    expect(screen.getByText(/the time you spent caring/)).toBeInTheDocument();
     expect(screen.getByText("If it helps to talk with someone, these services are free.")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "1-800-272-3900" })).toHaveAttribute("href", "tel:18002723900");
     const external = screen.getByRole("link", { name: /Hospice Foundation/ });
@@ -118,7 +118,7 @@ describe("Gentle exit", () => {
     expect(screen.getByTestId("where")).toHaveTextContent("/settings/gentle-exit");
     api.scenario.cancelFails = false;
     await userEvent.click(screen.getByRole("button", { name: EXIT.retry }));
-    await screen.findByRole("heading", { level: 1, name: "We're so sorry" });
+    await screen.findByRole("heading", { level: 1, name: "Your plan is closed" });
     expect(getToken()).toBeNull();
   });
 
@@ -127,7 +127,7 @@ describe("Gentle exit", () => {
     renderAt("/settings/gentle-exit");
     await userEvent.click(await screen.findByRole("button", { name: EXIT.continue }));
     await userEvent.click(screen.getByRole("button", { name: EXIT.confirm }));
-    await screen.findByRole("heading", { level: 1, name: "We're so sorry" });
+    await screen.findByRole("heading", { level: 1, name: "Your plan is closed" });
   });
 
   it("has no retention copy", () => {

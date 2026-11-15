@@ -112,6 +112,27 @@ describe("RoleplayRoom (AI path)", () => {
     expect(turnCalls()).toHaveLength(3);
   });
 
+  it("Try again drops the feedback and the typed reply for this round only, keeping earlier rounds", async () => {
+    mount();
+    let user = await playRound("one");
+    await user.click(screen.getByRole("button", { name: "Next round" }));
+    user = await playRound("two");
+    expect(screen.getByText("AI-generated")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Try again" }));
+    expect(screen.queryByText("AI-generated")).not.toBeInTheDocument();
+    expect(screen.getByText("Round 2 of 3")).toBeInTheDocument();
+    expect(await box()).toHaveValue("");
+    await user.type(await box(), "three");
+    await user.click(sendBtn());
+    await screen.findByText("AI-generated");
+    const sentTurns = turnCalls();
+    expect(sentTurns).toHaveLength(3);
+    expect(sentTurns[2]?.body["round"]).toBe(2);
+    expect(sentTurns[2]?.body["previousTurns"]).toEqual([
+      { parent: "When are you coming on Saturday?", caregiver: "one", score: 3 },
+    ]);
+  }, 20000);
+
   it("sends at most the last three previous turns as parent, caregiver and score", async () => {
     mount();
     let user = await playRound("one");
@@ -128,19 +149,19 @@ describe("RoleplayRoom (AI path)", () => {
     expect(third?.body["round"]).toBe(3);
   });
 
-  it("limits the reply to 500 characters and blocks empty or blank replies", async () => {
+  it("limits the reply to 150 characters and blocks empty or blank replies", async () => {
     mount();
     const user = userEvent.setup();
     const field = await box();
-    expect(field).toHaveAttribute("maxlength", "500");
+    expect(field).toHaveAttribute("maxlength", "150");
     await user.click(sendBtn());
     await user.type(field, "   ");
     await user.click(sendBtn());
     expect(turnCalls()).toHaveLength(0);
     await user.click(field);
-    await user.paste("a".repeat(600));
-    expect((field as HTMLTextAreaElement).value).toHaveLength(500);
-    expect(screen.getByText("500 of 500 characters")).toBeInTheDocument();
+    await user.paste("a".repeat(200));
+    expect((field as HTMLTextAreaElement).value).toHaveLength(150);
+    expect(screen.getByText("150 of 150 characters")).toBeInTheDocument();
   });
 
   it("shows score, goals and tip exactly as the server returned them (medical: score 0, fixed tip)", async () => {
@@ -212,7 +233,7 @@ describe("RoleplayRoom (AI path)", () => {
   it("shows the labels and has no axe violations in the reply and coach states", async () => {
     const { container } = mount();
     await box();
-    expect(screen.getByText(/We teach and organize/)).toBeInTheDocument();
+    expect(screen.queryByText(/We teach and organize/)).toBeNull();
     expect(screen.getByText(/This conversation isn't saved/)).toBeInTheDocument();
     expect(await axe(container)).toHaveNoViolations();
     await playRound("You sound worried.");

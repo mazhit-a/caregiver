@@ -1,7 +1,5 @@
 // UI-owned strings of the lesson player. Anything with a placeholder comes from the API.
 export const LESSON_COPY = {
-  /** Mirrors content/funnel-copy.json common.notMedicalAdvice (locked by lesson.test.ts). */
-  notMedicalAdvice: "We teach and organize. We don’t give medical advice.",
   closeLesson: "Close lesson and go to Today",
   closeShort: "Close",
   progressLabel: "Lesson progress",

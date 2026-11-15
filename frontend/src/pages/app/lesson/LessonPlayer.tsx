@@ -138,7 +138,6 @@ export function LessonPlayer({ lesson, reload }: Props) {
           {LESSON_COPY.gateHint[gate]}
         </p>
       )}
-      <p className={styles["disclaimer"]}>{LESSON_COPY.notMedicalAdvice}</p>
     </div>
   );
 }

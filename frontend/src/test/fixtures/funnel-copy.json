@@ -45,11 +45,11 @@
             "strong": true
           },
           {
-            "text": ", starting Feb 2, until you cancel. Cancel anytime in Settings → Subscription.",
+            "text": ", starting Feb 2, until you cancel. Cancel anytime in Settings → Manage my plan.",
             "strong": false
           }
         ],
-        "consentLabel": "I understand my plan renews automatically at $29.99 every 4 weeks until I cancel.",
+        "consentLabel": "By tapping the button, you agree that your plan renews automatically at $29.99 every 4 weeks until you cancel.",
         "payButtonLabel": "Pay $14.99 and start",
         "firstRenewalDate": "Feb 2"
       },
@@ -72,11 +72,11 @@
             "strong": true
           },
           {
-            "text": ", starting Mar 30, until you cancel. Cancel anytime in Settings → Subscription.",
+            "text": ", starting Mar 30, until you cancel. Cancel anytime in Settings → Manage my plan.",
             "strong": false
           }
         ],
-        "consentLabel": "I understand my plan renews automatically at $69.99 every 12 weeks until I cancel.",
+        "consentLabel": "By tapping the button, you agree that your plan renews automatically at $69.99 every 12 weeks until you cancel.",
         "payButtonLabel": "Pay $49.99 and start",
         "firstRenewalDate": "Mar 30"
       }

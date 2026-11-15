@@ -83,9 +83,10 @@
 }
 
 .help {
-  border: var(--border-width) solid var(--safety);
-  background: var(--safety-soft);
-  color: var(--safety-text);
+  border: var(--border-width) solid var(--border-control);
+  background: transparent;
+  color: var(--text);
+  font-weight: 400;
 }
 
 .menu {

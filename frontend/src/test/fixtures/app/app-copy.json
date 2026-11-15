@@ -40,7 +40,7 @@
   },
   "settings": {
     "title": "Settings",
-    "gentleExitEntry": "Mom has passed away or moved to a care facility",
+    "gentleExitEntry": "Close my plan and delete my data",
     "gentleExitHint": "If your situation has changed, there is a quiet way to close things here."
   },
   "welcome": {

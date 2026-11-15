@@ -1,6 +1,5 @@
 import { Link, useLocation } from "react-router";
 import logo from "../../assets/kelper-logo.svg";
-import { NOT_MEDICAL_ADVICE } from "../nav";
 import { ROUTES } from "../../routes";
 import { HelpButton } from "./HelpButton";
 import type { NavCopy } from "./navCopy";
@@ -12,13 +11,13 @@ interface Props {
   onHelp: () => void;
 }
 
-/** Desktop (1024px and up): logo, four tabs, Settings, Help and the disclaimer. */
+/** Desktop (1024px and up): logo, four tabs, Settings, Help. */
 export function AppSidebar({ copy, onHelp }: Props) {
   const { pathname } = useLocation();
   return (
     <aside className={styles.sidebar} data-app-chrome="sidebar">
-      <Link to={ROUTES.today} className={styles.logo} aria-label="Kelper home">
-        <img src={logo} alt="" width={84} height={32} />
+      <Link to={ROUTES.today} className={`${styles.logo} ${styles.sideLogo}`} aria-label="Kelper home">
+        <img src={logo} alt="" width={253} height={96} />
       </Link>
       {copy && (
         <nav aria-label="App" className={styles.sideNav}>
@@ -43,7 +42,6 @@ export function AppSidebar({ copy, onHelp }: Props) {
       )}
       <div className={styles.sideBottom}>
         <HelpButton className={styles.help} onClick={onHelp} />
-        <p className={styles.disclaimer}>{NOT_MEDICAL_ADVICE}</p>
       </div>
     </aside>
   );

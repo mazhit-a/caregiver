@@ -155,9 +155,11 @@ function turnResponse(req: FakeReq, runId: string): FakeRes {
   const run = runs(session)[runId];
   if (!run) return fail(404, "err-404-run");
   const reply = req.body["reply"];
-  if (typeof reply !== "string" || reply.trim() === "" || reply.length > 500) {
+  if (typeof reply !== "string" || reply.trim() === "" || reply.length > 150) {
     return fail(422, "err-422-roleplay-empty");
   }
+  const redo = req.body["round"] === run.round - 1 && run.round > 1 && !run.fallback;
+  if (redo) run.round -= 1; // Try again on the round just answered
   if (req.body["round"] !== run.round) {
     return error(422, "round_mismatch", "This is not the current round.", {
       expected: run.round,

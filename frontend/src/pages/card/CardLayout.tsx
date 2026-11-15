@@ -4,7 +4,7 @@ import { PUBLIC_CARD } from "../../content/app/publicCard";
 import { ROUTES } from "../../routes";
 import styles from "./CardLayout.module.css";
 
-/** Public card layout: logo link and a compact disclaimer. No nav, no session code, no help sheet. */
+/** Public card layout: logo link. No nav, no session code, no help sheet. */
 export function CardLayout() {
   return (
     <div className={styles.shell}>
@@ -14,7 +14,6 @@ export function CardLayout() {
         <Link to={ROUTES.home} aria-label={PUBLIC_CARD.logoLink} className={styles.logo}>
           <img src={logo} alt="Kelper" width={95} height={36} />
         </Link>
-        <p className={styles.disclaimer}>{PUBLIC_CARD.disclaimer}</p>
       </header>
       <Outlet />
     </div>

@@ -51,7 +51,6 @@ const [four, twelve] = copy.paywall.plans as [
 ];
 const pay = (p: { payButtonLabel: string }) => screen.getByRole("button", { name: p.payButtonLabel });
 const demo = () => screen.getByRole("button", { name: /Continue in demo mode/ });
-const consentBox = () => screen.getByRole("checkbox");
 
 describe("PaywallPage", () => {
   it("preselects the default plan and updates terms and Pay label on switch", async () => {
@@ -67,18 +66,16 @@ describe("PaywallPage", () => {
     expect(screen.getByText(twelve.disclosure[0]?.text ?? "")).toBeTruthy();
   });
 
-  it("blocks both buttons without consent, shows the error and focuses the checkbox", async () => {
+  it("has no consent checkbox: the descriptor line sits with the buttons and the buttons are enabled", async () => {
     await setup();
-    await userEvent.click(pay(four));
-    expect(screen.getByText(copy.paywall.consentRequiredError)).toBeVisible();
-    expect(consentBox()).toHaveFocus();
-    await userEvent.click(demo());
-    expect(api.calls.some((c) => c.path.startsWith("/billing/") && c.method === "POST")).toBe(false);
+    expect(screen.queryByRole("checkbox")).toBeNull();
+    expect(screen.getByText(four.consentLabel)).toBeTruthy();
+    expect(pay(four)).not.toHaveAttribute("aria-disabled", "true");
+    expect(demo()).not.toHaveAttribute("aria-disabled", "true");
   });
 
-  it("starts demo mode with consent and plan, then opens Today", async () => {
+  it("starts demo mode, sending consent as true, with the plan, then opens Today", async () => {
     const { router } = await setup();
-    await userEvent.click(consentBox());
     await userEvent.click(demo());
     await waitFor(() => expect(router.state.location.pathname).toBe("/today"));
     expect(api.calls.filter((c) => c.path === "/billing/demo")).toHaveLength(1);
@@ -86,7 +83,6 @@ describe("PaywallPage", () => {
 
   it("assigns only a checkout.stripe.com URL and sends one request on double click", async () => {
     await setup("/paywall", { stripeConfigured: true });
-    await userEvent.click(consentBox());
     const button = pay(four);
     await userEvent.dblClick(button);
     await waitFor(() => expect(goToCheckout).toHaveBeenCalledWith(FAKE_CHECKOUT_URL));
@@ -101,7 +97,6 @@ describe("PaywallPage", () => {
       status: 200,
       body: { checkoutId: "x", url: "https://evil.example.com/pay" },
     });
-    await userEvent.click(consentBox());
     await userEvent.click(pay(four));
     expect(await screen.findByRole("alert")).toBeTruthy();
     expect(goToCheckout).not.toHaveBeenCalled();
@@ -109,7 +104,6 @@ describe("PaywallPage", () => {
 
   it("follows the same-origin /fake-checkout path in-app, without leaving the page", async () => {
     const { router } = await setup("/paywall", { fakeStripe: true });
-    await userEvent.click(consentBox());
     await userEvent.click(pay(four));
     await waitFor(() => expect(router.state.location.pathname).toMatch(/^\/fake-checkout\/cs_fake_/));
     expect(goToCheckout).not.toHaveBeenCalled();
@@ -123,7 +117,6 @@ describe("PaywallPage", () => {
       status: 200,
       body: { checkoutId: "x", url: "https://evil.example.com/fake-checkout/x" },
     });
-    await userEvent.click(consentBox());
     await userEvent.click(pay(four));
     expect(await screen.findByRole("alert")).toBeTruthy();
     expect(goToCheckout).not.toHaveBeenCalled();
@@ -131,22 +124,19 @@ describe("PaywallPage", () => {
 
   it("shows the demo hint and focuses the demo button on 502 demo_mode", async () => {
     await setup();
-    await userEvent.click(consentBox());
     await userEvent.click(pay(four));
     expect(await screen.findByText(/For reviewers/)).toBeTruthy();
     expect(demo()).toHaveFocus();
   });
 
-  it("shows the canceled banner and requires consent again", async () => {
+  it("shows the canceled banner", async () => {
     await setup("/paywall?checkout=canceled");
     expect(screen.getByRole("status")).toHaveTextContent(copy.paywall.states.returnedCanceled);
-    expect(consentBox()).not.toBeChecked();
   });
 
   it("goes to Today when already subscribed (409 on start)", async () => {
     const { router } = await setup();
     api.injectError("POST", "/billing/demo", 409, "already_subscribed");
-    await userEvent.click(consentBox());
     await userEvent.click(demo());
     await waitFor(() => expect(router.state.location.pathname).toBe("/today"));
   });
@@ -164,10 +154,8 @@ describe("PaywallPage", () => {
   it("keeps state and shows a message when the request fails", async () => {
     await setup();
     api.injectError("POST", "/billing/demo", 500, "server_error");
-    await userEvent.click(consentBox());
     await userEvent.click(demo());
     expect(await screen.findByRole("alert")).toBeTruthy();
-    expect(consentBox()).toBeChecked();
   });
 
   it("has no pressure or per-day wording, and is axe clean", async () => {

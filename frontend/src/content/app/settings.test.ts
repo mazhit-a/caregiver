@@ -46,11 +46,11 @@ function allText(): string[] {
 }
 
 describe("settings wording", () => {
-  it("the section heading is exactly Subscription (the paywall says so)", () => {
-    expect(SETTINGS.subscriptionTitle).toBe("Subscription");
+  it("the section heading is exactly Manage my plan (the paywall says so)", () => {
+    expect(SETTINGS.subscriptionTitle).toBe("Manage my plan");
     expect(funnel.common).toBeDefined();
     const copy = readFileSync(resolve(process.cwd(), "../content/funnel-copy.json"), "utf-8");
-    expect(copy).toContain("Settings → Subscription");
+    expect(copy).toContain("Settings → Manage my plan");
   });
 
   it("the privacy line mirrors funnel-copy", () => {

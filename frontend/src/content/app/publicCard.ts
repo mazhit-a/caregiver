@@ -1,9 +1,7 @@
 // Static strings of the public care card page (`/card/:cardId`). No placeholders: the only text built
 // from user data is the page title (see `cardTitle`), which is limited to the two fields below.
-import { NOT_MEDICAL_ADVICE } from "../../layout/nav";
 
 export const PUBLIC_CARD = {
-  disclaimer: NOT_MEDICAL_ADVICE,
   loading: "Loading the care card",
   sections: {
     enjoys: "Enjoys",

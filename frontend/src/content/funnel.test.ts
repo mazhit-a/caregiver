@@ -23,7 +23,6 @@ const pp = c.planPreview;
 describe("funnel copy mirrors content/funnel-copy.json", () => {
   it("common and quiz intro", () => {
     expect(F.COMMON).toEqual({
-      notMedicalAdvice: c.common["notMedicalAdvice"],
       privacyShort: c.common["privacyShort"],
       needHelpNow: c.common["needHelpNow"],
       back: c.common["back"],
@@ -50,7 +49,7 @@ describe("funnel copy mirrors content/funnel-copy.json", () => {
     expect(F.paceLine(3)).toBe(pp.plan["paceLine"]?.replace("{perWeek}", "3"));
   });
 
-  it("gift, proof, disclaimer", () => {
+  it("gift, proof", () => {
     expect(F.GIFT_CARD).toEqual({
       title: pp.gift["title"],
       cta: pp.gift["cta"],
@@ -58,7 +57,6 @@ describe("funnel copy mirrors content/funnel-copy.json", () => {
     });
     expect(F.PROOF.title).toBe(pp.proof.title);
     expect(F.PROOF.items).toEqual(pp.proof.items);
-    expect(F.DISCLAIMER).toBe(c.common["notMedicalAdvice"]);
   });
 
   it("paywall static strings and errors", () => {

@@ -3,9 +3,9 @@
 
 export const SETTINGS = {
   title: "Settings",
-  subscriptionTitle: "Subscription",
+  subscriptionTitle: "Manage my plan",
   planLabel: "Plan",
-  statusLabel: "Status",
+  statusLabel: "Subscription status",
   modeLabel: "Mode",
   modeDemo: "Demo mode, no payment",
   modeStripe: "Stripe test mode",

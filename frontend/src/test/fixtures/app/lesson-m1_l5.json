@@ -134,7 +134,7 @@
         }
       ],
       "labels": {
-        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "partner": "AI practice partner.",
         "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
         "thinking": "Margaret is thinking…",
         "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
@@ -210,7 +210,7 @@
       "doneButton": "Done",
       "noteTemplate": {
         "title": "Margaret's note",
-        "example": "I'm here. We'll sort it out together. — [your name]"
+        "example": "I'm here. We'll sort it out together."
       }
     },
     {

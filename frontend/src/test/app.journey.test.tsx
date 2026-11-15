@@ -129,14 +129,10 @@ const here = (): string => router.state.location.pathname;
 const h1 = (name: string | RegExp) => screen.findByRole("heading", { level: 1, name });
 const h2 = (name: string | RegExp) => screen.findByRole("heading", { level: 2, name });
 const heading = (name: string | RegExp) => screen.findByRole("heading", { name });
-const roleplayContinue = () =>
-  waitFor(() => {
-    const found = screen.getAllByRole("button", { name: "Continue" }).filter((b) => !b.hasAttribute("aria-disabled"));
-    if (found.length !== 1) throw new Error("expected the role-play Continue button");
-    return found[0] as HTMLElement;
-  });
+/** The role-play summary has no Continue of its own: the player's footer Continue is enabled. */
+const roleplaySummary = () => screen.findByRole("heading", { name: "Your practice" });
 const nextBtn = () => {
-  // The player's footer button (the role-play screen has its own "Continue" inside the screen).
+  // The player's footer button (the role-play summary has no Continue of its own).
   const found = screen.getAllByRole("button", { name: "Continue" }).filter((b) => b.hasAttribute("aria-disabled"));
   if (found.length !== 1) throw new Error("expected one player Continue button");
   return found[0] as HTMLElement;
@@ -250,7 +246,7 @@ async function typedRoleplay() {
     await screen.findByText("AI-generated");
     await user.click(screen.getByRole("button", { name: i < 2 ? "Next round" : "See your practice" }));
   }
-  await user.click(await roleplayContinue());
+  await roleplaySummary();
 }
 
 async function lessonOne(variant: "in_person" | "phone") {
@@ -323,7 +319,6 @@ async function startAtTodayWithDemoPaywall() {
   api.sessions.set(token, { answers: { q3_situation: "noticing" }, lastQuestionId: null, completed: true, subscribed: false, app: {} });
   setToken(token);
   renderAt("/paywall");
-  await user.click(await screen.findByRole("checkbox"));
   await user.click(await screen.findByRole("button", { name: /Continue in demo mode/ }));
   await h1(/^Today with /);
   expect(here()).toBe("/today");
@@ -386,7 +381,7 @@ describe("app journey, persona A in demo mode", () => {
     await heading("Your practice");
     await user.click(screen.getByRole("button", { name: /^Save/ }));
     await screen.findByRole("button", { name: "Saved" });
-    await user.click(await roleplayContinue());
+    await user.click(await screen.findByRole("button", { name: "Continue" }));
     await h1(/^Today with /);
     await user.click(await screen.findByRole("link", { name: "Update card" }));
     await h1(/care card/i);
@@ -507,7 +502,7 @@ describe("app journey, other runs", () => {
     }
     await user.click(await screen.findByRole("button", { name: "Finish practice" }));
     await heading("Nicely done");
-    await user.click(await roleplayContinue());
+    await user.click(await screen.findByRole("button", { name: "Continue" }));
     await h1(/^Today with /);
     expect(calls("POST", /\/turn$/)).toHaveLength(1);
     expectPrivate();
@@ -534,12 +529,12 @@ describe("app journey, other runs", () => {
     api.sessions.get(token)!.app["phrases"] = [{ id: "p1", text: "kept?", source: "scenario", lessonId: null, savedAt: "x" }];
     renderAt("/settings");
     await h1("Settings");
-    await user.click(await screen.findByRole("link", { name: /passed away|moved to a care facility/ }));
+    await user.click(await screen.findByRole("link", { name: /Close my plan and delete my data/ }));
     await h2(/./);
-    await user.click(await roleplayContinue());
+    await user.click(await screen.findByRole("button", { name: "Continue" }));
     await noAxeViolations("gentle exit step 2");
     await user.click(await screen.findByRole("button", { name: "End my plan and delete my data" }));
-    await h1("We're so sorry");
+    await h1("Your plan is closed");
     expect(here()).toBe("/goodbye");
     expect(getToken()).toBeNull();
     expect(keysOf(window.localStorage)).toEqual([]);

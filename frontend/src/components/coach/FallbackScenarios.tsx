@@ -17,6 +17,7 @@ export interface FallbackLabels {
   finish: string;
   finishing: string;
   skip: string;
+  tryAgain: string;
 }
 
 interface Props {
@@ -89,6 +90,16 @@ export function FallbackScenarios({ scenarios, labels, finishing, finishError, o
               {labels.next}
             </button>
           ))}
+        <button
+          type="button"
+          className={styles["secondary"]}
+          onClick={() => {
+            setIndex(0);
+            setPicked(null);
+          }}
+        >
+          {labels.tryAgain}
+        </button>
         <button type="button" className={styles["secondary"]} onClick={onSkip}>
           {labels.skip}
         </button>

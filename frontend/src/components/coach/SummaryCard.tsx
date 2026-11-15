@@ -21,7 +21,8 @@ interface Props {
   saveError: string | null;
   onSave: () => void;
   onAgain: () => void;
-  onContinue: () => void;
+  /** Omitted when the lesson player's own Continue moves on. */
+  onContinue?: (() => void) | undefined;
 }
 
 export function SummaryCard({ firstVsLast, bestPhrase, labels, saveState, saveError, onSave, onAgain, onContinue }: Props) {
@@ -63,9 +64,11 @@ export function SummaryCard({ firstVsLast, bestPhrase, labels, saveState, saveEr
         <button type="button" className={styles["secondary"]} onClick={onAgain}>
           {labels.again}
         </button>
-        <button type="button" className={styles["primary"]} onClick={onContinue}>
-          {labels.continueLabel}
-        </button>
+        {onContinue && (
+          <button type="button" className={styles["primary"]} onClick={onContinue}>
+            {labels.continueLabel}
+          </button>
+        )}
       </div>
     </section>
   );

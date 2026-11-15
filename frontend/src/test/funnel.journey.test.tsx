@@ -251,7 +251,6 @@ describe("full funnel journey", () => {
     await h1(copy.planPreview.title);
 
     await planToPaywall();
-    await user.click(screen.getByRole("checkbox"));
     await user.click(screen.getByRole("button", { name: /Continue in demo mode/ }));
     await h1(/^Today/);
     expect(here()).toBe("/today");
@@ -268,7 +267,6 @@ describe("full funnel journey", () => {
     await planToPaywall();
 
     const plan = copy.paywall.plans[0]!;
-    await user.click(screen.getByRole("checkbox"));
     await user.click(screen.getByRole("button", { name: plan.payButtonLabel }));
     await waitFor(() => expect(goToCheckout).toHaveBeenCalledWith(FAKE_CHECKOUT_URL));
     expect(goToCheckout).toHaveBeenCalledTimes(1);
@@ -284,14 +282,13 @@ describe("full funnel journey", () => {
     expectPrivate(B);
   }, 60000);
 
-  it("persona C cancel path: back at the paywall with the banner, consent cleared, then demo works", async () => {
+  it("persona C cancel path: back at the paywall with the banner, then demo works", async () => {
     const first = renderAt("/quiz");
     await runQuiz(C);
     await throughBuildingToPlan();
     expect(modules()).toEqual(planExpect.C.first30);
     expect(screen.getByText(/^After a hospital stay/)).toBeInTheDocument();
     await planToPaywall();
-    await user.click(screen.getByRole("checkbox"));
     await user.click(screen.getByRole("button", { name: copy.paywall.plans[0]!.payButtonLabel }));
     await waitFor(() => expect(goToCheckout).toHaveBeenCalled());
 
@@ -299,9 +296,7 @@ describe("full funnel journey", () => {
     first.unmount();
     renderAt("/paywall?checkout=canceled");
     expect(await screen.findByRole("status")).toHaveTextContent(copy.paywall.states.returnedCanceled);
-    expect(screen.getByRole("checkbox")).not.toBeChecked();
     expect(api.calls.filter((c) => c.path === "/billing/demo")).toHaveLength(0);
-    await user.click(screen.getByRole("checkbox"));
     await user.click(screen.getByRole("button", { name: /Continue in demo mode/ }));
     await h1(/^Today/);
     expectPrivate(C);
@@ -473,7 +468,6 @@ describe("full funnel journey", () => {
     await runQuiz(A);
     await throughBuildingToPlan();
     await planToPaywall();
-    await user.click(screen.getByRole("checkbox"));
     await user.click(screen.getByRole("button", { name: /Continue in demo mode/ }));
     await h1(/^Today/);
     let view = first;

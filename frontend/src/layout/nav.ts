@@ -18,4 +18,3 @@ export const FOOTER_NAV = [
 ] as const;
 
 export const NEED_HELP_NOW = "Need help now?"; // content/funnel-copy.json common.needHelpNow
-export const NOT_MEDICAL_ADVICE = "We teach and organize. We don’t give medical advice.";

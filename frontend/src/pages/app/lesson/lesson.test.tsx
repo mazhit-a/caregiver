@@ -144,13 +144,13 @@ describe("lesson player", () => {
     expect(screen.getByRole("radio", { name: "Worry" })).toBeChecked();
   });
 
-  it("renders every screen of the lesson in order with no placeholder and the disclaimer", async () => {
+  it("renders every screen of the lesson in order with no placeholder and no disclaimer line", async () => {
     await openLesson();
     const user = await chooseVariant("Both");
     for (let i = 1; i <= 8; i += 1) {
       expect(progress()).toHaveAttribute("aria-valuenow", String(i));
       expect(document.body.textContent).not.toMatch(/\{[a-z]/i);
-      expect(screen.getAllByText(/We teach and organize/).length).toBeGreaterThan(0);
+      expect(screen.queryByText(/We teach and organize/)).toBeNull();
       await user.click(next());
     }
     expect(progress()).toHaveAttribute("aria-valuenow", "9");

@@ -24,7 +24,7 @@ export function AppTopBar({ copy, onHelp, compact }: Props) {
           className={styles.topLogo}
           aria-label="Kelper home"
         >
-          <img src={logo} alt="" width={84} height={32} />
+          <img src={logo} alt="" width={105} height={40} />
         </Link>
       )}
       <div className={styles.topEnd}>

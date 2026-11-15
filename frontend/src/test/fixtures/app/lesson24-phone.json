@@ -474,7 +474,7 @@
       "examples": null,
       "note": {
         "line1": "Doctor: Thursday 2 pm",
-        "line2": "I’ll pick you up. — [your name]"
+        "line2": "I’ll pick you up."
       },
       "keyIdea": "And mention plans closer to the time: less waiting means less worrying.",
       "tip": "In a care home, ask the staff to keep your visit days on a calendar in Mom's room."
@@ -589,7 +589,7 @@
         }
       ],
       "labels": {
-        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "partner": "AI practice partner.",
         "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
         "thinking": "Mom is thinking…",
         "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
@@ -623,7 +623,7 @@
       "doneButton": "Done",
       "noteTemplate": {
         "title": "Mom's note",
-        "example": "Doctor: [day] [time]. I'll pick you up. — [your name]"
+        "example": "Doctor: Thursday 2 pm. I'll pick you up."
       }
     },
     {

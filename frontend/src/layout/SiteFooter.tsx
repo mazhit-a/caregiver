@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { ROUTES } from "../routes";
-import { FOOTER_NAV, NEED_HELP_NOW, NOT_MEDICAL_ADVICE } from "./nav";
+import { FOOTER_NAV, NEED_HELP_NOW } from "./nav";
 import { useCrisisList } from "./useCrisisList";
 import styles from "./SiteFooter.module.css";
 
@@ -33,7 +33,6 @@ export function SiteFooter() {
           </nav>
         </div>
         <div className={styles.legal}>
-          <p>{NOT_MEDICAL_ADVICE}</p>
           {/* Placeholder domain from the design; the real address is deployment config. */}
           <p>
             <Link to={ROUTES.home} className={styles.legalLink}>
