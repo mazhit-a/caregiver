@@ -581,16 +581,16 @@
   },
   "beforeAfter": {
     "noticing": {
-      "before": "Today: you've noticed changes in {recipient} and aren't sure what they mean or how to bring them up.",
-      "after": "In 30 days: you know what's worth raising with a doctor, you've had a calm talk with {recipient}, and you have phrases that work when the same questions come up."
+      "before": "You've noticed changes in {recipient} and aren't sure what they mean or how to bring them up.",
+      "after": "You know what's worth raising with a doctor, you've had a calm talk with {recipient}, and you have phrases that work when the same questions come up."
     },
     "recent": {
-      "before": "Today: the diagnosis came with a brochure, and you don't know what to say when {recipient} asks the same question again and again.",
-      "after": "In 30 days: you have phrases that work, practiced out loud, key papers on track, and a plan your family can see."
+      "before": "The diagnosis came with a brochure, and you don't know what to say when {recipient} asks the same question again and again.",
+      "after": "You have phrases that work, practiced out loud, key papers on track, and a plan your family can see."
     },
     "changing": {
-      "before": "Today: things are changing, and every day brings a new hard moment.",
-      "after": "In 30 days: you have calm ways to handle the hard moments, a steadier routine, and a care card anyone who helps can use."
+      "before": "Things are changing, and every day brings a new hard moment.",
+      "after": "You have calm ways to handle the hard moments, a steadier routine, and a care card anyone who helps can use."
     }
   },
   "loaderLines": [
