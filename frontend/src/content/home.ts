@@ -117,22 +117,14 @@ export const HOME_SAFE = {
       text: "Saved privately to this session. No account, no name needed. No ad tracking in the quiz or the course.",
     },
     {
-      title: "Clear prices",
-      text: "The full price and renewal date before you pay. Cancel anytime in Settings.",
+      title: "Clear terms",
+      text: "You see the full terms and renewal date before you pay. Cancel anytime in Settings.",
     },
     {
       title: "Help is one tap away",
       text: "Need help now? sits on every screen, with 911, 988 and the Alzheimer’s Association helpline.",
     },
   ],
-} as const;
-
-/** Templates only: {price}, {period} and {renewal} are filled from the pricing API. */
-export const HOME_PRICING = {
-  headline: "{price} for your first {period}",
-  detail: "Then {renewal} every {renewPeriod} until you cancel. Cancel anytime in Settings.",
-  link: "See plans",
-  what: "prices",
 } as const;
 
 export const HOME_FAQ = {
@@ -166,8 +158,3 @@ export const HOME_CTA = {
   text: "Answer a few questions and see Mom’s plan before you decide anything.",
   imageAlt: "Ollie pointing the way forward",
 } as const;
-
-/** Fills {name} slots in a wording template. */
-export function fillTemplate(template: string, values: Record<string, string>): string {
-  return template.replace(/\{(\w+)\}/g, (_, key: string) => values[key] ?? "");
-}

@@ -27,10 +27,6 @@ export const routes: RouteObject[] = [
         ...page(() => import("./pages/course/CoursePage")),
       },
       { path: ROUTES.tools, ...page(() => import("./pages/tools/ToolsPage")) },
-      {
-        path: ROUTES.pricing,
-        ...page(() => import("./pages/pricing/PricingPage")),
-      },
       { path: "*", ...page(() => import("./pages/NotFoundPage")) },
     ],
   },

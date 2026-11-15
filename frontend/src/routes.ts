@@ -5,7 +5,6 @@ export const ROUTES = {
   practice: "/practice",
   course: "/course",
   tools: "/care-tools",
-  pricing: "/pricing",
   quiz: "/quiz",
   quizBuilding: "/quiz/building",
   plan: "/your-plan",

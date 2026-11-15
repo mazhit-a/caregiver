@@ -1,5 +1,4 @@
 import { Link } from "react-router";
-import { usePricing } from "../../api/usePricing";
 import { CtaBand } from "../../components/marketing/CtaBand";
 import { Faq } from "../../components/marketing/Faq";
 import { FeatureRow } from "../../components/marketing/FeatureRow";
@@ -7,7 +6,6 @@ import { ImageFigure } from "../../components/marketing/ImageFigure";
 import { NumberedSteps } from "../../components/marketing/NumberedSteps";
 import { Section } from "../../components/marketing/Section";
 import { StartLink } from "../../components/marketing/StartLink";
-import { StatusBlock } from "../../components/StatusBlock";
 import {
   HOME_CTA,
   HOME_FAQ,
@@ -15,11 +13,9 @@ import {
   HOME_GAP,
   HOME_HERO,
   HOME_OLLIE,
-  HOME_PRICING,
   HOME_SAFE,
   HOME_SEO,
   HOME_STEPS,
-  fillTemplate,
 } from "../../content/home";
 import { Seo } from "../../layout/Seo";
 import { ROUTES } from "../../routes";
@@ -27,32 +23,6 @@ import olliePointing from "../../assets/home/ollie-pointing.webp";
 import ollieWaving from "../../assets/home/ollie-waving.webp";
 import { HomePracticePreview } from "./HomePracticePreview";
 import styles from "./HomePage.module.css";
-
-function PricingTeaser() {
-  const pricing = usePricing();
-  if (pricing.status !== "ready") {
-    return <StatusBlock status={pricing.status} what={HOME_PRICING.what} onRetry={pricing.retry} />;
-  }
-  const { currency, defaultPlanId, plans } = pricing.data;
-  const plan = plans.find((p) => p.id === defaultPlanId) ?? plans[0];
-  if (!plan) {
-    return <StatusBlock status="error" what={HOME_PRICING.what} onRetry={pricing.retry} />;
-  }
-  const money = new Intl.NumberFormat("en-US", { style: "currency", currency });
-  return (
-    <div className={styles.priceText}>
-      <h2 className={styles.priceTitle}>
-        {fillTemplate(HOME_PRICING.headline, { price: money.format(plan.priceToday), period: plan.introPeriodText })}
-      </h2>
-      <p className={styles.priceDetail}>
-        {fillTemplate(HOME_PRICING.detail, {
-          renewal: money.format(plan.renewalPrice),
-          renewPeriod: plan.renewPeriodText,
-        })}
-      </p>
-    </div>
-  );
-}
 
 function PracticeMock() {
   const m = HOME_FEATURES.practice.mock;
@@ -235,15 +205,6 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-        </div>
-      </Section>
-
-      <Section>
-        <div className={styles.price}>
-          <PricingTeaser />
-          <Link to={ROUTES.pricing} className={styles.outline}>
-            {HOME_PRICING.link}
-          </Link>
         </div>
       </Section>
 
