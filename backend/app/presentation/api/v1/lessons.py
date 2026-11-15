@@ -83,6 +83,7 @@ async def get_lesson(
             "unlockOn": view.unlock_on,
             "pattern": PatternOut.model_validate(lesson.pattern),
             "screens": lesson.screens,
+            "screenCount": view.screen_count,
             "progress": LessonProgressOut(
                 step=view.progress.step,
                 started_at=view.progress.started_at,

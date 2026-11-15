@@ -16,17 +16,17 @@ async def test_plan_wrap_and_complete_end_to_end(
     session_factory: async_sessionmaker[AsyncSession],
 ) -> None:
     await subscribe(pclient)
-    await _answer(pclient, "s1_setup", "in_person")
-    await _answer(pclient, "s6_fifth_time", "slow")
+    await _answer(pclient, "setup", "in_person")
+    await _answer(pclient, "you", "r2")
 
-    r = await _answer(pclient, "s8_plan", {"response": "I've got it.", "reminderDownloaded": True})
+    r = await _answer(pclient, "plan", {"response": "I've got it.", "reminderDownloaded": True})
     assert r.status_code == 200, r.text
     reminder = r.json()["result"]["reminder"]
     assert reminder["startsAt"].startswith("2026-01-05T19:00:00")  # session tz America/New_York
     assert reminder["startsAt"].endswith("-05:00")
     assert reminder["url"] == "http://localhost:3000/lessons/m1_l1"
 
-    r = await _answer(pclient, "s9_wrap", RATINGS)
+    r = await _answer(pclient, "wrap", RATINGS)
     assert r.status_code == 200 and r.json()["result"]["saved"] is True
 
     r = await pclient.post("/api/lessons/m1_l1/complete")
@@ -48,7 +48,7 @@ async def test_plan_wrap_and_complete_end_to_end(
     assert tuple(plan) == (
         "If Mom asks the same question again,",
         "I've got it.",
-        "Say the first words slowly",
+        "say the first words slowly",
     )
     assert tuple(task)[1:] == ("print_note_template", True)
     assert conf.first == RATINGS and conf.latest is None and conf.day0 is not None
@@ -57,8 +57,8 @@ async def test_plan_wrap_and_complete_end_to_end(
 
 async def test_plan_response_over_limit_422(pclient: httpx.AsyncClient) -> None:  # noqa: F811
     await subscribe(pclient)
-    await _answer(pclient, "s1_setup", "phone")
-    r = await _answer(pclient, "s8_plan", {"response": "x" * 301})
+    await _answer(pclient, "setup", "phone")
+    r = await _answer(pclient, "plan", {"response": "x" * 301})
     assert r.status_code == 422
     assert r.json()["error"]["code"] == "invalid_screen_answer"
     assert r.json()["error"]["details"]["reason"] == "response_too_long"
@@ -66,8 +66,8 @@ async def test_plan_response_over_limit_422(pclient: httpx.AsyncClient) -> None:
 
 async def test_slider_out_of_range_422_over_http(pclient: httpx.AsyncClient) -> None:  # noqa: F811
     await subscribe(pclient)
-    await _answer(pclient, "s1_setup", "phone")
-    r = await _answer(pclient, "s9_wrap", {**RATINGS, "repeat": 6})
+    await _answer(pclient, "setup", "phone")
+    r = await _answer(pclient, "wrap", {**RATINGS, "repeat": 6})
     assert r.status_code == 422
     assert r.json()["error"]["details"]["reason"] == "rating_out_of_range"
 

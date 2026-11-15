@@ -71,6 +71,15 @@ async def _lesson_states(client: httpx.AsyncClient) -> dict[str, dict[str, Any]]
     return lessons
 
 
+def _first_answer(screen: dict[str, Any]) -> object:
+    """The first option of a quiz, builder group or reset screen; None for any other type."""
+    if screen["type"] in ("quiz", "reset"):
+        return screen["options"][0]["id"]
+    if screen["type"] == "builder":
+        return [group["options"][0]["id"] for group in screen["groups"]]
+    return None
+
+
 async def run_demo_journey(
     client: httpx.AsyncClient,
     app: FastAPI,
@@ -99,18 +108,18 @@ async def run_demo_journey(
 
     # --- lesson 1: variant, scenario, learn mini-tasks, role-play, phrase, plan, wrap -------------
     first = await ok(await client.get("/api/lessons/m1_l1"))
-    assert [s["type"] for s in first["screens"]] == ["setup_question"] and first["variant"] is None
-    await answer(client, "m1_l1", "s1_setup", "phone")
+    assert [s["type"] for s in first["screens"]] == ["intro", "setup"] and first["variant"] is None
+    await answer(client, "m1_l1", "setup", "phone")
     lesson = await ok(await client.get("/api/lessons/m1_l1"))
     assert lesson["variant"] == "phone"
-    assert [s["type"] for s in lesson["screens"]][:2] == ["setup_question", "scenario"]
-    scenario = await answer(client, "m1_l1", "s2_scenario", "a3")
+    assert [s["type"] for s in lesson["screens"]][:3] == ["intro", "setup", "scenario"]
+    scenario = await answer(client, "m1_l1", "scenario", "a3")
     assert scenario["result"]["feedback"]
     for screen in lesson["screens"]:
-        if screen["type"] == "learn" and screen.get("miniTask"):
-            task = screen["miniTask"]["options"][0]["id"]
-            mini = await answer(client, "m1_l1", screen["id"], task)
-            assert mini["result"]["optionId"] == task
+        value = _first_answer(screen)
+        if value is not None:
+            checked = await answer(client, "m1_l1", screen["id"], value)
+            assert checked["result"]
     await _roleplay_three_turns(client, app)
     phrase = await ok(
         await client.post(
@@ -123,13 +132,13 @@ async def run_demo_journey(
     plan = await answer(
         client,
         "m1_l1",
-        "s8_plan",
+        "plan",
         {"response": PLAN_RESPONSE, "reminderDownloaded": True},
     )
     reminder = plan["result"]["reminder"]
     assert reminder["startsAt"].startswith("2026-01-05T") and reminder["url"].endswith("/m1_l1")
     assert reminder["title"] and reminder["timezone"]
-    wrap = await answer(client, "m1_l1", "s9_wrap", RATINGS)
+    wrap = await answer(client, "m1_l1", "wrap", RATINGS)
     assert wrap["result"]["saved"] is True
     done = await ok(await client.post("/api/lessons/m1_l1/complete"))
     assert done["lessonId"] == "m1_l1" and done["nextLesson"]["id"] == "m1_l2"

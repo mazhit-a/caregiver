@@ -121,8 +121,8 @@ async def test_today_practice_round_is_day2_practice_round_for_the_stored_varian
 ) -> None:
     db_app.state.coach = FakeCoach()
     await subscribe(pclient)
-    await _answer(pclient, "s1_setup", "phone")
-    await _answer(pclient, "s8_plan", {"response": "I point to the note."})
+    await _answer(pclient, "setup", "phone")
+    await _answer(pclient, "plan", {"response": "I point to the note."})
     db_app.state.clock.advance(timedelta(days=1))
     day2 = db_app.state.content.render_lesson(
         "m1_l1",

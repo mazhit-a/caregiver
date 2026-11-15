@@ -40,6 +40,7 @@ class GetLesson:
             unlock_on=row.unlock_on,
             progress=ProgressView(progress.step, progress.started_at, progress.done_at),
             recap=await self._recap(session, row.seq),
+            screen_count=len(data["screens"]),
         )
 
     async def _saved_phrases(self, session: Session) -> list[dict[str, str | None]]:

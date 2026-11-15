@@ -34,8 +34,8 @@ async def prepared(
     session = await with_plan(uow, clock, content)
     session.timezone = timezone
     use_case = answerer(uow, clock, content)
-    await use_case.execute(session, "m1_l1", "s1_setup", "phone")
-    await use_case.execute(session, "s6_fifth_time" and "m1_l1", "s6_fifth_time", "breath")
+    await use_case.execute(session, "m1_l1", "setup", "phone")
+    await use_case.execute(session, "m1_l1", "you", "r1")
     return session, use_case
 
 
@@ -49,7 +49,7 @@ async def test_plan_answer_saves_if_then_and_task_and_returns_reminder_for_next_
     view = await use_case.execute(
         session,
         "m1_l1",
-        "s8_plan",
+        "plan",
         {
             "response": "  You're wondering. I've got it. Want to help with tea?  ",
             "reminderDownloaded": True,
@@ -71,10 +71,10 @@ async def test_plan_answer_saves_if_then_and_task_and_returns_reminder_for_next_
     assert plan is not None
     assert plan.cue == "If Dad calls with the same question again,"
     assert plan.response.startswith("You're wondering") and plan.response.endswith("tea?")
-    assert plan.reset == "One slow breath before I answer"
+    assert plan.reset == "take one slow breath"
     task = await uow.tasks.get(session.id, "m1_l1")
     assert task is not None and task.action == "copy_phrase" and task.reminder_downloaded
-    assert result["ifThen"]["reset"] == "One slow breath before I answer"
+    assert result["ifThen"]["reset"] == "take one slow breath"
 
 
 async def test_plan_answer_after_the_evening_rolls_to_the_next_day_and_replaces_the_plan(
@@ -84,9 +84,9 @@ async def test_plan_answer_after_the_evening_rolls_to_the_next_day_and_replaces_
 ) -> None:
     clock.set(datetime(2026, 1, 5, 20, 30, tzinfo=UTC))
     session, use_case = await prepared(uow, clock, content)
-    first = await use_case.execute(session, "m1_l1", "s8_plan", {"response": "One"})
+    first = await use_case.execute(session, "m1_l1", "plan", {"response": "One"})
     assert first.result["reminder"]["startsAt"] == "2026-01-06T19:00:00+00:00"
-    await use_case.execute(session, "m1_l1", "s8_plan", {"response": "Two"})
+    await use_case.execute(session, "m1_l1", "plan", {"response": "Two"})
     plan = await uow.if_then_plans.get(session.id, "m1_l1")
     assert plan is not None and plan.response == "Two" and len(uow.if_then_plans.rows) == 1
 
@@ -98,7 +98,7 @@ async def test_reminder_date_uses_app_clock_offset(
 ) -> None:
     session, use_case = await prepared(uow, clock, content)
     session.clock_offset = timedelta(days=3)
-    view = await use_case.execute(session, "m1_l1", "s8_plan", {"response": "Hi"})
+    view = await use_case.execute(session, "m1_l1", "plan", {"response": "Hi"})
     assert view.result["reminder"]["startsAt"] == "2026-01-08T19:00:00+00:00"
 
 
@@ -120,7 +120,7 @@ async def test_plan_response_rejections(
 ) -> None:
     session, use_case = await prepared(uow, clock, content)
     with pytest.raises(InvalidScreenAnswer) as error:
-        await use_case.execute(session, "m1_l1", "s8_plan", value)
+        await use_case.execute(session, "m1_l1", "plan", value)
     assert error.value.details["reason"] == reason
     assert await uow.if_then_plans.get(session.id, "m1_l1") is None
 
@@ -131,7 +131,7 @@ async def test_plan_response_at_the_limit_is_accepted(
     content: JsonContentProvider,  # noqa: F811
 ) -> None:
     session, use_case = await prepared(uow, clock, content)
-    await use_case.execute(session, "m1_l1", "s8_plan", {"response": "x" * IF_THEN_RESPONSE_MAX})
+    await use_case.execute(session, "m1_l1", "plan", {"response": "x" * IF_THEN_RESPONSE_MAX})
 
 
 async def test_wrap_first_lesson_sets_confidence_first_later_sets_latest(
@@ -141,7 +141,7 @@ async def test_wrap_first_lesson_sets_confidence_first_later_sets_latest(
 ) -> None:
     session, use_case = await prepared(uow, clock, content)
     # The fixture lesson m1_l2 keeps `onlyFirstLesson: true`: no check there.
-    first = await use_case.execute(session, "m1_l1", "s9_wrap", ALL_FOUR)
+    first = await use_case.execute(session, "m1_l1", "wrap", ALL_FOUR)
     assert first.result == {"saved": True, "ratings": ALL_FOUR}
     ratings = await uow.confidence.get_ratings(session.id)
     assert ratings.first == ALL_FOUR and ratings.latest is None
@@ -150,7 +150,7 @@ async def test_wrap_first_lesson_sets_confidence_first_later_sets_latest(
     clock.advance(timedelta(days=10))
     later = AnswerLesson(uow, _repeatable_check(content, clock), clock, public_app_url=APP_URL)
     later_ratings = {**ALL_FOUR, "repeat": 5}
-    await later.execute(session, "m1_l2", "s9_wrap", later_ratings)
+    await later.execute(session, "m1_l2", "wrap", later_ratings)
     ratings = await uow.confidence.get_ratings(session.id)
     assert ratings.first == ALL_FOUR and ratings.latest == later_ratings
 
@@ -194,7 +194,7 @@ async def test_slider_out_of_range_422(
 ) -> None:
     session, use_case = await prepared(uow, clock, content)
     with pytest.raises(InvalidScreenAnswer) as error:
-        await use_case.execute(session, "m1_l1", "s9_wrap", ratings)
+        await use_case.execute(session, "m1_l1", "wrap", ratings)
     assert error.value.details["reason"] == reason
     assert (await uow.confidence.get_ratings(session.id)).first is None
 
@@ -207,7 +207,7 @@ async def test_wrap_check_only_on_first_lesson_is_refused_later(
     session, use_case = await prepared(uow, clock, content)
     clock.advance(timedelta(days=10))
     with pytest.raises(InvalidScreenAnswer):
-        await use_case.execute(session, "m1_l2", "s9_wrap", ALL_FOUR)
+        await use_case.execute(session, "m1_l2", "wrap", ALL_FOUR)
 
 
 async def test_complete_returns_next_lesson_with_reason_and_unlock_date(
@@ -256,7 +256,7 @@ async def test_complete_is_idempotent(
     assert second.done_at == first.done_at == datetime(2026, 1, 5, 9, 0, tzinfo=UTC)
     progress = await uow.lesson_progress.get(session.id, "m1_l1")
     assert progress is not None and progress.done_at == first.done_at
-    assert progress.screen_answers["reset"] == "breath"
+    assert progress.screen_answers["you"] == "r1"
 
 
 async def test_complete_locked_lesson_423(

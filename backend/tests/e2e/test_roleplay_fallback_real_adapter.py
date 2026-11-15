@@ -107,7 +107,7 @@ async def _lesson_with_roleplay_falling_back(app: FastAPI) -> float:
         ]
         await answer_quiz_persona_b(client)
         await ok(await client.post("/api/billing/demo", json={"autoRenewConsent": True}))
-        await answer(client, "m1_l1", "s1_setup", "phone")
+        await answer(client, "m1_l1", "setup", "phone")
         run = await ok(
             await client.post(
                 "/api/roleplay/start", json={"lessonId": "m1_l1", "context": "lesson"}

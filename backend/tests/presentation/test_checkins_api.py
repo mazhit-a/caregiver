@@ -11,8 +11,8 @@ from tests.presentation.test_lessons_api import _answer, pclient, subscribe  # n
 
 async def make_plan(client: httpx.AsyncClient) -> None:
     await subscribe(client)
-    await _answer(client, "s1_setup", "in_person")
-    r = await _answer(client, "s8_plan", {"response": "I point to the note."})
+    await _answer(client, "setup", "in_person")
+    r = await _answer(client, "plan", {"response": "I point to the note."})
     assert r.status_code == 200, r.text
 
 

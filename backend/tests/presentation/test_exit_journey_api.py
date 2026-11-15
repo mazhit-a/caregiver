@@ -56,8 +56,8 @@ async def _journey(
     client: httpx.AsyncClient, app: FastAPI, factory: async_sessionmaker[AsyncSession]
 ) -> UUID:
     await make_plan(client)  # quiz, demo subscription, answers, if-then plan, task
-    assert (await _answer(client, "s2_scenario", "a3")).status_code == 200
-    assert (await _answer(client, "s9_wrap", RATINGS)).status_code == 200
+    assert (await _answer(client, "scenario", "a3")).status_code == 200
+    assert (await _answer(client, "wrap", RATINGS)).status_code == 200
     assert (await client.post("/api/lessons/m1_l1/complete")).status_code == 200
     app.state.clock.advance(timedelta(days=1))
     r = await client.post(

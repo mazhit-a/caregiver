@@ -100,13 +100,13 @@ async def test_variant_applied_after_setup_answer(
     session = await with_plan(uow, clock, content)
     use_case = get_lesson(uow, clock, content)
     before = await use_case.execute(session, "m1_l1")
-    assert before.lesson.variant is None and len(before.lesson.screens) == 1
+    assert before.lesson.variant is None and len(before.lesson.screens) == 2  # intro, setup
     progress = await uow.lesson_progress.get(session.id, "m1_l1")
     assert progress is not None
     progress.variant = "phone"
     await uow.lesson_progress.save(progress)
     after = await use_case.execute(session, "m1_l1")
-    assert after.lesson.variant == "phone" and len(after.lesson.screens) == 9
+    assert after.lesson.variant == "phone" and len(after.lesson.screens) == 24
     scenario = next(s for s in after.lesson.screens if s["type"] == "scenario")
     assert "calls" in scenario["setup"]
 
@@ -130,8 +130,8 @@ async def test_lesson_without_variants_renders(
     clock.advance(timedelta(days=10))
     view = await get_lesson(uow, clock, content).execute(session, "m1_l2")
     assert view.lesson.variant is None
-    assert view.lesson.screens[0]["type"] == "scenario"
-    assert len(view.lesson.screens) == 8
+    assert view.lesson.screens[0]["type"] == "intro"
+    assert len(view.lesson.screens) == 23  # the fixture is m1_l1 without its setup screen
 
 
 @pytest.mark.parametrize("recipient", ["mom", "dad", "both", "in_law", "other"])

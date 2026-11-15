@@ -10,8 +10,11 @@ REAL_CONTENT = Path(__file__).resolve().parents[4] / "content"
 KEYS = JsonContentProvider.from_directory(REAL_CONTENT).recipient_keys()
 
 
-def _all_texts(tree: dict[str, dict[str, str]]) -> list[str]:
-    return [text for section in tree.values() for text in section.values()]
+def _all_texts(node: object) -> list[str]:
+    if isinstance(node, str):
+        return [node]
+    assert isinstance(node, dict)
+    return [text for child in node.values() for text in _all_texts(child)]
 
 
 def test_the_app_copy_file_is_loaded_with_every_section() -> None:
@@ -25,7 +28,20 @@ def test_the_app_copy_file_is_loaded_with_every_section() -> None:
         "skills",
         "settings",
         "welcome",
+        "lesson",
     }
+
+
+def test_the_lesson_block_has_the_player_labels() -> None:
+    lesson = JsonContentProvider.from_directory(REAL_CONTENT).app_copy()["lesson"]
+    assert lesson["verdict_labels"] == {
+        "best": "Good instinct",
+        "okay": "Noted",
+        "try_again": "Very common",
+    }
+    assert set(lesson["quiz"]) == {"right", "wrong"}
+    assert set(lesson["builder"]) == {"all_correct", "not_yet"}
+    assert set(lesson["do_skip"]) == {"do_label", "skip_label"}
 
 
 @pytest.mark.parametrize("key", KEYS)

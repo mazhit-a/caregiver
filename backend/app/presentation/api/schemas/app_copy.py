@@ -58,6 +58,32 @@ class WelcomeCopyOut(CamelModel):
     name_label: str
 
 
+class QuizCopyOut(CamelModel):
+    right: str
+    wrong: str
+
+
+class BuilderCopyOut(CamelModel):
+    all_correct: str
+    not_yet: str
+
+
+class DoSkipCopyOut(CamelModel):
+    do_label: str
+    skip_label: str
+
+
+class LessonCopyOut(CamelModel):
+    """Labels of the lesson player. `verdict_labels` is keyed by verdict: best, okay, try_again."""
+
+    verdict_labels: dict[str, str]
+    after_choice: str
+    save_button: str
+    quiz: QuizCopyOut
+    builder: BuilderCopyOut
+    do_skip: DoSkipCopyOut
+
+
 class AppCopyResponse(CamelModel):
     nav: NavCopyOut
     plan: PlanCopyOut
@@ -67,3 +93,4 @@ class AppCopyResponse(CamelModel):
     skills: SkillsCopyOut
     settings: SettingsCopyOut
     welcome: WelcomeCopyOut
+    lesson: LessonCopyOut

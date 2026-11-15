@@ -26,6 +26,7 @@ from app.domain.lessons.variants import pick
 
 Json = Mapping[str, Any]
 VARIANT_KEY = "variant"
+BEST_VERDICT = "best"
 
 
 @dataclass(frozen=True)
@@ -86,15 +87,14 @@ def _setup(ctx: AnswerContext, value: object) -> AnswerOutcome:
     option = _find(screen_id, ctx.screen["options"], _option_id(screen_id, value))
     stored = {screen_id: option["id"]}
     # The variant only selects wording and examples; the plan and schedule are not touched.
-    if ctx.screen.get("storeAs") == VARIANT_KEY:
-        return AnswerOutcome({VARIANT_KEY: option["id"]}, stored, variant=option["id"])
-    return AnswerOutcome({}, stored)
+    # A `setup` screen always sets it.
+    return AnswerOutcome({VARIANT_KEY: option["id"]}, stored, variant=option["id"])
 
 
 def _scenario(ctx: AnswerContext, value: object) -> AnswerOutcome:
     screen = ctx.screen
-    answers = pick(screen["answers"], ctx.variant, screen["answersVariantMap"])
-    answer = _find(screen["id"], answers, _option_id(screen["id"], value))
+    options = pick(screen["optionsByVariant"], ctx.variant, screen.get("optionsVariantMap"))
+    answer = _find(screen["id"], options, _option_id(screen["id"], value))
     record = ScenarioAnswer(
         ctx.session_id,
         ctx.lesson_id,
@@ -107,9 +107,56 @@ def _scenario(ctx: AnswerContext, value: object) -> AnswerOutcome:
         "answerId": answer["id"],
         "verdict": answer["verdict"],
         "feedback": answer["feedback"],
-        "savePhrase": answer.get("savePhrase") is True,
+        "savePhrase": answer.get("savePhrase", answer["verdict"] == BEST_VERDICT),
     }
     return AnswerOutcome(result, {screen["id"]: answer["id"]}, scenario_answer=record)
+
+
+def _quiz(ctx: AnswerContext, value: object) -> AnswerOutcome:
+    screen_id = ctx.screen["id"]
+    options = ctx.screen["options"]
+    option = _find(screen_id, options, _option_id(screen_id, value))
+    right = next(o for o in options if o["correct"])
+    result = {
+        "optionId": option["id"],
+        "correct": option["correct"],
+        "correctOptionId": right["id"],
+        "feedback": option["feedback"],
+    }
+    return AnswerOutcome(result, {screen_id: option["id"]})
+
+
+def _builder(ctx: AnswerContext, value: object) -> AnswerOutcome:
+    """Value: one option id per group, in order. The reply is assembled here from the picked
+    content texts; nothing the learner typed is involved or stored."""
+    screen_id = ctx.screen["id"]
+    groups = ctx.screen["groups"]
+    if not isinstance(value, list) or not all(isinstance(v, str) for v in value):
+        raise InvalidScreenAnswer(screen_id, "value_must_be_a_list_of_option_ids")
+    if len(value) != len(groups):
+        raise InvalidScreenAnswer(screen_id, "value_must_pick_one_option_per_group")
+    picked = [
+        _find(screen_id, group["options"], str(v)) for group, v in zip(groups, value, strict=True)
+    ]
+    flags = [{"correct": option["correct"]} for option in picked]
+    result = {
+        "reply": " ".join(option["text"] for option in picked),
+        "allCorrect": all(flag["correct"] for flag in flags),
+        "groups": flags,
+    }
+    return AnswerOutcome(result, {screen_id: [option["id"] for option in picked]})
+
+
+def _reset(ctx: AnswerContext, value: object) -> AnswerOutcome:
+    screen_id = ctx.screen["id"]
+    option = _find(screen_id, ctx.screen["options"], _option_id(screen_id, value))
+    result = {"optionId": option["id"], "text": _plan_wording(option)}
+    return AnswerOutcome(result, {screen_id: option["id"]})
+
+
+def _plan_wording(option: Json) -> str:
+    """How the plan phrases a reset option: `planText` when the content has one."""
+    return str(option.get("planText", option["label"]))
 
 
 def _learn(ctx: AnswerContext, value: object) -> AnswerOutcome:
@@ -171,13 +218,18 @@ def _plan(ctx: AnswerContext, value: object) -> AnswerOutcome:
 
 
 def _reset_label(ctx: AnswerContext, source_screen_id: str) -> str | None:
-    """The label of the reset option the learner picked on the `resetFrom` mini-task."""
+    """The plan wording of the reset option the learner picked on the `resetFrom` screen: a
+    `reset` screen, or the mini-task of a `learn` screen."""
     chosen = ctx.screen_answers.get(source_screen_id)
     source = next((s for s in ctx.lesson.get("screens", []) if s["id"] == source_screen_id), None)
     if chosen is None or source is None:
         return None
-    options = source.get("miniTask", {}).get("options", [])
-    return next((o["label"] for o in options if o["id"] == chosen), None)
+    options = (
+        source.get("options", [])
+        if source["type"] == "reset"
+        else source.get("miniTask", {}).get("options", [])
+    )
+    return next((_plan_wording(o) for o in options if o["id"] == chosen), None)
 
 
 def _wrap(ctx: AnswerContext, value: object) -> AnswerOutcome:
@@ -204,8 +256,11 @@ def _wrap(ctx: AnswerContext, value: object) -> AnswerOutcome:
 
 
 SCREEN_HANDLERS: dict[str, ScreenHandler] = {
-    "setup_question": _setup,
+    "setup": _setup,
     "scenario": _scenario,
+    "quiz": _quiz,
+    "builder": _builder,
+    "reset": _reset,
     "learn": _learn,
     "plan": _plan,
     "wrap": _wrap,

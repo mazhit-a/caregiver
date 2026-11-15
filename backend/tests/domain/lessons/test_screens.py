@@ -55,24 +55,26 @@ def test_variant_changes_examples_but_not_the_screen_path(content: JsonContentPr
     in_person = lesson(content, "in_person")
     phone = lesson(content, "phone")
     assert [s["id"] for s in in_person.screens] == [s["id"] for s in phone.screens]
-    assert "doctor" in screen(in_person, "s2_scenario")["setup"]
-    assert "calls" in screen(phone, "s2_scenario")["setup"]
-    assert screen(in_person, "s2_scenario")["answers"] != screen(phone, "s2_scenario")["answers"]
+    assert "appointment" in screen(in_person, "scenario")["setup"]
+    assert "calls" in screen(phone, "scenario")["setup"]
+    assert screen(in_person, "scenario")["answers"] != screen(phone, "scenario")["answers"]
 
 
-def test_both_uses_in_person_texts_plus_the_phone_tip(content: JsonContentProvider) -> None:
-    both = lesson(content, "both")
+def test_both_and_not_yet_use_the_in_person_scenario(content: JsonContentProvider) -> None:
     in_person = lesson(content, "in_person")
-    assert screen(both, "s2_scenario")["answers"] == screen(in_person, "s2_scenario")["answers"]
-    assert screen(both, "s5_aha")["extra"].startswith("On the phone")
-    assert "extra" not in screen(in_person, "s5_aha")
+    for variant in ("both", "not_yet"):
+        other = lesson(content, variant)
+        assert screen(other, "scenario")["answers"] == screen(in_person, "scenario")["answers"]
+    both_tools = screen(lesson(content, "both"), "tools")["body"]
+    assert both_tools == screen(in_person, "tools")["body"]
+    assert screen(lesson(content, "phone"), "tools")["body"] != both_tools
 
 
-def test_without_a_variant_only_screens_up_to_the_setup_question_show(
+def test_without_a_variant_only_screens_up_to_the_setup_screen_show(
     content: JsonContentProvider,
 ) -> None:
     result = lesson(content, None)
-    assert [s["id"] for s in result.screens] == ["s1_setup"]
+    assert [s["id"] for s in result.screens] == ["intro", "setup"]
     assert result.variant is None
 
 
@@ -91,8 +93,8 @@ def test_runtime_placeholders_never_reach_the_output(content: JsonContentProvide
 
 
 def test_confidence_check_only_in_the_first_lesson(content: JsonContentProvider) -> None:
-    assert "confidenceCheck" in screen(lesson(content, "phone", first=True), "s9_wrap")
-    assert "confidenceCheck" not in screen(lesson(content, "phone", first=False), "s9_wrap")
+    assert "confidenceCheck" in screen(lesson(content, "phone", first=True), "wrap")
+    assert "confidenceCheck" not in screen(lesson(content, "phone", first=False), "wrap")
 
 
 def review_lesson(content: JsonContentProvider) -> RenderedLesson:

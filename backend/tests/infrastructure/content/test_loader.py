@@ -122,7 +122,7 @@ def test_invalid_json_and_missing_file_are_reported(content_copy: Path) -> None:
 
 def test_lesson_without_variants_is_valid(content_copy: Path) -> None:
     def strip_setup(data: dict[str, list[dict[str, str]]]) -> None:
-        data["screens"] = [s for s in data["screens"] if s["type"] != "setup_question"]
+        data["screens"] = [s for s in data["screens"] if s["type"] != "setup"]
 
     _edit(content_copy / "lessons" / "m1_l1.json", strip_setup)
     bundle = load_content(content_copy)

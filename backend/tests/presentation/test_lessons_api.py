@@ -61,7 +61,7 @@ async def test_first_lesson_renders_setup_screen_before_the_variant_is_known(
     body = r.json()
     assert body["id"] == "m1_l1" and body["variant"] is None
     assert body["title"] == "When Mom asks again"
-    assert [s["type"] for s in body["screens"]] == ["setup_question"]
+    assert [s["type"] for s in body["screens"]] == ["intro", "setup"]
     assert body["progress"]["step"] == 0 and body["progress"]["doneAt"] is None
 
 
@@ -84,7 +84,7 @@ async def test_lesson_unlocks_when_the_app_day_arrives(
     clock.advance(timedelta(days=10))
     r = await pclient.get("/api/lessons/m1_l2")
     assert r.status_code == 200 and r.json()["variant"] is None
-    assert len(r.json()["screens"]) == 8
+    assert len(r.json()["screens"]) == 23
 
 
 async def test_unknown_lesson_returns_404(pclient: httpx.AsyncClient) -> None:
@@ -119,7 +119,7 @@ async def test_variant_and_step_from_progress_are_returned_and_scenario_does_not
     r = await pclient.get("/api/lessons/m1_l1")
     body = r.json()
     assert body["variant"] == "phone" and body["progress"]["step"] == 4
-    assert len(body["screens"]) == 9
+    assert len(body["screens"]) == 24
     scenario = next(s for s in body["screens"] if s["type"] == "scenario")
     assert "calls" in scenario["setup"]
     assert [a["id"] for a in scenario["answers"]] == ["a1", "a2", "a3", "a4"]
@@ -140,14 +140,13 @@ async def test_scenario_response_does_not_leak_verdicts(
     assert set(scenario) <= {
         "id",
         "type",
+        "part",
+        "title",
         "intro",
+        "note",
         "setup",
         "line",
-        "question",
         "answers",
-        "verdictLabels",
-        "afterChoice",
-        "saveButton",
     }
     for learn in (s for s in body["screens"] if s["type"] == "learn" and s.get("miniTask")):
         assert all(set(o) == {"id", "label"} for o in learn["miniTask"]["options"])
@@ -164,11 +163,11 @@ async def _answer(
 async def test_answers_require_the_subscription_gate_and_a_token(
     pclient: httpx.AsyncClient,
 ) -> None:
-    r = await _answer(pclient, "s1_setup", "phone")
+    r = await _answer(pclient, "setup", "phone")
     assert r.status_code == 402
     r = await pclient.post(
         "/api/lessons/m1_l1/answers",
-        json={"screenId": "s1_setup", "value": "phone"},
+        json={"screenId": "setup", "value": "phone"},
         headers={"X-Session-Token": "nope"},
     )
     assert r.status_code == 401
@@ -178,22 +177,22 @@ async def test_setup_scenario_and_minitask_answers_end_to_end(
     pclient: httpx.AsyncClient, session_factory: async_sessionmaker[AsyncSession]
 ) -> None:
     await subscribe(pclient)
-    r = await _answer(pclient, "s1_setup", "phone")
+    r = await _answer(pclient, "setup", "phone")
     assert r.status_code == 200, r.text
     assert r.json() == {
-        "screenId": "s1_setup",
-        "type": "setup_question",
+        "screenId": "setup",
+        "type": "setup",
         "result": {"variant": "phone"},
     }
     assert (await pclient.get("/api/lessons/m1_l1")).json()["variant"] == "phone"
 
-    first = (await _answer(pclient, "s2_scenario", "a3")).json()["result"]
-    second = (await _answer(pclient, "s2_scenario", "a4")).json()["result"]
+    first = (await _answer(pclient, "scenario", "a3")).json()["result"]
+    second = (await _answer(pclient, "scenario", "a4")).json()["result"]
     assert (first["verdict"], second["verdict"]) == ("try_again", "best")
     assert second["savePhrase"] is True and "{" not in second["feedback"]
 
-    r = await _answer(pclient, "s6_fifth_time", "breath")
-    assert r.json()["result"] == {"optionId": "breath", "response": None}
+    r = await _answer(pclient, "you", "r1")
+    assert r.json()["result"] == {"optionId": "r1", "text": "take one slow breath"}
 
     async with session_factory() as db:
         rows = (
@@ -204,8 +203,8 @@ async def test_setup_scenario_and_minitask_answers_end_to_end(
         ).one()
     assert [tuple(r) for r in rows] == [("a3", "try_again"), ("a4", "best")]
     assert stored.variant == "phone"
-    assert stored.screen_answers["reset"] == "breath"
-    assert stored.screen_answers["s2_scenario"] == "a4"
+    assert stored.screen_answers["you"] == "r1"
+    assert stored.screen_answers["scenario"] == "a4"
 
 
 async def test_unknown_screen_id_422(pclient: httpx.AsyncClient) -> None:
@@ -216,7 +215,7 @@ async def test_unknown_screen_id_422(pclient: httpx.AsyncClient) -> None:
 
 async def test_answer_option_not_in_screen_422(pclient: httpx.AsyncClient) -> None:
     await subscribe(pclient)
-    r = await _answer(pclient, "s1_setup", "carrier_pigeon")
+    r = await _answer(pclient, "setup", "carrier_pigeon")
     assert r.status_code == 422
     assert r.json()["error"]["code"] == "invalid_screen_answer"
     assert r.json()["error"]["details"]["reason"] == "option_not_on_screen"
@@ -224,7 +223,7 @@ async def test_answer_option_not_in_screen_422(pclient: httpx.AsyncClient) -> No
 
 async def test_wrong_value_type_for_screen_type_422(pclient: httpx.AsyncClient) -> None:
     await subscribe(pclient)
-    r = await _answer(pclient, "s1_setup", {"id": "phone"})
+    r = await _answer(pclient, "setup", {"id": "phone"})
     assert r.status_code == 422
     assert r.json()["error"]["details"]["reason"] == "value_must_be_an_option_id"
     r = await pclient.post("/api/lessons/m1_l1/answers", json={"value": "phone"})
@@ -233,6 +232,6 @@ async def test_wrong_value_type_for_screen_type_422(pclient: httpx.AsyncClient) 
 
 async def test_answer_to_locked_lesson_423(pclient: httpx.AsyncClient) -> None:
     await subscribe(pclient)
-    r = await _answer(pclient, "s2_scenario", "a1", lesson_id="m1_l2")
+    r = await _answer(pclient, "scenario", "a1", lesson_id="m1_l2")
     assert r.status_code == 423 and r.json()["error"]["code"] == "lesson_locked"
     assert r.json()["error"]["details"]["unlockOn"] > "2026-01-05"

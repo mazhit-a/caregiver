@@ -8,6 +8,7 @@ from typing import Any
 
 from pydantic import BaseModel, ValidationError
 
+from app.infrastructure.content.lesson_validation import validate_lesson
 from app.infrastructure.content.schemas import (
     AppCopyFile,
     CrisisResourcesFile,
@@ -109,6 +110,10 @@ def load_content(content_dir: Path) -> ContentBundle:
             lesson = _parse(name, raw[name], LessonFile)
             if f"{lesson.id}.json" != name.split("/", 1)[1]:
                 raise ContentLoadError(f"{name}: id: lesson id '{lesson.id}' must match file name")
+            problems = validate_lesson(lesson)
+            if problems:
+                detail = "; ".join(f"{path}: {message}" for path, message in problems[:10])
+                raise ContentLoadError(f"{name}: {detail}")
             lessons[lesson.id] = lesson
     return ContentBundle(
         app_copy=_parse("app-copy.json", raw["app-copy.json"], AppCopyFile),

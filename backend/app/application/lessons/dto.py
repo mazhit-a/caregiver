@@ -28,6 +28,7 @@ class LessonView:
     unlock_on: date
     progress: ProgressView
     recap: RecapView | None = None
+    screen_count: int = 0  # all screens of the lesson, whether or not the learner sees them yet
 
 
 @dataclass(frozen=True)
