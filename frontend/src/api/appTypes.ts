@@ -28,6 +28,18 @@ export interface AppCopy {
   skills: { title: string; subtitle: string };
   settings: { title: string; gentleExitEntry: string; gentleExitHint: string };
   welcome: { title: string; body: string; nameLabel: string };
+  /** Placeholder-free lesson labels the lesson file does not carry (batch 4, C2: contract of P10). */
+  lesson: LessonCopy;
+}
+
+export interface LessonCopy {
+  /** Scenario verdict labels by verdict (`best`, `okay`, `try_again`). */
+  verdictLabels: Record<string, string>;
+  afterChoice: string;
+  saveButton: string;
+  quiz: { right: string; wrong: string };
+  builder: { allCorrect: string; notYet: string };
+  doSkip: { doLabel: string; skipLabel: string };
 }
 
 // ---- GET /today -------------------------------------------------------------
@@ -127,28 +139,103 @@ export interface Pattern {
   steps: PatternStep[];
 }
 
-export interface SetupQuestionScreen {
+/** `part` is the small label above a screen's title (nullable). Present on every lesson-1 screen type. */
+interface ScreenBase {
   id: string;
+  part?: string | null;
+}
+
+/** Old lesson 1 (9 screens). Superseded by `SetupScreen`; removed with the old fixtures in C5/C6. */
+export interface SetupQuestionScreen extends ScreenBase {
   type: "setup_question";
   speaker: string;
   text: string;
   question: string;
   options: Choice[];
 }
-export interface ScenarioScreen {
-  id: string;
+export interface IntroScreen extends ScreenBase {
+  type: "intro";
+  title: string;
+  body: string;
+  bullets: string[];
+  /** An Ollie pose id (for example `ollie-explaining`); the browser maps it to an asset. */
+  image?: string | null;
+}
+export interface SetupScreen extends ScreenBase {
+  type: "setup";
+  title: string;
+  body: string;
+  options: Choice[];
+}
+/** One canonical shape. The old fields (`question`, `verdictLabels`, ...) exist only on the old lessons m1_l2..l5. */
+export interface ScenarioScreen extends ScreenBase {
   type: "scenario";
+  title?: string;
   intro?: string | null;
   setup: string;
   line: string;
-  question: string;
+  note?: string | null;
   answers: { id: string; text: string }[];
-  verdictLabels: Record<string, string>;
-  afterChoice: string;
-  saveButton: string;
+  question?: string;
+  verdictLabels?: Record<string, string>;
+  afterChoice?: string;
+  saveButton?: string;
 }
-export interface LearnScreen {
+export interface ContentItem {
+  title: string;
+  text: string;
+}
+export interface ContentStep {
+  n: number;
+  title: string;
+  text: string;
+}
+export interface ContentExample {
+  text: string;
+  why: string;
+}
+/** Optional blocks, rendered in a fixed order: body, image, items, steps, dodont, examples, note, keyIdea, tip. */
+export interface ContentScreen extends ScreenBase {
+  type: "content";
+  title: string;
+  body: string[];
+  image?: string | null;
+  items?: ContentItem[] | null;
+  steps?: ContentStep[] | null;
+  dodont?: { do: string[]; dont: string[] } | null;
+  examples?: ContentExample[] | null;
+  /** The sticky note: two lines. */
+  note?: { line1: string; line2: string } | null;
+  keyIdea?: string | null;
+  tip?: string | null;
+}
+/** Options carry text only: correctness and feedback stay on the server. */
+export interface QuizScreen extends ScreenBase {
+  type: "quiz";
+  title: string;
+  options: { id: string; text: string }[];
+}
+export interface BuilderGroup {
   id: string;
+  label: string;
+  options: { id: string; text: string }[];
+}
+export interface BuilderScreen extends ScreenBase {
+  type: "builder";
+  title: string;
+  body: string;
+  groups: BuilderGroup[];
+}
+export interface ResetScreen extends ScreenBase {
+  type: "reset";
+  title: string;
+  body: string;
+  question: string;
+  options: Choice[];
+  /** May be `ollie-calm-none`: no asset exists, render nothing. */
+  image?: string | null;
+}
+export interface LearnScreen extends ScreenBase {
   type: "learn";
   title: string;
   body?: string | null;
@@ -158,16 +245,14 @@ export interface LearnScreen {
   pattern?: Pattern | null;
   miniTask?: { question: string; options: Choice[] } | null;
 }
-export interface PhrasesReviewScreen {
-  id: string;
+export interface PhrasesReviewScreen extends ScreenBase {
   type: "phrases_review";
   title: string;
   intro: string;
   emptyText: string;
   phrases: { id: string; text: string; source: string; lessonId?: string | null }[];
 }
-export interface RoleplayScreen {
-  id: string;
+export interface RoleplayScreen extends ScreenBase {
   type: "roleplay";
   title: string;
   intro: string;
@@ -176,8 +261,7 @@ export interface RoleplayScreen {
   labels: { partner: string; notSaved: string; thinking: string; aiDown: string };
   summary: { title: string; bestPhraseLabel: string; saveButton: string; againButton: string };
 }
-export interface PlanScreen {
-  id: string;
+export interface PlanScreen extends ScreenBase {
   type: "plan";
   title: string;
   ifThen: {
@@ -192,9 +276,11 @@ export interface PlanScreen {
   doneButton: string;
   noteTemplate: { title: string; example: string };
 }
-export interface WrapScreen {
-  id: string;
+export interface WrapScreen extends ScreenBase {
   type: "wrap";
+  /** New lesson 1 only. */
+  title?: string | null;
+  learned?: string[] | null;
   skillLine: string;
   phraseLine: string;
   patternLine: string;
@@ -205,7 +291,13 @@ export interface WrapScreen {
 
 export type KnownScreen =
   | SetupQuestionScreen
+  | IntroScreen
+  | SetupScreen
   | ScenarioScreen
+  | ContentScreen
+  | QuizScreen
+  | BuilderScreen
+  | ResetScreen
   | LearnScreen
   | PhrasesReviewScreen
   | RoleplayScreen
@@ -223,7 +315,13 @@ export type ScreenOut = KnownScreen | UnknownScreen;
 
 export const SCREEN_TYPES = [
   "setup_question",
+  "intro",
+  "setup",
   "scenario",
+  "content",
+  "quiz",
+  "builder",
+  "reset",
   "learn",
   "phrases_review",
   "roleplay",
@@ -243,6 +341,8 @@ export interface Lesson {
   pattern: Pattern;
   screens: ScreenOut[];
   progress: { step: number; startedAt: string; doneAt: string | null };
+  /** All screens of the lesson, also those not yet served before the setup answer (the progress bar uses it). */
+  screenCount?: number;
   recap?: { fromLessonId: string; text: string } | null;
 }
 
@@ -259,6 +359,24 @@ export interface ScenarioResult {
   verdict: string;
   feedback: string;
   savePhrase: boolean;
+}
+export interface QuizResult {
+  optionId: string;
+  correct: boolean;
+  /** Revealed on purpose after a pick, so the screen can mark the right option. */
+  correctOptionId: string;
+  feedback: string;
+}
+export interface BuilderResult {
+  /** The picked texts joined by a space, built by the server. */
+  reply: string;
+  allCorrect: boolean;
+  groups: { correct: boolean }[];
+}
+export interface ResetResult {
+  optionId: string;
+  /** The wording used in the plan ("And first, I'll: ..."). */
+  text: string;
 }
 export interface MiniTaskResult {
   optionId: string;
@@ -558,7 +676,7 @@ export interface Demo {
 type Keys<T> = readonly (keyof T)[];
 
 export const APP_COPY_KEYS = [
-  "nav", "plan", "profile", "careCard", "visitSheet", "skills", "settings", "welcome",
+  "nav", "plan", "profile", "careCard", "visitSheet", "skills", "settings", "welcome", "lesson",
 ] as const satisfies Keys<AppCopy>;
 export const TODAY_KEYS = [
   "title", "order", "checkIn", "practiceRound", "careCardNudge", "nextStep", "weeklyRhythm",
@@ -580,6 +698,16 @@ export const LESSON_KEYS = [
   "id", "moduleId", "title", "minutes", "skill", "skillLabel", "variant", "unlockOn", "pattern",
   "screens", "progress", "recap",
 ] as const satisfies Keys<Lesson>;
+/** A lesson-1 (24 screens) response also carries `screenCount`. */
+export const LESSON_V2_KEYS = [...LESSON_KEYS, "screenCount"] as const satisfies Keys<Lesson>;
+export const LESSON_COPY_KEYS = [
+  "verdictLabels", "afterChoice", "saveButton", "quiz", "builder", "doSkip",
+] as const satisfies Keys<LessonCopy>;
+export const QUIZ_RESULT_KEYS = [
+  "optionId", "correct", "correctOptionId", "feedback",
+] as const satisfies Keys<QuizResult>;
+export const BUILDER_RESULT_KEYS = ["reply", "allCorrect", "groups"] as const satisfies Keys<BuilderResult>;
+export const RESET_RESULT_KEYS = ["optionId", "text"] as const satisfies Keys<ResetResult>;
 export const LESSON_COMPLETE_KEYS = [
   "lessonId", "doneAt", "wrap", "nextLesson", "allDoneLine",
 ] as const satisfies Keys<LessonComplete>;

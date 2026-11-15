@@ -60,18 +60,30 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-/** Checks the fields the player reads for each of the seven screen types. */
+/** Checks the fields the player reads for each of the thirteen screen types. */
 export function isKnownScreen(value: unknown): value is KnownScreen {
   if (!isRecord(value) || typeof value["id"] !== "string") return false;
   const type = value["type"];
   if (typeof type !== "string" || !(SCREEN_TYPES as readonly string[]).includes(type)) return false;
+  const title = typeof value["title"] === "string";
   switch (type) {
     case "setup_question":
+    case "setup":
       return Array.isArray(value["options"]);
+    case "intro":
+      return title && Array.isArray(value["bullets"]);
     case "scenario":
-      return Array.isArray(value["answers"]) && isRecord(value["verdictLabels"]);
+      return Array.isArray(value["answers"]);
+    case "content":
+      return title && Array.isArray(value["body"]);
+    case "quiz":
+      return title && Array.isArray(value["options"]);
+    case "builder":
+      return title && Array.isArray(value["groups"]);
+    case "reset":
+      return title && Array.isArray(value["options"]);
     case "learn":
-      return typeof value["title"] === "string";
+      return title;
     case "phrases_review":
       return Array.isArray(value["phrases"]);
     case "roleplay":

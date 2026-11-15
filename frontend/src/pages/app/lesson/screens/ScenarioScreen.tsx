@@ -7,12 +7,14 @@ import { LESSON_COPY } from "../../../../content/app/lesson";
 import { OptionGroup } from "./OptionGroup";
 import type { ScreenProps } from "./types";
 import { useAnswer } from "./useAnswer";
+import { useLessonCopy } from "./useAppLessonCopy";
 import styles from "./lessonScreens.module.css";
 
 const text = (value: unknown): string => (typeof value === "string" ? value : "");
 
 export function ScenarioScreen({ screen, lesson, entry, remember }: ScreenProps<ScenarioData>) {
   const answer = useAnswer(lesson.id);
+  const copy = useLessonCopy();
   const run = useAppAction();
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -49,14 +51,19 @@ export function ScenarioScreen({ screen, lesson, entry, remember }: ScreenProps<
     }
   }
 
-  const verdict = entry ? screen.verdictLabels[text(entry.result["verdict"])] : undefined;
+  // Labels: the shared app copy (no "Wrong" anywhere); the old lessons carried their own.
+  const verdictKey = entry ? text(entry.result["verdict"]) : "";
+  const verdict = copy?.verdictLabels[verdictKey] ?? screen.verdictLabels?.[verdictKey];
+  const afterChoice = copy?.afterChoice ?? screen.afterChoice;
+  const saveLabel = copy?.saveButton ?? screen.saveButton ?? "";
   return (
     <div className={styles["screen"]}>
       {screen.intro && <p className={styles["muted"]}>{screen.intro}</p>}
       <p className={styles["body"]}>{screen.setup}</p>
       <p className={styles["bubble"]}>{screen.line}</p>
+      {screen.note && <p className={styles["muted"]}>{screen.note}</p>}
       <OptionGroup
-        legend={screen.question}
+        legend={screen.question ?? screen.title ?? ""}
         options={screen.answers.map((a) => ({ id: a.id, label: a.text }))}
         value={entry?.value ?? null}
         disabled={answer.busy}
@@ -67,7 +74,7 @@ export function ScenarioScreen({ screen, lesson, entry, remember }: ScreenProps<
           <>
             {verdict && <p className={styles["verdict"]}>{verdict}</p>}
             <p className={styles["text"]}>{text(entry.result["feedback"])}</p>
-            <p className={styles["muted"]}>{screen.afterChoice}</p>
+            {afterChoice && <p className={styles["muted"]}>{afterChoice}</p>}
           </>
         )}
       </div>
@@ -79,7 +86,7 @@ export function ScenarioScreen({ screen, lesson, entry, remember }: ScreenProps<
             aria-disabled={isSaved || saving}
             onClick={() => void save()}
           >
-            {isSaved ? LESSON_COPY.saved : saving ? LESSON_COPY.saving : screen.saveButton}
+            {isSaved ? LESSON_COPY.saved : saving ? LESSON_COPY.saving : saveLabel}
           </button>
           {isSaved && (
             <span role="status" className={styles["muted"]}>

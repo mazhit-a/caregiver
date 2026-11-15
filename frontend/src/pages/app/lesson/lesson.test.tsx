@@ -51,7 +51,7 @@ async function openLesson(id = "m1_l1") {
 }
 
 const progress = () => screen.getByRole("progressbar", { name: "Lesson progress" });
-const next = () => screen.getByRole("button", { name: "Next" });
+const next = () => screen.getByRole("button", { name: "Continue" });
 
 async function chooseVariant(label: string) {
   const user = userEvent.setup();
@@ -66,7 +66,8 @@ describe("lesson player", () => {
     await openLesson();
     await screen.findByRole("heading", { level: 1, name: "When Mom asks again" });
     expect(progress()).toHaveAttribute("aria-valuetext", "Screen 1 of 1");
-    expect(screen.getByRole("button", { name: /choose an option/i })).toHaveAttribute("aria-disabled", "true");
+    expect(next()).toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByText("Choose an option to continue.")).toBeInTheDocument();
     const user = await chooseVariant("Both");
     expect(progress()).toHaveAttribute("aria-valuetext", "Screen 1 of 9");
     expect(screen.getByRole("radio", { name: "Both" })).toBeChecked();
@@ -88,9 +89,9 @@ describe("lesson player", () => {
     const user = await chooseVariant("Both");
     await user.click(next());
     await user.click(screen.getByRole("radio", { name: /Mom, I told you already/ }));
-    expect(await screen.findByText("Try again")).toBeInTheDocument();
+    expect(await screen.findByText("Very common")).toBeInTheDocument();
     await user.click(screen.getByRole("radio", { name: /You're wondering about tomorrow/ }));
-    expect(await screen.findByText("Best")).toBeInTheDocument();
+    expect(await screen.findByText("Good instinct")).toBeInTheDocument();
     expect(document.body.textContent).not.toMatch(/wrong/i);
     expect(document.body.textContent).not.toMatch(/\{/);
   });
@@ -132,13 +133,13 @@ describe("lesson player", () => {
     const user = await chooseVariant("Both");
     await user.click(next());
     await user.click(screen.getByRole("radio", { name: /You're wondering about tomorrow/ }));
-    await screen.findByText("Best");
+    await screen.findByText("Good instinct");
     await user.click(next());
     await user.click(await screen.findByRole("radio", { name: "Worry" }));
     expect(await screen.findByText("Thanks for answering. Let’s keep going.")).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Back" }));
     expect(screen.getByRole("radio", { name: /You're wondering about tomorrow/ })).toBeChecked();
-    expect(screen.getByText("Best")).toBeInTheDocument();
+    expect(screen.getByText("Good instinct")).toBeInTheDocument();
     await user.click(next());
     expect(screen.getByRole("radio", { name: "Worry" })).toBeChecked();
   });
@@ -153,7 +154,7 @@ describe("lesson player", () => {
       await user.click(next());
     }
     expect(progress()).toHaveAttribute("aria-valuenow", "9");
-    expect(screen.queryByRole("button", { name: "Next" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Continue" })).toBeNull();
   });
 
   it("is keyboard operable: Enter on Next moves on", async () => {
@@ -245,7 +246,7 @@ describe("lesson player", () => {
     await user.click(next());
     expect(await axe(container)).toHaveNoViolations();
     await user.click(screen.getByRole("radio", { name: /You're wondering about tomorrow/ }));
-    await screen.findByText("Best");
+    await screen.findByText("Good instinct");
     expect(await axe(container)).toHaveNoViolations();
     await user.click(next());
     expect(await axe(container)).toHaveNoViolations();

@@ -9,7 +9,7 @@ export function useAnswer(lessonId: string) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function send(screenId: string, value: string): Promise<Record<string, unknown> | null> {
+  async function send(screenId: string, value: unknown): Promise<Record<string, unknown> | null> {
     setBusy(true);
     setError(null);
     const outcome = await run(() => answerLesson(lessonId, { screenId, value }));

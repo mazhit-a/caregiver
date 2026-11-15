@@ -57,8 +57,20 @@ export function WrapScreen({ screen, lesson }: ScreenProps<WrapData>) {
   return (
     <div className={styles["screen"]}>
       <h2 className={styles["title"]} data-screen-heading tabIndex={-1}>
-        {COPY.heading}
+        {screen.title ?? COPY.heading}
       </h2>
+      {screen.learned && screen.learned.length > 0 && (
+        <ul className={styles["bullets"]}>
+          {screen.learned.map((item) => (
+            <li key={item}>
+              <span className={styles["check"]} aria-hidden="true">
+                ✓
+              </span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      )}
       <p className={styles["body"]}>{screen.skillLine}</p>
       {savedPhrase && <p className={styles["body"]}>{screen.phraseLine}</p>}
       <p className={styles["body"]}>{screen.patternLine}</p>

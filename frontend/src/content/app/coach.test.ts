@@ -26,9 +26,11 @@ describe("coach copy", () => {
 
 describe("coach copy (G8 additions)", () => {
   it("mirrors the aiDown line and the verdict labels of the lesson files", () => {
+    // Lesson 1 moved to the 24-screen schema (verdict labels now in app-copy); lessons 2-5 keep the old ones.
     const lesson = readFileSync(resolve(root, "lessons/m1_l1.json"), "utf8");
+    const old = readFileSync(resolve(root, "lessons/m1_l2.json"), "utf8");
     expect(lesson).toContain(COACH_COPY.aiDown);
-    for (const label of Object.values(COACH_COPY.verdictLabels)) expect(lesson).toContain(`"${label}"`);
+    for (const label of Object.values(COACH_COPY.verdictLabels)) expect(old).toContain(`"${label}"`);
   });
 
   it("has no unfilled placeholder and no countdown wording", () => {

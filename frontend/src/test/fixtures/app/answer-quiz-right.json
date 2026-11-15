@@ -1,0 +1,10 @@
+{
+  "screenId": "q1",
+  "type": "quiz",
+  "result": {
+    "optionId": "o3",
+    "correct": true,
+    "correctOptionId": "o3",
+    "feedback": "Exactly. That’s why the worry is what needs an answer."
+  }
+}

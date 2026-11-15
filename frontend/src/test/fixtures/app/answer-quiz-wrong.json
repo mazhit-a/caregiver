@@ -1,0 +1,10 @@
+{
+  "screenId": "q1",
+  "type": "quiz",
+  "result": {
+    "optionId": "o1",
+    "correct": false,
+    "correctOptionId": "o3",
+    "feedback": "It can feel that way. But the memory of asking has faded, so this really is the first time for her."
+  }
+}

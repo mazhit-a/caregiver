@@ -32,6 +32,8 @@ export interface AppScenario {
   publicCard: PublicCardState;
   /** `POST /billing/cancel` and `POST /exit/gentle` answer 503 `billing_cancel_failed` (nothing changes). */
   cancelFails: boolean;
+  /** Serve lesson 1 as the 24-screen lesson (`lessonV2.ts`). Default off until the player moves to it (C5). */
+  lesson24: boolean;
 }
 
 export const DEFAULT_APP_SCENARIO: AppScenario = {
@@ -42,6 +44,7 @@ export const DEFAULT_APP_SCENARIO: AppScenario = {
   today: "fresh",
   publicCard: "ok",
   cancelFails: false,
+  lesson24: false,
 };
 
 /** Per-session scratch space of the app fakes (phrases, profile, role-play runs ...). */

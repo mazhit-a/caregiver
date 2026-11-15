@@ -69,7 +69,18 @@ afterEach(() => {
 
 const answers = () =>
   sent.filter((c) => c.method === "POST" && c.path === "/lessons/m1_l1/answers" && c.body["screenId"] !== "s1_setup");
-const next = () => screen.getByRole("button", { name: "Next" });
+const roleplayContinue = () =>
+  waitFor(() => {
+    const found = screen.getAllByRole("button", { name: "Continue" }).filter((b) => !b.hasAttribute("aria-disabled"));
+    if (found.length !== 1) throw new Error("expected the role-play Continue button");
+    return found[0] as HTMLElement;
+  });
+const next = () => {
+  // The player's footer button (the role-play screen has its own "Continue" inside the screen).
+  const found = screen.getAllByRole("button", { name: "Continue" }).filter((b) => b.hasAttribute("aria-disabled"));
+  if (found.length !== 1) throw new Error("expected one player Continue button");
+  return found[0] as HTMLElement;
+}
 
 async function goTo(heading: string, lesson = "m1_l1") {
   const router = createMemoryRouter(routes, { initialEntries: [`/lessons/${lesson}`] });
@@ -129,7 +140,7 @@ describe("plan screen", () => {
       await screen.findByText("AI-generated");
       await user.click(screen.getByRole("button", { name: round < 3 ? "Next round" : "See your practice" }));
     }
-    await user.click(await screen.findByRole("button", { name: "Continue" }));
+    await user.click(await roleplayContinue());
     await user.click(next());
     await screen.findByRole("heading", { name: "Your plan for next time" });
     expect(screen.getByRole("textbox", { name: "then I'll say:" })).toHaveValue(

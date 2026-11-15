@@ -17,6 +17,7 @@
 .primary:hover { background: var(--accent-hover); }
 .ghost { background: var(--surface); color: var(--accent-pressed); }
 .button[aria-disabled="true"] { opacity: 0.55; cursor: default; }
+.hint { color: var(--text-secondary); font: var(--text-small); margin: 0; text-align: right; }
 .disclaimer { color: var(--text-secondary); font: var(--text-small); text-align: center; margin: 0; }
 .notice { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); }
 .notice h1 { font: var(--text-h1); margin: 0; }

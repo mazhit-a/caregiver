@@ -22,4 +22,11 @@ describe("lesson copy", () => {
       expect(text).not.toContain(banned);
     }
   });
+
+  it("keeps the lesson-1 chrome strings: Start the lesson, Continue and the gate hints", () => {
+    expect(LESSON_COPY.start).toBe("Start the lesson");
+    expect(LESSON_COPY.next).toBe("Continue");
+    expect(LESSON_COPY.gateHint.setup).toMatch(/choose an option/i);
+    expect(LESSON_COPY.gateHint.answer).toMatch(/choose an answer/i);
+  });
 });

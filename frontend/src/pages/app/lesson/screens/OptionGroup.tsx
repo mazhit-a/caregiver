@@ -2,7 +2,9 @@ import { useId } from "react";
 import styles from "./lessonScreens.module.css";
 
 interface Props {
-  legend: string;
+  /** Visible legend. Omit it when `labelledBy` points at the screen heading. */
+  legend?: string;
+  labelledBy?: string;
   options: { id: string; label: string }[];
   value: string | null;
   disabled?: boolean;
@@ -10,11 +12,11 @@ interface Props {
 }
 
 /** Native radios in a fieldset: keyboard and screen-reader friendly, one answer at a time. */
-export function OptionGroup({ legend, options, value, disabled, onPick }: Props) {
+export function OptionGroup({ legend, labelledBy, options, value, disabled, onPick }: Props) {
   const name = useId();
   return (
-    <fieldset className={styles["group"]} disabled={disabled}>
-      <legend className={styles["legend"]}>{legend}</legend>
+    <fieldset className={styles["group"]} disabled={disabled} aria-labelledby={labelledBy}>
+      {legend && <legend className={styles["legend"]}>{legend}</legend>}
       {options.map((o) => (
         <label key={o.id} className={styles["option"]}>
           <input
