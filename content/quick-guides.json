@@ -1,0 +1,326 @@
+{
+  "version": 1,
+  "notes": [
+    "Five quick guides for urgent moments. Short, scannable how-tos, not lessons: no quizzes, no practice, no Ollie (brand rule: no Ollie on crisis screens).",
+    "Placeholders as in quiz.json, singular labels as in lessons ({recipient}, {Recipient}, {possessive}, {object}).",
+    "Layout per guide: title → 'Call 911 now if' box (red, always first when present) → numbered steps → 'Then' → 'Don't' → resources with tap-to-call → footer line.",
+    "Highlight rules ('For now') stay in plan-rules.json → quickGuides.",
+    "Every guide is reachable from the Plan tab and from the 'Need help now?' sheet, without a subscription check.",
+    "Phone numbers and the 15-minute missing-person rule come from the sources listed per guide. Re-check numbers before launch, and have a dementia-care or nursing professional review all five guides.",
+    "Nothing here diagnoses or treats. Medical decisions are routed to 911, the doctor or the pharmacist.",
+    "The 'After a hospital stay' steps are practical discharge questions, not clinical advice; have them reviewed with the other guides."
+  ],
+  "common": {
+    "footer": "In an emergency, call 911.",
+    "callNowTitle": "Call 911 now if",
+    "stepsTitle": "What to do",
+    "thenTitle": "Then",
+    "dontTitle": "Don't",
+    "resourcesTitle": "Who can help"
+  },
+  "resources": {
+    "911": {
+      "label": "Emergency",
+      "number": "911",
+      "tel": "911"
+    },
+    "988": {
+      "label": "988 Suicide & Crisis Lifeline (call or text)",
+      "number": "988",
+      "tel": "988"
+    },
+    "alz": {
+      "label": "Alzheimer's Association 24/7 Helpline",
+      "number": "1-800-272-3900",
+      "tel": "18002723900"
+    },
+    "eldercare": {
+      "label": "Eldercare Locator (local help, respite, weekdays)",
+      "number": "1-800-677-1116",
+      "tel": "18006771116"
+    }
+  },
+  "guides": [
+    {
+      "id": "qg_missing",
+      "title": "If {recipient} goes missing",
+      "summary": "Search for up to 15 minutes, then call 911.",
+      "urgency": "emergency",
+      "callNow": [
+        "You've searched for 15 minutes and haven't found {object}",
+        "{Recipient} may be in danger right now: near traffic or water, in bad weather, or without needed medicine"
+      ],
+      "steps": [
+        {
+          "title": "Start looking right away",
+          "text": "Don't wait to see if {recipient} comes back. Check the home first: closets, the garage, the yard, the car."
+        },
+        {
+          "title": "Search nearby, in the likely direction",
+          "text": "Many people who wander are found within about 1.5 miles of where they were last seen. Look along the way to places {recipient} talks about: an old home, a former job, a church, a favorite store."
+        },
+        {
+          "title": "After 15 minutes, call 911",
+          "text": "Say: \"A person with dementia is missing. {Recipient} is a vulnerable adult.\" Police usually don't need to wait 24 hours in this case."
+        },
+        {
+          "title": "Have the details ready",
+          "text": "A recent photo, height, weight, what {recipient} was wearing, where {recipient} was last seen, and any medicines {recipient} needs."
+        },
+        {
+          "title": "Ask for help",
+          "text": "Call neighbors and family. If you need help being taken seriously, the Alzheimer's Association 24/7 Helpline can talk with responders."
+        }
+      ],
+      "then": [
+        "When {recipient} is found, stay calm and warm. Don't scold; {recipient} may be frightened.",
+        "If {recipient} was out in heat or cold, or seems hurt or more confused than usual, get medical help.",
+        "Afterwards, make a plan: a recent photo on your phone, a list of likely places, ID jewelry or a wandering response service, and a note to neighbors."
+      ],
+      "dont": [
+        "Don't wait more than 15 minutes to call 911.",
+        "Don't search alone for long: call others in."
+      ],
+      "resources": [
+        "911",
+        "alz"
+      ],
+      "sources": [
+        {
+          "name": "Alzheimer's Association, wandering and emergency preparedness",
+          "url": "https://www.alz.org/help-support/caregiving/safety/wandering"
+        },
+        {
+          "name": "Alzheimer's Association, emergencies",
+          "url": "https://alz.org/emergency"
+        }
+      ]
+    },
+    {
+      "id": "qg_fall",
+      "title": "After a fall",
+      "summary": "Check before you lift. When in doubt, call 911.",
+      "urgency": "emergency",
+      "callNow": [
+        "{Recipient} hit {possessive} head, or you're not sure",
+        "{Recipient} passed out, even briefly, or is more confused or drowsy than usual",
+        "There's severe pain, or pain in the hip, back or neck",
+        "{Recipient} can't move an arm or leg, or a limb looks out of shape",
+        "There's heavy bleeding",
+        "{Recipient} can't get up, even with your help"
+      ],
+      "steps": [
+        {
+          "title": "Don't lift right away",
+          "text": "Get down to {possessive} level. Say calmly: \"I'm here. Let's not move yet.\""
+        },
+        {
+          "title": "Check before moving",
+          "text": "Ask where it hurts. Look for bleeding, swelling or a limb at an odd angle. Ask if {recipient} hit {possessive} head."
+        },
+        {
+          "title": "If anything on the 911 list is true",
+          "text": "Call 911. Don't move {object}. Keep {object} warm with a blanket and stay close until help arrives."
+        },
+        {
+          "title": "If {recipient} is not hurt and wants to get up",
+          "text": "Bring a sturdy chair close. Let {object} roll to one side, get onto hands and knees, and use the chair to rise slowly while you steady {object}. Stop if anything hurts."
+        },
+        {
+          "title": "If you can't help safely",
+          "text": "Don't lift {object} on your own. Make {object} comfortable on the floor and call for help."
+        }
+      ],
+      "then": [
+        "Tell {possessive} doctor about the fall the same day, even if {recipient} seems fine. Mention it if {recipient} takes blood thinners.",
+        "Watch for the next 24 hours: new headache, vomiting, more sleepiness or confusion than usual means call 911.",
+        "Write down when and where it happened; add it to the doctor-visit sheet.",
+        "Look at what caused it: a rug, poor light, a step, getting up at night."
+      ],
+      "dont": [
+        "Don't pull {object} up by the arms.",
+        "Don't give food or drink while you wait for an ambulance."
+      ],
+      "resources": [
+        "911"
+      ],
+      "sources": [
+        {
+          "name": "UCLA Health, falls in older adults (cites National Institute on Aging)",
+          "url": "https://www.uclahealth.org/news/article/preventing-falls-and-traumatic-brain-injuries-in-older-adults"
+        }
+      ]
+    },
+    {
+      "id": "qg_sudden_change",
+      "title": "A sudden change in confusion",
+      "summary": "Sudden confusion is not 'just the dementia'. Get help today.",
+      "urgency": "urgent",
+      "callNow": [
+        "Signs of a stroke: one side of the face droops, one arm is weak, speech is slurred or strange",
+        "{Recipient} is hard to wake, or passes out",
+        "Chest pain or trouble breathing",
+        "Fever with shivering, cold or clammy skin, a fast pulse, or very fast or slow breathing",
+        "The confusion started after a head injury",
+        "{Recipient} has diabetes and the confusion came on suddenly"
+      ],
+      "steps": [
+        {
+          "title": "Notice how fast it changed",
+          "text": "Dementia changes slowly, over months. A big change over hours or a day or two is different, and often has a cause that can be treated."
+        },
+        {
+          "title": "Keep {object} safe and calm",
+          "text": "Stay with {object}, speak softly, keep the room quiet and lit. Don't argue with what {recipient} says."
+        },
+        {
+          "title": "If nothing on the 911 list is true, call the doctor today",
+          "text": "Call {possessive} doctor's office or after-hours line now, not tomorrow. A nurse can tell you whether to come in, go to urgent care or go to the emergency room."
+        },
+        {
+          "title": "Tell them what changed",
+          "text": "When it started, what's different from {possessive} usual, and anything new: a new medicine, a fall, a fever, drinking less, trouble passing urine, pain, poor sleep."
+        },
+        {
+          "title": "Bring the list",
+          "text": "If {recipient} goes to be seen, bring all {possessive} medicines (or photos of the labels) and your notes."
+        }
+      ],
+      "then": [
+        "Confusion like this can come and go during the day. Better moments don't mean it's over: follow up until the cause is found.",
+        "Add what happened to the doctor-visit sheet."
+      ],
+      "dont": [
+        "Don't wait until morning to see if it passes.",
+        "Don't give extra or new medicines to calm {object} unless a doctor or pharmacist tells you to."
+      ],
+      "resources": [
+        "911",
+        "alz"
+      ],
+      "sources": [
+        {
+          "name": "MedlinePlus (NIH), confusion: when to call 911",
+          "url": "https://medlineplus.gov/ency/article/003205.htm"
+        },
+        {
+          "name": "NHS, confusion: common causes in older people",
+          "url": "https://www.nhs.uk/symptoms/confusion"
+        }
+      ]
+    },
+    {
+      "id": "qg_hospital",
+      "title": "After a hospital stay",
+      "summary": "Ask the right questions before leaving, and make the first days calm.",
+      "urgency": "planning",
+      "callNow": [
+        "New trouble breathing, chest pain, or signs of a stroke",
+        "{Recipient} is suddenly much more confused, very hard to wake, or can't keep fluids down"
+      ],
+      "steps": [
+        {
+          "title": "Before leaving the hospital, ask",
+          "text": "What happened and what to watch for. Which medicines are new, changed or stopped. When the follow-up visit is and with whom. Whether home health care or equipment was ordered. Who to call with questions, day and night."
+        },
+        {
+          "title": "Get it in writing",
+          "text": "Ask for the discharge papers and the updated medicine list. Take a photo of each page."
+        },
+        {
+          "title": "Go over the medicines with the pharmacist",
+          "text": "Compare the new list with what's at home, so nothing old is taken by mistake."
+        },
+        {
+          "title": "Make the first days calm",
+          "text": "Familiar room, a night light, a simple routine, water within reach, and the same short answers to the same questions."
+        },
+        {
+          "title": "Expect more confusion for a while",
+          "text": "Many people with dementia are more confused after a hospital stay. Tell the doctor if it's getting worse instead of better, or if anything new appears."
+        }
+      ],
+      "then": [
+        "Book the follow-up visit before you leave, or the next working day.",
+        "Ask family to cover the first few days; put tasks on the family board.",
+        "Do a quick safety check at home: clear paths, grab bars, lighting on the way to the bathroom."
+      ],
+      "dont": [
+        "Don't leave without a written medicine list and a number to call.",
+        "Don't change doses on your own; ask the doctor or pharmacist."
+      ],
+      "resources": [
+        "911",
+        "alz",
+        "eldercare"
+      ],
+      "sources": [
+        {
+          "name": "MedlinePlus (NIH), confusion: when to call 911",
+          "url": "https://medlineplus.gov/ency/article/003205.htm"
+        }
+      ]
+    },
+    {
+      "id": "qg_limit",
+      "title": "You're at your limit",
+      "summary": "You matter too. Here's what to do right now.",
+      "urgency": "support",
+      "callNow": [
+        "You're thinking about hurting yourself: call or text 988 now",
+        "You're afraid you might hurt {recipient}, or someone is in danger: call 911"
+      ],
+      "steps": [
+        {
+          "title": "Make sure everyone is safe",
+          "text": "If {recipient} is safe for a few minutes, step into another room. It's okay to leave a hard moment and come back."
+        },
+        {
+          "title": "Take one slow breath, then another",
+          "text": "Breathe out longer than you breathe in. Put your feet on the floor. Drink some water."
+        },
+        {
+          "title": "Talk to someone now",
+          "text": "Call a person you trust, or the Alzheimer's Association 24/7 Helpline. You can talk to them about how you feel, not just about {recipient}."
+        },
+        {
+          "title": "Hand off one thing",
+          "text": "Ask a sibling, friend or neighbor to take one task today: a call, a visit, a meal."
+        },
+        {
+          "title": "Plan a real break",
+          "text": "Respite care can give you hours or days off. The Eldercare Locator finds local respite and caregiver support."
+        }
+      ],
+      "then": [
+        "Feeling angry, exhausted or resentful doesn't make you a bad daughter or son. It means you've been carrying too much alone.",
+        "When you have a few minutes, open the lesson 'Spotting burnout early' or 'A plan for your own breaks'.",
+        "If this happens often, tell your own doctor how you're doing."
+      ],
+      "dont": [
+        "Don't wait until you're completely empty to ask for help.",
+        "Don't handle a dangerous moment alone: call."
+      ],
+      "resources": [
+        "988",
+        "911",
+        "alz",
+        "eldercare"
+      ],
+      "sources": [
+        {
+          "name": "988 Suicide & Crisis Lifeline",
+          "url": "https://988lifeline.org"
+        },
+        {
+          "name": "Alzheimer's Association (24/7 Helpline 800-272-3900)",
+          "url": "https://alz.org/emergency"
+        },
+        {
+          "name": "Administration for Community Living, Eldercare Locator",
+          "url": "https://acl.gov/contact-us"
+        }
+      ]
+    }
+  ]
+}

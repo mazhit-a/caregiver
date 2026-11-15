@@ -17,6 +17,7 @@ from app.infrastructure.content.schemas import (
     PhrasesFile,
     PlanRulesFile,
     PricingFile,
+    QuickGuidesFile,
     QuizFile,
     SafetyTermsFile,
     VisitQuestionsFile,
@@ -32,6 +33,7 @@ _SINGLE_FILES = (
     "safety-terms.json",
     "crisis-resources.json",
     "visit-questions.json",
+    "quick-guides.json",
 )
 _LESSONS_DIR = "lessons"
 
@@ -51,6 +53,7 @@ class ContentBundle:
     safety_terms: SafetyTermsFile
     crisis_resources: CrisisResourcesFile
     visit_questions: VisitQuestionsFile
+    quick_guides: QuickGuidesFile
     lessons: dict[str, LessonFile]
     content_version: str
 
@@ -129,6 +132,7 @@ def load_content(content_dir: Path) -> ContentBundle:
         visit_questions=_parse(
             "visit-questions.json", raw["visit-questions.json"], VisitQuestionsFile
         ),
+        quick_guides=_parse("quick-guides.json", raw["quick-guides.json"], QuickGuidesFile),
         lessons=lessons,
         content_version=compute_content_version(raw),
     )

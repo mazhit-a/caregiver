@@ -76,6 +76,7 @@ DOMAIN_ERROR_STATUS: dict[str, int] = {
     "card_not_published": 409,
     "invalid_card_phrases": 422,
     "unknown_event": 422,
+    "unknown_guide": 404,
 }
 
 

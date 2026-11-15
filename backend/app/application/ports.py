@@ -21,6 +21,7 @@ from app.domain.billing.exit_copy import GentleExitCopy
 from app.domain.billing.pricing import Pricing
 from app.domain.care_card.entities import CareCard
 from app.domain.funnel.copy import FunnelCopy
+from app.domain.guides.entities import QuickGuideBook
 from app.domain.lessons.plans import ConfidenceRatings, IfThenPlan, Task
 from app.domain.lessons.progress import LessonProgress, ScenarioAnswer
 from app.domain.phrases.entities import SavedPhrase
@@ -460,6 +461,10 @@ class ContentProvider(Protocol):
         ...
 
     def crisis_resources(self) -> list[CrisisResource]: ...
+
+    def quick_guides(self) -> QuickGuideBook:
+        """The quick guides of quick-guides.json (placeholders unfilled)."""
+        ...
 
     def visit_questions(self) -> VisitQuestionBank:
         """The doctor-visit question bank and the footer that is always shown."""

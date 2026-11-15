@@ -8,6 +8,7 @@ Content and rules for the funnel. No code here: the app reads these files.
 | plan-rules.json | Modules and lessons; turns tags into the module order with reasons, plus summary, before/after, loader lines, quick guides, gift phrases | planBuilder (pure function, unit-tested) |
 | funnel-copy.json | All funnel texts: landing, quiz intro, loader, plan preview, paywall, save plan | Funnel screens |
 | app-copy.json | App strings after the paywall that carry the recipient label (nav, page titles, care-card and gentle-exit wording, welcome card, lesson player labels) | `GET /api/app-copy` |
+| quick-guides.json | Five quick guides for urgent moments (missing, fall, sudden change, hospital, at your limit): call-now box, steps, then, don't, who can help, sources. Highlight rules stay in plan-rules.json | `GET /api/guides`, `GET /api/guides/{id}` (public) |
 | pricing.json | Demo plans (4-week default, 12-week), Stripe test-mode price ids | Paywall, checkout route |
 | phrases.json | Phrase bank for the free gift sheet | Gift sheet (H0), lessons |
 | lessons/m1_l1.json | Lesson 1 "When Mom asks again": setup question and 3 variants, scenario, 4 learn screens, AI practice rounds, if-then plan, wrap-up, Day 2 check-in and practice round, recap for lesson 2 | Lesson player (A3–A5), Today (Day 2) |

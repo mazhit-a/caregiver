@@ -408,6 +408,7 @@ Everything the learner reads, and every rule and number, is data in `content/` (
 | Role-play prompts (versioned, never edit a version that has an eval report) | `content/prompts/roleplay-turn.v<N>.md` |
 | Safety terms, medical terms, fixed coach tips | `content/safety-terms.json` |
 | Crisis resources | `content/crisis-resources.json` |
+| Quick guides (missing, fall, sudden change, hospital, at your limit) | `content/quick-guides.json` |
 | Visit-sheet questions | `content/visit-questions.json` |
 | Eval cases | `backend/evals/datasets/golden.jsonl` (source package: `content/evals/roleplay-evals.json`) |
 
@@ -421,6 +422,7 @@ All routes are under `/api`, JSON, camelCase. Session auth: header `X-Session-To
 `POST /api/session`). Groups: session, quiz, plan (funnel preview and gift), pricing and billing,
 Stripe webhook, app (plan, today, lessons, role-play, check-ins, skills, profile, phrases, care
 card, visit sheet; need a subscription), exit (gentle exit), public (care card, crisis resources,
+quick guides `GET /api/guides[/{id}]`,
 health), demo controls (`DEMO_CONTROLS`), events. Errors: `{"error": {"code", "message",
 "details"}}`; frontend-relevant codes: `402` gate with reason (`no_plan`, `no_subscription`,
 `past_due`, `ended`), `409` quiz locked, `423` lesson locked (`unlockOn`), `429` rate limit,
@@ -483,6 +485,7 @@ and the earlier backend list). None of this is done by the code. Items marked `[
 
 **Content and review**
 
+- [ ] Have a dementia-care or nursing professional review the five guides and re-check phone numbers (`content/quick-guides.json` notes).
 - [ ] **Content owner review of `content/app-copy.json`** (every app string: nav, plan, profile,
       care card, visit sheet, skills, settings, welcome, lesson labels such as "Good instinct /
       Noted / Very common") and of the `gentleExit` copy.
