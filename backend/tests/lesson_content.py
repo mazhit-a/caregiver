@@ -16,9 +16,14 @@ def _drop_variants(lesson: dict[str, Any]) -> dict[str, Any]:
     """m1_l1 without its setup question: every by-variant block keeps the `in_person` entry."""
     lesson["id"] = "m1_l2"
     lesson["title"] = "Fixture lesson for {recipient}"
-    lesson["screens"] = [s for s in lesson["screens"] if s["type"] != "setup_question"]
+    lesson["screens"] = [s for s in lesson["screens"] if s["type"] != "setup"]
     for screen in lesson["screens"]:
         _flatten(screen)
+        if screen["type"] == "wrap":  # the fixture is the last built lesson
+            screen["allDoneLine"] = (
+                "That's every lesson ready for you so far. More are on the way. "
+                "Come back to Today to practice again."
+            )
     day2 = lesson["day2"]
     for block in (day2["checkIn"], day2["practiceRound"]):
         _flatten(block)

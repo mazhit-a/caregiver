@@ -120,7 +120,7 @@
     {
       "id": "reassure_1",
       "type": "interstitial",
-      "speaker": "rosa",
+      "speaker": "ollie",
       "title": "You're not alone.",
       "body": "About 1 in 4 adults in the US cares for a family member, and most never got any training. Knowing what to say and do is a skill. You can learn it, one step at a time.",
       "cta": "Continue",
@@ -239,7 +239,7 @@
     {
       "id": "reassure_2",
       "type": "interstitial",
-      "speaker": "rosa",
+      "speaker": "ollie",
       "title": "Thank you. This helps a lot.",
       "body": "We'll start with what matters most to you and build the rest step by step. You don't have to figure it all out today.",
       "cta": "Continue",

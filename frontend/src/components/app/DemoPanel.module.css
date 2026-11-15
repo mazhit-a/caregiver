@@ -1,0 +1,37 @@
+.panel {
+  padding: var(--space-4);
+  border-radius: var(--radius-card);
+  border: var(--border-width-strong) dashed var(--coach-border);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.label { margin: 0; font: var(--text-caption); color: var(--text-secondary); }
+.detail { margin: 0; font: var(--text-body); color: var(--text-secondary); }
+.controls { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.button {
+  min-height: var(--tap-min);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-chip);
+  border: var(--border-width-strong) dashed var(--accent);
+  background: var(--surface);
+  color: var(--accent-pressed);
+  font: var(--text-button);
+  cursor: pointer;
+}
+.button:disabled { opacity: 0.6; cursor: default; }
+.status { margin: 0; font: var(--text-body-strong); color: var(--text); }
+.status:empty { display: none; }
+.error { padding: var(--space-3); border-radius: var(--radius-button); background: var(--error-soft); color: var(--error-text); font: var(--text-body); }
+.error p { margin: 0 0 var(--space-2); }
+.retry {
+  min-height: var(--tap-min);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-button);
+  border: var(--border-width-strong) solid var(--error-text);
+  background: var(--surface);
+  color: var(--error-text);
+  font: var(--text-button);
+  cursor: pointer;
+}

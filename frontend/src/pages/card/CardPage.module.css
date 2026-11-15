@@ -1,0 +1,74 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-4) var(--space-7);
+  overflow-wrap: anywhere;
+}
+
+.h1 { margin: 0; font: var(--text-h1); }
+.h2 { margin: 0 0 var(--space-2); font: var(--text-h3); }
+.meta { margin: 0; font: var(--text-small); color: var(--text-secondary); }
+.text { margin: 0; font: var(--text-body-lg); }
+
+.section {
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.chips, .list { display: flex; margin: 0; padding: 0; list-style: none; }
+.chips { flex-wrap: wrap; gap: var(--space-2); }
+.list { flex-direction: column; gap: var(--space-3); }
+
+.chip {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-chip);
+  background: var(--info-soft);
+  color: var(--info-text);
+  font: var(--text-body-strong);
+}
+
+.phrase { font: var(--text-body-lg); }
+.row { display: flex; flex-direction: column; gap: var(--space-1); }
+.name { font: var(--text-body-strong); }
+.role, .desc { font: var(--text-small); color: var(--text-secondary); }
+
+.call {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  min-height: var(--tap-min);
+  padding: 0 var(--space-4);
+  border: var(--border-width-strong) solid var(--accent);
+  border-radius: var(--radius-button);
+  color: var(--accent-pressed);
+  font: var(--text-button);
+  text-decoration: none;
+}
+
+.message { display: flex; flex-direction: column; gap: var(--space-3); }
+
+.print {
+  min-height: var(--tap-min);
+  align-self: flex-start;
+  padding: 0 var(--space-4);
+  border: var(--border-width) solid var(--border-control);
+  border-radius: var(--radius-button);
+  background: var(--surface);
+  color: var(--text);
+  font: var(--text-button);
+  cursor: pointer;
+}
+
+@media print {
+  .page { max-width: none; padding: 0.5in; gap: 10pt; }
+  .section { border: 1px solid #000; background: #fff; break-inside: avoid; }
+  .chip { border: 1px solid #000; background: #fff; color: #000; }
+  .meta, .role, .desc { color: #000; }
+  .call { border: 0; padding: 0; min-height: 0; color: #000; text-decoration: underline; }
+  .print { display: none; }
+}

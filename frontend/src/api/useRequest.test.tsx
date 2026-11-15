@@ -58,4 +58,23 @@ describe("useRequest", () => {
     unmount();
     expect(signal?.aborted).toBe(true);
   });
+
+  it("refresh runs again keeping the data, and a failed refresh keeps it too", async () => {
+    let attempts = 0;
+    const { result } = renderHook(() =>
+      useRequest(() => {
+        attempts += 1;
+        return attempts === 3 ? Promise.reject(new ApiError(500, "boom", "m")) : Promise.resolve(attempts);
+      }, []),
+    );
+    await waitFor(() => expect(result.current.data).toBe(1));
+    act(() => result.current.refresh());
+    expect(result.current.status).toBe("ready");
+    expect(result.current.data).toBe(1);
+    await waitFor(() => expect(result.current.data).toBe(2));
+    act(() => result.current.refresh());
+    await waitFor(() => expect(attempts).toBe(3));
+    expect(result.current.status).toBe("ready");
+    expect(result.current.data).toBe(2);
+  });
 });

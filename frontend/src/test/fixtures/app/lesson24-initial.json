@@ -1,0 +1,78 @@
+{
+  "id": "m1_l1",
+  "moduleId": "m1_talking",
+  "title": "When Mom asks again",
+  "minutes": 9,
+  "skill": "communication",
+  "skillLabel": "Handling repeated questions",
+  "variant": null,
+  "unlockOn": "2026-01-05",
+  "pattern": {
+    "name": "The three steps",
+    "steps": [
+      {
+        "id": "notice",
+        "label": "Notice the feeling",
+        "example": "You're wondering about tomorrow."
+      },
+      {
+        "id": "reassure",
+        "label": "Reassure",
+        "example": "We have plenty of time. I'll tell you when it's time."
+      },
+      {
+        "id": "offer",
+        "label": "Offer something to do",
+        "example": "Want to help me with the tea?"
+      }
+    ]
+  },
+  "screens": [
+    {
+      "id": "intro",
+      "part": null,
+      "type": "intro",
+      "title": "When Mom asks again",
+      "body": "The same question, five times before dinner. It’s one of the most common changes families notice, and one of the most tiring. In about 9 minutes you’ll learn why it happens and what to say instead.",
+      "bullets": [
+        "Why the question keeps coming back",
+        "Three steps that calm it",
+        "What to avoid, even when it’s true",
+        "Practice out loud, then make a plan"
+      ],
+      "image": "ollie-explaining"
+    },
+    {
+      "id": "setup",
+      "part": null,
+      "type": "setup",
+      "title": "Where do Mom's repeated questions usually reach you?",
+      "body": "Your answer changes the examples and your task, not the lesson.",
+      "options": [
+        {
+          "id": "in_person",
+          "label": "In person"
+        },
+        {
+          "id": "phone",
+          "label": "On the phone"
+        },
+        {
+          "id": "both",
+          "label": "Both"
+        },
+        {
+          "id": "not_yet",
+          "label": "I haven’t noticed it yet"
+        }
+      ]
+    }
+  ],
+  "screenCount": 24,
+  "progress": {
+    "step": 0,
+    "startedAt": "2026-01-05T09:00:00Z",
+    "doneAt": null
+  },
+  "recap": null
+}

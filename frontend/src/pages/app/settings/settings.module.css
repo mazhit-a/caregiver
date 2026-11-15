@@ -1,0 +1,31 @@
+.page { display: grid; gap: var(--space-5); max-width: var(--content-max); }
+.title { margin: 0; font: var(--text-h1); color: var(--text); }
+.card {
+  display: grid; gap: var(--space-3); padding: var(--space-4) var(--space-5);
+  background: var(--surface); border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-card);
+}
+.cardTitle { margin: 0; font: var(--text-h3); color: var(--text); }
+.line { margin: 0; font: var(--text-body); color: var(--text); }
+.note { margin: 0; font: var(--text-small); color: var(--text-secondary); }
+.facts { display: grid; gap: var(--space-2); margin: 0; }
+.fact { display: grid; grid-template-columns: 6rem 1fr; gap: var(--space-3); }
+.fact dt { font: var(--text-small); color: var(--text-secondary); }
+.fact dd { margin: 0; font: var(--text-body-strong); color: var(--text); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.button, .secondary, .retry {
+  display: inline-flex; align-items: center; justify-content: center; min-height: var(--tap-min);
+  padding: 0 var(--space-4); border-radius: var(--radius-button); font: var(--text-button);
+  text-decoration: none; cursor: pointer; border: var(--border-width) solid var(--border-control);
+  background: var(--surface); color: var(--text);
+}
+.button:focus-visible, .secondary:focus-visible, .retry:focus-visible, .calm:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.button:disabled, .secondary:disabled { opacity: 0.6; cursor: default; }
+.calm { color: var(--text); font: var(--text-body-strong); text-decoration: underline; }
+.exit { background: var(--surface-muted); }
+.done { background: var(--success-soft); color: var(--success-text); }
+.done .line, .done .cardTitle { color: inherit; }
+.error { padding: var(--space-4); border-radius: var(--radius-card); background: var(--error-soft); color: var(--error-text); display: grid; gap: var(--space-3); justify-items: start; }
+.error p { margin: 0; }
+.skeleton { min-height: var(--space-8); border-radius: var(--radius-card); background: var(--surface-muted); }
+.hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

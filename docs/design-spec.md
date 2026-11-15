@@ -1,10 +1,14 @@
-# Parent Care Navigator — Design Spec (MVP)
+# Kelper — Design Spec (MVP)
 
 Nov 14, 2026 · @Ali · v3
 
 ## Changelog
 
-**v3.1 (this version)**
+**v3.2 (this version)**
+
+- Product renamed to Kelper (Kelper.io); the guide is Ollie, a sea otter. Visual direction now comes from the Kelper brand book (tokens, Figtree, components, Ollie poses).
+
+**v3.1**
 
 - The course is now built from modules. Module 1 "Talking with Mom" is the same for everyone; lessons inside a module are fixed; the quiz decides the order of the other modules, with a reason for each. This replaces the week-by-week item list.
 - Lesson variants (in person / phone / not noticed yet) change only examples and tasks, never which lesson comes next.
@@ -25,7 +29,7 @@ Nov 14, 2026 · @Ali · v3
 - Paywall: 4-week plan selected by default, 12-week as an option, no weekly plan, price and period in bold above the button, no price per day, short disclaimer, no fortune wheel, fake timers or invented social proof.
 - After payment: onboarding cut to 2 screens with no repeated quiz questions, then straight into lesson 1, which continues the promise of the ad.
 - Lesson structure is now "task first": every lesson opens with a scenario, then short Learn screens, with a small interaction every 2–3 screens and warm feedback even on a wrong answer.
-- New guide narrator: Rosa, who cared for her own mom (not a nurse, so she doesn't read as a medical authority).
+- New guide narrator: Ollie, who cared for her own mom (not a nurse, so she doesn't read as a medical authority).
 - Normal cancellation shows what the user would lose (Mom's care card, saved phrases, plan progress). No discount. The gentle exit path stays free of any retention message.
 - Plan tab shows the full curriculum as modules, so the long journey is visible.
 - New P0 retention items: tonight's task, "Remind me tomorrow" calendar file (.ics, no email needed), next-lesson teaser, care-card update nudge. Add to Home Screen moved to P1.
@@ -49,7 +53,7 @@ Nov 14, 2026 · @Ali · v3
 
 ## Overview
 
-Parent Care Navigator is a web course that teaches adult children how to care for a parent with dementia, with a plan built around their specific parent. Other apps organize care; we teach people how to give it. Design every screen to serve that difference.
+Kelper is a web course that teaches adult children how to care for a parent with dementia, with a plan built around their specific parent. Other apps organize care; we teach people how to give it. Design every screen to serve that difference.
 
 **Product in one line:** quiz → personal course plan in modules → short lessons that start with a real scenario, with an AI role-play coach → an if-then plan for the next real moment → handouts for the sitter and the doctor.
 
@@ -123,11 +127,11 @@ Each decision below follows a common pattern in subscription learning products a
 
 The product should feel like a calm, experienced friend who has been through this, not like a hospital portal or a fitness app.
 
-**Guide narrator: Rosa**
+**Guide: Ollie**
 
-- Rosa cared for her own mom with dementia for six years. She is warm, practical and a little funny.
+- Ollie is a sea otter (a girl) in an iris sweater with a sun-yellow star pin. She cared for her own mom with dementia for six years. She is warm, practical and a little funny. Poses and rules: see the Kelper brand book.
 - She opens lessons, introduces scenarios and gives feedback. She is never presented as a nurse or doctor.
-- One illustrated character, used consistently from onboarding through every lesson.
+- One character, used consistently from onboarding through every lesson. Never on crisis, payment, medical or gentle-exit screens.
 
 **Voice**
 
@@ -144,7 +148,7 @@ The product should feel like a calm, experienced friend who has been through thi
 | --- | --- | --- |
 | Colour | Soft warm neutrals + one calm accent (e.g. deep teal or muted blue); a gentle positive colour for "done" | Clinical white-and-blue hospital look, alarm red as decoration |
 | Type | Highly readable sans-serif; body 17–18 px on mobile; generous line height | Small grey text, all-caps blocks |
-| Imagery | Warm illustration of everyday family moments (kitchen table, phone call, walk) and Rosa | Stock photos of sad elderly people, brains, pills |
+| Imagery | Warm illustration of everyday family moments (kitchen table, phone call, walk) and Ollie | Stock photos of sad elderly people, brains, pills |
 | Layout | Single column, lots of space, one primary button per screen | Dashboards packed with widgets |
 | Motion | Subtle, reassuring (a check fills in, a card slides) | Confetti, streak fireworks |
 | Iconography | Simple line icons with labels | Icons without text |
@@ -267,7 +271,7 @@ The practice screens (A3, A4, A5) are the hero of the product and get the most d
 
 **A0. Onboarding (2 screens, then straight into lesson 1)**
 
-1. Rosa welcomes: "I'm Rosa. I cared for my mom for six years. Let's start with the moment that comes up most." Shows the first item of Mom's plan from the quiz.
+1. Ollie welcomes: "I'm Ollie. I cared for my mom for six years. Let's start with the moment that comes up most." Shows the first item of Mom's plan from the quiz.
 2. Mom's profile, minimal: name or nickname (prefilled from Q1 label), what calms her (optional). Everything else is collected later inside lessons.
 3. Lesson 1 opens immediately on its first scenario. No empty dashboard, no repeated quiz questions.
 
@@ -452,14 +456,14 @@ Build a small component library first; every screen above is assembled from it.
 | --- | --- |
 | Button | Primary, secondary, text; loading, disabled |
 | Quiz option card | Single, multi-select chip, 3-state grid row, 1–5 scale; selected, focus |
-| Reassurance card | Text + Rosa illustration + Continue |
+| Reassurance card | Text + Ollie illustration + Continue |
 | Summary block | "What we heard" lines built from answers |
 | Lesson card | Not started, in progress, done, with "why you're seeing this" |
 | Learn screen | Text + optional illustration; key idea highlight; inline mini-interaction |
 | Scenario answer card | Default, selected, Best / Okay / Try again feedback |
 | Feedback panel | Verdict, what Mom may feel, why, save-phrase action |
 | Role-play bubbles | AI-Mom, caregiver, coach panel (3 criteria chips, tip, suggested phrase) |
-| Rosa bubble | Narrator line with avatar |
+| Ollie bubble | Narrator line with avatar |
 | Skill chip and progress row | First try vs latest score; confidence first vs latest |
 | Readiness ring | 0–100%, with "x of y done" label |
 | Weekly rhythm | "2 of 3 this week", no streak styling |
@@ -532,7 +536,7 @@ Design P0 first: it is exactly what judges click through in production, without 
 
 **Demo path:** quiz → "What we heard" → paywall (test mode) → lesson "When Mom asks again" (scenario first) → AI role-play → save phrase → if-then plan → "Simulate next day" → check-in + practice round + care-card nudge → care card → visit prep sheet → skills progress.
 
-**Hand-off package:** component library with tokens (colour, type, spacing), mobile + desktop frames for P0, all states listed above, clickable prototype of the demo path, print layouts for H0, H1 and H2, illustration set (6–8 scenes + Rosa).
+**Hand-off package:** component library with tokens (colour, type, spacing), mobile + desktop frames for P0, all states listed above, clickable prototype of the demo path, print layouts for H0, H1 and H2, illustration set (6–8 scenes + Ollie).
 
 ## Build notes
 
@@ -562,8 +566,8 @@ Not in the MVP; designed later.
 
 ## Open questions
 
-- [ ] Product name and logo final, or keep "Parent Care Navigator" for the competition?
-- [ ] Accent colour, illustration style and Rosa's look: who approves?
+- [ ] Product name and logo final, or keep "Kelper" for the competition?
+- [ ] Accent colour, illustration style and Ollie's look: who approves?
 - [ ] Number of paywall tiers and prices (from the fake-door test).
 - [ ] Do we build the second lesson ("Talking so it lands") if P0 is done early?
 - [ ] Gift sheet (H0): P1 as planned, or P0 if the print layout from H1 is ready early?

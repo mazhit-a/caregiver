@@ -35,7 +35,7 @@ async def test_skills_has_no_roleplay_text_fields(
     assert body["next"]["reason"] and body["skills"] == []
     run = await start(pclient)
     for answer in ("a1", "a4"):
-        r = await _answer(pclient, "s2_scenario", answer)
+        r = await _answer(pclient, "scenario", answer)
         assert r.status_code == 200, r.text
     assert (await turn(pclient, run["runId"])).status_code == 200
     phrases = {"phrases": [{"reply": REPLY, "betterPhrase": "Better."}]}

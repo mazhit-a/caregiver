@@ -1,6 +1,3 @@
-import { apiRequest } from "../../api/client";
-import { type Request, useRequest } from "../../api/useRequest";
-
 /** The slice of `GET /app-copy` the shell reads (labels are server-rendered, never filled here). */
 export interface NavCopy {
   today: string;
@@ -18,34 +15,9 @@ const NAV_KEYS = [
   "settings",
 ] as const;
 
-interface AppCopyNav {
-  nav: NavCopy;
-}
-
-/** Local, type-only view of app-copy; G1's AppDataProvider replaces the fetch later. */
-export function useNavCopy(): Request<NavCopy> {
-  const state = useRequest<AppCopyNav>(
-    (signal) =>
-      apiRequest<AppCopyNav>({
-        method: "GET",
-        path: "/app-copy",
-        signal,
-        auth: true,
-      }),
-    [],
-  );
-  if (state.status === "ready") {
-    const nav = state.data.nav as Partial<NavCopy> | undefined;
-    const valid = NAV_KEYS.every((key) => typeof nav?.[key] === "string");
-    if (!valid) {
-      return {
-        status: "error",
-        data: undefined,
-        error: { kind: "unknown" },
-        retry: state.retry,
-      };
-    }
-    return { ...state, data: state.data.nav } as Request<NavCopy>;
-  }
-  return state as Request<NavCopy>;
+/** The nav labels, or null when the server sent something incomplete (the shell shows its retry block). */
+export function readNavCopy(nav: Partial<NavCopy> | undefined): NavCopy | null {
+  return NAV_KEYS.every((key) => typeof nav?.[key] === "string")
+    ? (nav as NavCopy)
+    : null;
 }

@@ -1,8 +1,8 @@
 """Pydantic models of the content files. Unknown fields fail validation on purpose."""
 
-from typing import Annotated, Literal
+from typing import Annotated, Any, ClassVar, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 from pydantic.alias_generators import to_camel
 
 
@@ -569,14 +569,63 @@ class OptionLabel(ContentModel):
     label: str
 
 
-class SetupQuestionScreen(ContentModel):
+class ScreenBase(ContentModel):
+    """Fields every lesson screen may carry: `part` (label above the screen, served) and `sec`
+    (seconds, content-only: validated against the lesson `minutes`, never served)."""
+
+    part: str | None = None
+    sec: int | None = None
+
+
+class PositionalModel(ContentModel):
+    """A model the package files write as a positional array, e.g. `[text, correct, feedback]`."""
+
+    positions: ClassVar[tuple[str, ...]] = ()
+
+    @model_validator(mode="before")
+    @classmethod
+    def _from_array(cls, data: Any) -> Any:
+        if isinstance(data, list | tuple):
+            if len(data) != len(cls.positions):
+                raise ValueError(f"expected {len(cls.positions)} values {list(cls.positions)}")
+            return dict(zip(cls.positions, data, strict=True))
+        return data
+
+
+def _with_ids(items: Any, prefix: str) -> Any:
+    """Index-based ids (`o1..`, `a1..`): stable because content edits never reshuffle."""
+    if not isinstance(items, list):
+        return items
+    out: list[Any] = []
+    for index, item in enumerate(items, start=1):
+        if isinstance(item, dict):
+            item = {"id": f"{prefix}{index}", **item}
+        out.append(item)
+    return out
+
+
+class IntroScreen(ScreenBase):
     id: str
-    type: Literal["setup_question"]
-    speaker: str
-    text: str
-    question: str
-    store_as: str
-    options: list[OptionLabel]
+    type: Literal["intro"]
+    minutes: int
+    title: str
+    body: str
+    bullets: list[str]
+    image: str | None = None
+
+
+class SetupOption(PositionalModel):
+    positions = ("id", "label")
+    id: str
+    label: str
+
+
+class SetupScreen(ScreenBase):
+    id: str
+    type: Literal["setup"]
+    title: str
+    body: str
+    options: list[SetupOption]
 
 
 class ScenarioVariant(ContentModel):
@@ -593,16 +642,212 @@ class ScenarioAnswer(ContentModel):
     save_phrase: bool | None = None
 
 
-class ScenarioScreen(ContentModel):
+class ScenarioOption(PositionalModel):
+    positions = ("text", "verdict", "feedback")
+    id: str = ""
+    text: str
+    verdict: str
+    feedback: str
+    save_phrase: bool | None = None
+
+
+class ScenarioScreen(ScreenBase):
+    """Canonical scenario: `*_by_variant` blocks plus the maps that resolve them.
+
+    The old shape (`byVariant`, `answers` dict, `answersVariantMap`) is adapted by the validator
+    below. The legacy fields stay filled for old-shape lessons until P9 replaces the renderer, so
+    the API output is unchanged in the meantime; the new shape leaves them unset.
+    """
+
     id: str
     type: Literal["scenario"]
-    by_variant: dict[str, ScenarioVariant]
+    title: str | None = None
+    note: str | None = None
+    setup_by_variant: dict[str, str]
+    line_by_variant: dict[str, str]
+    options_by_variant: dict[str, list[ScenarioOption]]
+    setup_variant_map: dict[str, str] = {}
+    options_variant_map: dict[str, str] = {}
+    # Transitional (old shape only).
+    by_variant: dict[str, ScenarioVariant] | None = None
+    question: str | None = None
+    answers: dict[str, list[ScenarioAnswer]] | None = None
+    answers_variant_map: dict[str, str] | None = None
+    verdict_labels: dict[str, str] | None = None
+    after_choice: str | None = None
+    save_button: str | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def _adapt(cls, data: Any) -> Any:
+        if not isinstance(data, dict):
+            return data
+        data = dict(data)
+        if "byVariant" in data and "answers" in data:
+            variants = data["byVariant"]
+            data.setdefault("setupByVariant", {k: v["setup"] for k, v in variants.items()})
+            data.setdefault("lineByVariant", {k: v["line"] for k, v in variants.items()})
+            data.setdefault("optionsByVariant", data["answers"])
+            maps = data.get("answersVariantMap", {})
+            data.setdefault("setupVariantMap", maps)
+            data.setdefault("optionsVariantMap", maps)
+        by_variant = data.get("optionsByVariant")
+        if isinstance(by_variant, dict):
+            data["optionsByVariant"] = {
+                k: _with_ids(_dicts(v, ScenarioOption), "a") for k, v in by_variant.items()
+            }
+        return data
+
+
+class LessonQuizOption(PositionalModel):
+    positions = ("text", "correct", "feedback")
+    id: str = ""
+    text: str
+    correct: bool
+    feedback: str
+
+
+class QuizScreen(ScreenBase):
+    id: str
+    type: Literal["quiz"]
+    title: str
+    options: list[LessonQuizOption]
+
+    @model_validator(mode="before")
+    @classmethod
+    def _ids(cls, data: Any) -> Any:
+        if isinstance(data, dict) and "options" in data:
+            data = {**data, "options": _with_ids(_dicts(data["options"], LessonQuizOption), "o")}
+        return data
+
+
+class Item(PositionalModel):
+    positions = ("title", "text")
+    title: str
+    text: str
+
+
+class Step(PositionalModel):
+    positions = ("n", "title", "text")
+    n: str
+    title: str
+    text: str
+
+
+class Example(PositionalModel):
+    positions = ("text", "why")
+    text: str
+    why: str
+
+
+class StickyNote(PositionalModel):
+    positions = ("line1", "line2")
+    line1: str
+    line2: str
+
+
+class DoDont(ContentModel):
+    do: list[str]
+    dont: list[str]
+
+
+class ContentScreen(ScreenBase):
+    """Teaching screen with optional blocks, rendered in a fixed order (see PLAN-04 1.1)."""
+
+    id: str
+    type: Literal["content"]
+    title: str
+    body: list[str] | None = None
+    body_by_variant: dict[str, list[str]] | None = None
+    body_variant_map: dict[str, str] | None = None
+    items: list[Item] | None = None
+    steps: list[Step] | None = None
+    dodont: DoDont | None = None
+    examples: list[Example] | None = None
+    example: StickyNote | None = None
+    key_idea: str | None = None
+    tip: str | None = None
+    image: str | None = None
+
+
+class BuilderOption(PositionalModel):
+    positions = ("text", "correct")
+    id: str = ""
+    text: str
+    correct: bool
+
+
+class BuilderGroup(ContentModel):
+    id: str = ""
+    label: str
+    options: list[BuilderOption]
+
+
+class BuilderScreen(ScreenBase):
+    id: str
+    type: Literal["builder"]
+    title: str
+    body: str
+    groups: list[BuilderGroup]
+
+    @model_validator(mode="before")
+    @classmethod
+    def _groups(cls, data: Any) -> Any:
+        if not isinstance(data, dict) or not isinstance(data.get("groups"), list):
+            return data
+        groups: list[Any] = []
+        for index, group in enumerate(data["groups"], start=1):
+            if isinstance(group, list | tuple) and len(group) == 2:
+                group = {"label": group[0], "options": group[1]}
+            if isinstance(group, dict):
+                options = _with_ids(_dicts(group.get("options"), BuilderOption), "o")
+                group = {"id": f"g{index}", **group, "options": options}
+            groups.append(group)
+        return {**data, "groups": groups}
+
+
+class ResetOption(ContentModel):
+    id: str
+    label: str
+    plan_text: str | None = None
+
+
+class ResetScreen(ScreenBase):
+    """Options are plain strings, or `[label, planText]` pairs (planText: the plan wording)."""
+
+    id: str
+    type: Literal["reset"]
+    title: str
+    body: str
     question: str
-    answers: dict[str, list[ScenarioAnswer]]
-    answers_variant_map: dict[str, str]
-    verdict_labels: dict[str, str]
-    after_choice: str
-    save_button: str
+    options: list[ResetOption]
+    image: str | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def _options(cls, data: Any) -> Any:
+        if not isinstance(data, dict) or not isinstance(data.get("options"), list):
+            return data
+        options: list[Any] = []
+        for index, option in enumerate(data["options"], start=1):
+            if isinstance(option, str):
+                option = {"label": option}
+            elif isinstance(option, list | tuple) and len(option) == 2:
+                option = {"label": option[0], "plan_text": option[1]}
+            if isinstance(option, dict):
+                option = {"id": f"r{index}", **option}
+            options.append(option)
+        return {**data, "options": options}
+
+
+def _dicts(items: Any, model: type[PositionalModel]) -> Any:
+    """Arrays of a positional model become dicts so `_with_ids` can add the id."""
+    if not isinstance(items, list):
+        return items
+    return [
+        dict(zip(model.positions, item, strict=False)) if isinstance(item, list | tuple) else item
+        for item in items
+    ]
 
 
 class MiniTaskOption(ContentModel):
@@ -619,7 +864,7 @@ class MiniTask(ContentModel):
     all_correct: bool | None = None
 
 
-class LearnScreen(ContentModel):
+class LearnScreen(ScreenBase):
     id: str
     type: Literal["learn"]
     title: str
@@ -633,7 +878,7 @@ class LearnScreen(ContentModel):
     mini_task: MiniTask | None = None
 
 
-class PhrasesReviewScreen(ContentModel):
+class PhrasesReviewScreen(ScreenBase):
     """Review screen: the server fills it with the phrases the learner saved."""
 
     id: str
@@ -664,7 +909,7 @@ class RoleplayLabels(ContentModel):
     ai_down: str
 
 
-class RoleplayScreen(ContentModel):
+class RoleplayScreen(ScreenBase):
     id: str
     type: Literal["roleplay"]
     prompt_file: str
@@ -704,7 +949,7 @@ class NoteTemplate(ContentModel):
     example: str
 
 
-class PlanScreen(ContentModel):
+class PlanScreen(ScreenBase):
     id: str
     type: Literal["plan"]
     title: str
@@ -722,7 +967,7 @@ class ConfidenceCheck(ContentModel):
     items: list[OptionLabel]
 
 
-class WrapScreen(ContentModel):
+class WrapScreen(ScreenBase):
     id: str
     type: Literal["wrap"]
     skill_line: str
@@ -731,13 +976,20 @@ class WrapScreen(ContentModel):
     confidence_check: ConfidenceCheck | None = None
     tomorrow_line: str
     next_line: str
+    title: str | None = None
+    learned: list[str] | None = None
     # Shown instead of a next lesson when this is the last lesson built so far.
     all_done_line: str | None = None
 
 
 LessonScreen = Annotated[
-    SetupQuestionScreen
+    IntroScreen
+    | SetupScreen
     | ScenarioScreen
+    | ContentScreen
+    | QuizScreen
+    | BuilderScreen
+    | ResetScreen
     | LearnScreen
     | PhrasesReviewScreen
     | RoleplayScreen
@@ -831,9 +1083,10 @@ class LessonFile(Notes):
     recap_for_next_lesson: Recap
 
     def variant_ids(self) -> list[str]:
-        """Variant ids from the setup question; empty for lessons without variants."""
+        """Variant ids from the setup screen (`setup`); empty for
+        lessons without variants."""
         for screen in self.screens:
-            if isinstance(screen, SetupQuestionScreen):
+            if isinstance(screen, SetupScreen):
                 return [option.id for option in screen.options]
         return []
 
@@ -898,6 +1151,32 @@ class AppCopyWelcome(ContentModel):
     name_label: str
 
 
+class AppCopyQuiz(ContentModel):
+    right: str
+    wrong: str
+
+
+class AppCopyBuilder(ContentModel):
+    all_correct: str
+    not_yet: str
+
+
+class AppCopyDoSkip(ContentModel):
+    do_label: str
+    skip_label: str
+
+
+class AppCopyLesson(ContentModel):
+    """Labels of the lesson player that the lesson files do not carry (no placeholders)."""
+
+    verdict_labels: dict[str, str]
+    after_choice: str
+    save_button: str
+    quiz: AppCopyQuiz
+    builder: AppCopyBuilder
+    do_skip: AppCopyDoSkip
+
+
 class AppCopyFile(Notes):
     version: int
     nav: AppCopyNav
@@ -908,3 +1187,4 @@ class AppCopyFile(Notes):
     skills: AppCopySkills
     settings: AppCopySettings
     welcome: AppCopyWelcome
+    lesson: AppCopyLesson

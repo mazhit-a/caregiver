@@ -5,8 +5,8 @@ from app.application.lessons.dto import CompleteView, NextLessonView
 from app.application.ports import Clock, ContentProvider, UnitOfWork
 from app.domain.lessons.screens import (
     RUNTIME_PLACEHOLDERS,
-    SCREEN_RENDERERS,
     RenderContext,
+    render_screen,
     visible_screens,
 )
 from app.domain.plan.entities import StoredPlan
@@ -60,7 +60,7 @@ class CompleteLesson:
         return CompleteView(
             lesson_id,
             done_at,
-            None if wrap is None else SCREEN_RENDERERS[WRAP_TYPE](wrap, ctx),
+            None if wrap is None else render_screen(wrap, ctx),
             next_lesson,
             all_done,
         )

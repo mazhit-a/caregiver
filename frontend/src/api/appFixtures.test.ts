@@ -23,6 +23,7 @@ describe("app fixtures (captured from the real backend) match the hand-written t
   it("app-copy", () => {
     const copy = f<Rec>("app-copy");
     expectKeys(copy, T.APP_COPY_KEYS);
+    expectKeys(copy["lesson"], T.LESSON_COPY_KEYS);
     expect(Object.keys(copy["nav"] as Rec).sort()).toEqual(
       ["plan", "profilePage", "settings", "skills", "today"],
     );
@@ -49,12 +50,41 @@ describe("app fixtures (captured from the real backend) match the hand-written t
     for (const screen of lesson.screens) expect(isKnownScreen(screen)).toBe(true);
   });
 
+  it.each(names(/^lesson24-(?!key)/))("%s (24-screen lesson 1)", (name) => {
+    const lesson = f<{ screens: Rec[]; screenCount: number; progress: Rec } & Rec>(name);
+    expectKeys(lesson, T.LESSON_V2_KEYS);
+    expectKeys(lesson.progress, T.LESSON_PROGRESS_KEYS);
+    expect(lesson.screenCount).toBe(24);
+    for (const screen of lesson.screens) expect(isKnownScreen(screen), String(screen["id"])).toBe(true);
+    expect(lesson.screens.length).toBe(name.endsWith("initial") ? 2 : 24);
+    expect(lesson.screens.map((s) => s["type"]).slice(0, 2)).toEqual(["intro", "setup"]);
+  });
+
+  it("24-screen lessons never carry an answer key, and the key file stays test-only", () => {
+    for (const n of names(/^lesson24-/)) {
+      const text = JSON.stringify(f(n));
+      expect(text, n).not.toMatch(/"(correct|verdict|feedback|correctOptionId)"/);
+    }
+    const quiz = f<{ screens: { type: string; options: Rec[] }[] }>("lesson24-in_person").screens.find(
+      (s) => s.type === "quiz",
+    );
+    expect(Object.keys(quiz?.options[0] ?? {}).sort()).toEqual(["id", "text"]);
+  });
+
   it("answers per screen type", () => {
     for (const n of names(/^answer-/)) expectKeys(f(n), T.ANSWER_RESULT_KEYS);
     expectKeys((f<Rec>("answer-scenario-a1")["result"]), T.SCENARIO_RESULT_KEYS);
     expectKeys((f<Rec>("answer-plan")["result"]), T.PLAN_RESULT_KEYS);
     expectKeys((f<Rec>("answer-wrap")["result"]), T.WRAP_RESULT_KEYS);
     expectKeys(f<Rec>("answer-setup-both")["result"], ["variant"]);
+    for (const v of ["in_person", "phone", "both", "not_yet"]) {
+      expect(f<Rec>(`answer-setup-v2-${v}`)).toMatchObject({ type: "setup", result: { variant: v } });
+    }
+    for (const n of ["answer-quiz-right", "answer-quiz-wrong"]) expectKeys(f<Rec>(n)["result"], T.QUIZ_RESULT_KEYS);
+    for (const n of ["answer-builder-ok", "answer-builder-notyet"]) {
+      expectKeys(f<Rec>(n)["result"], T.BUILDER_RESULT_KEYS);
+    }
+    expectKeys(f<Rec>("answer-reset")["result"], T.RESET_RESULT_KEYS);
     expectKeys(f<Rec>("answer-minitask-main")["result"], ["optionId", "response"]);
   });
 
@@ -143,15 +173,23 @@ describe("app fixtures (captured from the real backend) match the hand-written t
 });
 
 describe("screen guard", () => {
-  it("accepts all 7 screen types found in the captured lessons", () => {
+  it("accepts all 12 screen types (and the legacy setup_question) found in the lesson fixtures", () => {
     const seen = new Set<string>();
-    for (const n of names(/^lesson-/)) {
+    for (const n of names(/^lesson(24)?-(?!key)/)) {
       for (const screen of f<{ screens: Rec[] }>(n).screens) {
         expect(isKnownScreen(screen), `${n} ${String(screen["id"])}`).toBe(true);
         seen.add(String(screen["type"]));
       }
     }
     expect([...seen].sort()).toEqual([...T.SCREEN_TYPES].sort());
+    expect(T.SCREEN_TYPES.filter((t) => t !== "setup_question")).toHaveLength(12);
+  });
+
+  it("rejects each new type when its fields are missing", () => {
+    for (const type of ["intro", "content", "quiz", "builder", "reset", "setup"]) {
+      expect(isKnownScreen({ id: "x", type }), type).toBe(false);
+    }
+    expect(toScreen({ id: "q", type: "quiz", title: "t" })).toEqual({ id: "q", type: "unknown" });
   });
 
   it("turns an unknown or malformed screen into a typed unknown state", () => {

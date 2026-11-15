@@ -1,0 +1,19 @@
+{
+  "screenId": "builder",
+  "type": "builder",
+  "result": {
+    "reply": "You’re wondering about tomorrow. We have plenty of time. I’ll tell you when. Want to help me with the tea?",
+    "allCorrect": true,
+    "groups": [
+      {
+        "correct": true
+      },
+      {
+        "correct": true
+      },
+      {
+        "correct": true
+      }
+    ]
+  }
+}

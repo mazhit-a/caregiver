@@ -10,6 +10,14 @@ import { ApiError } from "./client";
 import { clearToken, getToken, setToken } from "./session";
 import { runAppAction, useAppAction, useAppRequest } from "./useAppRequest";
 
+const NodeRequest = Request;
+/** jsdom's AbortSignal is not accepted by Node's Request; drop it so slow runs behave like fast ones. */
+class TestRequest extends NodeRequest {
+  constructor(input: RequestInfo | URL, init?: RequestInit) {
+    super(input, init?.signal ? { ...init, signal: undefined } : init);
+  }
+}
+
 let api: FakeApi;
 const report = vi.fn<AppContext["reportFailure"]>();
 
@@ -28,13 +36,17 @@ function memoryStorage(): Storage {
 }
 
 beforeEach(() => {
+  vi.stubGlobal("Request", TestRequest);
   Object.defineProperty(window, "localStorage", { value: memoryStorage(), configurable: true });
   clearToken();
   report.mockReset();
   report.mockReturnValue(true);
   api = installFakeApi();
 });
-afterEach(() => api.restore());
+afterEach(() => {
+  api.restore();
+  vi.unstubAllGlobals();
+});
 
 function Shell() {
   const context: AppContext = { openHelp: () => undefined, reportFailure: report };

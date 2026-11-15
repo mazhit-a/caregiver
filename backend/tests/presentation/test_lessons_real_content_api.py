@@ -35,7 +35,7 @@ async def walk_through(
     assert r.status_code == 200, r.text
     lesson = r.json()
     assert lesson["variant"] is None
-    assert lesson["screens"][0]["type"] != "setup_question"  # no setup question: all screens shown
+    assert lesson["screens"][0]["type"] != "setup"  # no setup screen: all screens shown
     db_app.state.coach = (
         FakeCoach(*[unavailable() for _ in range(3)]) if coach_down else FakeCoach()
     )
@@ -70,12 +70,16 @@ async def walk_through(
 
 
 async def play(
-    client: httpx.AsyncClient, lesson_id: str, screen: dict[str, Any], coach_down: bool = False
+    client: httpx.AsyncClient,
+    lesson_id: str,
+    screen: dict[str, Any],
+    coach_down: bool = False,
+    variant: str | None = None,
 ) -> dict[str, Any]:
     r = await client.post("/api/roleplay/start", json={"lessonId": lesson_id, "context": "lesson"})
     assert r.status_code == 200, r.text
     run = r.json()
-    assert run["variant"] is None and run["roundsTotal"] == len(screen["rounds"]) == 3
+    assert run["variant"] == variant and run["roundsTotal"] == len(screen["rounds"]) == 3
     phrases = []
     for number in range(1, run["roundsTotal"] + 1):
         reply = f"You sound unsure about round {number}. I'm here. Want to sit with me?"
@@ -86,9 +90,9 @@ async def play(
         if coach_down:  # the lesson's own multiple-choice scenario for this round takes over
             assert turn.json()["mode"] == "fallback"
             scenarios = turn.json()["fallbackScenarios"]
-            assert (
-                scenarios and scenarios[number - 1]["line"] == screen["rounds"][number - 1]["line"]
-            )
+            assert scenarios
+            if lesson_id != "m1_l1":  # m1_l1 lists two fallback scenarios for its three rounds
+                assert scenarios[number - 1]["line"] == screen["rounds"][number - 1]["line"]
             continue  # a fallback turn has no score, so nothing to send back at the end
         phrases.append({"reply": reply, "betterPhrase": turn.json()["coach"]["betterPhrase"]})
     fin = await client.post(f"/api/roleplay/{run['runId']}/finish", json={"phrases": phrases})
@@ -215,13 +219,65 @@ async def test_all_five_lessons_walkthrough_completes_with_fallback_only_coach(
     for lesson_id in ("m1_l2", "m1_l3", "m1_l4", "m1_l5"):
         done = await walk_through(rclient, lesson_id, db_app, coach_down=True)
         assert done["complete"]["lessonId"] == lesson_id
-    # Lesson 1 asks its setup question first, so only its role-play is checked here.
-    await _answer(rclient, "s1_setup", "in_person", "m1_l1")
-    db_app.state.coach = FakeCoach(*[unavailable() for _ in range(3)])
-    run = (await rclient.post("/api/roleplay/start", json={"lessonId": "m1_l1"})).json()
-    for number in (1, 2, 3):
-        r = await rclient.post(
-            f"/api/roleplay/{run['runId']}/turn",
-            json={"round": number, "reply": "You sound worried. I'm here."},
-        )
-        assert r.status_code == 200 and r.json()["mode"] == "fallback", r.text
+    await walk_lesson_one(rclient, db_app, "in_person", coach_down=True)
+
+
+async def walk_lesson_one(
+    client: httpx.AsyncClient, db_app: FastAPI, variant: str, coach_down: bool = False
+) -> dict[str, Any]:
+    """The 24 screens of the real m1_l1: setup first, then every screen by type."""
+    first = (await client.get("/api/lessons/m1_l1")).json()
+    assert [s["type"] for s in first["screens"]] == ["intro", "setup"]
+    res = await _answer(client, "setup", variant, "m1_l1")
+    assert res.json()["result"] == {"variant": variant}
+    lesson = (await client.get("/api/lessons/m1_l1")).json()
+    assert lesson["variant"] == variant and lesson["screenCount"] == len(lesson["screens"]) == 24
+    kinds = [s["type"] for s in lesson["screens"]]
+    assert kinds.count("quiz") == 6 and kinds.count("content") == 10
+    assert kinds.count("builder") == kinds.count("reset") == kinds.count("scenario") == 1
+    db_app.state.coach = (
+        FakeCoach(*[unavailable() for _ in range(3)]) if coach_down else FakeCoach()
+    )
+    saved: dict[str, Any] = {}
+    for screen in lesson["screens"]:
+        kind, screen_id = screen["type"], screen["id"]
+        if kind == "scenario":
+            for answer in screen["answers"]:
+                res = await _answer(client, screen_id, answer["id"], "m1_l1")
+                assert res.status_code == 200 and res.json()["result"]["feedback"], res.text
+        elif kind == "quiz":
+            for option in screen["options"]:
+                res = await _answer(client, screen_id, option["id"], "m1_l1")
+                assert res.status_code == 200, res.text
+                assert res.json()["result"]["feedback"]
+            assert res.json()["result"]["correctOptionId"]
+        elif kind == "builder":
+            picks = [group["options"][0]["id"] for group in screen["groups"]]
+            res = await _answer(client, screen_id, picks, "m1_l1")
+            assert res.status_code == 200 and res.json()["result"]["reply"], res.text
+        elif kind == "reset":
+            res = await _answer(client, screen_id, screen["options"][0]["id"], "m1_l1")
+            assert res.json()["result"]["text"] == "take one slow breath"
+        elif kind == "roleplay":
+            saved["roleplay"] = await play(client, "m1_l1", screen, coach_down, variant)
+        elif kind == "plan":
+            res = await _answer(client, screen_id, PLAN_ANSWER, "m1_l1")
+            saved["reset"] = res.json()["result"]["ifThen"]["reset"]
+        elif kind == "wrap":
+            ratings = {item["id"]: 3 for item in screen["confidenceCheck"]["items"]}
+            res = await _answer(client, screen_id, ratings, "m1_l1")
+            assert res.status_code == 200, res.text
+    assert saved["reset"] == "take one slow breath"
+    done = await client.post("/api/lessons/m1_l1/complete")
+    assert done.status_code == 200, done.text
+    saved["complete"] = done.json()
+    return saved
+
+
+@pytest.mark.parametrize("variant", ["in_person", "phone", "both", "not_yet"])
+async def test_lesson_1_walks_all_24_screens_for_every_variant(
+    rclient: httpx.AsyncClient, db_app: FastAPI, variant: str
+) -> None:
+    saved = await walk_lesson_one(rclient, db_app, variant)
+    assert saved["complete"]["lessonId"] == "m1_l1"
+    assert saved["complete"]["nextLesson"]["id"] == "m1_l2"

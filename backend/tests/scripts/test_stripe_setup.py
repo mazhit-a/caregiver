@@ -18,6 +18,7 @@ class _Collection:
     def __init__(self, prefix: str) -> None:
         self.objects: list[stripe.StripeObject] = []
         self.created = 0
+        self.updated = 0
         self._ids = count(1)
         self._prefix = prefix
         self.params_seen: list[dict[str, Any]] = []
@@ -34,6 +35,12 @@ class _Collection:
             {"id": f"{self._prefix}_{next(self._ids)}", **params}, "sk_test_fake"
         )
         self.objects.append(obj)
+        return obj
+
+    def update(self, id: str, params: dict[str, Any]) -> stripe.StripeObject:
+        obj = next(o for o in self.objects if o["id"] == id)
+        obj["name"] = params["name"]
+        self.updated += 1
         return obj
 
 
@@ -105,6 +112,16 @@ def test_stripe_setup_reuses_existing_objects_found_by_metadata_key(pricing_file
     fake.v1.products.created = 0
     run_setup(_client(fake), pricing_file)
     assert fake.v1.products.created == 0 and len(fake.v1.products.objects) == 1
+
+
+def test_stripe_setup_renames_an_existing_product_with_an_old_name(pricing_file: Path) -> None:
+    fake = FakeStripeClient()
+    fake.v1.products.create(params={"name": "x", "metadata": {"pcn_key": "parent_care_navigator"}})
+    run_setup(_client(fake), pricing_file)
+    assert fake.v1.products.updated == 1
+    assert fake.v1.products.objects[0]["name"] == "Kelper"
+    run_setup(_client(fake), pricing_file)
+    assert fake.v1.products.updated == 1
 
 
 @pytest.mark.parametrize("key", ["sk_live_abc", "rk_live_abc", "", "pk_test_abc"])

@@ -26,7 +26,7 @@ SECRET = "zebra-quartz-7731"
 async def start(
     client: httpx.AsyncClient, variant: str = "phone", context: str = "lesson"
 ) -> dict[str, object]:
-    await _answer(client, "s1_setup", variant)
+    await _answer(client, "setup", variant)
     r = await client.post("/api/roleplay/start", json={"lessonId": "m1_l1", "context": context})
     assert r.status_code == 200, r.text
     body: dict[str, object] = r.json()

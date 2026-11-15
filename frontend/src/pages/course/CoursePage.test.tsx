@@ -21,7 +21,8 @@ describe("CoursePage", () => {
     const lessons = screen.getByRole("list", { name: "Module 1 lessons" });
     expect(lessons.tagName).toBe("OL");
     expect(within(lessons).getAllByRole("listitem")).toHaveLength(5);
-    expect(within(lessons).getAllByText("8 min")).toHaveLength(3);
+    expect(within(lessons).getAllByText("8 min")).toHaveLength(2);
+    expect(within(lessons).getByText("9 min")).toBeInTheDocument();
     const cards = screen.getAllByRole("heading", { level: 3 });
     expect(cards).toHaveLength(8);
   });

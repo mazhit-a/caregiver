@@ -1,0 +1,680 @@
+{
+  "id": "m1_l1",
+  "moduleId": "m1_talking",
+  "title": "When Mom asks again",
+  "minutes": 9,
+  "skill": "communication",
+  "skillLabel": "Handling repeated questions",
+  "variant": "not_yet",
+  "unlockOn": "2026-01-05",
+  "pattern": {
+    "name": "The three steps",
+    "steps": [
+      {
+        "id": "notice",
+        "label": "Notice the feeling",
+        "example": "You're wondering about tomorrow."
+      },
+      {
+        "id": "reassure",
+        "label": "Reassure",
+        "example": "We have plenty of time. I'll tell you when it's time."
+      },
+      {
+        "id": "offer",
+        "label": "Offer something to do",
+        "example": "Want to help me with the tea?"
+      }
+    ]
+  },
+  "screens": [
+    {
+      "id": "intro",
+      "part": null,
+      "type": "intro",
+      "title": "When Mom asks again",
+      "body": "The same question, five times before dinner. It’s one of the most common changes families notice, and one of the most tiring. In about 9 minutes you’ll learn why it happens and what to say instead.",
+      "bullets": [
+        "Why the question keeps coming back",
+        "Three steps that calm it",
+        "What to avoid, even when it’s true",
+        "Practice out loud, then make a plan"
+      ],
+      "image": "ollie-explaining"
+    },
+    {
+      "id": "setup",
+      "part": null,
+      "type": "setup",
+      "title": "Where do Mom's repeated questions usually reach you?",
+      "body": "Your answer changes the examples and your task, not the lesson.",
+      "options": [
+        {
+          "id": "in_person",
+          "label": "In person"
+        },
+        {
+          "id": "phone",
+          "label": "On the phone"
+        },
+        {
+          "id": "both",
+          "label": "Both"
+        },
+        {
+          "id": "not_yet",
+          "label": "I haven’t noticed it yet"
+        }
+      ]
+    },
+    {
+      "id": "scenario",
+      "part": null,
+      "type": "scenario",
+      "title": "What would you say?",
+      "intro": null,
+      "setup": "Many families notice this first. It’s 6 pm. The appointment is tomorrow. For the fifth time today, Mom asks:",
+      "line": "When are we going to the doctor?",
+      "note": "Just your first instinct. There’s no wrong answer yet; we’ll come back to this.",
+      "answers": [
+        {
+          "id": "a1",
+          "text": "It’s tomorrow at 2. I wrote it on the calendar for you."
+        },
+        {
+          "id": "a2",
+          "text": "Don’t worry, I’ve got it all handled."
+        },
+        {
+          "id": "a3",
+          "text": "Mom, I told you already. It’s tomorrow."
+        },
+        {
+          "id": "a4",
+          "text": "You’re wondering about tomorrow. We have plenty of time, I’ll tell you when. Want to help me with the tea?"
+        }
+      ]
+    },
+    {
+      "id": "why1",
+      "part": "Why it happens",
+      "type": "content",
+      "title": "New information doesn’t stick",
+      "body": [
+        "Memory changes make it hard to hold on to something new, like a time or a plan. Older memories often last much longer.",
+        "So the answer you gave ten minutes ago may simply be gone. To her, the question is new."
+      ],
+      "image": "ollie-reading",
+      "items": null,
+      "steps": null,
+      "dodont": null,
+      "examples": null,
+      "note": null,
+      "keyIdea": "It’s not that Mom isn’t listening. The answer didn’t stay.",
+      "tip": null
+    },
+    {
+      "id": "why2",
+      "part": "Why it happens",
+      "type": "content",
+      "title": "The feeling stays, even when the memory fades",
+      "body": [
+        "Here’s the part most people don’t know: even when the memory of a conversation is gone, the feeling it left can stay.",
+        "If the last answer felt rushed or annoyed, Mom may not remember why, but may still feel uneasy. If it felt calm, that calm can stay too."
+      ],
+      "image": null,
+      "items": null,
+      "steps": null,
+      "dodont": null,
+      "examples": null,
+      "note": null,
+      "keyIdea": "How you answer matters as much as what you answer.",
+      "tip": null
+    },
+    {
+      "id": "q1",
+      "part": "Quick check",
+      "type": "quiz",
+      "title": "Mom asks again five minutes after you answered. What’s most likely going on?",
+      "options": [
+        {
+          "id": "o1",
+          "text": "Mom is testing your patience."
+        },
+        {
+          "id": "o2",
+          "text": "Mom didn’t hear you the first time."
+        },
+        {
+          "id": "o3",
+          "text": "The answer faded, but the worry behind the question didn’t."
+        }
+      ]
+    },
+    {
+      "id": "why3",
+      "part": "Why it happens",
+      "type": "content",
+      "title": "What’s often behind the question",
+      "body": [
+        "The words are about a time or a plan. The need underneath is usually something else:"
+      ],
+      "image": "ollie-thinking",
+      "items": [
+        {
+          "title": "Worry",
+          "text": "Something is coming up and she can’t keep track of it."
+        },
+        {
+          "title": "Feeling lost in time",
+          "text": "Without a clear sense of the day, plans feel shaky."
+        },
+        {
+          "title": "Boredom",
+          "text": "With nothing to do, the same thought loops."
+        },
+        {
+          "title": "Wanting you close",
+          "text": "The question is a way to connect."
+        }
+      ],
+      "steps": null,
+      "dodont": null,
+      "examples": null,
+      "note": null,
+      "keyIdea": null,
+      "tip": null
+    },
+    {
+      "id": "q2",
+      "part": "Quick check",
+      "type": "quiz",
+      "title": "Mom has been sitting alone all afternoon and keeps asking when dinner is. What might help most?",
+      "options": [
+        {
+          "id": "o1",
+          "text": "Tell her the exact time again, a bit louder."
+        },
+        {
+          "id": "o2",
+          "text": "Give her something to do with you, like setting the table."
+        },
+        {
+          "id": "o3",
+          "text": "Ignore it until the questions stop."
+        }
+      ]
+    },
+    {
+      "id": "steps",
+      "part": "The three steps",
+      "type": "content",
+      "title": "One pattern for the question that keeps coming back",
+      "body": [
+        "Instead of repeating the facts, answer in three short steps:"
+      ],
+      "image": "ollie-explaining",
+      "items": null,
+      "steps": [
+        {
+          "n": "1",
+          "title": "Notice the feeling",
+          "text": "“You’re wondering about tomorrow.”"
+        },
+        {
+          "n": "2",
+          "title": "Reassure",
+          "text": "“We have plenty of time. I’ll tell you when.”"
+        },
+        {
+          "n": "3",
+          "title": "Offer something to do",
+          "text": "“Want to help me with the tea?”"
+        }
+      ],
+      "dodont": null,
+      "examples": null,
+      "note": null,
+      "keyIdea": "You’ll use this same pattern in every lesson of this module.",
+      "tip": null
+    },
+    {
+      "id": "step1",
+      "part": "The three steps",
+      "type": "content",
+      "title": "Step 1: Notice the feeling",
+      "body": [
+        "Put the feeling into words before anything else. It tells her you’re on Mom's side."
+      ],
+      "image": null,
+      "items": null,
+      "steps": null,
+      "dodont": {
+        "do": [
+          "“You’re wondering about tomorrow.”",
+          "“It sounds like you’re worried.”",
+          "“You miss having company.”"
+        ],
+        "dont": [
+          "“Don’t worry about it.”",
+          "“There’s nothing to be upset about.”"
+        ]
+      },
+      "examples": null,
+      "note": null,
+      "keyIdea": null,
+      "tip": "“Don’t worry” sounds kind, but it can tell her the feeling is wrong. Naming it works better."
+    },
+    {
+      "id": "q3",
+      "part": "Quick check",
+      "type": "quiz",
+      "title": "Which reply notices the feeling?",
+      "options": [
+        {
+          "id": "o1",
+          "text": "“Don’t worry, it’s all fine.”"
+        },
+        {
+          "id": "o2",
+          "text": "“You’re not sure what’s happening tomorrow, are you?”"
+        },
+        {
+          "id": "o3",
+          "text": "“The appointment is at 2 pm on Thursday.”"
+        }
+      ]
+    },
+    {
+      "id": "step2",
+      "part": "The three steps",
+      "type": "content",
+      "title": "Step 2: Reassure",
+      "body": [
+        "Take the job of remembering off her. Short, calm and the same each time.",
+        "Promise only what you’ll really do, like telling her when it’s time."
+      ],
+      "image": null,
+      "items": null,
+      "steps": null,
+      "dodont": null,
+      "examples": [
+        {
+          "text": "We have plenty of time. I’ll tell you when.",
+          "why": "Takes the job of remembering off her"
+        },
+        {
+          "text": "I’ve got it covered. You don’t have to keep track.",
+          "why": "Promises something you can keep"
+        },
+        {
+          "text": "I’m right here.",
+          "why": "Simple, true and calming"
+        }
+      ],
+      "note": null,
+      "keyIdea": null,
+      "tip": null
+    },
+    {
+      "id": "step3",
+      "part": "The three steps",
+      "type": "content",
+      "title": "Step 3: Offer something to do",
+      "body": [
+        "A worried loop is hard to stop with words alone. Busy hands help.",
+        "Pick something small and familiar, ideally something Mom enjoys."
+      ],
+      "image": null,
+      "items": [
+        {
+          "title": "Tea together",
+          "text": "Make it, pour it, sit down"
+        },
+        {
+          "title": "Fold or sort",
+          "text": "Towels, socks, photos"
+        },
+        {
+          "title": "A short walk",
+          "text": "To the garden or the mailbox"
+        },
+        {
+          "title": "A familiar song",
+          "text": "Sinatra, hymns, old favourites"
+        }
+      ],
+      "steps": null,
+      "dodont": null,
+      "examples": null,
+      "note": null,
+      "keyIdea": "You’re not distracting her from the truth. You’re helping the worry settle.",
+      "tip": null
+    },
+    {
+      "id": "builder",
+      "part": "Try it",
+      "type": "builder",
+      "title": "Build a reply in three steps",
+      "body": "Pick one part for each step. Then read your reply out loud.",
+      "groups": [
+        {
+          "id": "g1",
+          "label": "Notice the feeling",
+          "options": [
+            {
+              "id": "o1",
+              "text": "You’re wondering about tomorrow."
+            },
+            {
+              "id": "o2",
+              "text": "I already told you."
+            },
+            {
+              "id": "o3",
+              "text": "Don’t worry."
+            }
+          ]
+        },
+        {
+          "id": "g2",
+          "label": "Reassure",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Like I said, it’s at 2."
+            },
+            {
+              "id": "o2",
+              "text": "We have plenty of time. I’ll tell you when."
+            },
+            {
+              "id": "o3",
+              "text": "Stop asking, it’s fine."
+            }
+          ]
+        },
+        {
+          "id": "g3",
+          "label": "Offer something to do",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Want to help me with the tea?"
+            },
+            {
+              "id": "o2",
+              "text": "Go watch TV."
+            },
+            {
+              "id": "o3",
+              "text": "Let’s talk about it later."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "avoid",
+      "part": "What to avoid",
+      "type": "content",
+      "title": "Phrases that hurt, even when they’re true",
+      "body": [
+        "After the fifth time, these come out on their own. Each one points at the forgetting, so the worry grows instead of settling."
+      ],
+      "image": null,
+      "items": null,
+      "steps": null,
+      "dodont": {
+        "do": [
+          "“I’ll tell you when.”",
+          "“You’re wondering about it.”"
+        ],
+        "dont": [
+          "“I told you already.”",
+          "“Don’t you remember?”",
+          "“Why do you keep asking?”",
+          "A long, detailed explanation"
+        ]
+      },
+      "examples": null,
+      "note": null,
+      "keyIdea": null,
+      "tip": "If one slips out, it’s okay. Take a breath and start again with the feeling."
+    },
+    {
+      "id": "tf1",
+      "part": "True or false",
+      "type": "quiz",
+      "title": "Explaining the whole plan in detail helps her remember it.",
+      "options": [
+        {
+          "id": "o1",
+          "text": "True"
+        },
+        {
+          "id": "o2",
+          "text": "False"
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "part": "Make it easier",
+      "type": "content",
+      "title": "Make the answer easy to find",
+      "body": [
+        "If it starts, a note or small whiteboard with the answer helps a lot.",
+        "Then you can point to it: “It’s on the board. I’ll tell you when.”"
+      ],
+      "image": "ollie-note",
+      "items": null,
+      "steps": null,
+      "dodont": null,
+      "examples": null,
+      "note": {
+        "line1": "Doctor: Thursday 2 pm",
+        "line2": "I’ll pick you up. — [your name]"
+      },
+      "keyIdea": "And mention plans closer to the time: less waiting means less worrying.",
+      "tip": "In a care home, ask the staff to keep your visit days on a calendar in Mom's room."
+    },
+    {
+      "id": "q4",
+      "part": "Quick check",
+      "type": "quiz",
+      "title": "Mom has a dentist visit next Friday. When is a good time to tell her?",
+      "options": [
+        {
+          "id": "o1",
+          "text": "Today, so Mom has plenty of notice."
+        },
+        {
+          "id": "o2",
+          "text": "The morning of the visit, with a note on the fridge."
+        },
+        {
+          "id": "o3",
+          "text": "Don’t tell her at all."
+        }
+      ]
+    },
+    {
+      "id": "pattern",
+      "part": "Make it easier",
+      "type": "content",
+      "title": "Look for a pattern",
+      "body": [
+        "Notice when the questions come. Is it the same time of day? After a nap? When Mom is hungry, tired or has nothing to do?",
+        "If you spot a pattern, you can get ahead of it: tea at 4, a walk before dinner."
+      ],
+      "image": null,
+      "items": null,
+      "steps": null,
+      "dodont": null,
+      "examples": null,
+      "note": null,
+      "keyIdea": null,
+      "tip": "If repeated questions are new or suddenly much worse, mention it at the next doctor visit."
+    },
+    {
+      "id": "you",
+      "part": "Taking care of you",
+      "type": "reset",
+      "title": "The fifth time is the hardest",
+      "body": "Feeling frustrated is normal. It doesn’t mean you care any less. A small reset before you answer makes a big difference.",
+      "question": "Pick your reset for next time:",
+      "options": [
+        {
+          "id": "r1",
+          "label": "One slow breath before I answer"
+        },
+        {
+          "id": "r2",
+          "label": "Say the first words slowly"
+        },
+        {
+          "id": "r3",
+          "label": "Step away for a minute, if it’s safe"
+        }
+      ],
+      "image": "ollie-calm-none"
+    },
+    {
+      "id": "recap",
+      "part": "Final check",
+      "type": "quiz",
+      "title": "Mom asks for the fourth time when a visitor is coming. Which reply follows all three steps?",
+      "options": [
+        {
+          "id": "o1",
+          "text": "“Someone’s coming Sunday. I told you this morning.”"
+        },
+        {
+          "id": "o2",
+          "text": "“You’re looking forward to the visit. It’s Sunday. Want to set out the good cups?”"
+        },
+        {
+          "id": "o3",
+          "text": "“Don’t worry, everything’s fine.”"
+        }
+      ]
+    },
+    {
+      "id": "practice",
+      "part": "Practice",
+      "type": "roleplay",
+      "title": "Practice: Mom asks again",
+      "intro": "Now try it out loud. Mom is an AI practice partner. Type what you'd say. The coach will show what worked.",
+      "goals": [
+        "notice",
+        "reassure",
+        "offer"
+      ],
+      "rounds": [
+        {
+          "stage": "It's 6 pm. The appointment is tomorrow.",
+          "line": "When are we going to the doctor?",
+          "mood": "worried"
+        },
+        {
+          "stage": "Ten minutes later.",
+          "line": "Something's wrong, isn't it? Why are we going to the doctor?",
+          "mood": "anxious"
+        },
+        {
+          "stage": "Later that evening.",
+          "line": "Why won't you just tell me? You're hiding something.",
+          "mood": "suspicious"
+        }
+      ],
+      "labels": {
+        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
+        "thinking": "Mom is thinking…",
+        "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
+      },
+      "summary": {
+        "title": "Your practice",
+        "bestPhraseLabel": "Your best phrase",
+        "saveButton": "Save",
+        "againButton": "Practice again"
+      }
+    },
+    {
+      "id": "plan",
+      "part": "Your plan",
+      "type": "plan",
+      "title": "Your plan for next time",
+      "ifThen": {
+        "cue": "If I notice Mom asking the same question again,",
+        "responseLabel": "then I'll say:",
+        "responseEditable": true,
+        "resetLabel": "And first, I'll:",
+        "resetFrom": "you"
+      },
+      "doNow": {
+        "title": "One thing to do now",
+        "text": "On your next call or visit, watch for repeated questions and note when they happen. We'll add your notes to the doctor-visit sheet.",
+        "action": "add_observation",
+        "button": "Add a note now"
+      },
+      "remindButton": "Remind me tomorrow",
+      "doneButton": "Done",
+      "noteTemplate": {
+        "title": "Mom's note",
+        "example": "Doctor: [day] [time]. I'll pick you up. — [your name]"
+      }
+    },
+    {
+      "id": "wrap",
+      "part": null,
+      "type": "wrap",
+      "title": "New skill: handling repeated questions",
+      "learned": [
+        "The answer fades, but the feeling stays.",
+        "Answer the feeling first: notice, reassure, offer something to do.",
+        "Skip “I told you already”. Short and the same each time.",
+        "Make the answer easy to find, and mention plans closer to the time."
+      ],
+      "skillLine": "New skill: handling repeated questions.",
+      "phraseLine": "Your phrase is saved to Mom's page and care card.",
+      "patternLine": "You've learned the three steps: notice the feeling, reassure, offer something to do. Every lesson in this module builds on them.",
+      "confidenceCheck": {
+        "title": "How ready do you feel for these?",
+        "scale": "1 to 5",
+        "items": [
+          {
+            "id": "repeat",
+            "label": "When Mom asks the same question again"
+          },
+          {
+            "id": "accusations",
+            "label": "When Mom thinks someone took something"
+          },
+          {
+            "id": "evenings",
+            "label": "When Mom gets upset in the evening"
+          },
+          {
+            "id": "refusal",
+            "label": "When Mom says no to help"
+          },
+          {
+            "id": "visits",
+            "label": "Getting what you need from a doctor visit"
+          }
+        ]
+      },
+      "tomorrowLine": "Tomorrow: a quick check-in and a 2-minute practice round.",
+      "nextLine": "Next in this module: \"Talking so it lands\", making every conversation easier, not just the answers."
+    }
+  ],
+  "screenCount": 24,
+  "progress": {
+    "step": 0,
+    "startedAt": "2026-01-05T09:00:00Z",
+    "doneAt": null
+  },
+  "recap": null
+}

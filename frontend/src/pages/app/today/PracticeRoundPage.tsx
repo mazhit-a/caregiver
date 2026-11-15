@@ -1,6 +1,2 @@
-import { AppStub } from "../../../layout/app/AppStub";
-
-/** Stub: the owning increment replaces this file. */
-export default function PracticeRoundPage() {
-  return <AppStub title="Practice round" />;
-}
+// The router (G2) lazy-loads this path; the page itself lives with the role-play room.
+export { default } from "../roleplay/PracticeRoundPage";

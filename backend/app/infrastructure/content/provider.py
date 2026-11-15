@@ -113,7 +113,7 @@ class JsonContentProvider:
 
     def app_copy(self) -> AppCopy:
         tree = self._bundle.app_copy.model_dump(exclude={"notes", "version"})
-        return {section: dict(texts) for section, texts in tree.items()}
+        return dict(tree)
 
     def funnel_copy(self) -> FunnelCopy:
         c = self._bundle.funnel_copy

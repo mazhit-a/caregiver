@@ -47,5 +47,26 @@
     "title": "Welcome",
     "body": "If you like, add a first name and we will use it in your lessons and on Mom's page. No last names, no diagnosis. You can skip this.",
     "nameLabel": "First name (optional)"
+  },
+  "lesson": {
+    "verdictLabels": {
+      "best": "Good instinct",
+      "okay": "Noted",
+      "try_again": "Very common"
+    },
+    "afterChoice": "You can try another answer to compare.",
+    "saveButton": "Save this phrase",
+    "quiz": {
+      "right": "That’s right.",
+      "wrong": "Not quite, and that’s okay."
+    },
+    "builder": {
+      "allCorrect": "That’s all three steps. Read it out loud once; it will come easier next time.",
+      "notYet": "Close. One part points at the forgetting or skips a step. Try swapping it."
+    },
+    "doSkip": {
+      "doLabel": "Try",
+      "skipLabel": "Skip"
+    }
   }
 }

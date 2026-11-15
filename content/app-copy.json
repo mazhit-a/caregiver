@@ -1,10 +1,11 @@
 {
-  "version": 1,
+  "version": 2,
   "notes": [
     "Strings for the app after the paywall that carry the recipient label. Placeholders as in quiz.json recipientLabels.",
     "The server renders them for the session (and the onboarding name when set). The browser never fills a placeholder.",
     "Block labels that would need a pronoun or verb agreement stay neutral (Enjoys, Calms, Try to avoid).",
-    "No medical advice, no relatives named that the user did not add, no fear copy."
+    "No medical advice, no relatives named that the user did not add, no fear copy.",
+    "The lesson block holds the player labels the lesson files do not carry (verdict labels by verdict id, quiz and builder feedback, do/skip column labels). No placeholders; same for every lesson."
   ],
   "nav": {
     "today": "Today",
@@ -54,5 +55,26 @@
     "title": "Welcome",
     "body": "If you like, add a first name and we will use it in your lessons and on {possessive} page. No last names, no diagnosis. You can skip this.",
     "nameLabel": "First name (optional)"
+  },
+  "lesson": {
+    "verdictLabels": {
+      "best": "Good instinct",
+      "okay": "Noted",
+      "try_again": "Very common"
+    },
+    "afterChoice": "You can try another answer to compare.",
+    "saveButton": "Save this phrase",
+    "quiz": {
+      "right": "That’s right.",
+      "wrong": "Not quite, and that’s okay."
+    },
+    "builder": {
+      "allCorrect": "That’s all three steps. Read it out loud once; it will come easier next time.",
+      "notYet": "Close. One part points at the forgetting or skips a step. Try swapping it."
+    },
+    "doSkip": {
+      "doLabel": "Try",
+      "skipLabel": "Skip"
+    }
   }
 }

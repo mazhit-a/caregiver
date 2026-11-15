@@ -1,0 +1,220 @@
+{
+  "quiz": {
+    "q1": [
+      {
+        "correct": false,
+        "feedback": "It can feel that way. But the memory of asking has faded, so this really is the first time for her."
+      },
+      {
+        "correct": false,
+        "feedback": "Possible, but usually not. Even when she heard you clearly, the answer may not stay."
+      },
+      {
+        "correct": true,
+        "feedback": "Exactly. That’s why the worry is what needs an answer."
+      }
+    ],
+    "q2": [
+      {
+        "correct": false,
+        "feedback": "The time may not stay. The empty afternoon is the real issue here."
+      },
+      {
+        "correct": true,
+        "feedback": "Yes. Boredom often drives the loop, and doing something together answers it."
+      },
+      {
+        "correct": false,
+        "feedback": "Understandable when you’re tired, but she may feel brushed off, and that feeling lingers."
+      }
+    ],
+    "q3": [
+      {
+        "correct": false,
+        "feedback": "Kind, but it brushes the feeling aside."
+      },
+      {
+        "correct": true,
+        "feedback": "Yes. You named the feeling, gently."
+      },
+      {
+        "correct": false,
+        "feedback": "That’s the fact. Useful, but the feeling comes first."
+      }
+    ],
+    "tf1": [
+      {
+        "correct": false,
+        "feedback": "It feels like it should. But long explanations are hard to hold on to and can add to the worry."
+      },
+      {
+        "correct": true,
+        "feedback": "Right. Short and the same each time works better than more detail."
+      }
+    ],
+    "q4": [
+      {
+        "correct": false,
+        "feedback": "That gives the worry a whole week to grow."
+      },
+      {
+        "correct": true,
+        "feedback": "Yes. Close to the time, and easy to see."
+      },
+      {
+        "correct": false,
+        "feedback": "Surprises can be upsetting too. Close to the time works best."
+      }
+    ],
+    "recap": [
+      {
+        "correct": false,
+        "feedback": "True, but it skips the feeling and points at the forgetting."
+      },
+      {
+        "correct": true,
+        "feedback": "Yes: the feeling, a short reassurance, and something to do together."
+      },
+      {
+        "correct": false,
+        "feedback": "Warm, but it brushes the feeling aside and offers nothing to do."
+      }
+    ]
+  },
+  "builder": {
+    "builder": [
+      [
+        {
+          "correct": true,
+          "text": "You’re wondering about tomorrow."
+        },
+        {
+          "correct": false,
+          "text": "I already told you."
+        },
+        {
+          "correct": false,
+          "text": "Don’t worry."
+        }
+      ],
+      [
+        {
+          "correct": false,
+          "text": "Like I said, it’s at 2."
+        },
+        {
+          "correct": true,
+          "text": "We have plenty of time. I’ll tell you when."
+        },
+        {
+          "correct": false,
+          "text": "Stop asking, it’s fine."
+        }
+      ],
+      [
+        {
+          "correct": true,
+          "text": "Want to help me with the tea?"
+        },
+        {
+          "correct": false,
+          "text": "Go watch TV."
+        },
+        {
+          "correct": false,
+          "text": "Let’s talk about it later."
+        }
+      ]
+    ]
+  },
+  "reset": {
+    "you": [
+      {
+        "label": "One slow breath before I answer",
+        "plan": "take one slow breath"
+      },
+      {
+        "label": "Say the first words slowly",
+        "plan": "say the first words slowly"
+      },
+      {
+        "label": "Step away for a minute, if it’s safe",
+        "plan": "step away for a minute, if it’s safe"
+      }
+    ]
+  },
+  "scenario": {
+    "in_person": [
+      {
+        "verdict": "okay",
+        "feedback": "Kind and practical. It answers the fact. Keep it in mind: we’ll see what it misses."
+      },
+      {
+        "verdict": "okay",
+        "feedback": "Warm. Hold on to it: we’ll look at what “don’t worry” does."
+      },
+      {
+        "verdict": "try_again",
+        "feedback": "Almost everyone says this, especially the fifth time. We’ll see why it usually makes the question come back."
+      },
+      {
+        "verdict": "best",
+        "feedback": "Good instinct. By the end of this lesson you’ll know exactly why this works."
+      }
+    ],
+    "phone": [
+      {
+        "verdict": "okay",
+        "feedback": "Clear and practical. Keep it in mind: we’ll see what it misses."
+      },
+      {
+        "verdict": "okay",
+        "feedback": "Warm. Hold on to it: we’ll look at what “don’t worry” does."
+      },
+      {
+        "verdict": "try_again",
+        "feedback": "Almost everyone says this mid-workday. We’ll see why it usually brings the next call sooner."
+      },
+      {
+        "verdict": "best",
+        "feedback": "Good instinct. By the end of this lesson you’ll know exactly why this works."
+      }
+    ],
+    "both": [
+      {
+        "verdict": "okay",
+        "feedback": "Kind and practical. It answers the fact. Keep it in mind: we’ll see what it misses."
+      },
+      {
+        "verdict": "okay",
+        "feedback": "Warm. Hold on to it: we’ll look at what “don’t worry” does."
+      },
+      {
+        "verdict": "try_again",
+        "feedback": "Almost everyone says this, especially the fifth time. We’ll see why it usually makes the question come back."
+      },
+      {
+        "verdict": "best",
+        "feedback": "Good instinct. By the end of this lesson you’ll know exactly why this works."
+      }
+    ],
+    "not_yet": [
+      {
+        "verdict": "okay",
+        "feedback": "Kind and practical. It answers the fact. Keep it in mind: we’ll see what it misses."
+      },
+      {
+        "verdict": "okay",
+        "feedback": "Warm. Hold on to it: we’ll look at what “don’t worry” does."
+      },
+      {
+        "verdict": "try_again",
+        "feedback": "Almost everyone says this, especially the fifth time. We’ll see why it usually makes the question come back."
+      },
+      {
+        "verdict": "best",
+        "feedback": "Good instinct. By the end of this lesson you’ll know exactly why this works."
+      }
+    ]
+  }
+}

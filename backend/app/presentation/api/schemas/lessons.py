@@ -17,12 +17,27 @@ class OptionOut(CamelModel):
     label: str
 
 
-class SetupQuestionScreenOut(CamelModel):
+class _ScreenOut(CamelModel):
+    """`part` is the small label above the screen's title."""
+
     id: str
-    type: Literal["setup_question"]
-    speaker: str
-    text: str
-    question: str
+    part: str | None = None
+
+
+class IntroScreenOut(_ScreenOut):
+    type: Literal["intro"]
+    title: str
+    body: str
+    bullets: list[str]
+    image: str | None = None
+
+
+class SetupScreenOut(_ScreenOut):
+    """Choosing an option always sets the lesson variant."""
+
+    type: Literal["setup"]
+    title: str
+    body: str
     options: list[OptionOut]
 
 
@@ -31,17 +46,97 @@ class ScenarioAnswerOut(CamelModel):
     text: str
 
 
-class ScenarioScreenOut(CamelModel):
-    id: str
+class ScenarioScreenOut(_ScreenOut):
+    """Verdict, feedback and button labels are not served: the answer result carries the verdict
+    and feedback, the labels are in `GET /api/app-copy` (`lesson`)."""
+
     type: Literal["scenario"]
+    title: str | None = None
     intro: str | None = None
     setup: str
     line: str
-    question: str
+    note: str | None = None
     answers: list[ScenarioAnswerOut]
-    verdict_labels: dict[str, str]
-    after_choice: str
-    save_button: str
+
+
+class ItemOut(CamelModel):
+    title: str
+    text: str
+
+
+class StepOut(CamelModel):
+    n: str
+    title: str
+    text: str
+
+
+class ExampleOut(CamelModel):
+    text: str
+    why: str
+
+
+class NoteOut(CamelModel):
+    """The sticky note: two lines."""
+
+    line1: str
+    line2: str
+
+
+class DoDontOut(CamelModel):
+    do: list[str]
+    dont: list[str]
+
+
+class ContentScreenOut(_ScreenOut):
+    """Teaching screen; every block but the title is optional. Client render order: body, image,
+    items, steps, dodont, examples, note, keyIdea, tip."""
+
+    type: Literal["content"]
+    title: str
+    body: list[str] = Field(default_factory=list)
+    image: str | None = None
+    items: list[ItemOut] | None = None
+    steps: list[StepOut] | None = None
+    dodont: DoDontOut | None = None
+    examples: list[ExampleOut] | None = None
+    note: NoteOut | None = None
+    key_idea: str | None = None
+    tip: str | None = None
+
+
+class ChoiceOut(CamelModel):
+    id: str
+    text: str
+
+
+class QuizScreenOut(_ScreenOut):
+    """Options carry text only: correctness and feedback come with the answer result."""
+
+    type: Literal["quiz"]
+    title: str
+    options: list[ChoiceOut]
+
+
+class BuilderGroupOut(CamelModel):
+    id: str
+    label: str
+    options: list[ChoiceOut]
+
+
+class BuilderScreenOut(_ScreenOut):
+    type: Literal["builder"]
+    title: str
+    body: str
+    groups: list[BuilderGroupOut]
+
+
+class ResetScreenOut(_ScreenOut):
+    type: Literal["reset"]
+    title: str
+    body: str
+    question: str
+    options: list[OptionOut]
+    image: str | None = None
 
 
 class PatternStepOut(CamelModel):
@@ -60,8 +155,7 @@ class MiniTaskOut(CamelModel):
     options: list[OptionOut]
 
 
-class LearnScreenOut(CamelModel):
-    id: str
+class LearnScreenOut(_ScreenOut):
     type: Literal["learn"]
     title: str
     body: str | None = None
@@ -79,10 +173,9 @@ class ReviewPhraseOut(CamelModel):
     lesson_id: str | None = None
 
 
-class PhrasesReviewScreenOut(CamelModel):
+class PhrasesReviewScreenOut(_ScreenOut):
     """`phrases` is empty when the learner has saved none: show `empty_text`."""
 
-    id: str
     type: Literal["phrases_review"]
     title: str
     intro: str
@@ -110,8 +203,7 @@ class RoleplaySummaryOut(CamelModel):
     again_button: str
 
 
-class RoleplayScreenOut(CamelModel):
-    id: str
+class RoleplayScreenOut(_ScreenOut):
     type: Literal["roleplay"]
     title: str
     intro: str
@@ -141,8 +233,7 @@ class NoteTemplateOut(CamelModel):
     example: str
 
 
-class PlanScreenOut(CamelModel):
-    id: str
+class PlanScreenOut(_ScreenOut):
     type: Literal["plan"]
     title: str
     if_then: IfThenOut
@@ -158,9 +249,10 @@ class ConfidenceCheckOut(CamelModel):
     items: list[OptionOut]
 
 
-class WrapScreenOut(CamelModel):
-    id: str
+class WrapScreenOut(_ScreenOut):
     type: Literal["wrap"]
+    title: str | None = None
+    learned: list[str] | None = None
     skill_line: str
     phrase_line: str
     pattern_line: str
@@ -170,8 +262,13 @@ class WrapScreenOut(CamelModel):
 
 
 ScreenOut = Annotated[
-    SetupQuestionScreenOut
+    IntroScreenOut
+    | SetupScreenOut
     | ScenarioScreenOut
+    | ContentScreenOut
+    | QuizScreenOut
+    | BuilderScreenOut
+    | ResetScreenOut
     | LearnScreenOut
     | PhrasesReviewScreenOut
     | RoleplayScreenOut
@@ -207,14 +304,15 @@ class LessonResponse(CamelModel):
     unlock_on: date
     pattern: PatternOut
     screens: list[ScreenOut]
+    screen_count: int
     progress: LessonProgressOut
     recap: RecapOut | None = None
 
 
 class AnswerRequest(CamelModel):
-    """`value` is an option id for the setup, scenario and mini-task screens; other screen
-    types will take structured values, so the schema accepts any JSON and the screen's handler
-    decides whether the type fits."""
+    """`value` is an option id for the setup, scenario, quiz, reset and mini-task screens, a list
+    of option ids (one per group, in order) for the builder, an object for the plan and wrap
+    screens; the schema accepts any JSON and the screen's handler decides whether the type fits."""
 
     screen_id: str = Field(min_length=1, max_length=64)
     value: JsonValue
@@ -240,11 +338,17 @@ class CompleteResponse(CamelModel):
 
 
 class AnswerResponse(CamelModel):
-    """`result` depends on the screen type: setup `{variant}`; scenario `{answerId, verdict,
-    feedback, savePhrase}`; mini-task `{optionId, response, correct?}`; plan `{ifThen, task,
-    reminder}` (reminder: title, description, startsAt, timezone, url for the browser's .ics);
-    wrap `{saved, ratings}`. A plan answer value is `{response, reminderDownloaded?}`; a wrap
-    answer value is `{itemId: 1..5}` for every confidence item."""
+    """`result` depends on the screen type:
+    - setup `{variant}`;
+    - scenario `{answerId, verdict, feedback, savePhrase}`;
+    - quiz `{optionId, correct, correctOptionId, feedback}`;
+    - builder `{reply, allCorrect, groups: [{correct}]}`;
+    - reset `{optionId, text}`;
+    - mini-task `{optionId, response, correct?}`;
+    - plan `{ifThen, task, reminder}` (reminder: title, description, startsAt, timezone, url for
+      the browser's .ics); a plan answer value is `{response, reminderDownloaded?}`;
+    - wrap `{saved, ratings}`; a wrap answer value is `{itemId: 1..5}` for every confidence item.
+    """
 
     screen_id: str
     type: str

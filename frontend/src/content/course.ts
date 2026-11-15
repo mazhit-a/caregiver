@@ -18,7 +18,7 @@ export const MODULE_ONE = {
     "One simple pattern for hard conversations: notice the feeling, reassure, offer something to do. Each lesson uses it in a harder moment.",
   why: "Why first: talking with Mom comes up every day, at every stage, wherever she lives.",
   lessons: [
-    { title: "When Mom asks again", minutes: 8 },
+    { title: "When Mom asks again", minutes: 9 },
     { title: "Talking so it lands", minutes: 7 },
     { title: "“You stole my purse”", minutes: 8 },
     { title: "When Mom says no", minutes: 8 },

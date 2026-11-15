@@ -1,4 +1,4 @@
-# Parent Care Navigator
+# Kelper
 
 A web course for adult children caring for a parent with dementia. A short quiz builds a personal
 plan, a paywall (Stripe test mode, or a no-Stripe demo mode) opens a set of lessons that are
@@ -8,8 +8,10 @@ complete the loop. Built for a hackathon demo that judges use **without logging 
 
 > We teach and organize. We don't give medical advice.
 
-**Status of this repository: backend only.** The React frontend is a later task. Everything in
-this README that talks about "the frontend" describes the contract the backend expects.
+**Status of this repository: backend and frontend built.** The backend (FastAPI) and the React
+frontend (landing site, quiz funnel, paywall, the app after the paywall, the 24-screen lesson 1 and
+the AI role-play room) are complete and tested against fakes. See [What is built](#what-is-built)
+and the one consolidated [Before launch checklist](#before-launch-checklist).
 
 **Not yet verified: the quality of the AI coach.** All automated tests run against a faked LLM
 and a faked Stripe. The real model has not been evaluated (the harness selection in
@@ -21,7 +23,8 @@ See [Evals](#evals-not-yet-run).
 1. [Architecture](#architecture)
 2. [Real vs test mode](#real-vs-test-mode)
 3. [Privacy model](#privacy-model)
-4. [Run locally](#run-locally)
+4. [What is built](#what-is-built)
+   and [Run locally](#run-locally) (backend and frontend)
 5. [Deploy on the VPS](#deploy-on-the-vps)
 6. [Manual Stripe test-mode run](#manual-stripe-test-mode-run-pending-user-action)
 7. [Evals (not yet run)](#evals-not-yet-run)
@@ -157,6 +160,33 @@ browser". That is no longer true: answers are stored on the server, tied to the 
 It must read: **"Saved privately to this session. No account, no name needed."** Search
 `content/` and the frontend for the old sentence before launch.
 
+## What is built
+
+**Backend (`backend/`).** Quiz and plan builder (persona tests A, B, C), anonymous sessions, paywall
+with Stripe test mode or a no-Stripe demo mode, subscription state machine and webhooks, lessons
+released on a pace formula, the role-play coach (local safety check, rules re-applied in code,
+multiple-choice fallback), Today and check-ins, skills, phrases, Mom's page, care card, visit sheet,
+settings, cancel, gentle exit, clear my data. Migrations head is 0022.
+**1152 backend tests** pass (plus 2 `slow`), `lint-imports`, `mypy --strict` and `ruff` are green.
+
+**Frontend (`frontend/`, React 19, Vite, TypeScript strict, no UI library).**
+
+| Area | Routes |
+| --- | --- |
+| Marketing site | `/`, `/how-it-works`, `/practice`, `/course`, `/care-tools`, `/pricing` |
+| Quiz funnel and paywall | `/quiz`, `/quiz/building`, `/your-plan`, `/your-plan/gift`, `/paywall`, `/checkout/return` |
+| App (needs a session and a subscription) | `/today`, `/today/practice`, `/lessons/:lessonId`, `/plan`, `/profile`, `/care-card`, `/visit-sheet`, `/skills`, `/settings`, `/settings/cancel`, `/settings/gentle-exit`, `/goodbye` |
+| Public | `/card/:cardId` (care card, no session token) |
+
+Lesson 1 (`m1_l1`) is the 24-screen lesson (intro, setup, scenario, content, quizzes, builder,
+reset, role-play, plan, wrap); lessons 2 to 5 still use the older 9-screen schema, which the
+backend and frontend both keep supporting. The frontend does no business logic: plan, unlock
+dates, scoring, gating and placeholder filling all come from the API. **829 frontend tests** run
+against a fake API whose lesson-1 and answer fixtures were captured from the real backend
+(`frontend/src/test/fixtures/app/`, batch 4 increment C7). One real-browser smoke (headless
+Chromium, 390 and 1280 px, lesson 1 screens 1 to 16) found no console errors and no horizontal
+scroll; see `context/frontend/PROGRESS-C7.md`.
+
 ## Run locally
 
 Prerequisites: Docker, [uv](https://docs.astral.sh/uv/), Python 3.12, optionally the
@@ -176,6 +206,24 @@ uv run alembic upgrade head                # migrations (head is 0022)
 uv run uvicorn app.main:create_app --factory --reload   # http://localhost:8000/api/docs
 ```
 
+**Restart the backend after every pull.** Content (`content/`) is loaded and validated once at
+startup and `--reload` only watches Python files, so a pull that changes `content/` (for example
+the lesson files or `app-copy.json`) or the content schemas needs a full restart of uvicorn (or
+`docker compose up --build -d api`). Run `uv run alembic upgrade head` again when a pull adds a
+migration.
+
+**Frontend** (Node 22 or newer; the dev server proxies `/api` to `localhost:8000`, so start the
+backend first):
+
+```bash
+cd frontend
+npm ci                    # install exactly what package-lock.json pins
+npm run dev               # http://localhost:3000 (strict port)
+npm run lint && npm run typecheck && npm test && npm run build
+```
+
+For the judge demo with no Stripe, set `DEMO_CONTROLS=true` and use the demo button on the paywall.
+
 `.env.example` points `DATABASE_URL` at the compose service name `db` (for the api container) and
 `TEST_DATABASE_URL` at `localhost:55432`. The test database `pcn_test` is created on demand by the
 test suite.
@@ -190,7 +238,7 @@ curl -s http://localhost/api/health        # {"status":"ok"}
 **Tests and lints** (all from `backend/`; no network, LLM and Stripe are faked):
 
 ```bash
-uv run pytest -v                           # default suite (1003 tests); excludes slow tests
+uv run pytest -v                           # default suite (1152 tests); excludes slow tests
 uv run pytest -m slow                      # 2 slow tests (real-time hang/timeout case, ~13 s)
 uv run lint-imports                        # layer rules
 uv run mypy --strict app scripts evals     # types
@@ -371,37 +419,91 @@ Funnel and activation metrics for the pitch: `psql "$DATABASE_URL" -f backend/sc
 
 ## Before launch checklist
 
-For the user and the content owner. None of this is done by the code.
+One consolidated list for the user and the content owner (merged from the frontend plans 01 to 04
+and the earlier backend list). None of this is done by the code. Items marked `[x]` are done.
 
-- [ ] Run the [manual Stripe test-mode checklist](#manual-stripe-test-mode-run-pending-user-action)
-      and the VPS deploy; register the webhook with the six event types.
-- [ ] Run the real-model evals, or consciously accept the unmeasured default
-      (`docs/decisions/llm-harness.md`). Get the owner's budget approval first.
-- [ ] **Verify crisis numbers** in `content/crisis-resources.json` (all flagged
-      `verifyBeforeLaunch`; Adult Protective Services uses the Eldercare Locator 1-800-677-1116,
-      since there is no single national APS number) and record who verified them and when.
-- [ ] **Verify the grief-support URL** in the gentle-exit copy (`content/funnel-copy.json`,
-      `gentleExit`): `https://hospicefoundation.org/Grief-Support` was written from memory. Also
-      confirm 1-800-272-3900 and 988.
-- [ ] **Content-owner review** of lessons `m1_l2` to `m1_l5` (drafts: wording, parent lines,
-      fallbacks, day-2 notes, doctor notes, recap, the 29 lesson eval cases marked
-      `needsContentReview`) and of the `gentleExit` copy.
-- [ ] **Safety-terms review** of `content/safety-terms.json`, including the medical-terms list
-      (20 terms drafted by the build agent) and the fixed coach tips; the eval data
-      `backend/evals/data/shaming-words.json` (21 terms).
-- [ ] Replace placeholder prices in `content/pricing.json` (demo prices, "TBD by test") and run
-      `scripts.stripe_setup` again.
-- [x] Change the privacy copy to "Saved privately to this session. No account, no name needed."
-- [ ] Frontend route assumptions: `/checkout/return?checkout_id=...` and
-      `/paywall?checkout=canceled` (Stripe return URLs), `/card/{id}` (public care card) and
-      `/lessons/{id}` (reminder link). These were guesses; fix `PUBLIC_APP_URL` usage if the
-      frontend differs.
-- [ ] Confirm the eval composite definition (mean of per-goal accuracy, exact-score rate, argued
-      accuracy, flag F1) and verify the model/price assumptions listed in
-      `docs/decisions/llm-harness.md`.
-- [ ] Decide on `FALLBACK_MODELS` (server-side refusal fallback for `claude-opus-5-5` was the agent's
-      assumption: verify against the API docs).
-- [ ] Set `DEMO_CONTROLS=false` for anything that is not a demo.
+**Facts and claims to verify**
+
+- [ ] **AARP / NAC statistic.** "About 1 in 4 US adults cares for a family member", source "AARP
+      and the National Alliance for Caregiving, Caregiving in the US 2025" (landing stat band and
+      the funnel proof line). Confirm the figure and the source line, or reword.
+- [ ] **Crisis numbers** in `content/crisis-resources.json` (all flagged `verifyBeforeLaunch`):
+      911, 988, 1-800-272-3900 and Adult Protective Services via the Eldercare Locator
+      1-800-677-1116 (no single national APS number exists). They also appear on the help sheet and
+      the role-play safety screens and in the frontend's bundled offline fallback. Decide whether
+      the Eldercare Locator entry belongs in the help sheet, and record who verified what and when.
+- [ ] **Grief-support URL** in the gentle-exit copy (`content/funnel-copy.json`, `gentleExit`):
+      `https://hospicefoundation.org/Grief-Support` was written from memory.
+- [ ] **Ollie quote.** "I cared for my mom for six years" / "a guide who has been there" is mascot
+      backstory presented as lived experience. Keep it as designed or reword (content rules forbid
+      invented proof).
+- [ ] **`TODO(verify)` markers.** Run `grep -rn "TODO(verify)" frontend/src content backend/app`
+      and clear every hit (at the time of writing: `frontend/src/content/funnel.ts`,
+      `frontend/src/content/home.ts` twice: the statistic and the Ollie backstory).
+- [ ] The pricing page line "Cancel anytime in Settings" and the paywall copy must keep matching
+      the Settings headings (`/settings`, `/settings/cancel`).
+- [ ] Verify the Figtree font file and licence (`frontend/licenses/`): the supplied woff2 should
+      be the variable OFL font.
+
+**Stripe, deploy and demo settings**
+
+- [ ] **Manual Stripe test-mode run** (see above) and the VPS deploy; register the webhook with the
+      six event types.
+- [ ] **Re-run `scripts.stripe_setup`** with your test key: the product was renamed to "Kelper"
+      and the script now updates the stored name. No agent runs this script. Also replace the
+      placeholder prices in `content/pricing.json` ("TBD by test", `REPLACE` ids).
+- [ ] **Domain.** Decide the real domain (the footer prints "Kelper.io"); set `SITE_ADDRESS`
+      (bare domain, Caddy gets the certificate) and `PUBLIC_APP_URL` (`https://<domain>`, it
+      builds care-card links, reminder links and the Stripe return URLs: `/checkout/return`,
+      `/paywall?checkout=canceled`, `/card/{id}`, `/lessons/{id}`). Keep `CORS_ORIGINS` equal.
+- [ ] **Demo endpoints.** `Settings.demo_controls` defaults to `True`, so a deploy that forgets the
+      variable exposes `/api/demo/*` (including `fail-next-payment`). Set `DEMO_CONTROLS`
+      explicitly: `true` for the hackathon deploy, `false` for anything public. `POST
+      /api/billing/demo` and the paywall's demo button are shown to every visitor in this build:
+      gate both before a public launch.
+- [ ] **`SESSION_CREATIONS_PER_MINUTE`** (default 20, per client address): judges behind one
+      venue network share it. Raise it (and check `ROLEPLAY_TURNS_PER_HOUR`) before a demo day.
+- [ ] **Caddy log directive.** The Caddyfile has no `log` directive, so care-card ids are not
+      logged by Caddy; the nginx `access_log off` for `/card/` is in `frontend/nginx.conf`.
+      Confirm on the VPS that no log records card ids. Keep one api worker.
+- [ ] Manual checks no test covers: `.ics` reminder import (iOS, Google, Outlook), print of the
+      care card, visit sheet and gift sheet (Chrome and Safari, US Letter, black and white),
+      clipboard copy over HTTPS, a real screen-reader pass.
+
+**Content and review**
+
+- [ ] **Content owner review of `content/app-copy.json`** (every app string: nav, plan, profile,
+      care card, visit sheet, skills, settings, welcome, lesson labels such as "Good instinct /
+      Noted / Very common") and of the `gentleExit` copy.
+- [ ] **Content owner review of the lessons.** `m1_l1` is the owner's 24-screen file with nine
+      patches applied (`context/frontend/m1_l1-patches-for-owner.md`: send this list back;
+      the original is untouched in `context/design/content-package/`). `m1_l2` to `m1_l5` are AI
+      drafts in the old schema: wording, parent lines, fallbacks, day-2 notes, doctor notes,
+      recap, and the 29 role-play eval cases marked `needsContentReview`.
+- [ ] **Missing Ollie pose files.** Only explaining, reading, thinking, note and the avatar exist
+      in `frontend/src/assets`. The brand book lists more: idea, calm (`ollie-calm-none` on the
+      reset screen), good-instinct, next-step, welcome (lesson), rest, lost, looking, complete.
+      Screens that name a missing pose render no image. Supply the files. Ollie never appears on
+      crisis, payment, medical, gentle-exit or demo-banner screens.
+- [ ] **Safety-terms review** of `content/safety-terms.json` (including the 20 drafted medical
+      terms and the fixed coach tips) and `backend/evals/data/shaming-words.json` (21 terms).
+- [ ] Add a fifth `general` phrase to `content/phrases.json`; give `m1_l1` a third fallback
+      scenario (see Known limitations).
+- [x] Privacy copy reads "Saved privately to this session. No account, no name needed." (backend
+      and frontend). Re-check with
+      `grep -rn "in this browser\|your browser" content frontend/src` before launch.
+- [ ] The scenario screen of lesson 1 renders no heading (the title is only the fieldset legend),
+      so focus-to-heading has no target there. Decide whether to add one.
+
+**AI coach**
+
+- [ ] **Real-model evals are still pending** (increments 25 to 27, postponed by the owner): run
+      them or consciously accept the unmeasured default (`docs/decisions/llm-harness.md`; ask
+      first, they cost money). Re-run `uv run python -m evals.run --config production --set test`
+      before every demo.
+- [ ] Confirm the eval composite definition and the model/price assumptions in
+      `docs/decisions/llm-harness.md`; decide on `FALLBACK_MODELS` (the server-side refusal
+      fallback for `claude-opus-5-5` was an assumption: verify against the API docs).
 
 ## Known limitations
 
@@ -420,4 +522,5 @@ For the user and the content owner. None of this is done by the code.
 - Metrics: day-0 and week-1 use the UTC date of app time; client events may double count
   server-side event names (metrics read lessons, role-play and subscriptions from tables).
 - `--batch` (Batches API) in the eval runner is not implemented.
-- Frontend: not built yet.
+- Lessons 2 to 5 keep the older lesson schema; converting them (and deleting the legacy `learn`
+  screen and scenario shim) waits for owner-supplied lessons.

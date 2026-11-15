@@ -12,8 +12,15 @@ from tests.presentation.test_billing_api import (  # noqa: F401
 )
 
 
-def _clean(body: dict[str, dict[str, str]]) -> bool:
-    texts = [t for section in body.values() for t in section.values()]
+def _texts(node: object) -> list[str]:
+    if isinstance(node, str):
+        return [node]
+    assert isinstance(node, dict)
+    return [t for child in node.values() for t in _texts(child)]
+
+
+def _clean(body: dict[str, object]) -> bool:
+    texts = _texts(body)
     return bool(texts) and not any(re.search(r"[{}]|\*\*", t) for t in texts)
 
 
@@ -28,6 +35,28 @@ async def test_app_copy_works_before_the_quiz_with_neutral_labels(
     assert r.status_code == 200, r.text
     assert _clean(r.json())
     assert r.json()["nav"]["profilePage"] == "Your loved one's page"
+
+
+async def test_app_copy_serves_the_lesson_labels_in_camel_case(
+    pclient: httpx.AsyncClient,  # noqa: F811
+) -> None:
+    lesson = (await pclient.get("/api/app-copy")).json()["lesson"]
+    assert lesson["verdictLabels"] == {
+        "best": "Good instinct",
+        "okay": "Noted",
+        "try_again": "Very common",
+    }
+    assert set(lesson) == {
+        "verdictLabels",
+        "afterChoice",
+        "saveButton",
+        "quiz",
+        "builder",
+        "doSkip",
+    }
+    assert set(lesson["quiz"]) == {"right", "wrong"}
+    assert set(lesson["builder"]) == {"allCorrect", "notYet"}
+    assert set(lesson["doSkip"]) == {"doLabel", "skipLabel"}
 
 
 async def test_app_copy_is_finished_text_for_the_recipient(

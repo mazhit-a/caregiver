@@ -6,18 +6,24 @@ from pathlib import Path
 
 import pytest
 
+from app.domain.lessons.screens import RUNTIME_PLACEHOLDERS, render_lesson
 from app.infrastructure.content.loader import load_content
+from app.infrastructure.content.provider import JsonContentProvider
 from app.infrastructure.content.schemas import (
     LearnScreen,
     LessonFile,
     PhrasesReviewScreen,
     RoleplayScreen,
+    ScenarioScreen,
 )
 
 REAL_CONTENT = Path(__file__).resolve().parents[4] / "content"
 BUNDLE = load_content(REAL_CONTENT)
 LESSONS: dict[str, LessonFile] = dict(BUNDLE.lessons)
-NEW_LESSONS = ["m1_l2", "m1_l3", "m1_l4", "m1_l5"]
+NEW_LESSONS = ["m1_l2", "m1_l3", "m1_l4", "m1_l5"]  # drafts in the old 9-screen schema
+RECIPIENT_KEYS = ["mom", "dad", "both", "in_law", "other"]
+VARIANTS = ["in_person", "phone", "both", "not_yet"]
+BLANKS = dict.fromkeys(RUNTIME_PLACEHOLDERS, "")
 BUILT_IN_RULES = {
     lesson.id for module in BUNDLE.plan_rules.modules for lesson in module.lessons if lesson.built
 }
@@ -116,8 +122,9 @@ def test_each_lesson_has_fallback_scenarios_for_every_roleplay_round() -> None:
             assert len(answers) >= 2 and {a.verdict for a in answers} >= {"best"}, scenario_id
 
 
-def test_learn_screens_are_within_word_limit() -> None:
-    for lesson_id, lesson in LESSONS.items():
+def test_learn_screens_of_the_old_lessons_are_within_word_limit() -> None:
+    for lesson_id in NEW_LESSONS:
+        lesson = LESSONS[lesson_id]
         learn = [s for s in lesson.screens if isinstance(s, LearnScreen)]
         assert 3 <= len(learn) <= 5, lesson_id
         for screen in learn:
@@ -131,6 +138,77 @@ def test_learn_screens_are_within_word_limit() -> None:
         for screen in learn:
             gap = 0 if screen.mini_task is not None else gap + 1
             assert gap <= 2, (lesson_id, screen.id)
+
+
+def _rendered_lessons() -> list[tuple[str, str, list[dict[str, object]]]]:
+    """m1_l1 as a learner sees it, for every recipient key and variant."""
+    provider = JsonContentProvider.from_directory(REAL_CONTENT)
+    return [
+        (
+            key,
+            variant,
+            render_lesson(
+                provider.render_lesson("m1_l1", key, variant, BLANKS), variant, True
+            ).screens,
+        )
+        for key in RECIPIENT_KEYS
+        for variant in VARIANTS
+    ]
+
+
+def _shown_text(screen: dict[str, object]) -> list[str]:
+    hidden = {"id", "type", "part", "image"}
+    return _strings({k: v for k, v in screen.items() if k not in hidden})
+
+
+def test_m1_l1_has_the_24_screens_of_the_new_schema() -> None:
+    lesson = LESSONS["m1_l1"]
+    assert len(lesson.screens) == 24 and lesson.variant_ids() == VARIANTS
+    assert [s.type for s in lesson.screens].count("quiz") == 6
+    assert lesson.screens[0].type == "intro" and lesson.screens[1].type == "setup"
+    assert not any(s.type in ("learn", "setup_question") for s in lesson.screens)
+    assert sum(s.sec or 0 for s in lesson.screens) == 543  # about 9 minutes
+
+
+def test_m1_l1_content_screens_are_within_word_limits() -> None:
+    for key, variant, screens in _rendered_lessons():
+        for screen in (s for s in screens if s["type"] == "content"):
+            body = " ".join(_strings(screen.get("body")))
+            assert _words(body) <= 60, (key, variant, screen["id"])
+            assert _words(" ".join(_shown_text(screen))) <= 90, (key, variant, screen["id"])
+
+
+def test_m1_l1_renders_for_every_recipient_and_variant_without_leftovers() -> None:
+    for key, variant, screens in _rendered_lessons():
+        text = " ".join(t for screen in screens for t in _shown_text(screen))
+        assert not re.search(r"\{\w+\}", text), (key, variant)
+        # singular "they" never meets a verb written for he or she
+        assert not re.search(r"\b[Tt]hey (asks|enjoys|isn't|is|has|was|doesn't|wants)\b", text)
+        assert not re.search(r"\b[Tt]hey's\b", text), (key, variant)
+
+
+def test_m1_l1_has_no_gendered_or_family_specific_hard_coded_words() -> None:
+    text = " ".join(_lesson_text(LESSONS["m1_l1"]))
+    banned = r"\b(she|he|her|hers|his|him|himself|herself|daughter|son|mother|father|Mom|Dad)\b"
+    assert not re.search(banned, text), re.findall(banned, text)
+
+
+def test_m1_l1_verdicts_use_the_shared_vocabulary() -> None:
+    lesson = LESSONS["m1_l1"]
+    scenario = next(s for s in lesson.screens if isinstance(s, ScenarioScreen))
+    verdicts = {o.verdict for options in scenario.options_by_variant.values() for o in options}
+    verdicts |= {a.verdict for f in lesson.fallback_scenarios for a in f.answers}
+    assert verdicts == {"best", "okay", "try_again"}
+
+
+def test_lesson_minutes_match_plan_rules() -> None:
+    minutes = {
+        lesson.id: lesson.minutes
+        for module in BUNDLE.plan_rules.modules
+        for lesson in module.lessons
+        if lesson.built
+    }
+    assert minutes == {lesson_id: lesson.minutes for lesson_id, lesson in LESSONS.items()}
 
 
 @pytest.mark.parametrize("lesson_id", NEW_LESSONS)

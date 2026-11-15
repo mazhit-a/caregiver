@@ -252,7 +252,7 @@ describe("full funnel journey", () => {
     await planToPaywall();
     await user.click(screen.getByRole("checkbox"));
     await user.click(screen.getByRole("button", { name: /Continue in demo mode/ }));
-    await h1("Today is coming soon");
+    await h1(/^Today/);
     expect(here()).toBe("/today");
     expect(api.calls.filter((c) => c.path === "/billing/demo")).toHaveLength(1);
     expectPrivate(A);
@@ -279,7 +279,7 @@ describe("full funnel journey", () => {
     expect(api.calls.filter((c) => c.path.startsWith("/billing/checkout/"))).toHaveLength(1);
     expect(here()).toBe("/checkout/return");
     await user.click(screen.getByRole("button", { name: "Continue" }));
-    await h1("Today is coming soon");
+    await h1(/^Today/);
     expectPrivate(B);
   }, 60000);
 
@@ -302,7 +302,7 @@ describe("full funnel journey", () => {
     expect(api.calls.filter((c) => c.path === "/billing/demo")).toHaveLength(0);
     await user.click(screen.getByRole("checkbox"));
     await user.click(screen.getByRole("button", { name: /Continue in demo mode/ }));
-    await h1("Today is coming soon");
+    await h1(/^Today/);
     expectPrivate(C);
   }, 60000);
 
@@ -474,13 +474,13 @@ describe("full funnel journey", () => {
     await planToPaywall();
     await user.click(screen.getByRole("checkbox"));
     await user.click(screen.getByRole("button", { name: /Continue in demo mode/ }));
-    await h1("Today is coming soon");
+    await h1(/^Today/);
     let view = first;
     for (const path of ["/quiz", "/quiz/q3_situation", "/paywall"]) {
       view.unmount();
       view = renderAt(path);
       await waitFor(() => expect(here()).toBe("/today"));
-      await h1("Today is coming soon");
+      await h1(/^Today/);
     }
   }, 60000);
 

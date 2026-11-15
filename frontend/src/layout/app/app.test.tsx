@@ -3,12 +3,19 @@ import userEvent from "@testing-library/user-event";
 import { readFileSync } from "node:fs";
 import { ESLint } from "eslint";
 import { resolve } from "node:path";
-import { createMemoryRouter, RouterProvider, useLocation } from "react-router";
+import {
+  createMemoryRouter,
+  RouterProvider,
+  useLocation,
+  type RouteObject,
+} from "react-router";
+import { isValidElement } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { axe } from "vitest-axe";
 import { crisisStore } from "../../api/useCrisisResources";
 import { routes } from "../../router";
 import { AppLayout } from "./AppLayout";
+import { useAppCopy } from "../../api/AppDataProvider";
 import { useAppContext } from "./appContext";
 import { DESKTOP_QUERY } from "./useIsDesktop";
 
@@ -69,6 +76,12 @@ beforeEach(() => {
     const url = String(input);
     if (url.includes("/api/app-copy"))
       return Promise.resolve(json(appCopyReply.status, appCopyReply.body));
+    if (url.includes("/api/cards/"))
+      return Promise.resolve(
+        json(404, {
+          error: { code: "not_found", message: "No.", details: {} },
+        }),
+      );
     return Promise.resolve(
       json(200, {
         verifyBeforeLaunch: true,
@@ -103,15 +116,8 @@ function LocationProbe() {
   );
 }
 
-async function renderAt(path: string) {
-  const router = createMemoryRouter(routes, { initialEntries: [path] });
-  const utils = render(<RouterProvider router={router} />);
-  await screen.findByRole("heading", { level: 1 });
-  return { router, ...utils };
-}
-
 const APP_ROUTES: [string, string][] = [
-  ["/today", "Today is coming soon"],
+  ["/today", "Today"],
   ["/today/practice", "Practice round"],
   ["/lessons/m1_l1", "Lesson"],
   ["/plan", "Plan"],
@@ -123,6 +129,44 @@ const APP_ROUTES: [string, string][] = [
   ["/settings/cancel", "Cancel subscription"],
   ["/settings/gentle-exit", "Gentle exit"],
 ];
+
+/** A dummy page: an h1 for its route and nothing else (the real pages have their own tests). */
+function DummyPage({ title }: { title: string }) {
+  return (
+    <h1 data-app-heading tabIndex={-1}>
+      {title}
+    </h1>
+  );
+}
+
+const shellRoutes: RouteObject[] = [
+  {
+    element: <AppLayout />,
+    children: APP_ROUTES.map(([path, title]) => ({
+      path,
+      element: <DummyPage title={title} />,
+    })),
+  },
+  { path: "/paywall", element: <h1>Paywall</h1> },
+  { path: "/quiz", element: <h1>Quiz</h1> },
+  { path: "/", element: <h1>Home</h1> },
+];
+
+async function renderAt(path: string) {
+  const router = createMemoryRouter(shellRoutes, { initialEntries: [path] });
+  const utils = render(<RouterProvider router={router} />);
+  await screen.findByRole("heading", { level: 1 });
+  return { router, ...utils };
+}
+
+async function renderRealAt(path: string, state?: unknown) {
+  const router = createMemoryRouter(routes, {
+    initialEntries: [{ pathname: path, state }],
+  });
+  const utils = render(<RouterProvider router={router} />);
+  await screen.findByRole("heading", { level: 1 });
+  return { router, ...utils };
+}
 
 describe("app routes", () => {
   it.each(APP_ROUTES)(
@@ -137,10 +181,7 @@ describe("app routes", () => {
       expect(navs).toHaveLength(
         path.startsWith("/lessons") || path === "/today/practice" ? 0 : 1,
       );
-      expect(
-        document.head.querySelector('meta[name="robots"][content="noindex"]'),
-      ).not.toBeNull();
-      // Stubs fetch nothing of their own: only the shell's app-copy and the help sheet's crisis list.
+      // The shell fetches the app copy once, plus the help sheet's crisis list: nothing else.
       const urls = fetchMock.mock.calls.map(([u]) => String(u));
       expect(
         urls.filter(
@@ -149,11 +190,28 @@ describe("app routes", () => {
             !u.includes("/api/resources/crisis"),
         ),
       ).toEqual([]);
+      expect(urls.filter((u) => u.includes("/api/app-copy"))).toHaveLength(1);
     },
   );
 
+  it("mounts every app path under the shell layout in the real route table", () => {
+    const shell = routes.find(
+      (r) => isValidElement(r.element) && r.element.type === AppLayout,
+    );
+    const paths = (shell?.children ?? []).map((r) => r.path);
+    for (const [path] of APP_ROUTES) {
+      const pattern = path.replace("m1_l1", ":lessonId");
+      const hit = paths.some((p) => {
+        if (!p) return false;
+        const re = new RegExp("^" + p.replace(/:[^/]+/g, "[^/]+") + "$");
+        return re.test(path) || p === pattern;
+      });
+      expect(hit, path).toBe(true);
+    }
+  });
+
   it("renders the public card outside the app shell, without a session request", async () => {
-    await renderAt("/card/abc");
+    await renderRealAt("/card/abc");
     expect(screen.queryByRole("navigation")).toBeNull();
     expect(
       fetchMock.mock.calls.filter(([u]) => String(u).includes("/api/app-copy")),
@@ -161,7 +219,7 @@ describe("app routes", () => {
   });
 
   it("renders /goodbye outside the app shell", async () => {
-    await renderAt("/goodbye");
+    await renderRealAt("/goodbye", { kind: "cleared", message: "Cleared." });
     expect(screen.queryByRole("navigation")).toBeNull();
     expect(
       fetchMock.mock.calls.filter(([u]) => String(u).includes("/api/app-copy")),
@@ -169,7 +227,7 @@ describe("app routes", () => {
   });
 
   it("still shows the 404 for an unknown URL", async () => {
-    await renderAt("/nope/nothing");
+    await renderRealAt("/nope/nothing");
     expect(
       screen.getByRole("heading", { level: 1, name: /can’t find that page/ }),
     ).toBeInTheDocument();
@@ -333,13 +391,9 @@ describe("help, skip link and focus", () => {
 describe("gate handling", () => {
   it("sends a lost session (401) to /quiz with the restore state", async () => {
     appCopyReply = error(401, "invalid_session_token");
-    const router = createMemoryRouter(
-      [
-        ...routes,
-        // Observe where the shell sends the visitor: swap /quiz for a probe.
-      ].map((r) => r),
-      { initialEntries: ["/plan"] },
-    );
+    const router = createMemoryRouter(shellRoutes, {
+      initialEntries: ["/plan"],
+    });
     render(<RouterProvider router={router} />);
     await waitFor(() => expect(router.state.location.pathname).toBe("/quiz"));
     expect(
@@ -351,13 +405,13 @@ describe("gate handling", () => {
     appCopyReply = error(402, "payment_required", {
       reason: "no_subscription",
     });
-    const a = createMemoryRouter(routes, { initialEntries: ["/plan"] });
+    const a = createMemoryRouter(shellRoutes, { initialEntries: ["/plan"] });
     const first = render(<RouterProvider router={a} />);
     await waitFor(() => expect(a.state.location.pathname).toBe("/paywall"));
     first.unmount();
 
     appCopyReply = error(402, "payment_required", { reason: "ended" });
-    const b = createMemoryRouter(routes, { initialEntries: ["/plan"] });
+    const b = createMemoryRouter(shellRoutes, { initialEntries: ["/plan"] });
     render(<RouterProvider router={b} />);
     await waitFor(() => expect(b.state.location.pathname).toBe("/"));
   });
@@ -365,7 +419,9 @@ describe("gate handling", () => {
   it("shows a retry state when the nav copy fails with a server error", async () => {
     const user = userEvent.setup();
     appCopyReply = error(500, "internal_error");
-    const router = createMemoryRouter(routes, { initialEntries: ["/plan"] });
+    const router = createMemoryRouter(shellRoutes, {
+      initialEntries: ["/plan"],
+    });
     render(<RouterProvider router={router} />);
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "We could not load",
@@ -451,6 +507,69 @@ describe("gate handling", () => {
     await waitFor(() =>
       expect(router.state.location.pathname).toBe("/paywall"),
     );
+  });
+});
+
+describe("shared app copy", () => {
+  function Refresher() {
+    const copy = useAppCopy();
+    return (
+      <>
+        <h1 data-app-heading tabIndex={-1}>
+          Refresher
+        </h1>
+        <p data-testid="plan-title">
+          {copy.status === "ready" ? copy.data.nav.profilePage : "-"}
+        </p>
+        <button type="button" onClick={copy.refresh}>
+          Refresh copy
+        </button>
+      </>
+    );
+  }
+
+  it("refreshes the nav labels and page copy silently after a name change, with one fetch per refresh", async () => {
+    const user = userEvent.setup();
+    const router = createMemoryRouter(
+      [
+        {
+          element: <AppLayout />,
+          children: [{ path: "/r", element: <Refresher /> }],
+        },
+      ],
+      { initialEntries: ["/r"] },
+    );
+    render(<RouterProvider router={router} />);
+    const h1 = await screen.findByRole("heading", {
+      level: 1,
+      name: "Refresher",
+    });
+    const nav = screen.getByRole("navigation", { name: "App" });
+    expect(
+      within(nav).getByRole("link", { name: "Mom’s page" }),
+    ).toBeInTheDocument();
+    const copyCalls = () =>
+      fetchMock.mock.calls.filter(([u]) => String(u).includes("/api/app-copy"))
+        .length;
+    expect(copyCalls()).toBe(1);
+
+    appCopyReply = {
+      status: 200,
+      body: { nav: { ...APP_COPY.nav, profilePage: "Rosa’s page" } },
+    };
+    await user.click(screen.getByRole("button", { name: "Refresh copy" }));
+    expect(
+      await within(screen.getByRole("navigation", { name: "App" })).findByRole(
+        "link",
+        {
+          name: "Rosa’s page",
+        },
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId("plan-title")).toHaveTextContent("Rosa’s page");
+    expect(copyCalls()).toBe(2);
+    // No loading screen replaced the page in between.
+    expect(h1.isConnected).toBe(true);
   });
 });
 

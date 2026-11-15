@@ -23,6 +23,7 @@ import quizFixture from "./fixtures/quiz.json";
 import subscriptionDemo from "./fixtures/subscription-demo.json";
 import type { AccessReason } from "../api/errors";
 import { gateFake } from "./fakeApp/core";
+import "./fakeApp/lessonV2";
 import { type AppScenario, DEFAULT_APP_SCENARIO, type FakeRes, serveFakeAreas } from "./fakeApp/registry";
 
 export type Persona = "a" | "b" | "c";

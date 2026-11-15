@@ -1,0 +1,28 @@
+.player { display: flex; flex-direction: column; gap: var(--space-5); }
+.header { display: flex; flex-direction: column; gap: var(--space-3); }
+.top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.h1 { font: var(--text-h3); margin: 0; color: var(--text); }
+.h1:focus { outline: none; }
+.close { display: inline-flex; align-items: center; min-height: var(--tap-min); padding: 0 var(--space-4); border-radius: var(--radius-button); border: var(--border-width-strong) solid var(--border-control); color: var(--text); text-decoration: none; font: var(--text-button); background: var(--surface); }
+.close:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.progress { display: flex; flex-direction: column; gap: var(--space-1); }
+.bar { height: 8px; border-radius: var(--radius-chip); background: var(--surface-muted); overflow: hidden; }
+.fill { height: 100%; background: var(--accent); transition: width var(--motion-medium) var(--motion-easing); }
+.count { font: var(--text-caption); color: var(--text-secondary); }
+.stage { outline: none; }
+.footer { display: flex; justify-content: space-between; gap: var(--space-3); }
+.button { min-height: var(--tap-min); padding: 0 var(--space-5); border-radius: var(--radius-button); font: var(--text-button); cursor: pointer; border: var(--border-width-strong) solid var(--accent); }
+.button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.primary { background: var(--accent); color: var(--on-accent); margin-left: auto; }
+.primary:hover { background: var(--accent-hover); }
+.ghost { background: var(--surface); color: var(--accent-pressed); }
+.button[aria-disabled="true"] { opacity: 0.55; cursor: default; }
+.hint { color: var(--text-secondary); font: var(--text-small); margin: 0; text-align: right; }
+.disclaimer { color: var(--text-secondary); font: var(--text-small); text-align: center; margin: 0; }
+.notice { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+.notice h1 { font: var(--text-h1); margin: 0; }
+.notice h1:focus { outline: none; }
+.notice p { font: var(--text-body); margin: 0; }
+.link { display: inline-flex; align-items: center; min-height: var(--tap-min); padding: 0 var(--space-5); border-radius: var(--radius-button); background: var(--accent); color: var(--on-accent); font: var(--text-button); text-decoration: none; }
+.link:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .fill { transition: none; } }
