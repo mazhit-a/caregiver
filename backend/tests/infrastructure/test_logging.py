@@ -45,3 +45,16 @@ def test_noisy_libraries_are_pinned_to_warning() -> None:
     for name in QUIET_LOGGERS:
         assert logging.getLogger(name).getEffectiveLevel() >= logging.WARNING, name
     assert logging.getLogger("sqlalchemy.engine").getEffectiveLevel() >= logging.WARNING
+
+
+def test_redact_hides_fake_checkout_ids_in_every_path() -> None:
+    secret = "cs_fake_Qx9-abc_DEF0123456789"
+    for path in (
+        f"POST /api/fake-stripe/checkout/{secret}/pay -> 200",
+        f"GET /api/billing/checkout/{secret} -> 200",
+        f"GET /fake-checkout/{secret}",
+    ):
+        assert secret not in redact(path)
+    assert redact(f"GET /api/fake-stripe/checkout/{secret}") == (
+        "GET /api/fake-stripe/checkout/cs_fake_[redacted]"
+    )

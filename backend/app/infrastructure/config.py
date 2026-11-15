@@ -31,6 +31,7 @@ class Settings(BaseSettings):
     eval_judge_model: str = "claude-opus-5-5"
     stripe_secret_key: str = ""
     stripe_webhook_secret: str = ""
+    fake_stripe: bool = False  # in-app simulated checkout; never charges anything
     public_app_url: str = "http://localhost:3000"
     cors_origins: str = ""
     content_dir: Path = Path(__file__).resolve().parents[3] / "content"

@@ -130,3 +130,24 @@ class BillingCancelFailed(DomainError):
             "Please try again in a moment.",
             {"retryable": True},
         )
+
+
+class CardError(DomainError):
+    """The simulated card was refused (HTTP 402). Only the fake checkout raises it.
+
+    `code` is Stripe's error code (`card_declined`, `expired_card`, `incorrect_cvc`); the details
+    carry Stripe's `declineCode` and `fake: true`.
+    """
+
+    def __init__(self, code: str, decline_code: str, message: str) -> None:
+        super().__init__(message, {"declineCode": decline_code, "fake": True})
+        self.code = code
+
+
+class FakeCheckoutClosed(DomainError):
+    """The simulated checkout was already canceled (or paid) and cannot take this action (409)."""
+
+    code = "checkout_closed"
+
+    def __init__(self, status: str) -> None:
+        super().__init__("This checkout is no longer open.", {"status": status, "fake": True})

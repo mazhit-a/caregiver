@@ -13,7 +13,7 @@ from app.domain.plan.errors import NoPlan
 from app.domain.session.entities import Session
 
 # Stripe replaces this literal placeholder with the real Checkout Session id.
-_CHECKOUT_ID_PLACEHOLDER = "{CHECKOUT_SESSION_ID}"
+CHECKOUT_ID_PLACEHOLDER = "{CHECKOUT_SESSION_ID}"
 
 
 class CreateCheckout:
@@ -73,7 +73,7 @@ class CreateCheckout:
                 price_id=plan.stripe_renew_price_id,
                 coupon_id=plan.stripe_intro_coupon_id,
                 amount_today=plan.intro_price,
-                success_url=f"{self._base_url}/checkout/return?checkout_id={_CHECKOUT_ID_PLACEHOLDER}",
+                success_url=f"{self._base_url}/checkout/return?checkout_id={CHECKOUT_ID_PLACEHOLDER}",
                 cancel_url=f"{self._base_url}/paywall?checkout=canceled",
             )
         )

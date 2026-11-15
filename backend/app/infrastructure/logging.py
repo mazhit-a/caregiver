@@ -12,6 +12,7 @@ import re
 _PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"(/api/cards/)[^\s/?#\"']+"), r"\1[redacted]"),
     (re.compile(r"(?i)(x-session-token['\"]?\s*[:=]\s*['\"]?)[^\s,'\"}]+"), r"\1[redacted]"),
+    (re.compile(r"\bcs_fake_[A-Za-z0-9_\-]+"), "cs_fake_[redacted]"),  # fake checkout ids
     (re.compile(r"sk-ant-[A-Za-z0-9_\-]+"), "[redacted-key]"),
     (re.compile(r"\b(?:sk|rk|pk)_(?:live|test)_[A-Za-z0-9]+"), "[redacted-key]"),
     (re.compile(r"\bwhsec_[A-Za-z0-9]+"), "[redacted-key]"),
