@@ -49,6 +49,10 @@ DOMAIN_ERROR_STATUS: dict[str, int] = {
     "billing_cancel_failed": 503,
     "checkout_not_found": 404,
     "invalid_webhook_signature": 400,
+    "card_declined": 402,  # the fake checkout's Stripe-like card errors
+    "expired_card": 402,
+    "incorrect_cvc": 402,
+    "checkout_closed": 409,
     "invalid_phrase": 422,
     "phrase_limit_reached": 422,
     "phrase_not_found": 404,

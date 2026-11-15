@@ -46,3 +46,22 @@ class CheckoutSessionInfo:
     customer_id: str | None
     subscription_id: str | None
     period_end: datetime | None  # end of the first subscription period, in provider time
+
+
+@dataclass(frozen=True)
+class FakeCheckoutRecord:
+    """A simulated checkout as the fake store holds it. Only the last four digits of the card are
+    kept (never the number, expiry or CVC)."""
+
+    id: str
+    session_id: UUID
+    plan_id: str
+    amount_today: Decimal
+    customer_id: str
+    success_url: str  # still holds Stripe's {CHECKOUT_SESSION_ID} placeholder
+    cancel_url: str
+    status: str = "open"  # open | paid | canceled
+    last4: str | None = None
+    last_outcome: str | None = None  # succeeds | requires_action | declined
+    subscription_id: str | None = None
+    period_end: datetime | None = None

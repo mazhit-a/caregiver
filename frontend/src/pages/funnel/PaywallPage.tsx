@@ -7,7 +7,7 @@ import { ERROR_MESSAGES, PAYWALL } from "../../content/funnel";
 import { FunnelScreen } from "../../layout/funnel/FunnelScreen";
 import { Seo, pageTitle } from "../../layout/Seo";
 import { ROUTES } from "../../routes";
-import { goToCheckout, isStripeCheckoutUrl } from "./checkoutRedirect";
+import { fakeCheckoutPath, goToCheckout, isStripeCheckoutUrl } from "./checkoutRedirect";
 import { PlanPicker } from "./PlanPicker";
 import styles from "./PaywallPage.module.css";
 
@@ -95,6 +95,11 @@ export default function PaywallPage() {
       const { url } = await createCheckout(body);
       if (isStripeCheckoutUrl(url)) {
         goToCheckout(url);
+        return;
+      }
+      const fake = fakeCheckoutPath(url);
+      if (fake) {
+        navigate(fake);
         return;
       }
       setMessage(ERROR_MESSAGES.gateway);

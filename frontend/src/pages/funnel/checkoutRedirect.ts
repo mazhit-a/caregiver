@@ -14,3 +14,17 @@ export function isStripeCheckoutUrl(url: string): boolean {
 export function goToCheckout(url: string): void {
   window.location.assign(url);
 }
+
+const FAKE_PATH = /^\/fake-checkout\/([A-Za-z0-9_-]{1,128})$/;
+
+/**
+ * The in-app path of a simulated checkout, or null. Accepts only the relative path
+ * `/fake-checkout/<id>` or the same path on this page's own origin; nothing else is followed.
+ */
+export function fakeCheckoutPath(url: string): string | null {
+  const origin = window.location.origin;
+  const relative = url.startsWith("/") && !url.startsWith("//") && !url.includes("\\");
+  if (!relative && !url.startsWith(`${origin}/`)) return null;
+  const path = relative ? url : url.slice(origin.length);
+  return FAKE_PATH.test(path) ? path : null;
+}

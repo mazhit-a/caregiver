@@ -12,6 +12,7 @@ export const ROUTES = {
   gift: "/your-plan/gift",
   paywall: "/paywall",
   checkoutReturn: "/checkout/return",
+  fakeCheckout: "/fake-checkout/:checkoutId",
   today: "/today",
   // The app after the paywall (batch 3). `plan` above is the funnel's "/your-plan".
   todayPractice: "/today/practice",

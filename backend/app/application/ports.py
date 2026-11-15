@@ -12,6 +12,7 @@ from app.application.billing.payments import (
     CheckoutSessionInfo,
     CheckoutSessionRef,
     CustomerRef,
+    FakeCheckoutRecord,
 )
 from app.application.roleplay.dto import CoachInput
 from app.domain.app_copy.render import AppCopy
@@ -364,6 +365,27 @@ class PaymentGateway(Protocol):
     async def attach_failing_payment_method(self, customer_id: str) -> None:
         """Make the customer's next charge fail (test card that is declined)."""
         ...
+
+
+class FakeCheckoutStore(Protocol):
+    """The simulated checkouts of the in-app fake Stripe (`FAKE_STRIPE=true` only).
+
+    Short-lived and in memory: a restart forgets open checkouts, which is fine for a demo.
+    """
+
+    def get(self, checkout_id: str) -> FakeCheckoutRecord | None: ...
+
+    def note_attempt(self, checkout_id: str, last4: str, outcome: str) -> None:
+        """Remember the last four digits and the outcome of a pay attempt. Never the number."""
+        ...
+
+    def mark_paid(
+        self, checkout_id: str, period_end: datetime, charge_fails_on_renewal: bool
+    ) -> FakeCheckoutRecord:
+        """The checkout is paid: a fake subscription now exists (its first period ends then)."""
+        ...
+
+    def mark_canceled(self, checkout_id: str) -> FakeCheckoutRecord: ...
 
 
 class WebhookParser(Protocol):

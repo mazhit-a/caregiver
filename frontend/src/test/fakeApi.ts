@@ -48,6 +48,24 @@ const REQUIRED = quizFixture.questions
 
 export const FAKE_CHECKOUT_URL = "https://checkout.stripe.com/c/pay/cs_test_fake";
 export const FAKE_CHECKOUT_ID = "cs_test_fake";
+export const SIM_CHECKOUT_ID = "cs_fake_sim123";
+
+/** Outcomes of Stripe's test cards in the simulated checkout (card number without spaces). */
+const SIM_DECLINES: Record<string, { code: string; declineCode: string; message: string }> = {
+  "4000000000000002": { code: "card_declined", declineCode: "generic_decline", message: "Your card was declined." },
+  "4000000000009995": {
+    code: "card_declined",
+    declineCode: "insufficient_funds",
+    message: "Your card has insufficient funds.",
+  },
+  "4000000000000069": { code: "expired_card", declineCode: "expired_card", message: "Your card has expired." },
+  "4000000000000127": {
+    code: "incorrect_cvc",
+    declineCode: "incorrect_cvc",
+    message: "Your card's security code is incorrect.",
+  },
+};
+const SIM_PAYS = ["4242424242424242", "4000000000000341", "4000002500003155"];
 
 export interface Injected {
   method: string;
@@ -70,6 +88,8 @@ export interface FakeScenario extends AppScenario {
   checkoutPaid: boolean;
   /** Subscription state served by the gate probe when subscribed. */
   accessReason: AccessReason | null;
+  /** Simulated Stripe (backend FAKE_STRIPE): checkout returns an in-app URL and the /fake-stripe routes exist. */
+  fakeStripe: boolean;
   /** The next fetch rejects like a dropped connection. */
   networkDown: boolean;
 }
@@ -141,6 +161,7 @@ export function installFakeApi(initial: Partial<FakeScenario> = {}): FakeApi {
     stripeConfigured: false,
     checkoutPaid: true,
     accessReason: null,
+    fakeStripe: false,
     networkDown: false,
     ...DEFAULT_APP_SCENARIO,
     ...initial,
@@ -149,6 +170,7 @@ export function installFakeApi(initial: Partial<FakeScenario> = {}): FakeApi {
   const injected: Injected[] = [];
   const calls: FakeApi["calls"] = [];
   let counter = 0;
+  const sim = { status: "open" as "open" | "paid" | "canceled" };
 
   const matchInjected = (method: string, path: string): Injected | undefined =>
     injected.find(
@@ -174,6 +196,8 @@ export function installFakeApi(initial: Partial<FakeScenario> = {}): FakeApi {
       });
       return json(201, { token: created, timezone: "America/New_York" });
     }
+
+    if (path.startsWith("/fake-stripe/")) return handleSim(method, path, body);
 
     const state = token ? sessions.get(token) : undefined;
     if (method === "GET" && path === "/pricing") {
@@ -240,18 +264,26 @@ export function installFakeApi(initial: Partial<FakeScenario> = {}): FakeApi {
     }
     if (method === "POST" && path === "/billing/demo") return subscribe(state, body, "demo");
     if (method === "POST" && path === "/billing/checkout") {
-      if (!scenario.stripeConfigured) return json(502, errors.gateway502);
+      if (!scenario.stripeConfigured && !scenario.fakeStripe) return json(502, errors.gateway502);
       if (state.subscribed) return json(409, errors.alreadySubscribed409);
       if (body["autoRenewConsent"] !== true) return json(422, errors.consentRequired422);
+      if (scenario.fakeStripe) {
+        sim.status = "open";
+        return json(200, {
+          checkoutId: SIM_CHECKOUT_ID,
+          url: `${window.location.origin}/fake-checkout/${SIM_CHECKOUT_ID}`,
+        });
+      }
       return json(200, { checkoutId: FAKE_CHECKOUT_ID, url: FAKE_CHECKOUT_URL });
     }
     if (method === "GET" && path.startsWith("/billing/checkout/")) {
-      if (!scenario.stripeConfigured) return json(502, errors.gateway502);
-      if (scenario.checkoutPaid) state.subscribed = true;
+      if (!scenario.stripeConfigured && !scenario.fakeStripe) return json(502, errors.gateway502);
+      const paid = scenario.fakeStripe ? sim.status === "paid" : scenario.checkoutPaid;
+      if (paid) state.subscribed = true;
       return json(200, {
-        paid: scenario.checkoutPaid,
-        message: scenario.checkoutPaid ? null : "No payment has been received for this checkout.",
-        subscription: scenario.checkoutPaid
+        paid,
+        message: paid ? null : "No payment has been received for this checkout.",
+        subscription: paid
           ? { ...subscriptionDemo, status: "active", source: "stripe" }
           : { ...subscriptionDemo, status: "none", planId: null, source: null },
       });
@@ -271,6 +303,48 @@ export function installFakeApi(initial: Partial<FakeScenario> = {}): FakeApi {
     if (served) return toResponse(served);
     return apiError(404, "not_found", "Not found.");
   };
+
+  const simSummary = {
+    fake: true,
+    checkoutId: SIM_CHECKOUT_ID,
+    planId: "four_week",
+    planLabel: "4-week plan",
+    currency: "usd",
+    amountToday: 4.99,
+    introPeriodText: "First 4 weeks",
+    renewalPrice: 29,
+    renewPeriodText: "every 4 weeks",
+    firstRenewalDate: "2026-12-13",
+    displayLabel: "Mom",
+    successUrl: `/checkout/return?checkout_id=${SIM_CHECKOUT_ID}`,
+    cancelUrl: "/paywall?checkout=canceled",
+  };
+
+  function handleSim(method: string, path: string, body: Record<string, unknown>): Response {
+    if (!scenario.fakeStripe) return apiError(404, "not_found", "Not found.");
+    const rest = path.slice("/fake-stripe/checkout/".length).split("/");
+    if (rest[0] !== SIM_CHECKOUT_ID) return apiError(404, "checkout_not_found", "Unknown checkout.");
+    if (method === "GET" && rest.length === 1) return json(200, { ...simSummary, status: sim.status });
+    if (method === "POST" && rest[1] === "cancel") {
+      if (sim.status === "paid") return apiError(409, "checkout_closed", "Already paid.", { status: "paid" });
+      sim.status = "canceled";
+      return json(200, { fake: true, status: "canceled", cancelUrl: simSummary.cancelUrl });
+    }
+    if (method === "POST" && rest[1] === "pay") {
+      if (sim.status === "canceled") return apiError(409, "checkout_closed", "Canceled.", { status: "canceled" });
+      const number = String(body["cardNumber"] ?? "").replace(/\D/g, "");
+      const decline = SIM_DECLINES[number] ?? (SIM_PAYS.includes(number) ? undefined : SIM_DECLINES["4000000000000002"]);
+      if (decline) {
+        return apiError(402, decline.code, decline.message, { declineCode: decline.declineCode, fake: true });
+      }
+      if (number === "4000002500003155" && body["authenticated"] !== true) {
+        return json(200, { fake: true, status: "requires_action", successUrl: simSummary.successUrl });
+      }
+      sim.status = "paid";
+      return json(200, { fake: true, status: "paid", successUrl: simSummary.successUrl });
+    }
+    return apiError(404, "not_found", "Not found.");
+  }
 
   const appRequest = (
     method: string,

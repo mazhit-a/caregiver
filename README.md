@@ -224,6 +224,18 @@ npm run lint && npm run typecheck && npm test && npm run build
 
 For the judge demo with no Stripe, set `DEMO_CONTROLS=true` and use the demo button on the paywall.
 
+**Fake Stripe** (`FAKE_STRIPE=true`): the card checkout path without any Stripe keys. The API
+simulates Stripe's checkout in memory and never charges anything or calls the network; it logs a
+warning at startup and replaces the real gateway even when a key is set. `POST /api/billing/checkout`
+then returns `{PUBLIC_APP_URL}/fake-checkout/{id}`, and a successful payment goes through the same
+`checkout.session.completed` handling as a real webhook. Test cards (any future expiry, any 3 or 4
+digit CVC): `4242 4242 4242 4242` pays; `4000 0000 0000 0002` declined; `4000 0000 0000 9995`
+insufficient funds; `4000 0000 0000 0069` expired; `4000 0000 0000 0127` wrong CVC; `4000 0000 0000
+0341` pays, then the first renewal fails (past due); `4000 0025 0000 3155` asks for a simulated
+3-D Secure confirmation; any other number is declined. The demo controls (next day, jump to
+renewal, fail next payment) work with it. State is in memory (one worker): a restart forgets open
+checkouts. With the flag off, `/api/fake-stripe/*` answers 404.
+
 `.env.example` points `DATABASE_URL` at the compose service name `db` (for the api container) and
 `TEST_DATABASE_URL` at `localhost:55432`. The test database `pcn_test` is created on demand by the
 test suite.

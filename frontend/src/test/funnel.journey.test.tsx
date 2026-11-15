@@ -11,7 +11,8 @@ import copy from "./fixtures/funnel-copy.json";
 import giftB from "./fixtures/gift-b.json";
 import quiz from "./fixtures/quiz.json";
 
-vi.mock("../pages/funnel/checkoutRedirect", () => ({
+vi.mock("../pages/funnel/checkoutRedirect", async (importActual) => ({
+  ...(await importActual<typeof import("../pages/funnel/checkoutRedirect")>()),
   isStripeCheckoutUrl: (url: string) => url.startsWith("https://checkout.stripe.com/"),
   goToCheckout: vi.fn(),
 }));
