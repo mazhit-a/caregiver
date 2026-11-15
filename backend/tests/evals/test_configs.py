@@ -32,3 +32,17 @@ def test_candidate_name_without_suffix_keeps_existing_behaviour() -> None:
 def test_unknown_candidate_or_harness_is_rejected(name: str) -> None:
     with pytest.raises(KeyError):
         candidate(name, "1")
+
+
+def test_prompt_version_flag_is_refused_for_the_production_config() -> None:
+    """`production` always runs COACH_PROMPT_VERSION; the flag would silently replay the cache."""
+    import argparse
+
+    from app.infrastructure.config import Settings
+    from evals.run import _resolve_configs
+
+    args = argparse.Namespace(config=["production"], stage="x", prompt_version="2")
+    with pytest.raises(SystemExit, match="does not apply to the 'production' config"):
+        _resolve_configs(args, Settings(anthropic_api_key=""))
+    ok = argparse.Namespace(config=["opus-low"], stage="x", prompt_version="2")
+    assert [c.prompt_version for c in _resolve_configs(ok, Settings(anthropic_api_key=""))] == ["2"]
