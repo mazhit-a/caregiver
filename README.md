@@ -6,8 +6,6 @@ released over time, and an AI role-play coach lets the caregiver practise one ha
 time. Return visits (Today screen, check-ins, a shareable care card, a visit sheet) and renewal
 complete the loop. Built for a hackathon demo that judges use **without logging in**.
 
-> We teach and organize. We don't give medical advice.
-
 **Status of this repository: backend and frontend built.** The backend (FastAPI) and the React
 frontend (landing site, quiz funnel, paywall, the app after the paywall, the 24-screen lesson 1 and
 the AI role-play room) are complete and tested against fakes. See [What is built](#what-is-built)

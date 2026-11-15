@@ -6,7 +6,6 @@
     "No invented reviews, no countdowns, no price per day."
   ],
   "common": {
-    "notMedicalAdvice": "We teach and organize. We don't give medical advice.",
     "privacyShort": "Saved privately to this session. No account, no name needed.",
     "needHelpNow": "Need help now?",
     "back": "Back",
@@ -64,7 +63,7 @@
         "a": "Saved privately to this session. No account, no name needed. We don't sell or share them, and there's no ad tracking in the quiz or the app."
       }
     ],
-    "footer": "We teach and organize. We don't give medical advice. In an emergency, call 911."
+    "footer": "In an emergency, call 911."
   },
   "quizIntro": {
     "title": "Let's build your plan",
@@ -142,14 +141,14 @@
     "selectedBadgeNote": "Only show a badge like 'Most chosen' if real data supports it.",
     "moneyFormat": "${amount}",
     "planDetail": "for the first {introPeriod}, then {renewPrice} every {renewPeriod}",
-    "disclosure": "**Today: {todayPrice}** for the first {introPeriod}. Then **{renewPrice} every {renewPeriod}**, starting {renewDate}, until you cancel. Cancel anytime in Settings → Subscription.",
-    "consentCheckbox": "I understand my plan renews automatically at {renewPrice} every {renewPeriod} until I cancel.",
+    "disclosure": "**Today: {todayPrice}** for the first {introPeriod}. Then **{renewPrice} every {renewPeriod}**, starting {renewDate}, until you cancel. Cancel anytime in Settings → Manage my plan.",
+    "consentCheckbox": "By tapping the button, you agree that your plan renews automatically at {renewPrice} every {renewPeriod} until you cancel.",
     "consentRequiredError": "Please confirm the renewal terms to continue.",
     "payButton": "Pay {todayPrice} and start",
     "testModeHint": "Test mode: use card 4242 4242 4242 4242, any future date, any CVC. No real charge.",
     "demoButton": "Continue in demo mode (no charge)",
     "demoNote": "For reviewers: unlocks the full demo without payment.",
-    "footer": "Prices in USD. We teach and organize. We don't give medical advice.",
+    "footer": "Prices in USD.",
     "states": {
       "loading": "Opening secure checkout…",
       "cardError": "The payment didn't go through. Please check the card details or try another card.",
@@ -187,15 +186,15 @@
     "renewedNoticeDays": 7
   },
   "gentleExit": {
-    "title": "We're so sorry",
-    "condolence": "We're so sorry for what you're going through. The time you spent caring for your parent mattered, and so did you. Your subscription has ended and your data is gone from our servers. Nothing more is needed from you.",
+    "title": "Your plan is closed",
+    "condolence": "Thank you for the time you spent caring for your parent. It mattered, and so did you. Your subscription has ended and your data is gone from our servers. Nothing more is needed from you.",
     "resourcesIntro": "If it helps to talk with someone, these services are free.",
     "resources": [
       {
         "id": "alz_helpline",
         "name": "Alzheimer's Association 24/7 Helpline",
         "phone": "1-800-272-3900",
-        "description": "Free support from trained staff, day or night, including for families after a loss or a move."
+        "description": "Free support from trained staff, day or night, for families at any stage of caring."
       },
       {
         "id": "lifeline_988",

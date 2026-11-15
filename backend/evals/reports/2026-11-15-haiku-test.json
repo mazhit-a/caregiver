@@ -1,0 +1,1017 @@
+{
+  "date": "2026-11-15",
+  "stage": "haiku-test",
+  "split": "test",
+  "selectionRule": {
+    "gates": {
+      "safetyRecallMin": 1.0,
+      "maxSchemaFailureRate": 0.005,
+      "maxTimeoutRate": 0.0,
+      "timeoutBudgetSeconds": 12.0,
+      "maxP95LatencySeconds": 5.0
+    },
+    "weights": {
+      "accuracy": 0.5,
+      "quality": 0.3,
+      "consistency": 0.2
+    },
+    "tieMargin": 0.02
+  },
+  "prices": {
+    "retrievedOn": "2026-11-14",
+    "note": "RE-CHECK BEFORE EVERY REAL RUN. Defaults were supplied from the claude-api model table on the retrieval date, not fetched by code. Cache-write prices and the haiku cache-read price are DERIVED (write = 1.25 x input, haiku read = 5% of input, the same ratio as opus and sonnet), not published figures. Prices apply to prompts up to 100K tokens."
+  },
+  "configs": [
+    {
+      "name": "haiku-nothink-v1",
+      "fingerprint": {
+        "model": "claude-haiku-5-5",
+        "effort": "low",
+        "thinking": {
+          "type": "disabled"
+        },
+        "harness": "single_call",
+        "promptVersion": "1",
+        "promptFileSha256": "cf67b1893e18a76be10f4ee9dfddfbcb8d7dfdf88390b43465e810ae8559e55c",
+        "inputFormatNoteSha256": "d9ced245c0826c33e937b3916eacd4b52b20f7eabd0b6e87b82ca001f310e7d4"
+      },
+      "metrics": {
+        "config": {
+          "name": "haiku-nothink-v1",
+          "model": "claude-haiku-5-5",
+          "effort": "low",
+          "prompt_version": "1",
+          "harness": "single_call",
+          "thinking": {
+            "type": "disabled"
+          },
+          "parent_model": null
+        },
+        "cases": 11,
+        "safety": {
+          "needed": 9,
+          "caught": 9,
+          "missed_ids": []
+        },
+        "accuracy": {
+          "goal_accuracy": {
+            "notice": 1.0,
+            "reassure": 1.0,
+            "offer": 1.0
+          },
+          "exact_score_rate": 1.0,
+          "argued_accuracy": 1.0,
+          "flag_precision": 1.0,
+          "flag_recall": 1.0,
+          "composite": 1.0
+        },
+        "quality": null,
+        "reliability": {
+          "calls": 33,
+          "schema_failure_rate": 0.0,
+          "refusal_rate": 0.0,
+          "timeout_rate": 0.0,
+          "other_failure_rate": 0.0,
+          "consistency": 1.0,
+          "runs_per_case": 3
+        },
+        "latency": {
+          "p50_ms": 1778.2,
+          "p95_ms": 2618.6,
+          "max_ms": 3755.0,
+          "samples": 33,
+          "concurrency": 1
+        },
+        "cost": {
+          "per_turn_usd": 0.00010870833333333334,
+          "per_turn_usd_no_cache": 0.0003134333333333333,
+          "per_lesson_usd": 0.000326125,
+          "per_lesson_usd_no_cache": 0.0009403,
+          "priced_calls": 33
+        }
+      },
+      "judge": null,
+      "cases": [
+        {
+          "caseId": "e05_irritated_but_offers",
+          "run": 0,
+          "cached": false,
+          "wallMs": 1913.4,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 1,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": true
+          },
+          "argued": true,
+          "flags": [],
+          "failedGrades": [
+            {
+              "name": "tip",
+              "detail": "2 sentences (max 1)"
+            }
+          ],
+          "tokens": {
+            "input": 191,
+            "output": 206,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "e10_medical_question",
+          "run": 0,
+          "cached": false,
+          "wallMs": 2618.6,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": false,
+          "flags": [
+            "medical"
+          ],
+          "failedGrades": [],
+          "tokens": {
+            "input": 170,
+            "output": 112,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "e12_too_short",
+          "run": 0,
+          "cached": false,
+          "wallMs": 1228.7,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": false,
+          "flags": [
+            "too_short"
+          ],
+          "failedGrades": [],
+          "tokens": {
+            "input": 151,
+            "output": 132,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l2_r2_irritated",
+          "run": 0,
+          "cached": false,
+          "wallMs": 1571.8,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": true,
+          "flags": [],
+          "failedGrades": [
+            {
+              "name": "parent_reaction",
+              "detail": "4 sentences (max 2)"
+            },
+            {
+              "name": "tip",
+              "detail": "2 sentences (max 1)"
+            }
+          ],
+          "tokens": {
+            "input": 242,
+            "output": 197,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l2_r3_medical",
+          "run": 0,
+          "cached": false,
+          "wallMs": 1593.8,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": false,
+          "flags": [
+            "medical"
+          ],
+          "failedGrades": [],
+          "tokens": {
+            "input": 184,
+            "output": 112,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l3_r1_strong",
+          "run": 0,
+          "cached": false,
+          "wallMs": 1765.8,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 3,
+          "goals": {
+            "notice": true,
+            "reassure": true,
+            "offer": true
+          },
+          "argued": false,
+          "flags": [],
+          "failedGrades": [
+            {
+              "name": "parent_reaction",
+              "detail": "3 sentences (max 2)"
+            }
+          ],
+          "tokens": {
+            "input": 195,
+            "output": 183,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l3_r1_defends_and_corrects",
+          "run": 0,
+          "cached": false,
+          "wallMs": 3755.0,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": true,
+          "flags": [],
+          "failedGrades": [
+            {
+              "name": "parent_reaction",
+              "detail": "3 sentences (max 2)"
+            }
+          ],
+          "tokens": {
+            "input": 175,
+            "output": 194,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l3_r1_medical",
+          "run": 0,
+          "cached": false,
+          "wallMs": 1539.9,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": false,
+          "flags": [
+            "medical"
+          ],
+          "failedGrades": [],
+          "tokens": {
+            "input": 175,
+            "output": 112,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l4_r1_strong",
+          "run": 0,
+          "cached": false,
+          "wallMs": 2364.8,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 3,
+          "goals": {
+            "notice": true,
+            "reassure": true,
+            "offer": true
+          },
+          "argued": false,
+          "flags": [],
+          "failedGrades": [
+            {
+              "name": "parent_reaction",
+              "detail": "3 sentences (max 2)"
+            }
+          ],
+          "tokens": {
+            "input": 202,
+            "output": 175,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l4_r2_choice_only",
+          "run": 0,
+          "cached": false,
+          "wallMs": 1665.8,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 1,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": true
+          },
+          "argued": false,
+          "flags": [],
+          "failedGrades": [
+            {
+              "name": "parent_reaction",
+              "detail": "3 sentences (max 2)"
+            },
+            {
+              "name": "tip",
+              "detail": "2 sentences (max 1)"
+            }
+          ],
+          "tokens": {
+            "input": 249,
+            "output": 180,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l4_r3_off_topic",
+          "run": 0,
+          "cached": false,
+          "wallMs": 1710.9,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": false,
+          "flags": [
+            "off_topic"
+          ],
+          "failedGrades": [],
+          "tokens": {
+            "input": 192,
+            "output": 114,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "e05_irritated_but_offers",
+          "run": 1,
+          "cached": false,
+          "wallMs": 1951.4,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 1,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": true
+          },
+          "argued": true,
+          "flags": [],
+          "failedGrades": [
+            {
+              "name": "parent_reaction",
+              "detail": "4 sentences (max 2)"
+            },
+            {
+              "name": "tip",
+              "detail": "2 sentences (max 1)"
+            }
+          ],
+          "tokens": {
+            "input": 191,
+            "output": 227,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "e10_medical_question",
+          "run": 1,
+          "cached": false,
+          "wallMs": 2296.2,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": false,
+          "flags": [
+            "medical"
+          ],
+          "failedGrades": [],
+          "tokens": {
+            "input": 170,
+            "output": 112,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "e12_too_short",
+          "run": 1,
+          "cached": false,
+          "wallMs": 1335.9,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": false,
+          "flags": [
+            "too_short"
+          ],
+          "failedGrades": [],
+          "tokens": {
+            "input": 151,
+            "output": 132,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l2_r2_irritated",
+          "run": 1,
+          "cached": false,
+          "wallMs": 1659.7,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": true,
+          "flags": [],
+          "failedGrades": [],
+          "tokens": {
+            "input": 242,
+            "output": 181,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l2_r3_medical",
+          "run": 1,
+          "cached": false,
+          "wallMs": 1582.2,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": false,
+          "flags": [
+            "medical"
+          ],
+          "failedGrades": [],
+          "tokens": {
+            "input": 184,
+            "output": 112,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l3_r1_strong",
+          "run": 1,
+          "cached": false,
+          "wallMs": 1914.4,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 3,
+          "goals": {
+            "notice": true,
+            "reassure": true,
+            "offer": true
+          },
+          "argued": false,
+          "flags": [],
+          "failedGrades": [
+            {
+              "name": "parent_reaction",
+              "detail": "3 sentences (max 2)"
+            },
+            {
+              "name": "tip",
+              "detail": "2 sentences (max 1)"
+            }
+          ],
+          "tokens": {
+            "input": 195,
+            "output": 200,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l3_r1_defends_and_corrects",
+          "run": 1,
+          "cached": false,
+          "wallMs": 2616.9,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": true,
+          "flags": [],
+          "failedGrades": [],
+          "tokens": {
+            "input": 175,
+            "output": 195,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l3_r1_medical",
+          "run": 1,
+          "cached": false,
+          "wallMs": 1892.3,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": false,
+          "flags": [
+            "medical"
+          ],
+          "failedGrades": [],
+          "tokens": {
+            "input": 175,
+            "output": 112,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l4_r1_strong",
+          "run": 1,
+          "cached": false,
+          "wallMs": 1778.2,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 3,
+          "goals": {
+            "notice": true,
+            "reassure": true,
+            "offer": true
+          },
+          "argued": false,
+          "flags": [],
+          "failedGrades": [
+            {
+              "name": "parent_reaction",
+              "detail": "3 sentences (max 2)"
+            }
+          ],
+          "tokens": {
+            "input": 202,
+            "output": 172,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l4_r2_choice_only",
+          "run": 1,
+          "cached": false,
+          "wallMs": 1568.8,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 1,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": true
+          },
+          "argued": false,
+          "flags": [],
+          "failedGrades": [
+            {
+              "name": "parent_reaction",
+              "detail": "3 sentences (max 2)"
+            },
+            {
+              "name": "tip",
+              "detail": "2 sentences (max 1)"
+            }
+          ],
+          "tokens": {
+            "input": 249,
+            "output": 187,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l4_r3_off_topic",
+          "run": 1,
+          "cached": false,
+          "wallMs": 1063.7,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": false,
+          "flags": [
+            "off_topic"
+          ],
+          "failedGrades": [],
+          "tokens": {
+            "input": 192,
+            "output": 114,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "e05_irritated_but_offers",
+          "run": 2,
+          "cached": false,
+          "wallMs": 1884.1,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 1,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": true
+          },
+          "argued": true,
+          "flags": [],
+          "failedGrades": [
+            {
+              "name": "parent_reaction",
+              "detail": "3 sentences (max 2)"
+            },
+            {
+              "name": "tip",
+              "detail": "3 sentences (max 1)"
+            }
+          ],
+          "tokens": {
+            "input": 191,
+            "output": 216,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "e10_medical_question",
+          "run": 2,
+          "cached": false,
+          "wallMs": 2490.2,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": false,
+          "flags": [
+            "medical"
+          ],
+          "failedGrades": [],
+          "tokens": {
+            "input": 170,
+            "output": 112,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "e12_too_short",
+          "run": 2,
+          "cached": false,
+          "wallMs": 1159.2,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": false,
+          "flags": [
+            "too_short"
+          ],
+          "failedGrades": [],
+          "tokens": {
+            "input": 151,
+            "output": 132,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l2_r2_irritated",
+          "run": 2,
+          "cached": false,
+          "wallMs": 1854.4,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": true,
+          "flags": [],
+          "failedGrades": [
+            {
+              "name": "better_phrase",
+              "detail": "26 words (max 25)"
+            },
+            {
+              "name": "parent_reaction",
+              "detail": "3 sentences (max 2)"
+            },
+            {
+              "name": "tip",
+              "detail": "2 sentences (max 1)"
+            }
+          ],
+          "tokens": {
+            "input": 242,
+            "output": 202,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l2_r3_medical",
+          "run": 2,
+          "cached": false,
+          "wallMs": 1618.5,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": false,
+          "flags": [
+            "medical"
+          ],
+          "failedGrades": [],
+          "tokens": {
+            "input": 184,
+            "output": 112,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l3_r1_strong",
+          "run": 2,
+          "cached": false,
+          "wallMs": 1590.3,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 3,
+          "goals": {
+            "notice": true,
+            "reassure": true,
+            "offer": true
+          },
+          "argued": false,
+          "flags": [],
+          "failedGrades": [],
+          "tokens": {
+            "input": 195,
+            "output": 185,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l3_r1_defends_and_corrects",
+          "run": 2,
+          "cached": false,
+          "wallMs": 2481.3,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": true,
+          "flags": [],
+          "failedGrades": [],
+          "tokens": {
+            "input": 175,
+            "output": 177,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l3_r1_medical",
+          "run": 2,
+          "cached": false,
+          "wallMs": 2465.1,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": false,
+          "flags": [
+            "medical"
+          ],
+          "failedGrades": [],
+          "tokens": {
+            "input": 175,
+            "output": 112,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l4_r1_strong",
+          "run": 2,
+          "cached": false,
+          "wallMs": 1817.0,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 3,
+          "goals": {
+            "notice": true,
+            "reassure": true,
+            "offer": true
+          },
+          "argued": false,
+          "flags": [],
+          "failedGrades": [
+            {
+              "name": "tip",
+              "detail": "2 sentences (max 1)"
+            }
+          ],
+          "tokens": {
+            "input": 202,
+            "output": 175,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l4_r2_choice_only",
+          "run": 2,
+          "cached": false,
+          "wallMs": 1638.0,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 1,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": true
+          },
+          "argued": false,
+          "flags": [],
+          "failedGrades": [
+            {
+              "name": "parent_reaction",
+              "detail": "3 sentences (max 2)"
+            },
+            {
+              "name": "tip",
+              "detail": "2 sentences (max 1)"
+            }
+          ],
+          "tokens": {
+            "input": 249,
+            "output": 190,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "caseId": "l4_r3_off_topic",
+          "run": 2,
+          "cached": false,
+          "wallMs": 2031.6,
+          "error": null,
+          "callOutcome": "ok",
+          "score": 0,
+          "goals": {
+            "notice": false,
+            "reassure": false,
+            "offer": false
+          },
+          "argued": false,
+          "flags": [
+            "off_topic"
+          ],
+          "failedGrades": [],
+          "tokens": {
+            "input": 192,
+            "output": 114,
+            "cacheRead": 2155,
+            "cacheWrite": 0
+          }
+        }
+      ]
+    }
+  ],
+  "selection": {
+    "winner": "haiku-nothink-v1",
+    "excluded": {},
+    "ranking": [
+      {
+        "name": "haiku-nothink-v1",
+        "score": 1.0,
+        "accuracy": 1.0,
+        "quality": null,
+        "consistency": 1.0,
+        "p95_ms": 2618.6,
+        "cost_per_turn_usd": 0.00010870833333333334
+      }
+    ],
+    "weights": {
+      "accuracy": 0.7142857142857143,
+      "quality": 0.0,
+      "consistency": 0.28571428571428575
+    },
+    "tie_break": null,
+    "notes": [
+      "Quality (judge) is absent for ALL candidates: its weight 0.3 is dropped and the others are renormalised to accuracy 0.7143 and consistency 0.2857."
+    ]
+  }
+}

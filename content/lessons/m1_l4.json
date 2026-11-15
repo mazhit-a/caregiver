@@ -10,8 +10,7 @@
     "DRAFT for content-owner review. Same for everyone: no setup question and no variants. Every by-variant block has one 'default' entry and every *VariantMap is empty.",
     "Placeholders as in quiz.json: {recipient}, {Recipient}, {possessive}, {Possessive}, {object}. The subject is always {recipient}, never {pronoun}.",
     "Default example is a refused shower and getting dressed: neutral everyday moments. Heavier refusals are not covered here.",
-    "Same three steps as lessons 1 to 3; here the third step is a small choice instead of 'help look'.",
-    "Every screen shows the line from common.notMedicalAdvice in the footer."
+    "Same three steps as lessons 1 to 3; here the third step is a small choice instead of 'help look'."
   ],
   "pattern": {
     "name": "The three steps",
@@ -204,7 +203,7 @@
         "againButton": "Practice again"
       },
       "labels": {
-        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "partner": "AI practice partner.",
         "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
         "thinking": "{Recipient} is thinking…",
         "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
@@ -244,7 +243,7 @@
       "doneButton": "Done",
       "noteTemplate": {
         "title": "{Possessive} note",
-        "example": "Blue top or green top? You choose. — [your name]"
+        "example": "Blue top or green top? You choose."
       }
     },
     {

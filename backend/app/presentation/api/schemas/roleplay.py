@@ -1,7 +1,7 @@
 """Role-play request and response schemas.
 
 Request size limits are the first line of defence for the model prompt: every client-sent
-string is capped here (the reply at 500 characters, at most 3 previous turns).
+string is capped here (the reply at 150 characters, at most 3 previous turns).
 """
 
 from datetime import datetime
@@ -15,7 +15,7 @@ from app.domain.roleplay.run import RunContext, RunMode
 from app.domain.roleplay.verdict import CoachOutcome
 from app.presentation.api.schemas.base import CamelModel
 
-MAX_REPLY = 500
+MAX_REPLY = 150
 MAX_PREVIOUS_TURNS = 3
 MAX_LINE = 400  # a parent line or an earlier better phrase
 MAX_ROUNDS = 10

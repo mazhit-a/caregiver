@@ -63,9 +63,8 @@ def test_display_name_replaces_the_label_for_every_key(key: str) -> None:
     assert rendered["profile"]["works_title"] == "What works with Margaret"
 
 
-def test_plural_label_agrees_in_the_gentle_exit_entry() -> None:
+def test_gentle_exit_entry_is_neutral_for_every_recipient() -> None:
     content = JsonContentProvider.from_directory(REAL_CONTENT)
-    both = render_app_copy(content.app_copy(), content.recipient_labels("both"))
-    assert both["settings"]["gentle_exit_entry"].startswith("Your parents have passed away")
-    mom = render_app_copy(content.app_copy(), content.recipient_labels("mom"))
-    assert mom["settings"]["gentle_exit_entry"].startswith("Mom has passed away")
+    for key in ("both", "mom"):
+        rendered = render_app_copy(content.app_copy(), content.recipient_labels(key))
+        assert rendered["settings"]["gentle_exit_entry"] == "Close my plan and delete my data"

@@ -62,7 +62,7 @@ def test_money_and_dates_come_from_pricing_json_and_the_given_day() -> None:
     assert four.detail == "for the first 4 weeks, then $29.99 every 4 weeks"
     assert four.first_renewal_date == "Dec 13"  # 2026-11-15 + 28 days
     assert four.pay_button_label == "Pay $14.99 and start"
-    assert "$29.99" in four.consent_label
+    assert "$29.99" in four.consent_label and "agree" in four.consent_label
     assert view.plans[1].price_today == "$49.99" and view.plans[1].first_renewal_date == "Feb 7"
     assert view.paywall_headline == "Mom's 30-day plan is ready"
     # No price per day anywhere.
@@ -77,7 +77,8 @@ def test_disclosure_segments_mark_the_bold_parts() -> None:
     segments = view.plans[0].disclosure
     assert segments[0] == TextSegment("Today: $14.99", strong=True)
     assert [s.strong for s in segments] == [True, False, True, False]
-    assert "".join(s.text for s in segments).endswith("Cancel anytime in Settings → Subscription.")
+    text = "".join(s.text for s in segments)
+    assert text.endswith("Cancel anytime in Settings → Manage my plan.")
 
 
 def test_split_bold_plain_text_is_one_weak_segment() -> None:

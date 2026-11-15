@@ -267,7 +267,7 @@ async def test_reply_501_chars_rejected(rig: Rig) -> None:
     coach = FakeCoach()
     use_case = rig.turn_use_case(coach)
     with pytest.raises(InvalidReply):
-        await use_case.execute(rig.session, view.run_id, 1, "x" * 501)
+        await use_case.execute(rig.session, view.run_id, 1, "x" * 151)
     with pytest.raises(InvalidReply):
         await use_case.execute(rig.session, view.run_id, 1, "   ")
     assert coach.calls == []
@@ -280,6 +280,28 @@ async def test_round_mismatch_rejected(rig: Rig) -> None:
         await use_case.execute(rig.session, view.run_id, 2, REPLY)
     with pytest.raises(RoundMismatch):
         await use_case.execute(rig.session, view.run_id, 0, REPLY)
+
+
+async def test_try_again_on_the_last_answered_round_replaces_its_score(rig: Rig) -> None:
+    view = await rig.start()
+    coach = FakeCoach(
+        verdict(True, True, True),
+        verdict(False, False, False),
+        verdict(True, False, False),
+    )
+    use_case = rig.turn_use_case(coach)
+    await use_case.execute(rig.session, view.run_id, 1, "first reply")
+    await use_case.execute(rig.session, view.run_id, 2, "weak reply")
+    redo = await use_case.execute(rig.session, view.run_id, 2, "better reply")
+    assert redo.coach is not None
+    with pytest.raises(RoundMismatch):
+        await use_case.execute(rig.session, view.run_id, 1, "too old")
+    done = await rig.finish_use_case().execute(
+        rig.session,
+        view.run_id,
+        [TurnPhrase("first reply", "A"), TurnPhrase("better reply", "B")],
+    )
+    assert done.scores == (3, 1)
 
 
 async def test_previous_turns_over_3_rejected(rig: Rig) -> None:

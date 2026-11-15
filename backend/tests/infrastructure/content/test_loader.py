@@ -43,7 +43,7 @@ def test_all_content_files_load() -> None:
     assert len(bundle.plan_rules.modules) >= 6
     assert bundle.phrases.phrases
     assert [p.id for p in bundle.pricing.plans] == ["four_week", "twelve_week"]
-    assert bundle.funnel_copy.common["notMedicalAdvice"]
+    assert bundle.funnel_copy.common["privacyShort"]
     assert set(bundle.lessons) == {"m1_l1", "m1_l2", "m1_l3", "m1_l4", "m1_l5"}
     assert len(bundle.content_version) == 16
 

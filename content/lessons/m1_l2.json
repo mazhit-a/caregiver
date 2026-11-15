@@ -9,8 +9,7 @@
   "notes": [
     "DRAFT for content-owner review. Same for everyone: no setup question and no variants. Every by-variant block has one 'default' entry and every *VariantMap is empty.",
     "Placeholders as in quiz.json: {recipient}, {Recipient}, {possessive}, {Possessive}, {object}. Lessons talk about one person, so the subject is always {recipient}, never {pronoun}.",
-    "The three steps from lesson 1 stay the same (notice, reassure, offer). This lesson adds HOW to say them: close, slow, short, one thing at a time, a choice of two.",
-    "Every screen shows the line from common.notMedicalAdvice in the footer."
+    "The three steps from lesson 1 stay the same (notice, reassure, offer). This lesson adds HOW to say them: close, slow, short, one thing at a time, a choice of two."
   ],
   "pattern": {
     "name": "The three steps",
@@ -197,7 +196,7 @@
         "againButton": "Practice again"
       },
       "labels": {
-        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "partner": "AI practice partner.",
         "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
         "thinking": "{Recipient} is thinking…",
         "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
@@ -237,7 +236,7 @@
       "doneButton": "Done",
       "noteTemplate": {
         "title": "{Possessive} note",
-        "example": "Dinner at [time]. I'll walk in with you. — [your name]"
+        "example": "Dinner at 6. I'll walk in with you."
       }
     },
     {

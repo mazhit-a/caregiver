@@ -13,7 +13,6 @@
     "Every screen has Back (top-left arrow and a Back button) and Continue. Continue unlocks after an answer on scenario, quiz, builder and reset screens. Answers are kept when going back.",
     "'sec' is the estimated time per screen; the total drives the 'about 9 minutes' label.",
     "Variants (set on the setup screen) change examples and tasks only. The next lesson never depends on the variant.",
-    "Every screen shows common.notMedicalAdvice in the footer.",
     "v3 (our copy): nine content patches applied to the owner's v2 file, listed in context/frontend/m1_l1-patches-for-owner.md. Subjects are {recipient}, never {pronoun}, wherever a verb would need to agree with 'they'; no gendered or family-specific words."
   ],
   "pattern": {
@@ -503,7 +502,7 @@
       },
       "example": [
         "Doctor: Thursday 2 pm",
-        "I’ll pick you up. — [your name]"
+        "I’ll pick you up."
       ],
       "tip": "In a care home, ask the staff to keep your visit days on a calendar in {possessive} room.",
       "image": "ollie-note",
@@ -658,7 +657,7 @@
         "againButton": "Practice again"
       },
       "labels": {
-        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "partner": "AI practice partner.",
         "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
         "thinking": "{Recipient} is thinking…",
         "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
@@ -721,7 +720,7 @@
       "doneButton": "Done",
       "noteTemplate": {
         "title": "{Possessive} note",
-        "example": "Doctor: [day] [time]. I'll pick you up. — [your name]"
+        "example": "Doctor: Thursday 2 pm. I'll pick you up."
       },
       "part": "Your plan",
       "sec": 30
