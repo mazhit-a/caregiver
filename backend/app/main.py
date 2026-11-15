@@ -43,7 +43,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     app = FastAPI(
         lifespan=lifespan,
-        title="Parent Care Navigator",
+        title="Kelper",
         docs_url="/api/docs" if settings.docs_enabled else None,
         openapi_url="/api/openapi.json" if settings.docs_enabled else None,
         redoc_url=None,

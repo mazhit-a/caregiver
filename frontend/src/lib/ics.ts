@@ -57,7 +57,7 @@ export function buildIcs(reminder: Reminder, uidSeed: string): string {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Parent Care Navigator//Reminder//EN",
+    "PRODID:-//Kelper//Reminder//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     "BEGIN:VEVENT",

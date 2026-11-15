@@ -22,7 +22,7 @@ from app.infrastructure.config import Settings
 PRICING_PATH = Path(__file__).resolve().parents[2] / "content" / "pricing.json"
 METADATA_KEY = "pcn_key"
 PRODUCT_KEY = "parent_care_navigator"
-PRODUCT_NAME = "Parent Care Navigator"
+PRODUCT_NAME = "Kelper"
 _TEST_PREFIXES = ("sk_test_", "rk_test_")
 
 
@@ -69,6 +69,8 @@ def run_setup(client: stripe.StripeClient, pricing_path: Path = PRICING_PATH) ->
         v1.products.create,
         {"name": PRODUCT_NAME},
     )
+    if getattr(product, "name", None) != PRODUCT_NAME:
+        product = v1.products.update(product.id, params={"name": PRODUCT_NAME})
     prices = list(
         v1.prices.list(
             params={"product": product.id, "limit": 100, "active": True}
