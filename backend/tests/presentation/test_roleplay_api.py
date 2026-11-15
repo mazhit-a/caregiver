@@ -127,8 +127,8 @@ async def test_turn_429_returns_friendly_message_in_error_shape(
     assert error["details"] == {}
 
 
-@pytest.mark.parametrize("reply", ["", "x" * 501])
-async def test_turn_422_for_empty_and_over_500_reply(
+@pytest.mark.parametrize("reply", ["", "x" * 151])
+async def test_turn_422_for_empty_and_over_150_reply(
     pclient: httpx.AsyncClient,  # noqa: F811
     reply: str,
 ) -> None:
@@ -239,7 +239,7 @@ async def test_roleplay_request_fields_over_limit_return_422_error_shape(
     good = {"parent": "p", "caregiver": "c", "score": 1}
     bad_bodies: list[dict[str, object]] = [
         {"previousTurns": [good] * 4},
-        {"previousTurns": [{**good, "caregiver": "x" * 501}]},
+        {"previousTurns": [{**good, "caregiver": "x" * 151}]},
         {"previousTurns": [{**good, "parent": "x" * 401}]},
         {"previousTurns": [{**good, "score": 4}]},
         {"round": 0},

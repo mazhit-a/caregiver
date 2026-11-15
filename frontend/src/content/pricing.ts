@@ -23,15 +23,15 @@ export const BILLING_TITLE = "How billing works";
 export const BILLING_CARDS = [
   {
     title: "Before you pay",
-    text: "Today’s price, the renewal price and the renewal date sit right above the button, and you confirm the renewal with a separate checkbox.",
+    text: "Today’s price, the renewal price and the renewal date sit right above the button, and the renewal terms are stated right there; tapping the button means you agree to them.",
   },
   {
     title: "Cancel anytime",
-    text: "Settings, then Subscription, then Cancel. Two taps, no offers to talk you out of it.",
+    text: "Settings, then Manage my plan, then Cancel. Two taps, no offers to talk you out of it.",
   },
   {
-    title: "If Mom passes away or moves to a care home",
-    text: "A gentle way to close everything in one step: the plan, the care card link and your data.",
+    title: "Close your plan any time",
+    text: "One step in Settings ends the plan, the care card link and deletes your data.",
   },
 ] as const;
 

@@ -10,8 +10,7 @@
     "DRAFT for content-owner review. REVIEW lesson: no setup question, no variants, no new teaching. Every by-variant block has one 'default' entry and every *VariantMap is empty.",
     "The 'phrases_review' screen is filled by the server with the phrases the learner saved; emptyText is shown when there are none.",
     "The mixed practice round copies rounds (line and mood) and fallback scenarios (line and answers) from lessons m1_l1, m1_l3 and m1_l4; a test checks that every one of them exists in lessons 1 to 4. Stage and setup texts are rewritten so they make sense without the original lesson.",
-    "Placeholders as in quiz.json: {recipient}, {Recipient}, {possessive}, {Possessive}, {object}. The subject is always {recipient}, never {pronoun}.",
-    "Every screen shows the line from common.notMedicalAdvice in the footer."
+    "Placeholders as in quiz.json: {recipient}, {Recipient}, {possessive}, {Possessive}, {object}. The subject is always {recipient}, never {pronoun}."
   ],
   "pattern": {
     "name": "The three steps",
@@ -113,7 +112,7 @@
         "againButton": "Practice again"
       },
       "labels": {
-        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "partner": "AI practice partner.",
         "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
         "thinking": "{Recipient} is thinking…",
         "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
@@ -192,7 +191,7 @@
       "doneButton": "Done",
       "noteTemplate": {
         "title": "{Possessive} note",
-        "example": "I'm here. We'll sort it out together. — [your name]"
+        "example": "I'm here. We'll sort it out together."
       }
     },
     {

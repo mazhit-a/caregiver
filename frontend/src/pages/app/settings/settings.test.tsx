@@ -66,17 +66,17 @@ const statusIn = async (state: SubscriptionState) => {
 };
 
 describe("Settings", () => {
-  it("demo: Subscription heading, plan, mode, cancel link, privacy, gentle exit, demo panel", async () => {
+  it("demo: Manage my plan heading, plan, mode, cancel link, privacy, gentle exit, demo panel", async () => {
     const { container } = renderAt("/settings");
     await screen.findByRole("heading", { level: 1, name: "Settings" });
-    await screen.findByRole("heading", { level: 2, name: "Subscription" });
+    await screen.findByRole("heading", { level: 2, name: "Manage my plan" });
     expect(await screen.findByText("4 weeks")).toBeInTheDocument();
     expect(screen.getByText("Demo mode, no payment")).toBeInTheDocument();
     expect(screen.getByText(/nothing is charged/)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Cancel subscription" })).toHaveAttribute("href", "/settings/cancel");
     expect(screen.getByRole("heading", { level: 2, name: "Privacy" })).toBeInTheDocument();
     expect(screen.getByText("Saved privately to this session. No account, no name needed.")).toBeInTheDocument();
-    expect(await screen.findByRole("link", { name: "Mom has passed away or moved to a care facility" })).toHaveAttribute(
+    expect(await screen.findByRole("link", { name: "Close my plan and delete my data" })).toHaveAttribute(
       "href",
       "/settings/gentle-exit",
     );
@@ -106,7 +106,7 @@ describe("Settings", () => {
     await statusIn("past_due");
     renderAt("/settings");
     await screen.findByRole("link", { name: "Cancel subscription" });
-    expect(screen.getByRole("link", { name: /Mom has passed away/ })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Close my plan and delete my data/ })).toBeInTheDocument();
   });
 
   it("demo panel is absent when GET /demo answers 404", async () => {

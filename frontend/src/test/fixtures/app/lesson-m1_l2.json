@@ -192,7 +192,7 @@
         }
       ],
       "labels": {
-        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "partner": "AI practice partner.",
         "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
         "thinking": "Margaret is thinking…",
         "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
@@ -225,7 +225,7 @@
       "doneButton": "Done",
       "noteTemplate": {
         "title": "Margaret's note",
-        "example": "Dinner at [time]. I'll walk in with you. — [your name]"
+        "example": "Dinner at 6. I'll walk in with you."
       }
     },
     {

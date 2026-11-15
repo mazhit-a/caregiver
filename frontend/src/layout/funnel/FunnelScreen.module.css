@@ -59,11 +59,12 @@
 }
 
 .help {
-  /* mockup: plain 14px bold red text, no box; never wraps, so the header stays one row at 320px */
-  border: 0;
+  /* quiet outlined button, plum text; never wraps, so the header stays one row at 320px */
+  border: var(--border-width) solid var(--border-control);
   background: transparent;
-  color: var(--safety-text);
+  color: var(--text);
   font-size: 14px;
+  font-weight: 400;
   white-space: nowrap;
   padding: 0 var(--space-2);
 }

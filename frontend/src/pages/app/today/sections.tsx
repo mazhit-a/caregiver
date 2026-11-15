@@ -128,7 +128,7 @@ const practiceRound: Render = ({ practiceRound: p }) =>
   );
 
 const subscriptionNotice: Render = ({ subscriptionNotice: s }) =>
-  s && (
+  s && s.kind === "ends_on" && (
     <p className={styles.banner} role="note">
       {s.text}
     </p>

@@ -9,7 +9,7 @@ from uuid import UUID
 from app.domain.roleplay.errors import InvalidReply
 from app.domain.roleplay.verdict import Goals
 
-MAX_REPLY_CHARS = 500
+MAX_REPLY_CHARS = 150
 PERFECT_SCORE = 3
 
 
@@ -24,7 +24,7 @@ class RunContext(StrEnum):
 
 
 def validate_reply(text: str) -> str:
-    """Return the trimmed reply; reject empty or over 500 characters."""
+    """Return the trimmed reply; reject empty or over 150 characters."""
     if len(text) > MAX_REPLY_CHARS:
         raise InvalidReply("Reply is too long", {"max": MAX_REPLY_CHARS})
     trimmed = text.strip()
@@ -57,6 +57,12 @@ class RoleplayRun:
     def record_turn(self, score: int, goals: Goals) -> None:
         self.turn_scores.append(score)
         self.goals_hit.append(goals)
+
+    def discard_last_turn(self) -> None:
+        """Forget the latest turn so its round can be answered again (Try again)."""
+        if self.turn_scores:
+            self.turn_scores.pop()
+            self.goals_hit.pop()
 
     def summary(self) -> RunSummary:
         first = self.turn_scores[0] if self.turn_scores else None

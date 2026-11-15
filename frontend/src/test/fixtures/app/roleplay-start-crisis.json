@@ -29,7 +29,7 @@
   ],
   "intro": "Now try it out loud. Mom is an AI practice partner. Type what you'd say. The coach will show what worked.",
   "labels": {
-    "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+    "partner": "AI practice partner.",
     "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
     "thinking": "Mom is thinking…",
     "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."

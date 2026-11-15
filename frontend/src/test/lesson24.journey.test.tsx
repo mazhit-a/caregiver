@@ -117,12 +117,7 @@ async function playRoleplay() {
     await screen.findByText("AI-generated");
     await user.click(screen.getByRole("button", { name: i < 2 ? "Next round" : "See your practice" }));
   }
-  const inner = await waitFor(() => {
-    const found = screen.getAllByRole("button", { name: "Continue" }).filter((b) => !b.hasAttribute("aria-disabled"));
-    if (found.length !== 1) throw new Error("expected the role-play Continue button");
-    return found[0] as HTMLElement;
-  });
-  await user.click(inner);
+  await screen.findByRole("heading", { name: "Your practice" });
 }
 
 /** Plays screen by screen, choosing from the fixture's screen list; returns the screen types visited. */

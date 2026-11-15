@@ -112,11 +112,11 @@ const ROWS: Row[] = [
   { name: "skills after a run", path: "/skills", ready: { heading: "Communication" }, prep: () => (session.app["ranRoleplay"] = true) },
   { name: "skills full", path: "/skills", ready: { heading: "Communication" }, prep: () => api.inject({ method: "GET", path: "/skills", status: 200, body: appFixture("skills-full") }) },
   // settings and exits
-  { name: "settings (demo)", path: "/settings", ready: { heading: "Subscription" } },
-  { name: "settings (active)", path: "/settings", ready: { heading: "Subscription" }, scenario: { subscription: "active" } },
-  { name: "settings (canceling)", path: "/settings", ready: { heading: "Subscription" }, scenario: { subscription: "canceling" } },
-  { name: "settings (past due)", path: "/settings", ready: { heading: "Subscription" }, scenario: { subscription: "past_due" } },
-  { name: "settings (ended)", path: "/settings", ready: { heading: "Subscription" }, scenario: { subscription: "ended" } },
+  { name: "settings (demo)", path: "/settings", ready: { heading: "Manage my plan" } },
+  { name: "settings (active)", path: "/settings", ready: { heading: "Manage my plan" }, scenario: { subscription: "active" } },
+  { name: "settings (canceling)", path: "/settings", ready: { heading: "Manage my plan" }, scenario: { subscription: "canceling" } },
+  { name: "settings (past due)", path: "/settings", ready: { heading: "Manage my plan" }, scenario: { subscription: "past_due" } },
+  { name: "settings (ended)", path: "/settings", ready: { heading: "Manage my plan" }, scenario: { subscription: "ended" } },
   { name: "cancel step", path: "/settings/cancel", ready: { text: "Keep my plan" } },
   { name: "gentle exit step 1", path: "/settings/gentle-exit", ready: { text: "Continue" } },
   // outside the shell

@@ -254,7 +254,7 @@ describe("layouts", () => {
     expect(screen.queryByRole("complementary")).toBeNull();
   });
 
-  it("uses the sidebar at 1024px and up, with Settings and the disclaimer, and no tab bar or top bar", async () => {
+  it("uses the sidebar at 1024px and up, with Settings, and no tab bar or top bar", async () => {
     setDesktop(true);
     await renderAt("/plan");
     const side = screen.getByRole("complementary");
@@ -267,9 +267,7 @@ describe("layouts", () => {
     expect(
       within(side).getByRole("button", { name: "Need help now?" }),
     ).toBeInTheDocument();
-    expect(
-      within(side).getByText(/don’t give medical advice/),
-    ).toBeInTheDocument();
+    expect(within(side).queryByText(/give medical advice/)).toBeNull();
     expect(screen.getAllByRole("navigation")).toHaveLength(1);
     expect(screen.queryByRole("banner")).toBeNull();
   });

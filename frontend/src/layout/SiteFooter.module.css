@@ -19,8 +19,9 @@
   gap: var(--space-3) var(--space-5);
   padding: 20px var(--space-5);
   border-radius: var(--radius-card);
-  background: var(--safety-soft);
-  color: var(--safety-text);
+  background: var(--butter-100);
+  color: var(--text);
+  border-left: 4px solid var(--safety);
 }
 
 .bandTitle {
@@ -42,7 +43,7 @@
   display: inline-flex;
   align-items: center;
   min-height: 48px;
-  color: var(--safety-text);
+  color: var(--text);
   font-weight: 700;
 }
 

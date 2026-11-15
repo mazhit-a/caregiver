@@ -69,7 +69,7 @@ async def test_app_copy_is_finished_text_for_the_recipient(
     assert _clean(body)
     assert body["nav"]["profilePage"] == "Mom's page"
     assert body["plan"]["title"] == "Mom's course"
-    assert body["settings"]["gentleExitEntry"] == "Mom has passed away or moved to a care facility"
+    assert body["settings"]["gentleExitEntry"] == "Close my plan and delete my data"
     assert body["careCard"]["sharingSentence"].startswith("Anyone who has the link")
 
 

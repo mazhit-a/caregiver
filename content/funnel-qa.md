@@ -59,7 +59,6 @@ Full expected results: see state-contract.md.
 - [ ] No ad or analytics scripts on any page (check the browser's network tab).
 - [ ] Nothing sent to our server during the quiz, the plan preview or the paywall, except the Stripe checkout request with plan id only.
 - [ ] "Need help now?" opens the crisis sheet from every funnel screen after the quiz starts.
-- [ ] "We teach and organize. We don't give medical advice." on the plan preview, paywall and gift sheet.
 - [ ] API keys are not in the repo or in the page source.
 
 ## 4. Accessibility checks

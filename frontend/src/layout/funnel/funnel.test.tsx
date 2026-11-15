@@ -107,11 +107,7 @@ describe("funnel routes", () => {
       expect(screen.getAllByRole("main")).toHaveLength(1);
       // Focused shell: no site nav, no link list in the footer.
       expect(screen.queryByRole("navigation")).toBeNull();
-      const footer = screen.getByRole("contentinfo");
-      expect(within(footer).queryAllByRole("link")).toHaveLength(0);
-      expect(
-        within(footer).getByText(/don’t give medical advice/),
-      ).toBeInTheDocument();
+      expect(screen.queryByRole("contentinfo")).toBeNull();
       // Only the shared help sheet may call the API (public crisis list); only the gift page fetches its own sheet.
       const urls = fetchMock.mock.calls.map(([u]) => String(u));
       expect(

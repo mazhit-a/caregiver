@@ -8,7 +8,7 @@
   "sheet": {
     "title": "Phrases that calm {recipient}",
     "intro": "Short, warm phrases for the moments that come up most. Keep your voice low and slow, and use {possessive} name.",
-    "footer": "We teach and organize. We don't give medical advice."
+    "footer": "Use these in your own words, in a calm and slow voice."
   },
   "phrases": [
     { "id": "p01", "tags": ["need:repeated_questions"], "text": "We have plenty of time. I'll let you know when it's time.", "when": "When the same question about plans or time comes up again" },

@@ -15,6 +15,7 @@ export interface CoachPanelLabels {
   saveBusy: string;
   saved: string;
   savedNote: string;
+  tryAgain: string;
 }
 
 interface Props {
@@ -23,14 +24,15 @@ interface Props {
   saveState: "idle" | "saving" | "saved";
   saveError: string | null;
   onSave: () => void;
+  /** Retry the current round from the start (the typed reply and this feedback are dropped). */
+  onTryAgain: () => void;
 }
 
 /** Everything shown here comes from the server's verdict; nothing is scored in the browser. */
-export function CoachPanel({ coach, labels, saveState, saveError, onSave }: Props) {
+export function CoachPanel({ coach, labels, saveState, saveError, onSave, onTryAgain }: Props) {
   return (
     <section className={styles["panel"]} aria-label={labels.aiTag}>
       <div className={styles["panelHead"]}>
-        <span className={styles["aiTag"]}>{labels.aiTag}</span>
         <span className={styles["score"]}>
           {labels.scoreLabel}: {labels.score}
         </span>
@@ -67,6 +69,12 @@ export function CoachPanel({ coach, labels, saveState, saveError, onSave }: Prop
         </div>
       )}
       {coach.parentReaction && <p className={styles["reaction"]}>{coach.parentReaction}</p>}
+      <div className={styles["panelFoot"]}>
+        <button type="button" className={styles["secondary"]} onClick={onTryAgain}>
+          {labels.tryAgain}
+        </button>
+        <p className={styles["aiNote"]}>{labels.aiTag}</p>
+      </div>
     </section>
   );
 }

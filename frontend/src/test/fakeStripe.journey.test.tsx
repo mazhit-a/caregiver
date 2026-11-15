@@ -54,7 +54,6 @@ async function startAtPaywall() {
 }
 
 async function toFakeCheckout() {
-  await user.click(screen.getByRole("checkbox"));
   await user.click(screen.getByRole("button", { name: copy.paywall.plans[0]!.payButtonLabel }));
   await waitFor(() => expect(router.state.location.pathname).toBe(`/fake-checkout/${SIM_CHECKOUT_ID}`));
   await screen.findByRole("heading", { level: 1, name: "Pay with a test card" });

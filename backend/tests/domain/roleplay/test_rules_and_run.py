@@ -121,9 +121,9 @@ def test_best_phrase_prefers_highest_scoring_reply_else_last_better_phrase() -> 
     assert best_phrase([]) is None
 
 
-def test_reply_over_500_or_empty_rejected() -> None:
+def test_reply_over_150_or_empty_rejected() -> None:
     assert validate_reply("  hi there ") == "hi there"
-    assert len(validate_reply("a" * 500)) == 500
-    for bad in ("", "   ", "a" * 501):
+    assert len(validate_reply("a" * 150)) == 150
+    for bad in ("", "   ", "a" * 151):
         with pytest.raises(InvalidReply):
             validate_reply(bad)

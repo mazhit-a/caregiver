@@ -9,13 +9,33 @@
 .help {
   min-height: var(--tap-min);
   padding: 0 var(--space-4);
-  border: var(--border-width) solid var(--safety);
+  border: var(--border-width) solid var(--border-control);
   border-radius: var(--radius-button);
-  background: var(--safety-soft);
-  color: var(--safety-text);
-  font: var(--text-button);
+  background: var(--surface);
+  color: var(--text);
+  font: var(--text-body);
+  font-weight: 400;
   white-space: nowrap;
   cursor: pointer;
+}
+
+/* Sidebar logo lockup: sized so the wordmark matches the nav item text below it (48px high mark). */
+.sideLogo {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.sideLogo img {
+  display: block;
+  height: 48px;
+  width: auto;
+}
+
+.topLogo img {
+  display: block;
+  height: 40px;
+  width: auto;
 }
 
 .disclaimer {

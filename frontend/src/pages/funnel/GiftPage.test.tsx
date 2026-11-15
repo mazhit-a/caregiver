@@ -51,7 +51,7 @@ describe("GiftPage", () => {
       expect(screen.getByText(p.when)).toBeTruthy();
     }
     expect(screen.getAllByText(gift.footer).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/We teach and organize/).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/We teach and organize/)).toBeNull();
     expect(container.textContent).not.toContain("{");
     await userEvent.click(screen.getByRole("button", { name: "Print or save as PDF" }));
     expect(print).toHaveBeenCalledTimes(1);

@@ -3,7 +3,6 @@
 import type { ApiFailureKind } from "../api/errors";
 
 export const COMMON = {
-  notMedicalAdvice: "We teach and organize. We don't give medical advice.",
   privacyShort: "Saved privately to this session. No account, no name needed.",
   needHelpNow: "Need help now?",
   back: "Back",
@@ -56,7 +55,6 @@ export const PROOF = {
   ],
 } as const;
 
-export const DISCLAIMER = COMMON.notMedicalAdvice;
 
 export const PAYWALL = {
   includesTitle: "What you get",
@@ -64,7 +62,7 @@ export const PAYWALL = {
     "Test mode: use card 4242 4242 4242 4242, any future date, any CVC. No real charge.",
   demoButton: "Continue in demo mode (no charge)",
   demoNote: "For reviewers: unlocks the full demo without payment.",
-  footer: "Prices in USD. We teach and organize. We don't give medical advice.",
+  footer: "Prices in USD.",
   loading: "Opening secure checkout…",
   cardError:
     "The payment didn't go through. Please check the card details or try another card.",

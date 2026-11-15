@@ -1,12 +1,18 @@
 import { useState } from "react";
-import type { RoleplayScreen as RoleplayData } from "../../../api/appTypes";
+import type { RoleplayFinish, RoleplayScreen as RoleplayData } from "../../../api/appTypes";
 import { GoalChipRow } from "../../../components/coach/GoalChipRow";
 import { COACH_COPY } from "../../../content/app/coach";
 import { RoleplayRoom } from "../roleplay/RoleplayRoom";
-import type { ScreenProps } from "./screens/types";
+import type { AnswerEntry, ScreenProps } from "./screens/types";
 import styles from "./screens/lessonScreens.module.css";
 
 /** Registry entry: intro, goals and labels, then the room once the learner starts. */
+const entry = (finish: RoleplayFinish | null): AnswerEntry => ({
+  value: finish?.bestPhrase ?? "",
+  result: { bestPhrase: finish?.bestPhrase ?? null },
+  saved: [] as never[],
+});
+
 export function RoleplayScreen({ screen, lesson, remember }: ScreenProps<RoleplayData>) {
   const [started, setStarted] = useState(false);
   return (
@@ -38,13 +44,8 @@ export function RoleplayScreen({ screen, lesson, remember }: ScreenProps<Rolepla
           lessonId={lesson.id}
           context="lesson"
           summaryText={screen.summary}
-          onDone={(finish) =>
-            remember(screen.id, () => ({
-              value: finish?.bestPhrase ?? "",
-              result: { bestPhrase: finish?.bestPhrase ?? null },
-              saved: [],
-            }))
-          }
+          onDone={(finish) => remember(screen.id, () => entry(finish))}
+          onSummary={(finish) => remember(screen.id, () => entry(finish))}
         />
       )}
     </div>

@@ -144,28 +144,10 @@
   margin: 0;
 }
 
-.consent {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.consentLabel {
-  display: flex;
-  gap: var(--space-3);
-  align-items: flex-start;
-  min-height: var(--tap-min);
-  padding: 4px 0;
-  font: 400 15px/22px var(--font-sans);
-  cursor: pointer;
-}
-
-.consentLabel input {
-  margin: 1px 0 0;
-  width: 24px;
-  height: 24px;
-  flex: none;
-  accent-color: var(--accent);
+.consentNote {
+  margin: 0;
+  font: 400 14px/20px var(--font-sans);
+  color: var(--text-muted, var(--text));
 }
 
 .error {

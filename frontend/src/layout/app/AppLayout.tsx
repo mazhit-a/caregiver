@@ -10,7 +10,6 @@ import {
 import { clearToken } from "../../api/session";
 import { StatusBlock } from "../../components/StatusBlock";
 import { HelpSheet } from "../HelpSheet";
-import { NOT_MEDICAL_ADVICE } from "../nav";
 import { SkipLink } from "../SkipLink";
 import { ROUTES } from "../../routes";
 import type { AppContext } from "./appContext";
@@ -131,9 +130,6 @@ function AppShell() {
               what="your page"
               onRetry={appCopy.refresh}
             />
-          )}
-          {!desktop && !fullScreen && (
-            <p className={styles.disclaimer}>{NOT_MEDICAL_ADVICE}</p>
           )}
         </div>
       </main>

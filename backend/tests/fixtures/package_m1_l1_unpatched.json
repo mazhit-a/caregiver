@@ -12,8 +12,7 @@
     "Screen types: intro, setup (sets the variant), scenario (first instinct, no wrong answer), content (title, body or bodyByVariant, optional items, steps, dodont, examples, example note, keyIdea, tip, image), quiz (options [text, correct, feedback]; correct one turns green, a wrong pick turns warm, feedback always kind), builder (one pick per group, then the assembled reply), reset (stores the reset for the plan), practice, plan, wrap.",
     "Every screen has Back (top-left arrow and a Back button) and Continue. Continue unlocks after an answer on scenario, quiz, builder and reset screens. Answers are kept when going back.",
     "'sec' is the estimated time per screen; the total drives the 'about 9 minutes' label.",
-    "Variants (set on the setup screen) change examples and tasks only. The next lesson never depends on the variant.",
-    "Every screen shows common.notMedicalAdvice in the footer."
+    "Variants (set on the setup screen) change examples and tasks only. The next lesson never depends on the variant."
   ],
   "pattern": {
     "name": "The three steps",
@@ -495,7 +494,7 @@
       },
       "example": [
         "Doctor: Thursday 2 pm",
-        "I’ll pick you up. — [your name]"
+        "I’ll pick you up."
       ],
       "tip": "In a care home, ask the staff to keep your visit days on a calendar in {possessive} room.",
       "image": "ollie-note",
@@ -638,7 +637,7 @@
         "againButton": "Practice again"
       },
       "labels": {
-        "partner": "AI practice partner. We teach and organize. We don't give medical advice.",
+        "partner": "AI practice partner.",
         "notSaved": "This conversation isn't saved. Only phrases you save are kept.",
         "thinking": "{Recipient} is thinking…",
         "aiDown": "The practice partner isn't available right now. Let's practice with a few quick choices instead."
@@ -701,7 +700,7 @@
       "doneButton": "Done",
       "noteTemplate": {
         "title": "{Possessive} note",
-        "example": "Doctor: [day] [time]. I'll pick you up. — [your name]"
+        "example": "Doctor: Thursday 2 pm. I'll pick you up."
       },
       "part": "Your plan",
       "sec": 30

@@ -38,6 +38,8 @@ export interface RoleplayRoomProps {
   onDone: (finish: RoleplayFinish | null) => void;
   /** Summary wording from the lesson's roleplay screen; defaults are UI strings. */
   summaryText?: RoleplaySummaryText;
+  /** When given, called once the summary shows and the room has no Continue of its own (the host's Continue moves on). */
+  onSummary?: (finish: RoleplayFinish) => void;
 }
 
 type SaveState = "idle" | "saving" | "saved";
@@ -75,7 +77,7 @@ function toView(coach: CoachData): CoachView {
  * three role-play calls (and the chosen phrase to `POST /phrases`), never stored, logged or put
  * in a URL. Score and goals are shown exactly as the server returned them.
  */
-export function RoleplayRoom({ lessonId, context, onDone, summaryText }: RoleplayRoomProps) {
+export function RoleplayRoom({ lessonId, context, onDone, summaryText, onSummary }: RoleplayRoomProps) {
   const run = useAppAction();
   const [generation, setGeneration] = useState(0);
   const startedFor = useRef(-1);
@@ -126,6 +128,18 @@ export function RoleplayRoom({ lessonId, context, onDone, summaryText }: Rolepla
     setSaveError({});
     setGeneration((g) => g + 1);
   }, []);
+
+  useEffect(() => {
+    if (finish) onSummary?.(finish);
+  }, [finish, onSummary]);
+
+  const tryRoundAgain = useCallback(() => {
+    setTurns((all) => all.slice(0, round - 1));
+    setReply("");
+    setTurnError(null);
+    setSaves((s) => ({ ...s, [`turn${round}`]: "idle" }));
+    setSaveError((s) => ({ ...s, [`turn${round}`]: null }));
+  }, [round]);
 
   const answered = turns.length >= round;
   useEffect(() => {
@@ -291,6 +305,7 @@ export function RoleplayRoom({ lessonId, context, onDone, summaryText }: Rolepla
             finish: COACH_COPY.fallbackFinish,
             finishing: COACH_COPY.fallbackFinishing,
             skip: COACH_COPY.skipPractice,
+            tryAgain: COACH_COPY.fallbackRestart,
           }}
         />
       </div>
@@ -302,11 +317,13 @@ export function RoleplayRoom({ lessonId, context, onDone, summaryText }: Rolepla
       <div className={styles["room"]}>
         <h2 className={styles["h"]}>{COACH_COPY.fallbackDoneTitle}</h2>
         <p className={styles["muted"]}>{labels["notSaved"]}</p>
-        <div className={styles["actions"]}>
-          <button type="button" className={styles["primary"]} onClick={() => onDone(finish)}>
-            {COACH_COPY.continueButton}
-          </button>
-        </div>
+        {!onSummary && (
+          <div className={styles["actions"]}>
+            <button type="button" className={styles["primary"]} onClick={() => onDone(finish)}>
+              {COACH_COPY.continueButton}
+            </button>
+          </div>
+        )}
       </div>
     );
   }
@@ -334,7 +351,7 @@ export function RoleplayRoom({ lessonId, context, onDone, summaryText }: Rolepla
           saveError={saveError["best"] ?? null}
           onSave={() => finish.bestPhrase && void save("best", finish.bestPhrase)}
           onAgain={restart}
-          onContinue={() => onDone(finish)}
+          onContinue={onSummary ? undefined : () => onDone(finish)}
         />
         <p className={styles["muted"]}>{labels["notSaved"]}</p>
       </div>
@@ -357,6 +374,7 @@ export function RoleplayRoom({ lessonId, context, onDone, summaryText }: Rolepla
     saveBusy: COACH_COPY.saving,
     saved: COACH_COPY.savedShort,
     savedNote: COACH_COPY.savedNote,
+    tryAgain: COACH_COPY.tryAgain,
   });
 
   return (
@@ -373,6 +391,7 @@ export function RoleplayRoom({ lessonId, context, onDone, summaryText }: Rolepla
             saveState={saves[`turn${round}`] ?? "idle"}
             saveError={saveError[`turn${round}`] ?? null}
             onSave={() => void save(`turn${round}`, turn.coach.betterPhrase)}
+            onTryAgain={tryRoundAgain}
           />
           {finishError && (
             <p className={styles["error"]} role="alert">

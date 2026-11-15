@@ -129,7 +129,7 @@ describe("Ollie never appears on banned screens", () => {
     api.sessions.set("fake-token-paywall", { answers: { q3_situation: "noticing" }, lastQuestionId: null, completed: true, subscribed: false, app: {} });
     setToken("fake-token-paywall");
     open("/paywall");
-    await screen.findByRole("checkbox");
+    await screen.findByRole("button", { name: /demo mode/i });
     expect(ollieImages()).toHaveLength(0);
   });
 

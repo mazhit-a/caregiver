@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { NEED_HELP_NOW, NOT_MEDICAL_ADVICE } from "./nav";
+import { NEED_HELP_NOW } from "./nav";
 import { useCrisisList } from "./useCrisisList";
 import styles from "./HelpSheet.module.css";
 
@@ -57,7 +57,6 @@ export function HelpSheet({ open, onClose }: Props) {
             </li>
           ))}
         </ul>
-        <p className={styles.note}>{NOT_MEDICAL_ADVICE}</p>
         <button type="button" className={styles.close} onClick={() => ref.current?.close()}>
           Close
         </button>

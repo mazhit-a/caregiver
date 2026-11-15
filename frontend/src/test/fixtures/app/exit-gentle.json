@@ -1,12 +1,12 @@
 {
-  "title": "We're so sorry",
-  "condolence": "We're so sorry for what you're going through. The time you spent caring for your parent mattered, and so did you. Your subscription has ended and your data is gone from our servers. Nothing more is needed from you.",
+  "title": "Your plan is closed",
+  "condolence": "Thank you for the time you spent caring for your parent. It mattered, and so did you. Your subscription has ended and your data is gone from our servers. Nothing more is needed from you.",
   "resourcesIntro": "If it helps to talk with someone, these services are free.",
   "resources": [
     {
       "id": "alz_helpline",
       "name": "Alzheimer's Association 24/7 Helpline",
-      "description": "Free support from trained staff, day or night, including for families after a loss or a move.",
+      "description": "Free support from trained staff, day or night, for families at any stage of caring.",
       "phone": "1-800-272-3900",
       "url": null
     },

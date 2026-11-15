@@ -80,7 +80,7 @@ describe("TodayPage", () => {
     expect(sectionHeadings()).toEqual(["When Mom asks again", "This week", "Your plan"]);
     expect(screen.getByText("Mom's plan: 0 of 12 lessons done")).toBeInTheDocument();
     expect(screen.getByText("This week: 0 of 4 practice sessions.")).toBeInTheDocument();
-    expect(screen.getByText("Your plan renews on February 2.")).toBeInTheDocument();
+    expect(screen.queryByText(/Your plan renews on/)).toBeNull();
     expect(screen.getByRole("progressbar", { name: "Your plan" })).toHaveAttribute(
       "aria-valuetext",
       "0 of 12",

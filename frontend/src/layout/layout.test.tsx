@@ -85,7 +85,8 @@ describe("routes", () => {
     const main = screen.getByRole("main");
     expect(within(main).getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(screen.getByRole("banner")).toBeInTheDocument();
-    expect(screen.getByRole("contentinfo")).toBeInTheDocument();
+    // The quiz uses the focused funnel shell, which has no footer.
+    if (path !== "/quiz") expect(screen.getByRole("contentinfo")).toBeInTheDocument();
   });
 
   it("sets title and description for a page", async () => {
@@ -158,7 +159,7 @@ describe("help sheet", () => {
       "href",
       "tel:1-800-000-1111".replace(/-/g, ""),
     );
-    expect(within(dialog).getByText("We teach and organize. We don’t give medical advice.")).toBeInTheDocument();
+    expect(within(dialog).queryByText(/give medical advice/)).toBeNull();
     await act(async () => {
       (dialog as HTMLDialogElement).close();
     });

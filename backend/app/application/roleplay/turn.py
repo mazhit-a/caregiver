@@ -94,6 +94,8 @@ class SubmitRoleplayTurn:
             raise RateLimited()
         if record.run.mode is RunMode.FALLBACK:
             return self._fallback(record, lesson, round_number)
+        if round_number == len(record.run.turn_scores):
+            record.run.discard_last_turn()  # Try again on the round just answered
 
         labels = self._content.lesson_recipient_labels(
             session.recipient_key or "", session.display_name
@@ -123,10 +125,11 @@ class SubmitRoleplayTurn:
         return TurnView(TurnMode.AI, round_number, record.run.rounds_total, coach=outcome)
 
     def _check_round(self, record: RunRecord, round_number: int, total: int) -> None:
-        """AI runs take rounds in order; a fallback run only needs a round that exists."""
+        """AI runs take rounds in order (or the last again); fallback needs an existing round."""
         expected = len(record.run.turn_scores) + 1
         in_range = 1 <= round_number <= total
-        if (record.run.mode is RunMode.AI and round_number != expected) or not in_range:
+        allowed = {expected, expected - 1}
+        if (record.run.mode is RunMode.AI and round_number not in allowed) or not in_range:
             raise RoundMismatch(expected, round_number)
 
     async def _ask(self, coach_input: CoachInput, labels: RecipientLabels) -> CoachOutcome | None:

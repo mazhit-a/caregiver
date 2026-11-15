@@ -14,7 +14,7 @@ import styles from "./PaywallPage.module.css";
 type Probe = "checking" | "open";
 const PLANS_LEGEND = "Choose your plan";
 
-/** Paywall: terms and consent, then demo mode or Stripe Checkout. All wording comes from the API or content. */
+/** Paywall: terms (tapping a button means agreeing), then demo mode or Stripe Checkout. All wording comes from the API or content. */
 export default function PaywallPage() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -22,12 +22,9 @@ export default function PaywallPage() {
   const copy = useRequest((signal) => getFunnelCopy(signal), []);
   const [probe, setProbe] = useState<Probe>("checking");
   const [planId, setPlanId] = useState<string | null>(null);
-  const [consent, setConsent] = useState(false);
-  const [consentError, setConsentError] = useState(false);
   const [busy, setBusy] = useState<"pay" | "demo" | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const lock = useRef(false);
-  const consentRef = useRef<HTMLInputElement>(null);
   const demoRef = useRef<HTMLButtonElement>(null);
 
   // Entry probe: an already-subscribed visitor goes straight to the app.
@@ -77,11 +74,6 @@ export default function PaywallPage() {
 
   async function run(kind: "pay" | "demo") {
     if (lock.current || !plan) return;
-    if (!consent) {
-      setConsentError(true);
-      consentRef.current?.focus();
-      return;
-    }
     lock.current = true;
     setBusy(kind);
     setMessage(null);
@@ -162,8 +154,6 @@ export default function PaywallPage() {
             value={plan.id}
             onChange={(id) => {
               setPlanId(id);
-              setConsent(false);
-              setConsentError(false);
             }}
             legend={PLANS_LEGEND}
           />
@@ -174,40 +164,17 @@ export default function PaywallPage() {
               )}
             </p>
           </div>
-          <div className={styles.consent}>
-            <label className={styles.consentLabel}>
-              <input
-                ref={consentRef}
-                type="checkbox"
-                checked={consent}
-                onChange={(e) => {
-                  setConsent(e.target.checked);
-                  if (e.target.checked) setConsentError(false);
-                }}
-                aria-describedby={consentError ? "consent-error" : undefined}
-                aria-invalid={consentError || undefined}
-              />
-              <span>{plan.consentLabel}</span>
-            </label>
-            <p
-              id="consent-error"
-              role="alert"
-              className={styles.error}
-              hidden={!consentError}
-            >
-              {consentError ? paywall.consentRequiredError : ""}
-            </p>
-          </div>
           <p className={styles.hint}>{PAYWALL.testModeHint}</p>
           {message && (
             <p role="alert" className={styles.error}>
               {message}
             </p>
           )}
+          <p className={styles.consentNote}>{plan.consentLabel}</p>
           <button
             type="button"
             className={styles.primary}
-            aria-disabled={!consent || busy !== null}
+            aria-disabled={busy !== null}
             onClick={() => void run("pay")}
           >
             {busy === "pay" ? PAYWALL.loading : plan.payButtonLabel}
@@ -216,7 +183,7 @@ export default function PaywallPage() {
             ref={demoRef}
             type="button"
             className={styles.secondary}
-            aria-disabled={!consent || busy !== null}
+            aria-disabled={busy !== null}
             onClick={() => void run("demo")}
           >
             {PAYWALL.demoButton}
