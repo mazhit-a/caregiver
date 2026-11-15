@@ -57,6 +57,10 @@ export const routes: RouteObject[] = [
         path: ROUTES.checkoutReturn,
         ...page(() => import("./pages/funnel/CheckoutReturnPage")),
       },
+      {
+        path: ROUTES.fakeCheckout,
+        ...page(() => import("./pages/funnel/FakeCheckoutPage")),
+      },
     ],
   },
   {

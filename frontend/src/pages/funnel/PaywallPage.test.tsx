@@ -10,7 +10,8 @@ import { routes } from "../../router";
 import { type FakeApi, FAKE_CHECKOUT_URL, installFakeApi } from "../../test/fakeApi";
 import copy from "../../test/fixtures/funnel-copy.json";
 
-vi.mock("./checkoutRedirect", () => ({
+vi.mock("./checkoutRedirect", async (importActual) => ({
+  ...(await importActual<typeof import("./checkoutRedirect")>()),
   isStripeCheckoutUrl: (url: string) => url.startsWith("https://checkout.stripe.com/"),
   goToCheckout: vi.fn(),
 }));
@@ -99,6 +100,28 @@ describe("PaywallPage", () => {
       path: "/billing/checkout",
       status: 200,
       body: { checkoutId: "x", url: "https://evil.example.com/pay" },
+    });
+    await userEvent.click(consentBox());
+    await userEvent.click(pay(four));
+    expect(await screen.findByRole("alert")).toBeTruthy();
+    expect(goToCheckout).not.toHaveBeenCalled();
+  });
+
+  it("follows the same-origin /fake-checkout path in-app, without leaving the page", async () => {
+    const { router } = await setup("/paywall", { fakeStripe: true });
+    await userEvent.click(consentBox());
+    await userEvent.click(pay(four));
+    await waitFor(() => expect(router.state.location.pathname).toMatch(/^\/fake-checkout\/cs_fake_/));
+    expect(goToCheckout).not.toHaveBeenCalled();
+  });
+
+  it("refuses a fake-checkout path on another host", async () => {
+    await setup("/paywall", { stripeConfigured: true });
+    api.inject({
+      method: "POST",
+      path: "/billing/checkout",
+      status: 200,
+      body: { checkoutId: "x", url: "https://evil.example.com/fake-checkout/x" },
     });
     await userEvent.click(consentBox());
     await userEvent.click(pay(four));
