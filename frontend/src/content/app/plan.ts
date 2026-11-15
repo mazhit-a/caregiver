@@ -1,9 +1,6 @@
 // UI-owned strings of the Plan (course) view. Anything with a placeholder (the title, the
 // subtitle, the quick-guide caption, module reasons, "Mom's plan: 0 of 12 ...") comes from the API.
 
-/** The one quick guide that opens the help sheet. Mirrors content/plan-rules.json quickGuides[].id (locked by plan.test.ts). */
-export const QG_LIMIT_ID = "qg_limit";
-
 export const PLAN_TEXT = {
   loadingHeading: "Plan",
   what: "course",

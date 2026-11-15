@@ -54,8 +54,8 @@
 .guidesTitle { margin: 0 0 var(--space-3); font: var(--text-h3); }
 .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
 .guideChip { display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--tap-min); padding: 0 var(--space-4); border: var(--border-width) solid var(--safety-text); border-radius: var(--radius-chip); background: var(--surface); color: var(--safety-text); font: var(--text-small); }
-button.guideChip { cursor: pointer; }
-button.guideChip:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+a.guideChip { text-decoration: none; }
+a.guideChip:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .guideChip[data-highlight="true"] { border-width: var(--border-width-strong); font-weight: 700; }
 .forNow { padding: 0 var(--space-2); border-radius: var(--radius-chip); background: var(--safety-text); color: var(--surface); font: var(--text-caption); }
 .caption { margin: var(--space-3) 0 0; font: var(--text-small); }

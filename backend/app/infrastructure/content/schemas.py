@@ -1,5 +1,6 @@
 """Pydantic models of the content files. Unknown fields fail validation on purpose."""
 
+import re
 from typing import Annotated, Any, ClassVar, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -1188,3 +1189,82 @@ class AppCopyFile(Notes):
     settings: AppCopySettings
     welcome: AppCopyWelcome
     lesson: AppCopyLesson
+
+
+# ---------------------------------------------------------------- quick-guides.json
+
+# Placeholders a guide may use (singular labels, as in the lessons).
+GUIDE_PLACEHOLDERS = frozenset(
+    {"recipient", "Recipient", "possessive", "Possessive", "pronoun", "Pronoun", "object"}
+)
+_GUIDE_PLACEHOLDER = re.compile(r"\{([^{}]*)\}")
+
+
+class GuideCommonModel(ContentModel):
+    footer: str
+    call_now_title: str
+    steps_title: str
+    then_title: str
+    dont_title: str
+    resources_title: str
+
+
+class GuideResourceModel(ContentModel):
+    label: str
+    number: str
+    tel: str
+
+
+class GuideStepModel(ContentModel):
+    title: str
+    text: str
+
+
+class GuideSourceModel(ContentModel):
+    name: str
+    url: str
+
+
+class QuickGuideModel(ContentModel):
+    id: str
+    title: str
+    summary: str
+    urgency: Literal["emergency", "urgent", "planning", "support"]
+    call_now: list[str]
+    steps: list[GuideStepModel] = Field(min_length=1)
+    then: list[str]
+    dont: list[str]
+    resources: list[str]
+    sources: list[GuideSourceModel]
+
+    def texts(self) -> list[str]:
+        return [
+            self.title,
+            self.summary,
+            *self.call_now,
+            *(t for s in self.steps for t in (s.title, s.text)),
+            *self.then,
+            *self.dont,
+        ]
+
+
+class QuickGuidesFile(Notes):
+    version: int
+    common: GuideCommonModel
+    resources: dict[str, GuideResourceModel]
+    guides: list[QuickGuideModel] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def _check_guides(self) -> "QuickGuidesFile":
+        ids = [g.id for g in self.guides]
+        if len(set(ids)) != len(ids):
+            raise ValueError("guide ids must be unique")
+        for guide in self.guides:
+            for rid in guide.resources:
+                if rid not in self.resources:
+                    raise ValueError(f"guide '{guide.id}' uses unknown resource '{rid}'")
+            for text in guide.texts():
+                for name in _GUIDE_PLACEHOLDER.findall(text):
+                    if name not in GUIDE_PLACEHOLDERS:
+                        raise ValueError(f"guide '{guide.id}' uses placeholder {{{name}}}")
+        return self

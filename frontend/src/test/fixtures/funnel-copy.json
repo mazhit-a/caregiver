@@ -29,11 +29,11 @@
       {
         "id": "four_week",
         "label": "4 weeks",
-        "priceToday": "$14.99",
-        "detail": "for the first 4 weeks, then $29.99 every 4 weeks",
+        "priceToday": "$19.99",
+        "detail": "for the first 4 weeks, then $39.99 every 4 weeks",
         "disclosure": [
           {
-            "text": "Today: $14.99",
+            "text": "Today: $19.99",
             "strong": true
           },
           {
@@ -41,7 +41,7 @@
             "strong": false
           },
           {
-            "text": "$29.99 every 4 weeks",
+            "text": "$39.99 every 4 weeks",
             "strong": true
           },
           {
@@ -49,15 +49,15 @@
             "strong": false
           }
         ],
-        "consentLabel": "By tapping the button, you agree that your plan renews automatically at $29.99 every 4 weeks until you cancel.",
-        "payButtonLabel": "Pay $14.99 and start",
+        "consentLabel": "By tapping the button, you agree that your plan renews automatically at $39.99 every 4 weeks until you cancel.",
+        "payButtonLabel": "Pay $19.99 and start",
         "firstRenewalDate": "Feb 2"
       },
       {
         "id": "twelve_week",
         "label": "12 weeks",
         "priceToday": "$49.99",
-        "detail": "for the first 12 weeks, then $69.99 every 12 weeks",
+        "detail": "for the first 12 weeks, then $99.99 every 12 weeks",
         "disclosure": [
           {
             "text": "Today: $49.99",
@@ -68,7 +68,7 @@
             "strong": false
           },
           {
-            "text": "$69.99 every 12 weeks",
+            "text": "$99.99 every 12 weeks",
             "strong": true
           },
           {
@@ -76,7 +76,7 @@
             "strong": false
           }
         ],
-        "consentLabel": "By tapping the button, you agree that your plan renews automatically at $69.99 every 12 weeks until you cancel.",
+        "consentLabel": "By tapping the button, you agree that your plan renews automatically at $99.99 every 12 weeks until you cancel.",
         "payButtonLabel": "Pay $49.99 and start",
         "firstRenewalDate": "Mar 30"
       }

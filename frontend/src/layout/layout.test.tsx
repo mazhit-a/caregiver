@@ -75,7 +75,6 @@ const PAGES: [string, string][] = [
   ["/practice", "Practice with Ollie"],
   ["/course", "The course"],
   ["/care-tools", "Care tools"],
-  ["/pricing", "Pricing and safety"],
   ["/quiz", "The quiz is coming soon"],
 ];
 
@@ -90,9 +89,14 @@ describe("routes", () => {
   });
 
   it("sets title and description for a page", async () => {
-    await renderAt("/pricing");
-    await waitFor(() => expect(document.title).toBe("Pricing and safety | Kelper"));
+    await renderAt("/course");
+    await waitFor(() => expect(document.title).toBe("The course | Kelper"));
     expect(document.head.querySelector('meta[name="description"]')).not.toBeNull();
+  });
+
+  it("sends the old /pricing URL to the 404 page", async () => {
+    await renderAt("/pricing");
+    expect(screen.getByRole("heading", { level: 1, name: /can’t find that page/ })).toBeInTheDocument();
   });
 
   it("shows the 404 with noindex for an unknown URL", async () => {
@@ -118,8 +122,8 @@ describe("routes", () => {
   it("navigates with the nav and moves focus to main", async () => {
     const user = userEvent.setup();
     await renderAt("/");
-    await user.click(within(screen.getByRole("navigation", { name: "Main" })).getByRole("link", { name: "Pricing" }));
-    await waitFor(() => expect(document.title).toMatch(/^Pricing/));
+    await user.click(within(screen.getByRole("navigation", { name: "Main" })).getByRole("link", { name: "The course" }));
+    await waitFor(() => expect(document.title).toMatch(/^The course/));
     await waitFor(() => expect(screen.getByRole("main")).toHaveFocus());
     expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
   });

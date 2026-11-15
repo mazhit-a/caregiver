@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "notes": [
     "Demo prices for the hackathon build, to be set by a real pricing test later.",
     "Stripe runs in test mode. Replace the price ids with the test-mode ids from the Stripe dashboard.",
@@ -13,10 +13,10 @@
     {
       "id": "four_week",
       "label": "4 weeks",
-      "introPrice": 14.99,
+      "introPrice": 19.99,
       "introDays": 28,
       "introPeriodText": "4 weeks",
-      "renewPrice": 29.99,
+      "renewPrice": 39.99,
       "renewDays": 28,
       "renewPeriodText": "4 weeks",
       "stripeIntroPriceId": "price_TEST_REPLACE_4W_INTRO",
@@ -30,7 +30,7 @@
       "introPrice": 49.99,
       "introDays": 84,
       "introPeriodText": "12 weeks",
-      "renewPrice": 69.99,
+      "renewPrice": 99.99,
       "renewDays": 84,
       "renewPeriodText": "12 weeks",
       "stripeIntroPriceId": "price_TEST_REPLACE_12W_INTRO",

@@ -251,8 +251,8 @@ async def test_pricing_first_renewal_date_is_app_today_plus_intro_days(
     body = (await pclient.get("/api/pricing")).json()
     assert body["defaultPlanId"] == "four_week"
     plans = {p["id"]: p for p in body["plans"]}
-    assert plans["four_week"]["priceToday"] == 14.99
-    assert plans["four_week"]["renewalPrice"] == 29.99
+    assert plans["four_week"]["priceToday"] == 19.99
+    assert plans["four_week"]["renewalPrice"] == 39.99
     assert plans["four_week"]["firstRenewalDate"] == "2026-02-02"  # 2026-01-05 + 28
     assert plans["twelve_week"]["firstRenewalDate"] == "2026-03-30"  # + 84
 
@@ -272,8 +272,8 @@ async def test_pricing_without_session_returns_plans_and_null_renewal_date_and_w
     assert r.status_code == 200
     body = r.json()
     plans = {p["id"]: p for p in body["plans"]}
-    assert plans["four_week"]["priceToday"] == 14.99
-    assert plans["four_week"]["renewalPrice"] == 29.99
+    assert plans["four_week"]["priceToday"] == 19.99
+    assert plans["four_week"]["renewalPrice"] == 39.99
     assert set(plans) == {p.id for p in content.pricing().plans}
     assert all(p["firstRenewalDate"] is None for p in body["plans"])
     raw = r.text.lower()

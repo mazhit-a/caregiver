@@ -43,7 +43,7 @@ async def test_checkout_session_payload_has_only_session_uuid_plan_amount_price_
             plan_id="four_week",
             price_id="price_renew",
             coupon_id="coupon_intro",
-            amount_today=Decimal("14.99"),
+            amount_today=Decimal("19.99"),
             success_url="https://app.example/ok?c={CHECKOUT_SESSION_ID}",
             cancel_url="https://app.example/no",
         )
@@ -59,7 +59,7 @@ async def test_checkout_session_payload_has_only_session_uuid_plan_amount_price_
         "cancel_url": "https://app.example/no",
         "metadata[session_id]": str(sid),
         "metadata[plan_id]": "four_week",
-        "metadata[amount]": "14.99",
+        "metadata[amount]": "19.99",
         "subscription_data[metadata][session_id]": str(sid),
         "subscription_data[metadata][plan_id]": "four_week",
     }

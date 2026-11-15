@@ -116,8 +116,8 @@ describe("data hooks", () => {
         {
           id: "four_week",
           label: "4 weeks",
-          priceToday: 14.99,
-          renewalPrice: 29.99,
+          priceToday: 19.99,
+          renewalPrice: 39.99,
           introPeriodText: "4 weeks",
           renewPeriodText: "4 weeks",
           introDays: 28,

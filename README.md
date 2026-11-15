@@ -172,7 +172,7 @@ settings, cancel, gentle exit, clear my data. Migrations head is 0022.
 
 | Area | Routes |
 | --- | --- |
-| Marketing site | `/`, `/how-it-works`, `/practice`, `/course`, `/care-tools`, `/pricing` |
+| Marketing site | `/`, `/how-it-works`, `/practice`, `/course`, `/care-tools` |
 | Quiz funnel and paywall | `/quiz`, `/quiz/building`, `/your-plan`, `/your-plan/gift`, `/paywall`, `/checkout/return` |
 | App (needs a session and a subscription) | `/today`, `/today/practice`, `/lessons/:lessonId`, `/plan`, `/profile`, `/care-card`, `/visit-sheet`, `/skills`, `/settings`, `/settings/cancel`, `/settings/gentle-exit`, `/goodbye` |
 | Public | `/card/:cardId` (care card, no session token) |
@@ -408,6 +408,7 @@ Everything the learner reads, and every rule and number, is data in `content/` (
 | Role-play prompts (versioned, never edit a version that has an eval report) | `content/prompts/roleplay-turn.v<N>.md` |
 | Safety terms, medical terms, fixed coach tips | `content/safety-terms.json` |
 | Crisis resources | `content/crisis-resources.json` |
+| Quick guides (missing, fall, sudden change, hospital, at your limit) | `content/quick-guides.json` |
 | Visit-sheet questions | `content/visit-questions.json` |
 | Eval cases | `backend/evals/datasets/golden.jsonl` (source package: `content/evals/roleplay-evals.json`) |
 
@@ -421,6 +422,7 @@ All routes are under `/api`, JSON, camelCase. Session auth: header `X-Session-To
 `POST /api/session`). Groups: session, quiz, plan (funnel preview and gift), pricing and billing,
 Stripe webhook, app (plan, today, lessons, role-play, check-ins, skills, profile, phrases, care
 card, visit sheet; need a subscription), exit (gentle exit), public (care card, crisis resources,
+quick guides `GET /api/guides[/{id}]`,
 health), demo controls (`DEMO_CONTROLS`), events. Errors: `{"error": {"code", "message",
 "details"}}`; frontend-relevant codes: `402` gate with reason (`no_plan`, `no_subscription`,
 `past_due`, `ended`), `409` quiz locked, `423` lesson locked (`unlockOn`), `429` rate limit,
@@ -451,7 +453,7 @@ and the earlier backend list). None of this is done by the code. Items marked `[
 - [ ] **`TODO(verify)` markers.** Run `grep -rn "TODO(verify)" frontend/src content backend/app`
       and clear every hit (at the time of writing: `frontend/src/content/funnel.ts`,
       `frontend/src/content/home.ts` twice: the statistic and the Ollie backstory).
-- [ ] The pricing page line "Cancel anytime in Settings" and the paywall copy must keep matching
+- [ ] The landing "Cancel anytime in Settings" line and the paywall copy must keep matching
       the Settings headings (`/settings`, `/settings/cancel`).
 - [ ] Verify the Figtree font file and licence (`frontend/licenses/`): the supplied woff2 should
       be the variable OFL font.
@@ -460,6 +462,8 @@ and the earlier backend list). None of this is done by the code. Items marked `[
 
 - [ ] **Manual Stripe test-mode run** (see above) and the VPS deploy; register the webhook with the
       six event types.
+- [ ] **Prices changed:** re-run `backend/scripts/stripe_setup.py` with your test key so Stripe test
+      prices/coupons match `pricing.json` (agents never run it).
 - [ ] **Re-run `scripts.stripe_setup`** with your test key: the product was renamed to "Kelper"
       and the script now updates the stored name. No agent runs this script. Also replace the
       placeholder prices in `content/pricing.json` ("TBD by test", `REPLACE` ids).
@@ -483,6 +487,7 @@ and the earlier backend list). None of this is done by the code. Items marked `[
 
 **Content and review**
 
+- [ ] Have a dementia-care or nursing professional review the five guides and re-check phone numbers (`content/quick-guides.json` notes).
 - [ ] **Content owner review of `content/app-copy.json`** (every app string: nav, plan, profile,
       care card, visit sheet, skills, settings, welcome, lesson labels such as "Good instinct /
       Noted / Very common") and of the `gentleExit` copy.

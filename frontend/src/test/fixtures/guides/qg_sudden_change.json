@@ -1,0 +1,72 @@
+{
+  "id": "qg_sudden_change",
+  "title": "A sudden change in confusion",
+  "summary": "Sudden confusion is not 'just the dementia'. Get help today.",
+  "urgency": "urgent",
+  "callNowTitle": "Call 911 now if",
+  "callNow": [
+    "Signs of a stroke: one side of the face droops, one arm is weak, speech is slurred or strange",
+    "They is hard to wake, or passes out",
+    "Chest pain or trouble breathing",
+    "Fever with shivering, cold or clammy skin, a fast pulse, or very fast or slow breathing",
+    "The confusion started after a head injury",
+    "They has diabetes and the confusion came on suddenly"
+  ],
+  "stepsTitle": "What to do",
+  "steps": [
+    {
+      "title": "Notice how fast it changed",
+      "text": "Dementia changes slowly, over months. A big change over hours or a day or two is different, and often has a cause that can be treated."
+    },
+    {
+      "title": "Keep them safe and calm",
+      "text": "Stay with them, speak softly, keep the room quiet and lit. Don't argue with what they says."
+    },
+    {
+      "title": "If nothing on the 911 list is true, call the doctor today",
+      "text": "Call your loved one's doctor's office or after-hours line now, not tomorrow. A nurse can tell you whether to come in, go to urgent care or go to the emergency room."
+    },
+    {
+      "title": "Tell them what changed",
+      "text": "When it started, what's different from your loved one's usual, and anything new: a new medicine, a fall, a fever, drinking less, trouble passing urine, pain, poor sleep."
+    },
+    {
+      "title": "Bring the list",
+      "text": "If they goes to be seen, bring all your loved one's medicines (or photos of the labels) and your notes."
+    }
+  ],
+  "thenTitle": "Then",
+  "then": [
+    "Confusion like this can come and go during the day. Better moments don't mean it's over: follow up until the cause is found.",
+    "Add what happened to the doctor-visit sheet."
+  ],
+  "dontTitle": "Don't",
+  "dont": [
+    "Don't wait until morning to see if it passes.",
+    "Don't give extra or new medicines to calm them unless a doctor or pharmacist tells you to."
+  ],
+  "resourcesTitle": "Who can help",
+  "resources": [
+    {
+      "label": "Emergency",
+      "number": "911",
+      "tel": "911"
+    },
+    {
+      "label": "Alzheimer's Association 24/7 Helpline",
+      "number": "1-800-272-3900",
+      "tel": "18002723900"
+    }
+  ],
+  "sources": [
+    {
+      "name": "MedlinePlus (NIH), confusion: when to call 911",
+      "url": "https://medlineplus.gov/ency/article/003205.htm"
+    },
+    {
+      "name": "NHS, confusion: common causes in older people",
+      "url": "https://www.nhs.uk/symptoms/confusion"
+    }
+  ],
+  "footer": "In an emergency, call 911."
+}

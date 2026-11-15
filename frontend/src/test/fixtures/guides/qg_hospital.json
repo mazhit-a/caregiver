@@ -1,0 +1,70 @@
+{
+  "id": "qg_hospital",
+  "title": "After a hospital stay",
+  "summary": "Ask the right questions before leaving, and make the first days calm.",
+  "urgency": "planning",
+  "callNowTitle": "Call 911 now if",
+  "callNow": [
+    "New trouble breathing, chest pain, or signs of a stroke",
+    "They is suddenly much more confused, very hard to wake, or can't keep fluids down"
+  ],
+  "stepsTitle": "What to do",
+  "steps": [
+    {
+      "title": "Before leaving the hospital, ask",
+      "text": "What happened and what to watch for. Which medicines are new, changed or stopped. When the follow-up visit is and with whom. Whether home health care or equipment was ordered. Who to call with questions, day and night."
+    },
+    {
+      "title": "Get it in writing",
+      "text": "Ask for the discharge papers and the updated medicine list. Take a photo of each page."
+    },
+    {
+      "title": "Go over the medicines with the pharmacist",
+      "text": "Compare the new list with what's at home, so nothing old is taken by mistake."
+    },
+    {
+      "title": "Make the first days calm",
+      "text": "Familiar room, a night light, a simple routine, water within reach, and the same short answers to the same questions."
+    },
+    {
+      "title": "Expect more confusion for a while",
+      "text": "Many people with dementia are more confused after a hospital stay. Tell the doctor if it's getting worse instead of better, or if anything new appears."
+    }
+  ],
+  "thenTitle": "Then",
+  "then": [
+    "Book the follow-up visit before you leave, or the next working day.",
+    "Ask family to cover the first few days; put tasks on the family board.",
+    "Do a quick safety check at home: clear paths, grab bars, lighting on the way to the bathroom."
+  ],
+  "dontTitle": "Don't",
+  "dont": [
+    "Don't leave without a written medicine list and a number to call.",
+    "Don't change doses on your own; ask the doctor or pharmacist."
+  ],
+  "resourcesTitle": "Who can help",
+  "resources": [
+    {
+      "label": "Emergency",
+      "number": "911",
+      "tel": "911"
+    },
+    {
+      "label": "Alzheimer's Association 24/7 Helpline",
+      "number": "1-800-272-3900",
+      "tel": "18002723900"
+    },
+    {
+      "label": "Eldercare Locator (local help, respite, weekdays)",
+      "number": "1-800-677-1116",
+      "tel": "18006771116"
+    }
+  ],
+  "sources": [
+    {
+      "name": "MedlinePlus (NIH), confusion: when to call 911",
+      "url": "https://medlineplus.gov/ency/article/003205.htm"
+    }
+  ],
+  "footer": "In an emergency, call 911."
+}

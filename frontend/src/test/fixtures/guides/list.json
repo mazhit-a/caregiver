@@ -1,0 +1,34 @@
+{
+  "guides": [
+    {
+      "id": "qg_missing",
+      "title": "If your loved one goes missing",
+      "summary": "Search for up to 15 minutes, then call 911.",
+      "urgency": "emergency"
+    },
+    {
+      "id": "qg_fall",
+      "title": "After a fall",
+      "summary": "Check before you lift. When in doubt, call 911.",
+      "urgency": "emergency"
+    },
+    {
+      "id": "qg_sudden_change",
+      "title": "A sudden change in confusion",
+      "summary": "Sudden confusion is not 'just the dementia'. Get help today.",
+      "urgency": "urgent"
+    },
+    {
+      "id": "qg_hospital",
+      "title": "After a hospital stay",
+      "summary": "Ask the right questions before leaving, and make the first days calm.",
+      "urgency": "planning"
+    },
+    {
+      "id": "qg_limit",
+      "title": "You're at your limit",
+      "summary": "You matter too. Here's what to do right now.",
+      "urgency": "support"
+    }
+  ]
+}

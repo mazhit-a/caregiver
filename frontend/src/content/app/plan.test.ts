@@ -1,16 +1,19 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { PLAN_TEXT, QG_LIMIT_ID, doneOf, lessonsDoneOf, moduleKicker } from "./plan";
+import { PLAN_TEXT, doneOf, lessonsDoneOf, moduleKicker } from "./plan";
 
 const rules = JSON.parse(
   readFileSync(resolve(process.cwd(), "../content/plan-rules.json"), "utf-8"),
 ) as { quickGuides: { id: string; title: string }[] };
 
 describe("plan strings", () => {
-  it("the limit guide id exists in content/plan-rules.json", () => {
-    const guide = rules.quickGuides.find((g) => g.id === QG_LIMIT_ID);
-    expect(guide?.title).toMatch(/limit/i);
+  it("every plan quick guide id has a guide page in content/quick-guides.json (all chips link to /guides/<id>)", () => {
+    const book = JSON.parse(readFileSync(resolve(process.cwd(), "../content/quick-guides.json"), "utf-8")) as {
+      guides: { id: string }[];
+    };
+    const ids = book.guides.map((g) => g.id).sort();
+    expect(rules.quickGuides.map((g) => g.id).sort()).toEqual(ids);
   });
 
   it("has no placeholder, countdown or fear wording", () => {

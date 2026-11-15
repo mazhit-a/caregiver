@@ -9,6 +9,7 @@ from app.domain.app_copy.render import AppCopy
 from app.domain.billing.exit_copy import GentleExitCopy, GentleExitResourceCopy
 from app.domain.billing.pricing import Pricing, PricingPlan
 from app.domain.funnel.copy import FunnelCopy
+from app.domain.guides.entities import QuickGuideBook
 from app.domain.plan.entities import PhraseSheetText, PhraseText, PlanRules
 from app.domain.quiz.definition import QuizDefinition
 from app.domain.roleplay.verdict import CoachTips
@@ -23,6 +24,7 @@ from app.domain.shared.labels import (
 )
 from app.domain.today.copy import DemoControlCopy, TodayCopy
 from app.domain.visit_sheet.entities import BankQuestion, VisitQuestionBank
+from app.infrastructure.content.guides_mapper import to_quick_guide_book
 from app.infrastructure.content.loader import ContentBundle, load_content
 from app.infrastructure.content.plan_rules_mapper import to_plan_rules
 from app.infrastructure.content.quiz_mapper import to_quiz_definition
@@ -75,6 +77,9 @@ class JsonContentProvider:
             CrisisResource(id=r.id, name=r.name, phone=r.phone, description=r.description)
             for r in self._bundle.crisis_resources.resources
         ]
+
+    def quick_guides(self) -> QuickGuideBook:
+        return to_quick_guide_book(self._bundle.quick_guides)
 
     def visit_questions(self) -> VisitQuestionBank:
         file = self._bundle.visit_questions

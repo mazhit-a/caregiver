@@ -1,0 +1,69 @@
+{
+  "id": "qg_missing",
+  "title": "If your loved one goes missing",
+  "summary": "Search for up to 15 minutes, then call 911.",
+  "urgency": "emergency",
+  "callNowTitle": "Call 911 now if",
+  "callNow": [
+    "You've searched for 15 minutes and haven't found them",
+    "Your loved one may be in danger right now: near traffic or water, in bad weather, or without needed medicine"
+  ],
+  "stepsTitle": "What to do",
+  "steps": [
+    {
+      "title": "Start looking right away",
+      "text": "Don't wait to see if your loved one comes back. Check the home first: closets, the garage, the yard, the car."
+    },
+    {
+      "title": "Search nearby, in the likely direction",
+      "text": "Many people who wander are found within about 1.5 miles of where they were last seen. Look along the way to places they talks about: an old home, a former job, a church, a favorite store."
+    },
+    {
+      "title": "After 15 minutes, call 911",
+      "text": "Say: \"A person with dementia is missing. They is a vulnerable adult.\" Police usually don't need to wait 24 hours in this case."
+    },
+    {
+      "title": "Have the details ready",
+      "text": "A recent photo, height, weight, what they was wearing, where they was last seen, and any medicines they needs."
+    },
+    {
+      "title": "Ask for help",
+      "text": "Call neighbors and family. If you need help being taken seriously, the Alzheimer's Association 24/7 Helpline can talk with responders."
+    }
+  ],
+  "thenTitle": "Then",
+  "then": [
+    "When your loved one is found, stay calm and warm. Don't scold; they may be frightened.",
+    "If they was out in heat or cold, or seems hurt or more confused than usual, get medical help.",
+    "Afterwards, make a plan: a recent photo on your phone, a list of likely places, ID jewelry or a wandering response service, and a note to neighbors."
+  ],
+  "dontTitle": "Don't",
+  "dont": [
+    "Don't wait more than 15 minutes to call 911.",
+    "Don't search alone for long: call others in."
+  ],
+  "resourcesTitle": "Who can help",
+  "resources": [
+    {
+      "label": "Emergency",
+      "number": "911",
+      "tel": "911"
+    },
+    {
+      "label": "Alzheimer's Association 24/7 Helpline",
+      "number": "1-800-272-3900",
+      "tel": "18002723900"
+    }
+  ],
+  "sources": [
+    {
+      "name": "Alzheimer's Association, wandering and emergency preparedness",
+      "url": "https://www.alz.org/help-support/caregiving/safety/wandering"
+    },
+    {
+      "name": "Alzheimer's Association, emergencies",
+      "url": "https://alz.org/emergency"
+    }
+  ],
+  "footer": "In an emergency, call 911."
+}

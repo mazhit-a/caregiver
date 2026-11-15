@@ -6,7 +6,6 @@ import { useAppRequest } from "../../../api/useAppRequest";
 import { StatusBlock } from "../../../components/StatusBlock";
 import { PLAN_TEXT } from "../../../content/app/plan";
 import { Seo, pageTitle } from "../../../layout/Seo";
-import { useAppContext } from "../../../layout/app/appContext";
 import { ModulesGrid } from "./ModulesGrid";
 import { PathView } from "./PathView";
 import { QuickGuides } from "./QuickGuides";
@@ -16,7 +15,6 @@ import styles from "./plan.module.css";
 type View = "path" | "all";
 
 export default function PlanTabPage() {
-  const { openHelp } = useAppContext();
   const request = useAppRequest(async (signal) => {
     const [plan, preview, today] = await Promise.all([
       getPlan(signal),
@@ -119,7 +117,6 @@ export default function PlanTabPage() {
         title={copy.plan.quickGuidesTitle}
         caption={copy.plan.quickGuidesCaption}
         guides={preview.quickGuides}
-        onLimit={openHelp}
       />
     </>
   );

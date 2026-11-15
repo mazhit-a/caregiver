@@ -87,7 +87,7 @@ describe("fixtures captured from the real backend match the hand-written types",
     strings.forEach((text) => expect(text).not.toMatch(/[{}]|\*\*/));
     // Hand-checked against pricing.json and the pricing fixture (renewal dates 2026-02-02 / 2026-03-30).
     const [four, twelve] = funnelCopyFixture.paywall.plans;
-    expect(four?.priceToday).toBe("$14.99");
+    expect(four?.priceToday).toBe("$19.99");
     expect(twelve?.priceToday).toBe("$49.99");
     expect(JSON.stringify(four)).toContain("Feb 2");
     expect(JSON.stringify(twelve)).toContain("Mar 30");

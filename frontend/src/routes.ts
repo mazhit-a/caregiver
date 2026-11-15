@@ -5,7 +5,6 @@ export const ROUTES = {
   practice: "/practice",
   course: "/course",
   tools: "/care-tools",
-  pricing: "/pricing",
   quiz: "/quiz",
   quizBuilding: "/quiz/building",
   plan: "/your-plan",
@@ -27,6 +26,7 @@ export const ROUTES = {
   settingsGentleExit: "/settings/gentle-exit",
   goodbye: "/goodbye",
   card: "/card/:cardId",
+  guide: "/guides/:guideId",
 } as const;
 
 /** One lesson player route. */

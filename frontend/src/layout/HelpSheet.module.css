@@ -66,6 +66,21 @@
   color: var(--text-secondary);
 }
 
+.guides { display: flex; flex-direction: column; gap: var(--space-2); }
+.guidesTitle { margin: 0; font: var(--text-h3); }
+.guideList { display: flex; flex-direction: column; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+.guideLink {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  padding: var(--space-2) var(--space-4);
+  border: var(--border-width) solid var(--border-control);
+  border-radius: var(--radius-button);
+  color: var(--text);
+  font: var(--text-body-strong);
+  text-decoration: none;
+}
+
 .note {
   font: var(--text-small);
   color: var(--text-secondary);
