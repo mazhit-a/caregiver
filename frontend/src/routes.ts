@@ -27,6 +27,7 @@ export const ROUTES = {
   settingsGentleExit: "/settings/gentle-exit",
   goodbye: "/goodbye",
   card: "/card/:cardId",
+  guide: "/guides/:guideId",
 } as const;
 
 /** One lesson player route. */

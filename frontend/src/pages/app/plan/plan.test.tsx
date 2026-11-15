@@ -98,6 +98,7 @@ async function renderPlan() {
         children: [
           { path: "/plan", element: <WithAppCopy><PlanTabPage /></WithAppCopy> },
           { path: "/lessons/:id", element: <Where /> },
+          { path: "/guides/:guideId", element: <Where /> },
         ],
       },
     ],
@@ -147,7 +148,7 @@ describe("plan view: personas", () => {
     expect(card.querySelector("svg")).toBeNull();
   });
 
-  it("quick guides: highlight matches the fixture and only 'limit' is a button", async () => {
+  it("quick guides: highlight matches the fixture and every chip links to its guide page", async () => {
     const preview = previewC as PlanPreview;
     setup = { plan: planFromPreview(preview), preview };
     await renderPlan();
@@ -158,10 +159,14 @@ describe("plan view: personas", () => {
       const marked = within(must(chip.closest("li"))).queryByText("For now") !== null;
       expect(marked, g.title).toBe(highlighted.includes(g.title));
     }
-    expect(within(guides).getAllByRole("button")).toHaveLength(1);
-    await userEvent.click(within(guides).getByRole("button", { name: /limit/ }));
-    expect(openHelp).toHaveBeenCalledTimes(1);
-    expect(within(guides).getByText(/still being written/)).toBeInTheDocument();
+    expect(within(guides).queryAllByRole("button")).toHaveLength(0);
+    const links = within(guides).getAllByRole("link");
+    expect(links.map((l) => l.getAttribute("href"))).toEqual(
+      preview.quickGuides.map((g) => `/guides/${g.id}`),
+    );
+    await userEvent.click(within(guides).getByRole("link", { name: /limit/ }));
+    expect(screen.getByTestId("loc")).toHaveTextContent("/guides/qg_limit");
+    expect(openHelp).not.toHaveBeenCalled();
   });
 });
 

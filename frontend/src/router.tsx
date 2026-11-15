@@ -3,6 +3,7 @@ import { createBrowserRouter, type RouteObject } from "react-router";
 import { AppLayout } from "./layout/app/AppLayout";
 import { FunnelLayout } from "./layout/funnel/FunnelLayout";
 import { CardLayout } from "./pages/card/CardLayout";
+import { GuideLayout } from "./pages/guide/GuideLayout";
 import { RootLayout } from "./layout/RootLayout";
 import { ROUTES } from "./routes";
 
@@ -125,6 +126,14 @@ export const routes: RouteObject[] = [
     HydrateFallback: () => null,
     children: [
       { path: ROUTES.card, ...page(() => import("./pages/card/CardPage")) },
+    ],
+  },
+  {
+    // Public quick guides: no session, no gate.
+    element: <GuideLayout />,
+    HydrateFallback: () => null,
+    children: [
+      { path: ROUTES.guide, ...page(() => import("./pages/guide/GuidePage")) },
     ],
   },
 ];

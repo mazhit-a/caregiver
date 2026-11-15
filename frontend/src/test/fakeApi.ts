@@ -11,6 +11,12 @@ import completeFixture from "./fixtures/complete.json";
 import errors from "./fixtures/errors.json";
 import eventsFixture from "./fixtures/events.json";
 import funnelCopyFixture from "./fixtures/funnel-copy.json";
+import guideList from "./fixtures/guides/list.json";
+import guideFall from "./fixtures/guides/qg_fall.json";
+import guideHospital from "./fixtures/guides/qg_hospital.json";
+import guideLimit from "./fixtures/guides/qg_limit.json";
+import guideMissing from "./fixtures/guides/qg_missing.json";
+import guideSudden from "./fixtures/guides/qg_sudden_change.json";
 import giftA from "./fixtures/gift-a.json";
 import giftB from "./fixtures/gift-b.json";
 import giftC from "./fixtures/gift-c.json";
@@ -25,6 +31,14 @@ import type { AccessReason } from "../api/errors";
 import { gateFake } from "./fakeApp/core";
 import "./fakeApp/lessonV2";
 import { type AppScenario, DEFAULT_APP_SCENARIO, type FakeRes, serveFakeAreas } from "./fakeApp/registry";
+
+const GUIDES: Record<string, unknown> = {
+  qg_missing: guideMissing,
+  qg_fall: guideFall,
+  qg_sudden_change: guideSudden,
+  qg_hospital: guideHospital,
+  qg_limit: guideLimit,
+};
 
 export type Persona = "a" | "b" | "c";
 
@@ -206,6 +220,13 @@ export function installFakeApi(initial: Partial<FakeScenario> = {}): FakeApi {
         ...pricingFixture,
         plans: pricingFixture.plans.map((p) => ({ ...p, firstRenewalDate: null })),
       });
+    }
+    if (method === "GET" && (path === "/guides" || path.startsWith("/guides/"))) {
+      // Public (no gate, any subscription state); only an unknown token is refused.
+      if (token && !state) return json(401, errors["401"]);
+      if (path === "/guides") return json(200, guideList);
+      const guide = GUIDES[decodeURIComponent(path.slice("/guides/".length))];
+      return guide ? json(200, guide) : apiError(404, "unknown_guide", "We don't have that guide.");
     }
     if (method === "GET" && path.startsWith("/cards/")) {
       // The public care card: no token, no session.

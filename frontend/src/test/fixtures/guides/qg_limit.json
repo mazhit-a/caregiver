@@ -1,0 +1,83 @@
+{
+  "id": "qg_limit",
+  "title": "You're at your limit",
+  "summary": "You matter too. Here's what to do right now.",
+  "urgency": "support",
+  "callNowTitle": "Call 911 now if",
+  "callNow": [
+    "You're thinking about hurting yourself: call or text 988 now",
+    "You're afraid you might hurt your loved one, or someone is in danger: call 911"
+  ],
+  "stepsTitle": "What to do",
+  "steps": [
+    {
+      "title": "Make sure everyone is safe",
+      "text": "If your loved one is safe for a few minutes, step into another room. It's okay to leave a hard moment and come back."
+    },
+    {
+      "title": "Take one slow breath, then another",
+      "text": "Breathe out longer than you breathe in. Put your feet on the floor. Drink some water."
+    },
+    {
+      "title": "Talk to someone now",
+      "text": "Call a person you trust, or the Alzheimer's Association 24/7 Helpline. You can talk to them about how you feel, not just about your loved one."
+    },
+    {
+      "title": "Hand off one thing",
+      "text": "Ask a sibling, friend or neighbor to take one task today: a call, a visit, a meal."
+    },
+    {
+      "title": "Plan a real break",
+      "text": "Respite care can give you hours or days off. The Eldercare Locator finds local respite and caregiver support."
+    }
+  ],
+  "thenTitle": "Then",
+  "then": [
+    "Feeling angry, exhausted or resentful doesn't make you a bad daughter or son. It means you've been carrying too much alone.",
+    "When you have a few minutes, open the lesson 'Spotting burnout early' or 'A plan for your own breaks'.",
+    "If this happens often, tell your own doctor how you're doing."
+  ],
+  "dontTitle": "Don't",
+  "dont": [
+    "Don't wait until you're completely empty to ask for help.",
+    "Don't handle a dangerous moment alone: call."
+  ],
+  "resourcesTitle": "Who can help",
+  "resources": [
+    {
+      "label": "988 Suicide & Crisis Lifeline (call or text)",
+      "number": "988",
+      "tel": "988"
+    },
+    {
+      "label": "Emergency",
+      "number": "911",
+      "tel": "911"
+    },
+    {
+      "label": "Alzheimer's Association 24/7 Helpline",
+      "number": "1-800-272-3900",
+      "tel": "18002723900"
+    },
+    {
+      "label": "Eldercare Locator (local help, respite, weekdays)",
+      "number": "1-800-677-1116",
+      "tel": "18006771116"
+    }
+  ],
+  "sources": [
+    {
+      "name": "988 Suicide & Crisis Lifeline",
+      "url": "https://988lifeline.org"
+    },
+    {
+      "name": "Alzheimer's Association (24/7 Helpline 800-272-3900)",
+      "url": "https://alz.org/emergency"
+    },
+    {
+      "name": "Administration for Community Living, Eldercare Locator",
+      "url": "https://acl.gov/contact-us"
+    }
+  ],
+  "footer": "In an emergency, call 911."
+}

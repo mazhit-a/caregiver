@@ -1,4 +1,8 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router";
+import { getGuides } from "../api/guides";
+import { useRequest } from "../api/useRequest";
+import { GUIDES_TEXT, guideRoute } from "../content/app/guides";
 import { NEED_HELP_NOW } from "./nav";
 import { useCrisisList } from "./useCrisisList";
 import styles from "./HelpSheet.module.css";
@@ -6,6 +10,31 @@ import styles from "./HelpSheet.module.css";
 interface Props {
   open: boolean;
   onClose: () => void;
+}
+
+/**
+ * Additive list of the quick guides. Hidden while loading and on any failure: the crisis numbers
+ * above never wait for it. It loads when the sheet is opened (it is only mounted then).
+ */
+function GuideLinks({ onNavigate }: { onNavigate: () => void }) {
+  const request = useRequest((signal) => getGuides(signal), []);
+  if (request.status !== "ready" || request.data.guides.length === 0) return null;
+  return (
+    <section aria-labelledby="help-guides-title" className={styles.guides}>
+      <h3 id="help-guides-title" className={styles.guidesTitle}>
+        {GUIDES_TEXT.helpSheetTitle}
+      </h3>
+      <ul className={styles.guideList}>
+        {request.data.guides.map((g) => (
+          <li key={g.id}>
+            <Link to={guideRoute(g.id)} className={styles.guideLink} onClick={onNavigate}>
+              {g.title}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 }
 
 /** Native modal dialog: the platform provides the focus trap and Esc. */
@@ -57,6 +86,7 @@ export function HelpSheet({ open, onClose }: Props) {
             </li>
           ))}
         </ul>
+        {open && <GuideLinks onNavigate={() => ref.current?.close()} />}
         <button type="button" className={styles.close} onClick={() => ref.current?.close()}>
           Close
         </button>

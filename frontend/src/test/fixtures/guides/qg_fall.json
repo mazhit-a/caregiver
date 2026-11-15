@@ -1,0 +1,65 @@
+{
+  "id": "qg_fall",
+  "title": "After a fall",
+  "summary": "Check before you lift. When in doubt, call 911.",
+  "urgency": "emergency",
+  "callNowTitle": "Call 911 now if",
+  "callNow": [
+    "They hit your loved one's head, or you're not sure",
+    "They passed out, even briefly, or is more confused or drowsy than usual",
+    "There's severe pain, or pain in the hip, back or neck",
+    "They can't move an arm or leg, or a limb looks out of shape",
+    "There's heavy bleeding",
+    "They can't get up, even with your help"
+  ],
+  "stepsTitle": "What to do",
+  "steps": [
+    {
+      "title": "Don't lift right away",
+      "text": "Get down to your loved one's level. Say calmly: \"I'm here. Let's not move yet.\""
+    },
+    {
+      "title": "Check before moving",
+      "text": "Ask where it hurts. Look for bleeding, swelling or a limb at an odd angle. Ask if they hit your loved one's head."
+    },
+    {
+      "title": "If anything on the 911 list is true",
+      "text": "Call 911. Don't move them. Keep them warm with a blanket and stay close until help arrives."
+    },
+    {
+      "title": "If they is not hurt and wants to get up",
+      "text": "Bring a sturdy chair close. Let them roll to one side, get onto hands and knees, and use the chair to rise slowly while you steady them. Stop if anything hurts."
+    },
+    {
+      "title": "If you can't help safely",
+      "text": "Don't lift them on your own. Make them comfortable on the floor and call for help."
+    }
+  ],
+  "thenTitle": "Then",
+  "then": [
+    "Tell your loved one's doctor about the fall the same day, even if they seems fine. Mention it if they takes blood thinners.",
+    "Watch for the next 24 hours: new headache, vomiting, more sleepiness or confusion than usual means call 911.",
+    "Write down when and where it happened; add it to the doctor-visit sheet.",
+    "Look at what caused it: a rug, poor light, a step, getting up at night."
+  ],
+  "dontTitle": "Don't",
+  "dont": [
+    "Don't pull them up by the arms.",
+    "Don't give food or drink while you wait for an ambulance."
+  ],
+  "resourcesTitle": "Who can help",
+  "resources": [
+    {
+      "label": "Emergency",
+      "number": "911",
+      "tel": "911"
+    }
+  ],
+  "sources": [
+    {
+      "name": "UCLA Health, falls in older adults (cites National Institute on Aging)",
+      "url": "https://www.uclahealth.org/news/article/preventing-falls-and-traumatic-brain-injuries-in-older-adults"
+    }
+  ],
+  "footer": "In an emergency, call 911."
+}
