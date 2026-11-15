@@ -23,9 +23,12 @@ class Settings(BaseSettings):
     test_database_url: str = "postgresql+asyncpg://pcn:pcn@localhost:55432/pcn_test"
     anthropic_api_key: str = ""
     coach_harness: str = "single_call"
-    coach_model: str = "claude-opus-5-5"
+    coach_model: str = "claude-haiku-5-5"  # selected by the eval, docs/decisions/llm-harness.md
     coach_parent_model: str = ""  # parallel_split only; empty means the same as COACH_MODEL
     coach_effort: str = "low"
+    coach_thinking: str = (
+        "disabled"  # "disabled" or "" (model default); set "" for models that need it
+    )
     coach_prompt_version: str = "1"
     llm_timeout_seconds: float = 12
     eval_judge_model: str = "claude-opus-5-5"
@@ -47,11 +50,18 @@ class Settings(BaseSettings):
         key = self.stripe_secret_key
         if key and not key.startswith(_TEST_KEY_PREFIXES):
             raise ValueError("STRIPE_SECRET_KEY must be a test key (sk_test_ or rk_test_)")
+        if self.coach_thinking not in ("", "disabled"):
+            raise ValueError("COACH_THINKING must be 'disabled' or empty")
         if "*" in self.cors_origin_list:
             raise ValueError("CORS_ORIGINS must list explicit origins, never '*'")
         if not self.anthropic_api_key:
             logger.warning("ANTHROPIC_API_KEY is empty: role-play will use the fallback only")
         return self
+
+    @property
+    def coach_thinking_param(self) -> dict[str, str] | None:
+        """The SDK `thinking` argument for the coach, or None to keep the model default."""
+        return {"type": "disabled"} if self.coach_thinking == "disabled" else None
 
     @property
     def stripe_enabled(self) -> bool:
